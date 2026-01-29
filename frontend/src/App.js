@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Submission from "./pages/Submission";
 import Admin from "./pages/Admin";
-
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 
