@@ -1,29 +1,28 @@
-const dotenv = require('dotenv');
-
+const dotenv = require("dotenv");
 dotenv.config();
 
+// Fonction de validation stricte
 function required(name) {
-  const value = process.env[name];
-  if (!value) {
+  if (!process.env[name]) {
     throw new Error(`❌ Missing required environment variable: ${name}`);
   }
-  return value;
+  return process.env[name];
 }
 
-function optional(name, fallback) {
-  const value = process.env[name];
-  return value === undefined || value === '' ? fallback : value;
-}
+module.exports = {
+  NODE_ENV: process.env.NODE_ENV || "development",
+  PORT: process.env.PORT || 5000,
 
-const env = {
-  NODE_ENV: optional('NODE_ENV', 'development'),
-  PORT: Number(optional('PORT', 4000)),
+  DB_HOST: required("DB_HOST"),
+  DB_PORT: required("DB_PORT"),
+  DB_NAME: required("DB_NAME"),
+  DB_USER: required("DB_USER"),
 
-  DB_HOST: required('DB_HOST'),
-  DB_PORT: Number(optional('DB_PORT', 3306)),
-  DB_NAME: required('DB_NAME'),
-  DB_USER: required('DB_USER'),
-  DB_PASSWORD: required('DB_PASSWORD'),
+  // MODIFICATION ICI : On n'utilise PAS required() pour le mot de passe
+  // On prend la valeur du .env OU une chaine vide si rien n'est défini
+  DB_PASSWORD: process.env.DB_PASSWORD || "",
+
+  // ... le reste de vos configurations (YouTube, etc.)
+  YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
+  // etc...
 };
-
-module.exports = Object.freeze(env);

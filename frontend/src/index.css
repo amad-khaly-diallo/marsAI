@@ -2,16 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* On force le fond noir et le texte blanc sur tout le site */
 body {
+  @apply bg-mars-dark text-white;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    "Inter", sans-serif; /* Assurez-vous d'avoir une police par défaut */
 }
