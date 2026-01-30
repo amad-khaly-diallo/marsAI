@@ -17,6 +17,19 @@ exports.create = asyncHandler(async (req, res) => {
   res.status(201).json(data);
 });
 
+exports.logAdmin = asyncHandler(async (req, res) => {
+  const { admin, token } = await AdminService.logAdmin(req.body || {});
+
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 1000, // 1h
+    sameSite: 'lax',
+  });
+
+  res.status(200).json(admin);
+});
+
 exports.update = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
   const data = await AdminService.update(id, req.body || {});

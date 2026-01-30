@@ -67,13 +67,10 @@ async function logAdmin(payload) {
 
   const token = signToken({ id: row.id, role: row.role });
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 1000
-  });
-
-  return mapAdmin(row);
+  return {
+    admin: mapAdmin(row),
+    token,
+  };
 }
 
 async function update(id, payload) {
