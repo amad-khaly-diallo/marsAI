@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const cors = require("cors");
 
-const env = require('./Config/env');
-const apiRoutes = require('./Routes');
-const notFound = require('./Middlewares/notFound');
-const errorHandler = require('./Middlewares/errorHandler');
-const { checkDatabaseConnection } = require('./Config/db');
+const env = require("./Config/env");
+const apiRoutes = require("./Routes");
+const notFound = require("./Middlewares/notFound");
+const errorHandler = require("./Middlewares/errorHandler");
+const { checkDatabaseConnection } = require("./Config/db");
 
 const app = express();
 
@@ -13,14 +13,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Route d'accueil simple 
-app.get('/', (req, res) => {
-  res.send('MarsAI backend est démarré');
+// Route d'accueil simple
+app.get("/", (req, res) => {
+  res.send("MarsAI backend est démarré");
 });
 
 // API (MVC)
-app.use('/api', apiRoutes);
-
+app.use("/api", apiRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -33,11 +32,10 @@ app.use(errorHandler);
       console.log(`Backend MarsAI démarré sur http://localhost:${env.PORT}`);
     });
   } catch (err) {
-    console.error('Startup failed');
-    console.error(err.message);
+    console.error("❌ ECHEC DU DEMARRAGE DU SERVEUR");
+    console.error("Erreur détaillée :", err);
     process.exit(1);
   }
 })();
-
 
 module.exports = app;

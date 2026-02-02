@@ -16,7 +16,7 @@ function App() {
     <Router>
       <div className="flex flex-col min-h-screen bg-mars-dark text-white">
         {/* Affichage conditionnel du Header si le composant existe */}
-        {/* <Header /> */}
+        <Header />
 
         <main className="flex-grow">
           <Routes>
@@ -28,7 +28,7 @@ function App() {
           </Routes>
         </main>
 
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </Router>
   );
