@@ -13,11 +13,11 @@ exports.submit = asyncHandler(async (req, res) => {
     }
   }
 
-  // const { width, height } = await getVideoDimensions(req.file);
-  // const ratio = width / height;
-  // if (Math.abs(ratio - 16 / 9) > 0.01) {
-  //   throw new (require('../Utils/http').HttpError)(400, `Vidéo non conforme (aspect ratio = ${ratio.toFixed(2)}), il faut du 16:9`);
-  // }
+  const { width, height } = await getVideoDimensions(req.file);
+  const ratio = width / height;
+  if (Math.abs(ratio - 16 / 9) > 0.01) {
+    throw new (require('../Utils/http').HttpError)(400, `Vidéo non conforme (aspect ratio = ${ratio.toFixed(2)}), il faut du 16:9`);
+  }
 
   const duration = await getVideoDuration(req.file);
   if (duration < 60) {
