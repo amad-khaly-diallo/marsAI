@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mariadb:3306
--- Généré le : jeu. 29 jan. 2026 à 14:41
+-- Généré le : mer. 28 jan. 2026 à 12:18
 -- Version du serveur : 11.8.5-MariaDB-ubu2404
 -- Version de PHP : 8.3.26
 
@@ -20,23 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `marsAi`
 --
-
--- --------------------------------------------------------
-
---
--- Structure de la table `admins`
---
-
-CREATE TABLE `admins` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `first_name` varchar(100) NOT NULL,
-  `last_name` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` enum('admin','super_admin') NOT NULL DEFAULT 'admin',
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -139,37 +122,6 @@ CREATE TABLE `movie_tag` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `notations`
---
-
-CREATE TABLE `notations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `score` tinyint(3) UNSIGNED NOT NULL CHECK (`score` between 0 and 10),
-  `comment` text DEFAULT NULL,
-  `film_id` int(10) UNSIGNED NOT NULL,
-  `admin_id` int(10) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp()
-) ;
-
--- --------------------------------------------------------
-
---
--- Structure de la table `partners`
---
-
-CREATE TABLE `partners` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `logo_url` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `website_url` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `tag`
 --
 
@@ -194,13 +146,6 @@ CREATE TABLE `winner` (
 --
 -- Index pour les tables déchargées
 --
-
---
--- Index pour la table `admins`
---
-ALTER TABLE `admins`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Index pour la table `ai_declaration`
@@ -245,19 +190,6 @@ ALTER TABLE `movie_tag`
   ADD KEY `fk_movie_tag_tag` (`tag_id`);
 
 --
--- Index pour la table `notations`
---
-ALTER TABLE `notations`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uq_notations_admin_film` (`film_id`,`admin_id`);
-
---
--- Index pour la table `partners`
---
-ALTER TABLE `partners`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Index pour la table `tag`
 --
 ALTER TABLE `tag`
@@ -275,12 +207,6 @@ ALTER TABLE `winner`
 --
 -- AUTO_INCREMENT pour les tables déchargées
 --
-
---
--- AUTO_INCREMENT pour la table `admins`
---
-ALTER TABLE `admins`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `ai_declaration`
@@ -311,18 +237,6 @@ ALTER TABLE `filmmaker`
 --
 ALTER TABLE `movie`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `notations`
---
-ALTER TABLE `notations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `partners`
---
-ALTER TABLE `partners`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `tag`

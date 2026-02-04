@@ -1,4 +1,3 @@
-const { get } = require('../Routes');
 const { query, withTransaction } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
 
@@ -13,8 +12,6 @@ function mapMovie(row) {
     synopsis_english: row.synopsis_english,
     youtube_url: row.youtube_url,
     status: row.status,
-    decision_reason: row.decision_reason,
-    decision_at: row.decision_at,
     filmmaker_id: row.filmmaker_id,
   };
 }
@@ -98,60 +95,9 @@ async function listAssets(movieId) {
   return query('SELECT * FROM asset WHERE movie_id = :movieId ORDER BY id DESC', { movieId });
 }
 
-async function getAssetById(movieId, assetId) {
-  await getById(movieId);
-  return query('SELECT * FROM asset WHERE movie_id = :movieId AND id = :assetId', { movieId, assetId });
-}
-
-async function addAsset(movieId, payload) {
-  await getById(movieId);
-  const result = await query(
-    `INSERT INTO asset (asset_type, file_path, file_format,movie_id)
-     VALUES (:asset_type, :file_path, :file_format, :movie_id)`,
-    {
-      movie_id: movieId,
-      asset_type: payload.asset_type ?? null,
-      file_path: payload.file_path ?? null,
-      file_format: payload.file_format ?? null,
-    }
-  );
-  return getAssetById(movieId, result.insertId);
-}
-
-
-
 async function listCollaborators(movieId) {
   await getById(movieId);
   return query('SELECT * FROM collaborator WHERE movie_id = :movieId ORDER BY id DESC', { movieId });
-}
-
-/*{
-      "civility": "Mr",
-      "first_name": "Paul",
-      "last_name": "Martin",
-      "role": "Producer",
-      "email": "paul.martin@example.com",
-      "movie_id": 1
-    }*/
-async function addCollaborator(movieId, payload) {
-  await getById(movieId);
-  const result = await query(
-    `INSERT INTO collaborator (civility, first_name, last_name, role, email, movie_id)
-     VALUES (:civility, :first_name, :last_name, :role, :email, :movie_id)`,
-    {
-      movie_id: movieId,
-      civility: payload.civility ?? null,
-      first_name: payload.first_name ?? null,
-      last_name: payload.last_name ?? null,
-      role: payload.role ?? null,
-      email: payload.email ?? null,
-    }
-  );
-  return getMovieCollaboratorsById(movieId);
-}
-
-async function getMovieCollaboratorsById(id) {
-  return query('SELECT * FROM collaborator WHERE movie_id = :id', { id });
 }
 
 async function listTags(movieId) {
@@ -248,10 +194,7 @@ module.exports = {
   update,
   remove,
   listAssets,
-  addAsset,
-  getAssetById,
   listCollaborators,
-  addCollaborator,
   listTags,
   addTag,
   removeTag,
