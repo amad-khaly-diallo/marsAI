@@ -20,7 +20,7 @@ exports.submit = asyncHandler(async (req, res) => {
   }
 
   const duration = await getVideoDuration(req.file);
-  if (duration < 60) {
+  if (duration > 60) {
     throw new (require('../Utils/http').HttpError)(400, 'La vidéo dépasse la durée maximale de 1 minute.');
   }
 

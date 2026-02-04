@@ -25,7 +25,7 @@ router.post('/submit', upload.single('video'), FilmSubmissionController.submit);
 
 // GET /api/movies - Liste tous les films
 router.get('/', MovieController.list);
-
+router.post('/', MovieController.create);
 
 // GET /api/movies/:id - Détails d'un film
 router.get('/:id', MovieController.get);
