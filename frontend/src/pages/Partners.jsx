@@ -60,15 +60,15 @@ const partnersData = [
 
 const Partners = () => {
   return (
-    <div className="min-h-screen bg-slate-900 py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-black py-20 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <div className="text-center mb-20">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
             Nos Partenaires
-          </h2>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+          </h1>
+          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-blue-600 mx-auto mb-8 rounded-full"></div>
+          <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             Ils nous font confiance et contribuent au succès du festival
           </p>
         </div>
@@ -83,36 +83,23 @@ const Partners = () => {
               rel="noopener noreferrer"
               className="group"
             >
-              <div
-                className="bg-slate-800 rounded-xl p-8 h-full flex flex-col items-center justify-center
-                            border border-slate-700 shadow-lg
-                            transition-all duration-300 ease-in-out
-                            hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-600/20
-                            hover:-translate-y-2 cursor-pointer"
-              >
+              <div className="bg-gray-900/50 backdrop-blur-md rounded-2xl p-8 h-full flex flex-col items-center justify-center border border-gray-800 shadow-lg transition-all duration-300 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2">
                 {/* Logo Container */}
-                <div className="mb-6 overflow-hidden">
+                <div className="mb-6 overflow-hidden rounded-lg">
                   <img
                     src={partner.logoUrl}
                     alt={`Logo ${partner.name}`}
-                    className="w-48 h-24 object-contain
-                             transition-transform duration-300 ease-in-out
-                             group-hover:scale-110
-                             filter brightness-90 group-hover:brightness-100"
+                    className="w-48 h-24 object-contain transition-transform duration-300 group-hover:scale-110 filter brightness-90 group-hover:brightness-100"
                   />
                 </div>
 
                 {/* Partner Name */}
-                <h3
-                  className="text-gray-100 font-semibold text-center text-lg
-                             transition-colors duration-300
-                             group-hover:text-blue-400"
-                >
+                <h3 className="text-white font-semibold text-center text-lg mb-3 transition-colors duration-300 group-hover:text-blue-400">
                   {partner.name}
                 </h3>
 
                 {/* Hover Indicator */}
-                <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-blue-500 text-sm flex items-center gap-2">
                     Visiter le site
                     <svg
@@ -135,20 +122,20 @@ const Partners = () => {
           ))}
         </div>
 
-        {/* Call to Action optionnel */}
-        <div className="mt-20 text-center">
-          <p className="text-gray-400 text-lg mb-6">
-            Vous souhaitez devenir partenaire ?
-          </p>
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold 
-                           px-8 py-3 rounded-lg
-                           transition-all duration-300
-                           hover:shadow-lg hover:shadow-blue-600/50
-                           hover:scale-105"
-          >
-            Contactez-nous
-          </button>
+        {/* Call to Action */}
+        <div className="mt-24 text-center">
+          <div className="rounded-2xl border border-gray-800 bg-gray-900/50 backdrop-blur-md p-12 shadow-xl">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Devenez Partenaire
+            </h3>
+            <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+              Rejoignez notre communauté de partenaires et soutenez l'innovation
+              dans le cinéma généré par IA
+            </p>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50 hover:scale-105">
+              Contactez-nous
+            </button>
+          </div>
         </div>
       </div>
     </div>

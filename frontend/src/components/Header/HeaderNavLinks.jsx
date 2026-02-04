@@ -6,21 +6,19 @@ const links = [
   { to: "/partenaires", label: "Partenaires" },
 ];
 
-export default function HeaderNavLinks({ orientation = "horizontal", onNavigate }) {
+export default function HeaderNavLinks({
+  orientation = "horizontal",
+  onNavigate,
+}) {
   const base =
-    "text-sm font-medium tracking-wide transition-colors hover:text-brand-primary-soft";
+    "text-sm font-medium tracking-wide transition-all duration-300 hover:text-blue-400";
 
   const active = ({ isActive }) =>
-    [
-      base,
-      isActive
-        ? "text-brand-primary-soft"
-        : "text-slate-300",
-    ].join(" ");
+    [base, isActive ? "text-blue-500" : "text-gray-300"].join(" ");
 
   if (orientation === "vertical") {
     return (
-      <div className="flex flex-col gap-2 pt-3">
+      <div className="flex flex-col gap-3 pt-4">
         {links.map((link) => (
           <NavLink
             key={link.to}
@@ -33,7 +31,7 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
         ))}
         <NavLink
           to="/participer"
-          className="mt-2 inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm"
+          className="mt-3 inline-flex items-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:bg-blue-600 hover:shadow-blue-500/50"
           onClick={onNavigate}
         >
           Soumettre un film
@@ -43,7 +41,7 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
   }
 
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex items-center gap-8">
       {links.map((link) => (
         <NavLink key={link.to} to={link.to} className={active}>
           {link.label}
@@ -51,11 +49,10 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
       ))}
       <NavLink
         to="/participer"
-        className="inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent"
+        className="inline-flex items-center justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:bg-blue-600 hover:shadow-blue-500/50 hover:scale-105"
       >
         Soumettre un film
       </NavLink>
     </div>
   );
 }
-
