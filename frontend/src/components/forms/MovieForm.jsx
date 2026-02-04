@@ -1,4 +1,4 @@
-export default function MovieForm({ value, onChange }) {
+export default function MovieForm({ value, onChange, onVideoChange }) {
   const handle = (field) => (e) =>
     onChange({ ...value, [field]: e.target.value });
 
@@ -70,16 +70,32 @@ export default function MovieForm({ value, onChange }) {
           />
         </div>
       </div>
-      <div className="mt-3 flex flex-col gap-1">
-        <label className="text-xs text-brand-muted">
-          Lien YouTube (version finale du film)
-        </label>
-        <input
-          type="url"
-          value={value.youtube_url || ""}
-          onChange={handle("youtube_url")}
-          className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
-        />
+      <div className="mt-3 grid gap-3 md:grid-cols-2">
+        <div className="flex flex-col gap-1">
+          <label className="text-xs text-brand-muted">
+            Fichier vidéo (16:9, max 1 min)
+          </label>
+          <input
+            type="file"
+            accept="video/*"
+            required
+            onChange={(e) =>
+              onVideoChange && onVideoChange(e.target.files?.[0] || null)
+            }
+            className="block w-full text-xs text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-brand-accent"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs text-brand-muted">
+            Lien YouTube (optionnel, si déjà publié)
+          </label>
+          <input
+            type="url"
+            value={value.youtube_url || ""}
+            onChange={handle("youtube_url")}
+            className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
+          />
+        </div>
       </div>
     </section>
   );

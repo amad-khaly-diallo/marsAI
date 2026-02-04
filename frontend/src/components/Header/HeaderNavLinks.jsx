@@ -4,6 +4,7 @@ const links = [
   { to: "/", label: "Accueil" },
   { to: "/participer", label: "Participer" },
   { to: "/partenaires", label: "Partenaires" },
+  { to: "/admin", label: "Admin" },
 ];
 
 export default function HeaderNavLinks({ orientation = "horizontal", onNavigate }) {
