@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-black">
@@ -18,18 +20,18 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col items-center gap-4 pt-8 sm:flex-row sm:justify-center">
-            <a
-              href="/participer"
+            <Link
+              to="/participer"
               className="inline-flex items-center justify-center rounded-lg bg-blue-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-blue-500/30 transition-all duration-300 hover:bg-blue-600 hover:shadow-blue-500/50 hover:scale-105"
             >
               Soumettre un film
-            </a>
-            <a
-              href="/partenaires"
-              className="inline-flex items-center justify-center rounded-lg border border-gray-800 bg-gray-900/50 px-8 py-4 text-base font-semibold text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-blue-500 hover:bg-gray-800/50 hover:text-blue-400"
+            </Link>
+            <Link
+              to="/partenaires"
+              className="inline-flex items-center justify-center rounded-lg border border-blue-500 bg-blue-500/10 px-8 py-4 text-base font-semibold text-blue-400 backdrop-blur-sm transition-all duration-300 hover:bg-blue-500 hover:text-white hover:shadow-lg hover:shadow-blue-500/50 hover:scale-105"
             >
-              Nos partenaires
-            </a>
+              Découvrir nos partenaires
+            </Link>
           </div>
         </div>
 

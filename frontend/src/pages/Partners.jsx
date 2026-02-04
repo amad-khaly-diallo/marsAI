@@ -6,55 +6,111 @@ const partnersData = [
     id: 1,
     name: "CineVision Pro",
     logoUrl:
-      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=CineVision+Pro",
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=CineVision+Pro",
     websiteUrl: "https://cinevision.example.com",
   },
   {
     id: 2,
     name: "FilmTech Studios",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=FilmTech",
+    logoUrl: "https://via.placeholder.com/200x100/000000/3b82f6?text=FilmTech",
     websiteUrl: "https://filmtech.example.com",
   },
   {
     id: 3,
     name: "Digital Arts Media",
     logoUrl:
-      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Digital+Arts",
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Digital+Arts",
     websiteUrl: "https://digitalartsmed.example.com",
   },
   {
     id: 4,
     name: "Mars Production",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Mars+Prod",
+    logoUrl: "https://via.placeholder.com/200x100/000000/3b82f6?text=Mars+Prod",
     websiteUrl: "https://marsproduction.example.com",
   },
   {
     id: 5,
     name: "Creative Vision",
     logoUrl:
-      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Creative+Vision",
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Creative+Vision",
     websiteUrl: "https://creativevision.example.com",
   },
   {
     id: 6,
     name: "Stellar Films",
     logoUrl:
-      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Stellar+Films",
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Stellar+Films",
     websiteUrl: "https://stellarfilms.example.com",
   },
   {
     id: 7,
     name: "Golden Frame",
     logoUrl:
-      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Golden+Frame",
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Golden+Frame",
     websiteUrl: "https://goldenframe.example.com",
   },
   {
     id: 8,
     name: "Urban Cinema",
     logoUrl:
-      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Urban+Cinema",
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Urban+Cinema",
     websiteUrl: "https://urbancinema.example.com",
+  },
+  {
+    id: 9,
+    name: "Pixel Studios",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Pixel+Studios",
+    websiteUrl: "https://pixelstudios.example.com",
+  },
+  {
+    id: 10,
+    name: "Visionary Media",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Visionary+Media",
+    websiteUrl: "https://visionarymedia.example.com",
+  },
+  {
+    id: 11,
+    name: "CineArt Group",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=CineArt+Group",
+    websiteUrl: "https://cineart.example.com",
+  },
+  {
+    id: 12,
+    name: "Frame Perfect",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Frame+Perfect",
+    websiteUrl: "https://frameperfect.example.com",
+  },
+  {
+    id: 13,
+    name: "Digital Dream",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Digital+Dream",
+    websiteUrl: "https://digitaldream.example.com",
+  },
+  {
+    id: 14,
+    name: "Motion Masters",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Motion+Masters",
+    websiteUrl: "https://motionmasters.example.com",
+  },
+  {
+    id: 15,
+    name: "Reel Magic",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Reel+Magic",
+    websiteUrl: "https://reelmagic.example.com",
+  },
+  {
+    id: 16,
+    name: "Studio Infinity",
+    logoUrl:
+      "https://via.placeholder.com/200x100/000000/3b82f6?text=Studio+Infinity",
+    websiteUrl: "https://studioinfinity.example.com",
   },
 ];
 
