@@ -1,55 +1,61 @@
-import React from 'react';
+import React from "react";
 
 // Mock data des partenaires
 const partnersData = [
   {
     id: 1,
     name: "CineVision Pro",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=CineVision+Pro",
-    websiteUrl: "https://cinevision.example.com"
+    logoUrl:
+      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=CineVision+Pro",
+    websiteUrl: "https://cinevision.example.com",
   },
   {
     id: 2,
     name: "FilmTech Studios",
     logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=FilmTech",
-    websiteUrl: "https://filmtech.example.com"
+    websiteUrl: "https://filmtech.example.com",
   },
   {
     id: 3,
     name: "Digital Arts Media",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Digital+Arts",
-    websiteUrl: "https://digitalartsmed.example.com"
+    logoUrl:
+      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Digital+Arts",
+    websiteUrl: "https://digitalartsmed.example.com",
   },
   {
     id: 4,
     name: "Mars Production",
     logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Mars+Prod",
-    websiteUrl: "https://marsproduction.example.com"
+    websiteUrl: "https://marsproduction.example.com",
   },
   {
     id: 5,
     name: "Creative Vision",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Creative+Vision",
-    websiteUrl: "https://creativevision.example.com"
+    logoUrl:
+      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Creative+Vision",
+    websiteUrl: "https://creativevision.example.com",
   },
   {
     id: 6,
     name: "Stellar Films",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Stellar+Films",
-    websiteUrl: "https://stellarfilms.example.com"
+    logoUrl:
+      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Stellar+Films",
+    websiteUrl: "https://stellarfilms.example.com",
   },
   {
     id: 7,
     name: "Golden Frame",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Golden+Frame",
-    websiteUrl: "https://goldenframe.example.com"
+    logoUrl:
+      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Golden+Frame",
+    websiteUrl: "https://goldenframe.example.com",
   },
   {
     id: 8,
     name: "Urban Cinema",
-    logoUrl: "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Urban+Cinema",
-    websiteUrl: "https://urbancinema.example.com"
-  }
+    logoUrl:
+      "https://via.placeholder.com/200x100/1e293b/60a5fa?text=Urban+Cinema",
+    websiteUrl: "https://urbancinema.example.com",
+  },
 ];
 
 const Partners = () => {
@@ -77,11 +83,13 @@ const Partners = () => {
               rel="noopener noreferrer"
               className="group"
             >
-              <div className="bg-slate-800 rounded-xl p-8 h-full flex flex-col items-center justify-center
+              <div
+                className="bg-slate-800 rounded-xl p-8 h-full flex flex-col items-center justify-center
                             border border-slate-700 shadow-lg
                             transition-all duration-300 ease-in-out
                             hover:border-blue-600 hover:shadow-2xl hover:shadow-blue-600/20
-                            hover:-translate-y-2 cursor-pointer">
+                            hover:-translate-y-2 cursor-pointer"
+              >
                 {/* Logo Container */}
                 <div className="mb-6 overflow-hidden">
                   <img
@@ -95,9 +103,11 @@ const Partners = () => {
                 </div>
 
                 {/* Partner Name */}
-                <h3 className="text-gray-100 font-semibold text-center text-lg
+                <h3
+                  className="text-gray-100 font-semibold text-center text-lg
                              transition-colors duration-300
-                             group-hover:text-blue-400">
+                             group-hover:text-blue-400"
+                >
                   {partner.name}
                 </h3>
 
@@ -105,17 +115,17 @@ const Partners = () => {
                 <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-blue-500 text-sm flex items-center gap-2">
                     Visiter le site
-                    <svg 
-                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" 
-                      fill="none" 
-                      stroke="currentColor" 
+                    <svg
+                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M13 7l5 5m0 0l-5 5m5-5H6" 
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
                       />
                     </svg>
                   </span>
@@ -130,11 +140,13 @@ const Partners = () => {
           <p className="text-gray-400 text-lg mb-6">
             Vous souhaitez devenir partenaire ?
           </p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold 
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold 
                            px-8 py-3 rounded-lg
                            transition-all duration-300
                            hover:shadow-lg hover:shadow-blue-600/50
-                           hover:scale-105">
+                           hover:scale-105"
+          >
             Contactez-nous
           </button>
         </div>
