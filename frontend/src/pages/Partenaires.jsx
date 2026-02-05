@@ -1,18 +1,21 @@
 import React from 'react';
+import marsai from '../assets/images/marsai.png'; 
+import mobilefilm from '../assets/images/mobilefilm.png';
+import laplateforme from '../assets/images/laplateforme.png';
 
 
 
 const mainPartners = [
-  { id: 1, name: "MarsAI", logo: "https://via.placeholder.com/150?text=TechGiant" },
-  { id: 2, name: "Mobile Film festival", logo: "https://via.placeholder.com/150?text=Cinema+Futur" },
-  { id: 3, name: "La plateforme", logo: "https://via.placeholder.com/150?text=Global+Studio" },
+  { id: 1, name: "MarsAI", logo: marsai },
+  { id: 2, name: "Mobile Film festival", logo: mobilefilm },
+  { id: 3, name: "La plateforme", logo: laplateforme },
 ];
 
 const techPartners = [
-  { id: 4, name: "Gemini", logo: "" },
-  { id: 5, name: "Vision 8K", logo: "" },
-  { id: 6, name: "Audio Pro", logo: "" },
-  { id: 7, name: "Sora video", logo: "" },
+  { id: 4, name: "Gemini", logo: "images/gemini-logo.png" },
+  { id: 5, name: "Vision 8K", logo: "images/vision-8k-logo.png" },
+  { id: 6, name: "Audio Pro", logo: "images/audio-pro-logo.png" },
+  { id: 7, name: "Sora video", logo: "images/sora-video-logo.png" },
 ];
 
 const Partners = () => {
@@ -39,11 +42,11 @@ const Partners = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {mainPartners.map((partner) => (
-              <div key={partner.id} className="group relative h-40 bg-white/60 backdrop-blur-md border border-white/80 rounded-2xl flex items-center justify-center p-8 shadow-glass hover:shadow-glow hover:-translate-y-1 transition-all duration-300">
+              <div key={partner.id} className="group relative   border-white/80 rounded-2xl flex items-center justify-center p-8 shadow-glass hover:shadow-glow hover:-translate-y-1 transition-all duration-300">
                 <img 
                   src={partner.logo} 
                   alt={partner.name} 
-                  className="max-h-full max-w-full opacity-80 group-hover:opacity-100 transition-opacity grayscale group-hover:grayscale-0" 
+                  className="max-h-full max-w-full opacity-80 group-hover:opacity-100 transition-opacity  group-hover:grayscale-0" 
                 />
               </div>
             ))}
