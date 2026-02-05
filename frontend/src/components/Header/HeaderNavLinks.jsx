@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const links = [
   { to: "/", label: "Accueil" },
-  { to: "/participer", label: "Participer" },
+  { to: "/contact", label: "Contact" },
   { to: "/partenaires", label: "Partenaires" },
   { to: "/admin", label: "Admin" },
 ];
@@ -37,7 +37,7 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
           className="mt-2 inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm"
           onClick={onNavigate}
         >
-          Soumettre un film
+          Participer
         </NavLink>
       </div>
     );
@@ -52,9 +52,9 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
       ))}
       <NavLink
         to="/participer"
-        className="inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent"
+        className="inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent hover:"
       >
-        Soumettre un film
+        Participer
       </NavLink>
     </div>
   );
