@@ -30,21 +30,21 @@ export default function FooterLegalLinks() {
           </a>
           <div className="flex gap-3 md:justify-end">
             <a
-              href="#"
+              href="https://www.instagram.com/marsai.festival/"
               className="hover:text-brand-primary-soft"
               aria-label="Instagram"
             >
               Instagram
             </a>
             <a
-              href="#"
+              href="https://twitter.com/marsai_festival"
               className="hover:text-brand-primary-soft"
               aria-label="X / Twitter"
             >
               X
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/company/marsai-festival"
               className="hover:text-brand-primary-soft"
               aria-label="LinkedIn"
             >
