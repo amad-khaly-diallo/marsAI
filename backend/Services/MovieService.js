@@ -20,7 +20,7 @@ function mapMovie(row) {
 }
 
 async function list() {
-  const rows = await query('SELECT * FROM movie ORDER BY id DESC');
+  const rows = await query("SELECT * FROM movie WHERE status = 'selected' ORDER BY id DESC");
   return rows.map(mapMovie);
 }
 
@@ -29,62 +29,6 @@ async function getById(id) {
   const row = rows[0];
   if (!row) throw new HttpError(404, 'Movie not found');
   return mapMovie(row);
-}
-
-async function create(payload) {
-  const required = ['original_title', 'english_title', 'duration', 'youtube_url', 'filmmaker_id'];
-  const missing = required.filter((k) => payload[k] === undefined || payload[k] === null || payload[k] === '');
-  if (missing.length) throw new HttpError(400, 'Missing required fields', { missing });
-
-  const result = await query(
-    `INSERT INTO movie
-      (original_title, english_title, duration, language, synopsis_original, synopsis_english, youtube_url, status, filmmaker_id)
-     VALUES
-      (:original_title, :english_title, :duration, :language, :synopsis_original, :synopsis_english, :youtube_url, :status, :filmmaker_id)`,
-    {
-      original_title: payload.original_title,
-      english_title: payload.english_title,
-      duration: payload.duration,
-      language: payload.language ?? null,
-      synopsis_original: payload.synopsis_original ?? null,
-      synopsis_english: payload.synopsis_english ?? null,
-      youtube_url: payload.youtube_url,
-      status: payload.status ?? 'in_process',
-      filmmaker_id: payload.filmmaker_id,
-    }
-  );
-
-  return getById(result.insertId);
-}
-
-async function update(id, payload) {
-  await getById(id);
-  await query(
-    `UPDATE movie SET
-      original_title = :original_title,
-      english_title = :english_title,
-      duration = :duration,
-      language = :language,
-      synopsis_original = :synopsis_original,
-      synopsis_english = :synopsis_english,
-      youtube_url = :youtube_url,
-      status = :status,
-      filmmaker_id = :filmmaker_id
-     WHERE id = :id`,
-    {
-      id,
-      original_title: payload.original_title ?? null,
-      english_title: payload.english_title ?? null,
-      duration: payload.duration ?? null,
-      language: payload.language ?? null,
-      synopsis_original: payload.synopsis_original ?? null,
-      synopsis_english: payload.synopsis_english ?? null,
-      youtube_url: payload.youtube_url ?? null,
-      status: payload.status ?? null,
-      filmmaker_id: payload.filmmaker_id ?? null,
-    }
-  );
-  return getById(id);
 }
 
 async function remove(id) {
@@ -119,20 +63,11 @@ async function addAsset(movieId, payload) {
 }
 
 
-
 async function listCollaborators(movieId) {
   await getById(movieId);
   return query('SELECT * FROM collaborator WHERE movie_id = :movieId ORDER BY id DESC', { movieId });
 }
 
-/*{
-      "civility": "Mr",
-      "first_name": "Paul",
-      "last_name": "Martin",
-      "role": "Producer",
-      "email": "paul.martin@example.com",
-      "movie_id": 1
-    }*/
 async function addCollaborator(movieId, payload) {
   await getById(movieId);
   const result = await query(
@@ -244,8 +179,6 @@ async function upsertAiDeclaration(movieId, payload) {
 module.exports = {
   list,
   getById,
-  create,
-  update,
   remove,
   listAssets,
   addAsset,

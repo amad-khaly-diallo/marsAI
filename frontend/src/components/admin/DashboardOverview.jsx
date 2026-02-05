@@ -17,7 +17,7 @@ export default function DashboardOverview() {
       setError(null);
       try {
         const [moviesRes, filmmakersRes] = await Promise.all([
-          fetch("/api/movies"),
+          fetch("/api/admin/films"),
           fetch("/api/filmmakers"),
         ]);
 
