@@ -179,8 +179,6 @@ async function upsertAiDeclaration(movieId, payload) {
 module.exports = {
   list,
   getById,
-  create,
-  update,
   remove,
   listAssets,
   addAsset,
