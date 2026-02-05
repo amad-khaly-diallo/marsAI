@@ -15,6 +15,7 @@ module.exports = {
         "brand-accent": "rgb(var(--color-accent) / <alpha-value>)",
         "brand-border": "rgb(var(--color-border) / <alpha-value>)",
         "brand-muted": "rgb(var(--color-muted) / <alpha-value>)",
+        "brand-white": "rgb(var(--color-white) / <alpha-value>)",
       },
       boxShadow: {
         "soft-xl": "0 24px 60px rgba(15, 23, 42, 0.55)",
