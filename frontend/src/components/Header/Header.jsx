@@ -5,8 +5,6 @@ export default function Header() {
       <a href="/submission" className="nav-link">Soumission</a>
       <a href="/admin" className="nav-link">Admin</a>
       <a href="/Jury" className="nav-link">Jury</a>
-      <a href="/about" className="nav-link">À propos</a>
-
     </div>
   );
 }
