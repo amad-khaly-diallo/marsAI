@@ -7,9 +7,10 @@ import laplateforme from '../assets/images/laplateforme.png';
 
 
 const mainPartners = [
-  { id: 1, name: "MarsAI", logo: marsai },
+  { id: 1, name: "La plateforme", logo: laplateforme },
   { id: 2, name: "Mobile Film festival", logo: mobilefilm },
-  { id: 3, name: "La plateforme", logo: laplateforme },
+  { id: 3, name: "MarsAI", logo: marsai },
+  
 ];
 
 const techPartners = [
