@@ -75,30 +75,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/25" />
 
-        {/* Header */}
-        <header className="absolute top-0 left-0 right-0 z-20">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
-            <Link to="/" className="text-lg font-extrabold tracking-tight">
-              mars<span className="text-white/70">AI</span>
-            </Link>
-
-            <nav className="hidden md:flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-3 py-2 backdrop-blur">
-              <NavItem to="/">Accueil</NavItem>
-              <NavItem to="/a-propos">À propos</NavItem>
-              <NavItem to="/programme">Films</NavItem>
-              <NavItem to="/contact">Contact</NavItem>
-            </nav>
-
-            <div className="flex items-center gap-2">
-              <Link
-                to="/login"
-                className="rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-bold backdrop-blur hover:bg-white/20"
-              >
-                Connexion
-              </Link>
-            </div>
-          </div>
-        </header>
 
         {/* Texte centré (moins “headline IA”) */}
         <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
