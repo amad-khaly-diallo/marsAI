@@ -67,29 +67,6 @@ export default function AProposPage() {
         <div className="absolute -bottom-60 left-[18%] h-[520px] w-[820px] rounded-full bg-sky-500/10 blur-3xl" />
       </div>
 
-      {/* Header (cohérent, sans "Déposer") */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/20 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <Link to="/" className="text-lg font-extrabold tracking-tight">
-            mars<span className="text-white/70">AI</span>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-3 py-2 backdrop-blur">
-            <NavItem to="/">Accueil</NavItem>
-            <NavItem to="/a-propos">À propos</NavItem>
-            <NavItem to="/programme">Films</NavItem>
-            <NavItem to="/contact">Contact</NavItem>
-          </nav>
-
-          <Link
-            to="/login"
-            className="rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-bold backdrop-blur hover:bg-white/20"
-          >
-            Connexion
-          </Link>
-        </div>
-      </header>
-
       {/* HERO ABOUT */}
       <section className="px-6 pt-12">
         <div className="mx-auto max-w-6xl">
