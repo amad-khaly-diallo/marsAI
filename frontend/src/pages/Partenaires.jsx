@@ -57,7 +57,7 @@ const Partners = () => {
 
         <section>
           <h2 className="text-2xl font-bold text-navy mb-8 border-l-4 border-accent pl-4">
-            Soutien Technologique
+            Technologies & Outils
           </h2>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
