@@ -47,7 +47,7 @@ const juryMembers = [
 
 const Jury = () => {
   return (
-    <div className="w-full bg-slate-950 text-white h-full bg-gradient-to-b from-sky-dark to-sky-light py-12 px-6">
+    <div className="w-full bg-[#070819] text-white h-full bg-gradient-to-b from-sky-dark to-sky-light py-12 px-6">
       <div className="max-w-7xl mx-auto">
         
         <div className="text-center mb-12">
