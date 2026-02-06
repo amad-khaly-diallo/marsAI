@@ -1,0 +1,90 @@
+import { useState } from "react";
+
+export default function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!email.trim()) {
+      setError("Merci de renseigner un email.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/newsletters/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(
+          data.error || data.message || "Impossible d'enregistrer l'email."
+        );
+      }
+
+      setSuccess("Merci, votre email est bien inscrit à la newsletter.");
+      setEmail("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="mt-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 text-left backdrop-blur"
+    >
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
+          Newsletter
+        </p>
+        <p className="mt-1 text-xs text-white/70">
+          Recevoir les infos sur la programmation, les appels à films et les
+          événements autour du festival.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="votre@email"
+          className="w-full flex-1 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/70"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {loading ? "Inscription..." : "S'inscrire"}
+        </button>
+      </div>
+
+      {error && (
+        <p className="text-[11px] text-red-300">
+          {error}
+        </p>
+      )}
+      {success && !error && (
+        <p className="text-[11px] text-emerald-300">
+          {success}
+        </p>
+      )}
+    </form>
+  );
+}
+
