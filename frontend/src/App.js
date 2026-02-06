@@ -1,5 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import Home from "./pages/Home";
+import AProposPage from "./pages/AProposPage";
 import Participer from "./pages/Participer";
 import Partenaires from "./pages/Partenaires";
 import CGV from "./pages/CGV";
@@ -10,15 +13,24 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
 
-function App() {
+export default function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex min-h-screen flex-col">
         <Header />
 
         <main className="flex-grow">
           <Routes>
+            {/* HOME */}
             <Route path="/" element={<Home />} />
+
+            {/* Optionnel: /home */}
+            <Route path="/home" element={<Home />} />
+
+            {/* A PROPOS */}
+            <Route path="/a-propos" element={<AProposPage />} />
+            {/* 404 => retourne à Home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/participer" element={<Participer />} />
             <Route path="/partenaires" element={<Partenaires />} />
             <Route path="/admin" element={<Admin />} />
@@ -34,5 +46,3 @@ function App() {
     </Router>
   );
 }
-
-export default App;
