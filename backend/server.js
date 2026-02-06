@@ -6,11 +6,18 @@ const apiRoutes = require('./Routes');
 const notFound = require('./Middlewares/notFound');
 const errorHandler = require('./Middlewares/errorHandler');
 const { checkDatabaseConnection } = require('./Config/db');
+const oauth = require('./Routes/oauth');
+
 
 const app = express();
 
+app.use('/', oauth);
+
 // Middlewares globaux
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true, // Permet l'envoi/réception des cookies
+}));
 app.use(express.json());
 
 // Route d'accueil simple 

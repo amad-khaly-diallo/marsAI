@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Submission from "./pages/Submission";
+import Participer from "./pages/Participer";
+import Partenaires from "./pages/Partenaires";
+import CGV from "./pages/CGV";
+import CGU from "./pages/CGU";
 import Admin from "./pages/Admin";
 import Jury from "./pages/Jury";
 import Header from "./components/Header/Header";
@@ -16,11 +19,13 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/submission" element={<Submission />} />
+            <Route path="/participer" element={<Participer />} />
+            <Route path="/partenaires" element={<Partenaires />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/jury" element={<Jury />} />
             <Route path="/Partenaires" element={<About />} />
-            
+            <Route path="/cgv" element={<CGV />} />
+            <Route path="/cgu" element={<CGU />} />
           </Routes>
         </main>
 
