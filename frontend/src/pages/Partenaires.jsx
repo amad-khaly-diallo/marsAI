@@ -57,13 +57,13 @@ const Partners = () => {
 
         <section>
           <h2 className="text-2xl font-bold text-navy mb-8 border-l-4 border-accent pl-4">
-            Soutien Technologique
+            Technologies & Outils
           </h2>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {techPartners.map((partner) => (
               // Carte Glassmorphism (Petite)
-              <div key={partner.id} className="group h-28 bg-white/40 backdrop-blur-sm border border-white/60 rounded-xl flex items-center justify-center p-6 hover:bg-white/60 transition-colors duration-300">
+              <div key={partner.id} className="group h-24 backdrop-blur-sm border border-blue-900 rounded-xl flex items-center justify-center p-6 hover:bg-white/20 transition-colors duration-300">
                 <img 
                   src={partner.logo} 
                   alt={partner.name} 
