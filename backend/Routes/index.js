@@ -1,30 +1,27 @@
 const express = require('express');
-const HomeController = require('../Controllers/HomeController');
 const { asyncHandler } = require('../Utils/http');
 const { ping } = require('../Utils/db');
-
+const adminRoutes = require('./admins');
 const filmmakerRoutes = require('./filmmakers');
 const movieRoutes = require('./movies');
+const adminFilmsRoutes = require('./adminFilms');
+const authRoutes = require('./auth');
+const cookieParser = require('cookie-parser');
 
 const router = express.Router();
 
-router.get('/', HomeController.index);
+router.use(cookieParser());
 
-router.get(
-  '/health',
-  asyncHandler(async (req, res) => {
-    await ping();
-    res.json({
-      status: 'ok',
-      service: 'marsAI-backend',
-      timestamp: new Date().toISOString(),
-      db: 'up',
-    });
-  })
-);
+router.use('/health', asyncHandler(async (req, res) => {
+  await ping();
+  res.json({ status: 'ok' });
+}));
 
-router.use('/filmmakers', filmmakerRoutes);
-router.use('/movies', movieRoutes);
+router.use('/admins', adminRoutes);// Admin CRUD
+router.use('/admin/films', adminFilmsRoutes);// Admin gestion des films
+router.use('/filmmakers', filmmakerRoutes);// Filmmaker CRUD
+router.use('/movies', movieRoutes);// CRUD movies + POST /api/movies/submit (soumission publique)
+router.use('/auth', authRoutes);
 
 module.exports = router;
 

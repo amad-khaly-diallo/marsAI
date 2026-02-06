@@ -2,18 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Variables globales pour un thème “modern tech” */
+:root {
+  --color-bg: 0 0 0; /* #000000 - black */
+  --color-surface: 17 24 39; /* #111827 - gray-900 */
+  --color-primary: 59 130 246; /* #3b82f6 - blue-500 */
+  --color-primary-soft: 96 165 250; /* #60a5fa - blue-400 */
+  --color-accent: 37 99 235; /* #2563eb - blue-600 */
+  --color-border: 30 64 175; /* #1f2937 - gray-800 */
+  --color-muted: 156 163 175; /* #9ca3af - gray-400 */
+  --color-white: 255 255 255; /* #ffffff - white */
+
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  @apply bg-brand-bg text-brand-white font-sans antialiased;
+}
+
+a {
+  @apply text-brand-primary-soft hover:text-brand-accent transition-colors;
 }
 
 /* FICHIER: frontend/src/index.css (ajoute en bas) */
