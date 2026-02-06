@@ -12,6 +12,7 @@ exports.get = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+
 exports.create = asyncHandler(async (req, res) => {
   const data = await MovieService.create(req.body || {});
   res.status(201).json(data);
@@ -35,10 +36,22 @@ exports.listAssets = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+exports.addAssets = asyncHandler(async (req, res) => {
+  const movieId = Number(req.params.movieId);
+  const data = await MovieService.addAsset(movieId, req.body || {});
+  res.status(201).json(data);
+});
+
 exports.listCollaborators = asyncHandler(async (req, res) => {
   const movieId = Number(req.params.movieId);
   const data = await MovieService.listCollaborators(movieId);
   res.json(data);
+});
+
+exports.addCollaborator = asyncHandler(async (req, res) => {
+  const movieId = Number(req.params.movieId);
+  const data = await MovieService.addCollaborator(movieId, req.body || {});
+  res.status(201).json(data);
 });
 
 exports.listTags = asyncHandler(async (req, res) => {

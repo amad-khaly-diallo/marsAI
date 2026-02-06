@@ -1,17 +1,20 @@
+import FooterMainLinks from "./FooterMainLinks";
+import FooterLegalLinks from "./FooterLegalLinks";
+
 export default function Footer() {
   return (
-    <div className=" bg-blue-900 text-white">
-      <div className="flex flex-wrap justify-center gap-6 mb-4 pt-4">
-      <a href="/mentions-legales">Mentions légales</a>
-      <a href="/contact">Contact</a>
-    <a href="/privacy-policy">Politique de confidentialité</a>
-    <a href="/terms-of-service">Conditions d'utilisation</a>
-    <a href="/Partenaires" className="nav-link">Partenaires</a>
-
-    </div>
-    <div className=" p-4 text-white text-center">
-      <p className="text-sm">© 2026 MarsAI. Tous droits réservés.</p> 
-    </div>
-    </div>
-);
+    <footer className="border-t border-brand-border/40 bg-brand-surface/70">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-8 md:flex-row md:items-start md:justify-between">
+        <FooterMainLinks />
+        <FooterLegalLinks />
+      </div>
+      <div className="border-t border-slate-800/70 py-4">
+        <p className="text-center text-xs text-brand-muted">
+          © {new Date().getFullYear()} marsAI — Festival de courts-métrages
+          générés par IA.
+        </p>
+      </div>
+    </footer>
+  );
 }
+
