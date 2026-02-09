@@ -1,18 +1,25 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
-    if (!email.trim()) {
-      setError("Merci de renseigner un email.");
+    const trimmed = email.trim();
+    if (!trimmed) {
+      setError(t("newsletter.error.required"));
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setError(t("newsletter.error.invalid"));
       return;
     }
 
@@ -23,17 +30,17 @@ export default function NewsletterForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: trimmed }),
       });
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         throw new Error(
-          data.error || data.message || "Impossible d'enregistrer l'email."
+          data.error || data.message || t("newsletter.error.generic")
         );
       }
 
-      setSuccess("Merci, votre email est bien inscrit à la newsletter.");
+      setSuccess(t("newsletter.success"));
       setEmail("");
     } catch (err) {
       setError(err.message);
@@ -63,6 +70,8 @@ export default function NewsletterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="votre@email"
+          required
+          maxLength={200}
           className="w-full flex-1 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/70"
         />
         <button
