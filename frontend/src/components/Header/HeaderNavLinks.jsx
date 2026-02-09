@@ -1,13 +1,15 @@
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const links = [
-  { to: "/", label: "Accueil" },
-  { to: "/contact", label: "Contact" },
-  { to: "/jury", label: "Jury" },
-  { to: "/admin", label: "Admin" },
+  { to: "/", labelKey: "nav.home", defaultLabel: "Accueil" },
+  { to: "/contact", labelKey: "nav.contact", defaultLabel: "Contact" },
+  { to: "/jury", labelKey: "nav.jury", defaultLabel: "Jury" },
+  { to: "/admin", labelKey: "nav.admin", defaultLabel: "Admin" },
 ];
 
 export default function HeaderNavLinks({ orientation = "horizontal", onNavigate }) {
+  const { t } = useTranslation();
   const base =
     "text-sm font-medium tracking-wide transition-colors hover:text-brand-primary-soft";
 
@@ -29,7 +31,7 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
             className={active}
             onClick={onNavigate}
           >
-            {link.label}
+            {t(link.labelKey, link.defaultLabel)}
           </NavLink>
         ))}
         <NavLink
@@ -37,7 +39,7 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
           className="mt-2 inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm"
           onClick={onNavigate}
         >
-          Participer
+          {t("nav.participate", "Participer")}
         </NavLink>
       </div>
     );
@@ -47,14 +49,14 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
     <div className="flex items-center gap-6">
       {links.map((link) => (
         <NavLink key={link.to} to={link.to} className={active}>
-          {link.label}
+          {t(link.labelKey, link.defaultLabel)}
         </NavLink>
       ))}
       <NavLink
         to="/participer"
-        className="inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent hover:"
+        className="inline-flex items-center justify-center rounded-full bg-brand-primary px-4 py-2 text-sm font-semibold text-brand-white shadow-soft-sm hover:bg-brand-accent hover:text-brand-white"
       >
-        Participer
+        {t("nav.participate", "Participer")}
       </NavLink>
     </div>
   );

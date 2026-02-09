@@ -1,26 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-/* ---------- Helpers ---------- */
-
-function NavItem({ to, children }) {
-  const { pathname } = useLocation();
-  const active = pathname === to;
-
-  return (
-    <Link
-      to={to}
-      className={[
-        "rounded-full px-4 py-2 text-sm font-semibold transition",
-        active
-          ? "bg-white/20 text-white"
-          : "text-white/80 hover:bg-white/15 hover:text-white",
-      ].join(" ")}
-    >
-      {children}
-    </Link>
-  );
-}
 
 function SmallLabel({ children }) {
   return (
@@ -52,10 +33,9 @@ function Card({ title, text }) {
 function Divider() {
   return <div className="h-px w-full bg-white/10" />;
 }
-
-
-
 export default function AProposPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="relative min-h-screen text-white">
       {/* Background cohérent avec Home */}
@@ -71,16 +51,18 @@ export default function AProposPage() {
       <section className="px-6 pt-12">
         <div className="mx-auto max-w-6xl">
           <div className="rounded-[36px] border border-white/10 bg-white/[0.05] p-8 shadow-[0_25px_90px_rgba(0,0,0,.18)] backdrop-blur md:p-10">
-            <SmallLabel>À propos — Marseille</SmallLabel>
+            <SmallLabel>{t("about.badge")}</SmallLabel>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight md:text-5xl">
-              Un festival pour{" "}
-              <span className="text-white/85">raconter fort</span>, en une minute.
+              {t("about.heroTitle.part1")}{" "}
+              <span className="text-white/85">
+                {t("about.heroTitle.highlight")}
+              </span>
+              {t("about.heroTitle.part2")}
             </h1>
 
             <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 md:text-base">
-              marsAI est un festival de courts-métrages au format 1 minute. Projections, talks et ateliers :
-              une expérience culturelle contemporaine pensée comme un rendez-vous éditorial — pas comme un produit tech.
+              {t("about.hero.paragraph")}
             </p>
 
             <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -94,13 +76,13 @@ export default function AProposPage() {
                 to="/programme"
                 className="rounded-full bg-white px-6 py-3 text-sm font-extrabold text-black hover:bg-white/90"
               >
-                Voir la programmation
+                {t("about.hero.cta.program")}
               </Link>
               <Link
                 to="/contact"
                 className="rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-extrabold hover:bg-white/20"
               >
-                Contacter l’équipe
+                {t("about.hero.cta.contact")}
               </Link>
             </div>
           </div>
@@ -114,16 +96,18 @@ export default function AProposPage() {
         <div className="mx-auto max-w-6xl">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-7 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur">
-              <div className="text-xs font-semibold text-white/60">Manifeste</div>
+              <div className="text-xs font-semibold text-white/60">
+                {t("about.manifesto.label")}
+              </div>
               <h2 className="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">
-                La technologie n’est pas le sujet.{" "}
-                <span className="text-white/80">L’intention l’est.</span>
+                {t("about.manifesto.title.part1")}{" "}
+                <span className="text-white/80">
+                  {t("about.manifesto.title.highlight")}
+                </span>
               </h2>
 
               <p className="mt-4 text-sm leading-7 text-white/70">
-                Nous valorisons l’écriture, la mise en scène, le montage, l’image et le son.
-                L’IA peut faire partie du processus, mais ce qui compte reste le film :
-                une idée claire, une direction, un rythme.
+                {t("about.manifesto.body")}
               </p>
 
               <Divider />
@@ -158,13 +142,14 @@ export default function AProposPage() {
         <div className="mx-auto max-w-6xl">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-7 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur">
-              <div className="text-xs font-semibold text-white/60">Lieu</div>
+              <div className="text-xs font-semibold text-white/60">
+                {t("about.location.label")}
+              </div>
               <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-                Marseille, comme décor et énergie
+                {t("about.location.title")}
               </h3>
               <p className="mt-3 text-sm leading-7 text-white/70">
-                Marseille donne le ton : contrastes, lumière, récits. Le festival s’y ancre
-                et invite à regarder autrement.
+                {t("about.location.body")}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -172,13 +157,13 @@ export default function AProposPage() {
                   to="/contact"
                   className="rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-extrabold hover:bg-white/20"
                 >
-                  Infos pratiques
+                  {t("about.location.cta.info")}
                 </Link>
                 <Link
                   to="/programme"
                   className="rounded-full px-6 py-3 text-sm font-extrabold text-white/70 hover:text-white"
                 >
-                  Voir la programmation →
+                  {t("about.location.cta.program")}
                 </Link>
               </div>
             </div>
@@ -207,14 +192,15 @@ export default function AProposPage() {
       {/* PARTENAIRES */}
       <section id="partenaires" className="px-6 pb-24">
         <div className="mx-auto max-w-6xl">
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-8 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur">
-            <div className="text-xs font-semibold text-white/60">Partenaires</div>
+            <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-8 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur">
+            <div className="text-xs font-semibold text-white/60">
+              {t("about.partners.label")}
+            </div>
             <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-              Travaillons ensemble
+              {t("about.partners.title")}
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70">
-              Soutenir marsAI, c’est associer votre image à un événement culturel contemporain :
-              visibilité, présence sur place, prises de parole, ateliers et contenus.
+              {t("about.partners.body")}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -222,13 +208,13 @@ export default function AProposPage() {
                 to="/contact"
                 className="rounded-full bg-white px-6 py-3 text-sm font-extrabold text-black hover:bg-white/90"
               >
-                Nous contacter
+                {t("about.partners.cta.contact")}
               </Link>
               <Link
                 to="/programme"
                 className="rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-extrabold hover:bg-white/20"
               >
-                Voir la programmation
+                {t("about.partners.cta.program")}
               </Link>
             </div>
           </div>
