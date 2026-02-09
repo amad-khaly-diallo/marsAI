@@ -1,6 +1,6 @@
 const { withTransaction, query } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
-const { uploadVideo } = require('./youtube.service');
+const { uploadVideo, getVideoStatus } = require('./youtube.service');
 const { sendSubmissionConfirmation } = require('./mail.service');
 
 function validateMoviePayload(movie) {
@@ -30,6 +30,74 @@ async function handleYoutubeUpload(videoFile, movie) {
   });
 
   return `https://www.youtube.com/watch?v=${youtubeId}`;
+}
+
+function extractYoutubeIdFromUrl(youtubeUrl) {
+  if (!youtubeUrl) return null;
+
+  try {
+    const url = new URL(youtubeUrl);
+
+    // Formats classiques : https://www.youtube.com/watch?v=ID
+    const v = url.searchParams.get('v');
+    if (v) return v;
+
+    // Format court : https://youtu.be/ID
+    if (url.hostname.includes('youtu.be')) {
+      return url.pathname.split('/').filter(Boolean).pop() || null;
+    }
+
+    // Autres formats (par ex. /shorts/ID)
+    const parts = url.pathname.split('/').filter(Boolean);
+    if (parts.length) {
+      return parts.pop();
+    }
+  } catch (e) {
+    // URL invalide, on ignore simplement
+  }
+
+  return null;
+}
+
+/**
+ * Programme un contrôle différé (30 min) du statut YouTube.
+ * - Si uploadStatus === 'processed' => on passe le film en 'approved' et on envoie l'email.
+ * - Si uploadStatus === 'rejected'  => on passe le film en 'rejected' avec la raison YouTube.
+ * (Les autres statuts sont simplement ignorés.)
+ */
+function scheduleYoutubeApprovalCheck({ movieId, youtubeUrl }) {
+  const THIRTY_MINUTES = 30 * 60 * 1000;
+
+  setTimeout(async () => {
+    const youtubeId = extractYoutubeIdFromUrl(youtubeUrl);
+    if (!youtubeId) {
+      // eslint-disable-next-line no-console
+      console.error('Impossible de déterminer le YouTube ID à partir de l’URL :', youtubeUrl);
+      return;
+    }
+
+    try {
+      const { uploadStatus, rejectionReason } = await getVideoStatus(youtubeId);
+
+      // Chargement tardif pour éviter les éventuels problèmes de dépendances circulaires
+      // eslint-disable-next-line global-require
+      const AdminFilmService = require('./AdminFilmService');
+
+      if (uploadStatus === 'processed') {
+        await AdminFilmService.updateStatus(movieId, { status: 'approved' });
+      } else if (uploadStatus === 'rejected') {
+        await AdminFilmService.updateStatus(movieId, {
+          status: 'rejected',
+          decision_reason: rejectionReason || 'Rejetée par YouTube.',
+        });
+      }
+      // Autres statuts (uploaded, failed, etc.) : on ne fait rien automatiquement.
+    } catch (err) {
+      // On loggue simplement ; pas de throw dans un setTimeout
+      // eslint-disable-next-line no-console
+      console.error('❌ Erreur lors du contrôle différé du statut YouTube :', err.message || err);
+    }
+  }, THIRTY_MINUTES);
 }
 
 async function submit({ movie, videoFile }) {
@@ -90,6 +158,12 @@ async function submit({ movie, videoFile }) {
         youtube_url: youtubeUrl,
         status: 'in_process',
       };
+    });
+
+    // 4. Planifier un contrôle automatique 30 minutes plus tard
+    scheduleYoutubeApprovalCheck({
+      movieId: result.movie_id,
+      youtubeUrl: result.youtube_url,
     });
 
     return result;
