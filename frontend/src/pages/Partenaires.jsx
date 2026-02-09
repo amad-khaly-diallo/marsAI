@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import marsai from '../assets/images/marsai.png'; 
 import mobilefilm from '../assets/images/mobilefilm.png';
 import laplateforme from '../assets/images/laplateforme.png';
@@ -21,17 +22,21 @@ const techPartners = [
 ];
 
 const Partners = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-slate-950 text-white min-h-screen bg-gradient-to-b from-sky-dark to-sky-light py-16 px-6">
       
       
       <div className="max-w-7xl mx-auto text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-extrabold text-navy mb-4">
-          Nos Partenaires
+          {t("partners.title", "Nos Partenaires")}
         </h1>
         <p className="text-body text-lg max-w-2xl mx-auto">
-          Ils soutiennent l'innovation et la créativité. Découvrez les organisations 
-          qui rendent le festival MarsAI possible.
+          {t(
+            "partners.subtitle",
+            "Ils soutiennent l'innovation et la créativité. Découvrez les organisations qui rendent le festival MarsAI possible."
+          )}
         </p>
       </div>
 
@@ -39,7 +44,7 @@ const Partners = () => {
 
         <section>
           <h2 className="text-2xl font-bold text-navy mb-8 border-l-4 border-primary pl-4">
-            Partenaires Officiels
+            {t("partners.official", "Partenaires Officiels")}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -57,7 +62,7 @@ const Partners = () => {
 
         <section>
           <h2 className="text-2xl font-bold text-navy mb-8 border-l-4 border-accent pl-4">
-            Technologies & Outils
+            {t("partners.techTitle", "Technologies & Outils")}
           </h2>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -80,10 +85,13 @@ const Partners = () => {
           
           <h3 className="text-2xl font-bold mb-4 relative z-10">Devenir Partenaire ?</h3>
           <p className="mb-8 text-white/80 max-w-lg mx-auto relative z-10">
-            Rejoignez l'aventure MarsAI et associez votre marque à l'avenir du cinéma et de l'intelligence artificielle.
+            {t(
+              "partners.ctaText",
+              "Rejoignez l'aventure MarsAI et associez votre marque à l'avenir du cinéma et de l'intelligence artificielle."
+            )}
           </p>
           <button className="bg-primary hover:bg-accent text-white font-bold py-3 px-8 rounded-full transition-colors duration-300 shadow-lg relative z-10">
-            Nous Contacter
+            {t("partners.ctaButton", "Nous Contacter")}
           </button>
         </div>
 
