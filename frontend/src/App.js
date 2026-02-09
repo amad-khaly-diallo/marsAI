@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
 import Home from "./pages/Home";
 import AProposPage from "./pages/AProposPage";
 import Participer from "./pages/Participer";
@@ -12,6 +11,7 @@ import Jury from "./pages/Jury";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
+import Contact from "./pages/Contact";
 
 export default function App() {
   return (
@@ -23,14 +23,8 @@ export default function App() {
           <Routes>
             {/* HOME */}
             <Route path="/" element={<Home />} />
-
-            {/* Optionnel: /home */}
             <Route path="/home" element={<Home />} />
-
-            {/* A PROPOS */}
             <Route path="/a-propos" element={<AProposPage />} />
-            {/* 404 => retourne à Home */}
-            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/participer" element={<Participer />} />
             <Route path="/partenaires" element={<Partenaires />} />
             <Route path="/admin" element={<Admin />} />
@@ -38,6 +32,8 @@ export default function App() {
             <Route path="/Partenaires" element={<About />} />
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
 
