@@ -95,7 +95,7 @@ function scheduleYoutubeApprovalCheck({ movieId, youtubeUrl }) {
     } catch (err) {
       // On loggue simplement ; pas de throw dans un setTimeout
       // eslint-disable-next-line no-console
-      console.error('❌ Erreur lors du contrôle différé du statut YouTube :', err.message || err);
+      console.error('Erreur lors du contrôle différé du statut YouTube :', err.message || err);
     }
   }, THIRTY_MINUTES);
 }
