@@ -8,6 +8,7 @@ import PartnersManagement from "../components/admin/PartnersManagement";
 import NewslettersManagement from "../components/admin/NewslettersManagement";
 import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
+import AdminVideos from "../components/admin/All-videos";
 
 export default function Admin() {
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -65,6 +66,8 @@ export default function Admin() {
         return <NewslettersManagement />;
       case "traffic":
         return <TrafficOverview />;
+        case "all-videos":
+        return <AdminVideos />;
       case "dashboard":
       default:
         return <DashboardOverview />;

@@ -8,6 +8,7 @@ const sections = [
   { id: "partners", label: "Partenaires" },
   { id: "newsletters", label: "Newsletters" },
   { id: "traffic", label: "Trafic" },
+  {id: "all-videos", label: "Toutes les vidéos"}
 ];
 
 export default function AdminLayout({ children }) {
