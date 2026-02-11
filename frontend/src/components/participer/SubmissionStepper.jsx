@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next";
+
 const steps = [
-  { id: 1, label: "Réalisateur" },
-  { id: 2, label: "Film" },
-  { id: 3, label: "Déclaration IA" },
-  { id: 4, label: "Collaborateurs" },
+  { id: 1, labelKey: "steps.filmmaker", defaultLabel: "Réalisateur" },
+  { id: 2, labelKey: "steps.movie", defaultLabel: "Film" },
+  { id: 3, labelKey: "steps.aiDeclaration", defaultLabel: "Déclaration IA" },
+  { id: 4, labelKey: "steps.assetsTags", defaultLabel: "Assets & tags" },
+  { id: 5, labelKey: "steps.collaborators", defaultLabel: "Collaborateurs" },
 ];
 
 export default function SubmissionStepper({
@@ -10,13 +13,17 @@ export default function SubmissionStepper({
   filmmakerId,
   movieId,
   aiSaved,
+  assetsTagsSaved,
   collaboratorsSaved,
 }) {
+  const { t } = useTranslation();
+
   const statusFor = (step) => {
     if (step === 1) return filmmakerId ? "done" : "current";
     if (step === 2) return movieId ? "done" : currentStep === 2 ? "current" : "todo";
     if (step === 3) return aiSaved ? "done" : currentStep === 3 ? "current" : "todo";
-    if (step === 4) return collaboratorsSaved ? "done" : currentStep === 4 ? "current" : "todo";
+    if (step === 4) return assetsTagsSaved ? "done" : currentStep === 4 ? "current" : "todo";
+    if (step === 5) return collaboratorsSaved ? "done" : currentStep === 5 ? "current" : "todo";
     return "todo";
   };
 
@@ -53,7 +60,7 @@ export default function SubmissionStepper({
                   : "text-slate-400"
               }
             >
-              Étape {step.id} · {step.label}
+              Étape {step.id} · {t(step.labelKey, step.defaultLabel)}
             </span>
           </li>
         );
