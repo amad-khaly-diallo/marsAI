@@ -1,4 +1,4 @@
-export default function CollaboratorsForm({ value, onChange }) {
+export default function CollaboratorsForm({ value, onChange, hasError }) {
   const list = value || [];
 
   const updateRow = (index, field, newValue) => {
@@ -20,7 +20,12 @@ export default function CollaboratorsForm({ value, onChange }) {
   };
 
   return (
-    <section className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-sm">
+    <section
+      className={[
+        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
+        hasError ? "border-red-500/70" : "border-slate-800/80",
+      ].join(" ")}
+    >
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="text-sm font-semibold text-slate-100">
           4. Collaborateurs (optionnel)
@@ -61,6 +66,7 @@ export default function CollaboratorsForm({ value, onChange }) {
               placeholder="Prénom"
               value={collab.first_name || ""}
               onChange={(e) => updateRow(index, "first_name", e.target.value)}
+              maxLength={80}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             />
             <input
@@ -68,6 +74,7 @@ export default function CollaboratorsForm({ value, onChange }) {
               placeholder="Nom"
               value={collab.last_name || ""}
               onChange={(e) => updateRow(index, "last_name", e.target.value)}
+              maxLength={80}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             />
             <input
@@ -75,6 +82,7 @@ export default function CollaboratorsForm({ value, onChange }) {
               placeholder="Rôle (ex : Producteur)"
               value={collab.role || ""}
               onChange={(e) => updateRow(index, "role", e.target.value)}
+              maxLength={120}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             />
             <div className="flex items-center gap-2">
@@ -83,6 +91,7 @@ export default function CollaboratorsForm({ value, onChange }) {
                 placeholder="Email"
                 value={collab.email || ""}
                 onChange={(e) => updateRow(index, "email", e.target.value)}
+                maxLength={200}
                 className="flex-1 rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
               />
               <button

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mariadb:3306
--- Généré le : jeu. 29 jan. 2026 à 14:41
+-- Généré le : mar. 10 fév. 2026 à 08:23
 -- Version du serveur : 11.8.5-MariaDB-ubu2404
 -- Version de PHP : 8.3.26
 
@@ -38,6 +38,14 @@ CREATE TABLE `admins` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+--
+-- Déchargement des données de la table `admins`
+--
+
+INSERT INTO `admins` (`id`, `first_name`, `last_name`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
+(1, 'super', 'admin', 'super.admin@laplateforme.io', '$2b$10$7fB7RE1unFNN7YIGJ0T5wuC.5c6BhvwdVCyXFJLWdToXTw6C2uZri', 'admin', '2026-01-30 08:39:42', '2026-01-30 08:39:42'),
+(2, 'admin1', 'admin', 'admin1.admin@laplateforme.io', '$2b$10$ayAQQcxoTLR0cmlZWs9g6u5xe9yGWZhslZNrqQbtsn1yTaO0z9vre', 'admin', '2026-02-03 09:29:45', '2026-02-03 09:29:45');
+
 -- --------------------------------------------------------
 
 --
@@ -52,6 +60,16 @@ CREATE TABLE `ai_declaration` (
   `movie_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+--
+-- Déchargement des données de la table `ai_declaration`
+--
+
+INSERT INTO `ai_declaration` (`id`, `artwork_type`, `tech_stack`, `methodology`, `movie_id`) VALUES
+(1, '100_ai', 'Sora', 'prompt', 6),
+(2, '100_ai', 'Freepik', 'j\'ai pris une vidéo par hasard sur freepik', 7),
+(3, '100_ai', 'Artist.io', 'prompt', 8),
+(4, 'hybrid', 'photoshop, sora et capcut', 'j\'ai fais un rpompt a l\'AI et ensuite j\'ai use photoshop pour modifier certaines partis et utiliser capcut pour monter', 9);
+
 -- --------------------------------------------------------
 
 --
@@ -65,6 +83,16 @@ CREATE TABLE `asset` (
   `file_format` varchar(10) DEFAULT NULL,
   `movie_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Déchargement des données de la table `asset`
+--
+
+INSERT INTO `asset` (`id`, `asset_type`, `file_path`, `file_format`, `movie_id`) VALUES
+(1, 'thumbnail', '/uploads/thumbnail1.jpg', 'jpg', 2),
+(2, 'still', 'uploads/assets/video-1770628427436-368732121.jpg', 'jpg', 9),
+(3, 'still', 'uploads/assets/view-futuristic-concert-1770628427546-676111237.jpg', 'jpg', 9),
+(4, 'still', 'uploads/assets/futuristic-set-with-dj-charge-music-using-virtual-reality-glasses-1770628427594-466118993.jpg', 'jpg', 9);
 
 -- --------------------------------------------------------
 
@@ -81,6 +109,16 @@ CREATE TABLE `collaborator` (
   `email` varchar(100) DEFAULT NULL,
   `movie_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Déchargement des données de la table `collaborator`
+--
+
+INSERT INTO `collaborator` (`id`, `civility`, `first_name`, `last_name`, `role`, `email`, `movie_id`) VALUES
+(1, 'Mr', 'Paul', 'Martin', 'Producer', 'paul.martin@example.com', 2),
+(2, 'Mr', 'mehdi', 'mehdi', 'monteur video', 'mehdi.mehdi@laplateforme.io', 6),
+(3, 'Mr', 'amad', 'diallo', 'realisateur', 'amad.diallo@laplateforme.io', 7),
+(4, 'Mr', 'amad', 'diallo', 'realisateur', 'amad.diallo@laplateforme.io', 7);
 
 -- --------------------------------------------------------
 
@@ -106,6 +144,34 @@ CREATE TABLE `filmmaker` (
   `newsletter` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+--
+-- Déchargement des données de la table `filmmaker`
+--
+
+INSERT INTO `filmmaker` (`id`, `civility`, `first_name`, `last_name`, `birth_date`, `email`, `phone`, `mobile`, `job`, `street`, `postal_code`, `city`, `country`, `discovery_source`, `newsletter`) VALUES
+(1, 'Mr', 'John', 'Doe', '1990-05-15', 'khalyamad.d@gmail.com', '0123456789', '0612345678', 'Director', '123 Rue Exemple', '75001', 'Paris', 'France', 'Social Media', 1),
+(3, 'Mr', 'Amad khaly', 'Diallo', '2002-02-25', 'amad-khaly.diallo@laplateforme.io', '0758854873', '0758854873', 'DEV', '123 rue de la paix', '12345', 'Ville', 'pays', 'famille', 1),
+(4, 'Mr', 'sadjo', 'kanoute', '1920-12-24', 'sadjo.kanoute@laplateforme.io', NULL, '01234567', 'DEV', NULL, NULL, 'Paris', 'France', 'laplateforme', 0),
+(5, 'Mr', 'amad', 'diallo', '2000-11-03', 'amad.diallo@laplateforme.io', NULL, '01234567', 'DEV', NULL, NULL, 'Paris', 'Belgique', 'Famille', 0),
+(7, 'Mr', 'amad', 'diallo', '2004-01-20', 'khalyamad.d@gqsdfl.com', NULL, '0758854873', 'TESTER', NULL, NULL, 'Paris', 'France', 'collègue', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `jury`
+--
+
+CREATE TABLE `jury` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `role` varchar(150) DEFAULT NULL,
+  `bio` text DEFAULT NULL,
+  `photo_url` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -121,9 +187,25 @@ CREATE TABLE `movie` (
   `synopsis_original` varchar(300) DEFAULT NULL,
   `synopsis_english` varchar(300) DEFAULT NULL,
   `youtube_url` varchar(255) NOT NULL,
-  `status` enum('in_process','selected','rejected') DEFAULT 'in_process',
+  `status` enum('in_process','approved','rejected','selected') DEFAULT 'in_process',
+  `decision_reason` text DEFAULT NULL,
+  `decision_at` datetime DEFAULT NULL,
   `filmmaker_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Déchargement des données de la table `movie`
+--
+
+INSERT INTO `movie` (`id`, `original_title`, `english_title`, `duration`, `language`, `synopsis_original`, `synopsis_english`, `youtube_url`, `status`, `decision_reason`, `decision_at`, `filmmaker_id`) VALUES
+(1, 'Le Film Test', 'The Test Movie', 120, 'French', 'Ceci est un synopsis en français.', 'This is an English synopsis.', 'https://youtu.be/dQw4w9WgXcQ', 'rejected', NULL, '2026-02-05 15:26:47', 1),
+(2, 'Le Film Test', 'The Test Movie', 120, 'French', 'Ceci est un synopsis en français.', 'This is an English synopsis.', 'https://youtu.be/dQw4w9WgXcQ', 'rejected', NULL, '2026-02-06 13:42:40', 1),
+(4, 'title', 'title', 1, 'anglais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=CyMS7UqT53w', 'in_process', NULL, NULL, 1),
+(5, 'title', 'title', 10, 'angais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=LuykUqIniFE', 'in_process', NULL, NULL, 1),
+(6, 'title', 'title', 5, 'anglais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=pHKFWb5Zgk8', 'selected', 'je sais pas pourquoi', '2026-02-03 09:49:04', 1),
+(7, 'savane', 'savane', 1, 'Français', 'dans la savane', 'dans la savane', 'https://www.youtube.com/watch?v=0vI-icmWPww', 'in_process', NULL, NULL, 4),
+(8, 'Title', 'title', 0, 'English', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=OERknocIYKI', 'in_process', NULL, NULL, 5),
+(9, 'Futur souhaitable', 'futur', 1, 'Français', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=sdN8gdoYOYo', 'in_process', NULL, NULL, 7);
 
 -- --------------------------------------------------------
 
@@ -135,6 +217,41 @@ CREATE TABLE `movie_tag` (
   `movie_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Déchargement des données de la table `movie_tag`
+--
+
+INSERT INTO `movie_tag` (`movie_id`, `tag_id`) VALUES
+(6, 2),
+(9, 3),
+(9, 4),
+(9, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `newsletters`
+--
+
+CREATE TABLE `newsletters` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Déchargement des données de la table `newsletters`
+--
+
+INSERT INTO `newsletters` (`id`, `email`, `created_at`) VALUES
+(1, 'amad-khaly.diallo@laplateforme.io', '2026-02-06 13:39:10'),
+(2, 'mehdi.ben-chaabane@laplateforme.io', '2026-02-06 13:39:10'),
+(3, 'nordine.ait-ouaraz@laplateforme.io', '2026-02-06 13:48:09'),
+(5, 'chaymaa.labied@laplateforme.io', '2026-02-06 13:48:09'),
+(6, 'jawad.zafari@laplateforme.io', '2026-02-06 13:48:09'),
+(7, 'soumman.guirassy@laplateforme.io', '2026-02-06 13:48:09'),
+(8, 'khalyamad.d@gmail.com', '2026-02-06 14:06:02');
 
 -- --------------------------------------------------------
 
@@ -167,6 +284,13 @@ CREATE TABLE `partners` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+--
+-- Déchargement des données de la table `partners`
+--
+
+INSERT INTO `partners` (`id`, `name`, `logo_url`, `description`, `website_url`, `created_at`, `updated_at`) VALUES
+(1, 'partenaires', 'https://www.parteners.fr/logo', 'partenaire description', 'https://www.parteners.fr', '2026-02-06 12:15:56', '2026-02-06 12:15:56');
+
 -- --------------------------------------------------------
 
 --
@@ -177,6 +301,16 @@ CREATE TABLE `tag` (
   `id` int(11) NOT NULL,
   `label` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Déchargement des données de la table `tag`
+--
+
+INSERT INTO `tag` (`id`, `label`) VALUES
+(4, '#ai'),
+(3, '#futur'),
+(5, '#photoshop'),
+(2, '#teste');
 
 -- --------------------------------------------------------
 
@@ -231,6 +365,12 @@ ALTER TABLE `filmmaker`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Index pour la table `jury`
+--
+ALTER TABLE `jury`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Index pour la table `movie`
 --
 ALTER TABLE `movie`
@@ -243,6 +383,13 @@ ALTER TABLE `movie`
 ALTER TABLE `movie_tag`
   ADD PRIMARY KEY (`movie_id`,`tag_id`),
   ADD KEY `fk_movie_tag_tag` (`tag_id`);
+
+--
+-- Index pour la table `newsletters`
+--
+ALTER TABLE `newsletters`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Index pour la table `notations`
@@ -280,37 +427,49 @@ ALTER TABLE `winner`
 -- AUTO_INCREMENT pour la table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `ai_declaration`
 --
 ALTER TABLE `ai_declaration`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `asset`
 --
 ALTER TABLE `asset`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `collaborator`
 --
 ALTER TABLE `collaborator`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `filmmaker`
 --
 ALTER TABLE `filmmaker`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT pour la table `jury`
+--
+ALTER TABLE `jury`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `movie`
 --
 ALTER TABLE `movie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT pour la table `newsletters`
+--
+ALTER TABLE `newsletters`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `notations`
@@ -322,13 +481,13 @@ ALTER TABLE `notations`
 -- AUTO_INCREMENT pour la table `partners`
 --
 ALTER TABLE `partners`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `tag`
 --
 ALTER TABLE `tag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `winner`
