@@ -18,7 +18,7 @@ const juryMembers = [
   },
   {
     id: 3,
-    name: "mehdi-trump",
+    name: "mehdi-",
     role: "Expert AI",
     bio: "Chercheur principal en modèles linguistiques et production d'images.",
     image: avatar
