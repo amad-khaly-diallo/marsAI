@@ -103,20 +103,31 @@ export default function Participer() {
     setError(null);
     setSubmitting(true);
     try {
-      if (collaborators.length > 0) {
-        await Promise.all(
-          collaborators.map((collab) =>
-            fetch(`/api/movies/${movieId}/collaborators`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(collab),
-            })
-          )
-        );
+      if (!collaborators.length) {
+        setCollaboratorsSaved(true);
+        return;
       }
+
+      await Promise.all(
+        collaborators.map((collab) =>
+          fetch(`/api/movies/${movieId}/collaborators`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(collab),
+          }).then(async (res) => {
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+              throw new Error(
+                data.error || "Erreur lors de l'enregistrement des collaborateurs"
+              );
+            }
+            return data;
+          })
+        )
+      );
       setCollaboratorsSaved(true);
     } catch (err) {
-      setError("Erreur lors de l'enregistrement des collaborateurs");
+      setError(err.message);
     } finally {
       setSubmitting(false);
     }
