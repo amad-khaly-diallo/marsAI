@@ -22,20 +22,8 @@ export default function JuryManagement() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/jury", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json().catch(() => []);
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de récupérer la liste des membres du jury."
-        );
-      }
-
+      const admin = require("../../services/admin").default;
+      const data = await admin.getJury();
       setMembers(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message);
@@ -59,23 +47,8 @@ export default function JuryManagement() {
     setCreateLoading(true);
 
     try {
-      const res = await fetch("/api/jury", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(form),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de créer le membre du jury."
-        );
-      }
+      const admin = require("../../services/admin").default;
+      await admin.createJuryMember(form);
 
       setForm({
         first_name: "",
@@ -97,20 +70,8 @@ export default function JuryManagement() {
     if (!window.confirm("Supprimer ce membre du jury ?")) return;
     setDeletingId(id);
     try {
-      const res = await fetch(`/api/jury/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (!res.ok && res.status !== 204) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de supprimer ce membre du jury."
-        );
-      }
-
+      const admin = require("../../services/admin").default;
+      await admin.deleteJuryMember(id);
       setMembers((prev) => prev.filter((m) => m.id !== id));
     } catch (err) {
       setError(err.message);
@@ -300,4 +261,3 @@ export default function JuryManagement() {
     </div>
   );
 }
-
