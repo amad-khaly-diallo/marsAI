@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from "react-i18next";
 import avatar from "../assets/images/avatar.jpg";
 const juryMembers = [
   {
@@ -17,7 +18,7 @@ const juryMembers = [
   },
   {
     id: 3,
-    name: "mehdi",
+    name: "mehdi-",
     role: "Expert AI",
     bio: "Chercheur principal en modèles linguistiques et production d'images.",
     image: avatar
@@ -46,16 +47,21 @@ const juryMembers = [
 ];
 
 const Jury = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full bg-[#070819] text-white h-full bg-gradient-to-b from-sky-dark to-sky-light py-12 px-6">
       <div className="max-w-7xl mx-auto">
         
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-navy mb-4">
-            Jury du <span className="text-primary">Festival</span>
+            {t("jury.title", "Jury du ")}
+            <span className="text-primary">
+              {t("jury.titleHighlight", "Festival")}
+            </span>
           </h1>
           <p className="text-body text-lg max-w-2xl mx-auto">
-            Découvrez les experts qui évaluent vos œuvres créatives.
+            {t("jury.subtitle", "Découvrez les experts qui évaluent vos œuvres créatives.")}
           </p>
          <br></br>
          <br></br>

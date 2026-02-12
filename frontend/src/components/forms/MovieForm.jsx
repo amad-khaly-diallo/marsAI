@@ -1,9 +1,33 @@
-export default function MovieForm({ value, onChange, onVideoChange }) {
+export default function MovieForm({ value, onChange, onVideoChange, hasError }) {
   const handle = (field) => (e) =>
     onChange({ ...value, [field]: e.target.value });
 
+  const handleDuration = (e) => {
+    let val = e.target.value.replace(",", ".");
+    // Autoriser uniquement chiffres et point
+    val = val.replace(/[^0-9.]/g, "");
+    if (val === "") {
+      onChange({ ...value, duration: "" });
+      return;
+    }
+
+    const num = parseFloat(val);
+    if (!Number.isFinite(num)) {
+      onChange({ ...value, duration: "" });
+      return;
+    }
+
+    let clamped = Math.max(0, Math.min(1.5, num));
+    onChange({ ...value, duration: clamped.toString() });
+  };
+
   return (
-    <section className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-sm">
+    <section
+      className={[
+        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
+        hasError ? "border-red-500/70" : "border-slate-800/80",
+      ].join(" ")}
+    >
       <h2 className="mb-3 text-sm font-semibold text-slate-100">
         2. Film soumis
       </h2>
@@ -14,6 +38,9 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
             type="text"
             value={value.original_title || ""}
             onChange={handle("original_title")}
+            required
+            minLength={2}
+            maxLength={150}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>
@@ -23,6 +50,9 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
             type="text"
             value={value.english_title || ""}
             onChange={handle("english_title")}
+            required
+            minLength={2}
+            maxLength={150}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>
@@ -33,8 +63,10 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
           <input
             type="number"
             min="0"
+            max="1.5"
+            step="0.01"
             value={value.duration || ""}
-            onChange={handle("duration")}
+            onChange={handleDuration}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>
@@ -44,6 +76,7 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
             type="text"
             value={value.language || ""}
             onChange={handle("language")}
+            maxLength={80}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>
@@ -57,6 +90,7 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
             rows={3}
             value={value.synopsis_original || ""}
             onChange={handle("synopsis_original")}
+            maxLength={1000}
             className="resize-none rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>
@@ -66,6 +100,7 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
             rows={3}
             value={value.synopsis_english || ""}
             onChange={handle("synopsis_english")}
+            maxLength={1000}
             className="resize-none rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>
@@ -93,6 +128,7 @@ export default function MovieForm({ value, onChange, onVideoChange }) {
             type="url"
             value={value.youtube_url || ""}
             onChange={handle("youtube_url")}
+            maxLength={255}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
         </div>

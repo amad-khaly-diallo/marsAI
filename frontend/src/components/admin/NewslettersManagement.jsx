@@ -5,6 +5,12 @@ export default function NewslettersManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState(null);
+  const [sendResult, setSendResult] = useState(null);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -12,7 +18,10 @@ export default function NewslettersManagement() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/filmmakers");
+        const res = await fetch("/api/newsletters/subscribers", {
+          method: "GET",
+          credentials: "include",
+        });
         const data = await res.json().catch(() => []);
 
         if (!res.ok) {
@@ -25,7 +34,7 @@ export default function NewslettersManagement() {
 
         if (!cancelled) {
           const list = Array.isArray(data) ? data : [];
-          setSubscribers(list.filter((f) => f.newsletter));
+          setSubscribers(list);
         }
       } catch (err) {
         if (!cancelled) {
@@ -43,6 +52,50 @@ export default function NewslettersManagement() {
     };
   }, []);
 
+  const handleSend = async (e) => {
+    e.preventDefault();
+    setSendError(null);
+    setSendResult(null);
+
+    if (!subject.trim() || !body.trim()) {
+      setSendError("Sujet et contenu sont obligatoires.");
+      return;
+    }
+
+    setSending(true);
+    try {
+      const res = await fetch("/api/newsletters/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ subject, text: body }),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(
+          data.error ||
+            data.message ||
+            "Impossible d\"envoyer la newsletter."
+        );
+      }
+
+      setSendResult(
+        typeof data.sent === "number"
+          ? `Newsletter envoyée à ${data.sent} abonné(s).`
+          : "Newsletter envoyée."
+      );
+      setSubject("");
+      setBody("");
+    } catch (err) {
+      setSendError(err.message);
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       <header className="space-y-1">
@@ -50,7 +103,7 @@ export default function NewslettersManagement() {
           Gestion des newsletters
         </h2>
         <p className="text-sm text-brand-muted">
-          Consultez les inscrits et préparez vos campagnes d&apos;emailing.
+          Consultez les inscrits et envoyez des campagnes d&apos;emailing.
         </p>
       </header>
 
@@ -61,7 +114,7 @@ export default function NewslettersManagement() {
               Inscrits à la newsletter
             </p>
             <span className="text-[11px] text-brand-muted">
-              Basé sur le champ &quot;newsletter&quot; des réalisateurs.
+              Basé sur les abonnements newsletter des réalisateurs.
             </span>
           </div>
 
@@ -124,14 +177,60 @@ export default function NewslettersManagement() {
 
         <div className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-sm">
           <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">
-            Dernière campagne
+            Envoyer une newsletter
           </p>
-          <p className="mt-2 text-sm text-brand-muted">
-            Vous pourrez afficher ici les statistiques d&apos;ouverture, de
-            clics, etc. importées d&apos;un outil d&apos;emailing (Brevo,
-            Mailchimp, ...).
+          <p className="mt-1 text-[11px] text-brand-muted">
+            Un email sera envoyé à tous les abonnés à la newsletter.
           </p>
-          <div className="mt-4 h-32 rounded-md border border-dashed border-brand-border/60 bg-slate-950/40" />
+
+          <form onSubmit={handleSend} className="mt-3 space-y-3 text-xs">
+            <div className="space-y-1">
+              <label className="block text-[11px] font-medium text-brand-muted">
+                Sujet
+              </label>
+              <input
+                type="text"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none focus:border-brand-primary-soft"
+                required
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="block text-[11px] font-medium text-brand-muted">
+                Contenu du message
+              </label>
+              <textarea
+                rows={5}
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none focus:border-brand-primary-soft"
+                required
+              />
+            </div>
+
+            {sendError && (
+              <p className="rounded-md border border-red-500/60 bg-red-950/40 px-3 py-2 text-[11px] text-red-200">
+                {sendError}
+              </p>
+            )}
+
+            {sendResult && !sendError && (
+              <p className="rounded-md border border-emerald-500/60 bg-emerald-950/40 px-3 py-2 text-[11px] text-emerald-200">
+                {sendResult}
+              </p>
+            )}
+
+            <div className="flex justify-end pt-1">
+              <button
+                type="submit"
+                disabled={sending}
+                className="inline-flex items-center rounded-full bg-brand-primary px-4 py-1.5 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {sending ? "Envoi..." : "Envoyer la newsletter"}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
