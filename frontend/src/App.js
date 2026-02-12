@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import AProposPage from "./pages/AProposPage";
 import Participer from "./pages/Participer";
@@ -12,7 +17,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
 import Contact from "./pages/Contact";
-
+import Winners from "./pages/Winners";
 export default function App() {
   return (
     <Router>
@@ -33,6 +38,7 @@ export default function App() {
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/winners" element={<Winners />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
