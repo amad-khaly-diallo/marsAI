@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import AProposPage from "./pages/AProposPage";
 import Participer from "./pages/Participer";
@@ -31,6 +36,7 @@ export default function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/jury" element={<Jury />} />
             <Route path="/Partenaires" element={<About />} />
+            {/* alors on a partenaires et Partenaires un avec p et un avec P donc a voir  */}
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
             <Route path="/contact" element={<Contact />} />

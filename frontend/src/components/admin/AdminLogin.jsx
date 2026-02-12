@@ -12,20 +12,8 @@ export default function AdminLogin({ onSuccess }) {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/admins/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(data.error || data.message || "Identifiants invalides");
-      }
+      const api = require("../../services/api").default;
+      const data = await api.post("/admins/auth/login", { email, password });
 
       if (onSuccess) onSuccess(data);
     } catch (err) {
@@ -56,7 +44,10 @@ export default function AdminLogin({ onSuccess }) {
         </p>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-brand-border/60 bg-brand-surface/80 p-4 shadow-soft-md">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 rounded-lg border border-brand-border/60 bg-brand-surface/80 p-4 shadow-soft-md"
+      >
         <div className="space-y-1">
           <label className="block text-xs font-medium text-brand-muted">
             Email
@@ -94,4 +85,3 @@ export default function AdminLogin({ onSuccess }) {
     </div>
   );
 }
-

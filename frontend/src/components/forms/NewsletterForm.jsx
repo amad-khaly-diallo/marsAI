@@ -25,20 +25,8 @@ export default function NewsletterForm() {
 
     setLoading(true);
     try {
-      const res = await fetch("/api/newsletters/subscribe", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: trimmed }),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(
-          data.error || data.message || t("newsletter.error.generic")
-        );
-      }
+      const api = require("../../services/api").default;
+      await api.post("/newsletters/subscribe", { email: trimmed });
 
       setSuccess(t("newsletter.success"));
       setEmail("");
@@ -83,17 +71,10 @@ export default function NewsletterForm() {
         </button>
       </div>
 
-      {error && (
-        <p className="text-[11px] text-red-300">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-[11px] text-red-300">{error}</p>}
       {success && !error && (
-        <p className="text-[11px] text-emerald-300">
-          {success}
-        </p>
+        <p className="text-[11px] text-emerald-300">{success}</p>
       )}
     </form>
   );
 }
-
