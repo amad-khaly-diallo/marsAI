@@ -19,21 +19,9 @@ export default function AdminsManagement() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admins", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json().catch(() => []);
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de récupérer la liste des admins."
-        );
-      }
-
-      setAdmins(data || []);
+      const admin = require("../../services/admin").default;
+      const data = await admin.getAdmins();
+      setAdmins(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -56,29 +44,10 @@ export default function AdminsManagement() {
     setCreateLoading(true);
 
     try {
-      const res = await fetch("/api/admins/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json().catch(() => ({}));
+      const admin = require("../../services/admin").default;
+      await admin.createAdmin(form);
 
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de créer le compte administrateur."
-        );
-      }
-
-      setForm({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-      });
+      setForm({ first_name: "", last_name: "", email: "", password: "" });
       setCreating(false);
       fetchAdmins();
     } catch (err) {
@@ -253,5 +222,3 @@ export default function AdminsManagement() {
     </div>
   );
 }
-
-
