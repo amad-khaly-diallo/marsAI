@@ -8,6 +8,7 @@ import PartnersManagement from "../components/admin/PartnersManagement";
 import NewslettersManagement from "../components/admin/NewslettersManagement";
 import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
+import AdminVideos from "../components/admin/All-videos";
 
 export default function Admin() {
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -21,23 +22,21 @@ export default function Admin() {
       setCheckingAuth(true);
       setAuthError(null);
       try {
-        const res = await fetch("/api/admins", {
-          method: "GET",
-          credentials: "include",
-        });
+        const admin = require("../services/admin");
+        const ok = await admin.checkAuth();
 
         if (!cancelled) {
-          if (res.ok) {
+          if (ok) {
             setIsAuthenticated(true);
-          } else if (res.status === 401 || res.status === 403) {
-            setIsAuthenticated(false);
           } else {
-            setAuthError("Impossible de vérifier l'authentification admin.");
+            setIsAuthenticated(false);
           }
         }
       } catch (err) {
         if (!cancelled) {
-          setAuthError("Erreur réseau lors de la vérification de l'accès admin.");
+          setAuthError(
+            "Erreur réseau lors de la vérification de l'accès admin.",
+          );
         }
       } finally {
         if (!cancelled) setCheckingAuth(false);
@@ -65,6 +64,8 @@ export default function Admin() {
         return <NewslettersManagement />;
       case "traffic":
         return <TrafficOverview />;
+      case "all-videos":
+        return <AdminVideos />;
       case "dashboard":
       default:
         return <DashboardOverview />;
@@ -98,5 +99,3 @@ export default function Admin() {
 
   return <AdminLayout>{renderSection}</AdminLayout>;
 }
-
-

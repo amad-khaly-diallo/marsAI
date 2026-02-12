@@ -16,6 +16,7 @@ import Jury from "./pages/Jury";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
+import AdminVideos from "./components/admin/All-videos";
 import Contact from "./pages/Contact";
 import Winners from "./pages/Winners";
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/jury" element={<Jury />} />
             <Route path="/Partenaires" element={<About />} />
+            {/* alors on a partenaires et Partenaires un avec p et un avec P donc a voir  */}
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
             <Route path="/contact" element={<Contact />} />

@@ -18,20 +18,8 @@ export default function NewslettersManagement() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("/api/newsletters/subscribers", {
-          method: "GET",
-          credentials: "include",
-        });
-        const data = await res.json().catch(() => []);
-
-        if (!res.ok) {
-          throw new Error(
-            data.error ||
-              data.message ||
-              "Impossible de récupérer les inscrits newsletter."
-          );
-        }
-
+        const admin = require("../../services/admin").default;
+        const data = await admin.getNewsletterSubscribers();
         if (!cancelled) {
           const list = Array.isArray(data) ? data : [];
           setSubscribers(list);
@@ -64,28 +52,13 @@ export default function NewslettersManagement() {
 
     setSending(true);
     try {
-      const res = await fetch("/api/newsletters/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ subject, text: body }),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible d\"envoyer la newsletter."
-        );
-      }
+      const admin = require("../../services/admin").default;
+      const data = await admin.sendNewsletter({ subject, text: body });
 
       setSendResult(
         typeof data.sent === "number"
           ? `Newsletter envoyée à ${data.sent} abonné(s).`
-          : "Newsletter envoyée."
+          : "Newsletter envoyée.",
       );
       setSubject("");
       setBody("");
@@ -236,5 +209,3 @@ export default function NewslettersManagement() {
     </div>
   );
 }
-
-
