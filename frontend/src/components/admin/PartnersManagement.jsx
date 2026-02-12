@@ -21,20 +21,8 @@ export default function PartnersManagement() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/partners", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json().catch(() => []);
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de récupérer la liste des partenaires."
-        );
-      }
-
+      const admin = require("../../services/admin").default;
+      const data = await admin.getPartners();
       setPartners(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message);
@@ -58,23 +46,8 @@ export default function PartnersManagement() {
     setCreateLoading(true);
 
     try {
-      const res = await fetch("/api/partners", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(form),
-      });
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de créer le partenaire."
-        );
-      }
+      const admin = require("../../services/admin").default;
+      await admin.createPartner(form);
 
       setForm({ name: "", website_url: "", logo_url: "", description: "" });
       setCreating(false);
@@ -90,20 +63,8 @@ export default function PartnersManagement() {
     if (!window.confirm("Supprimer ce partenaire ?")) return;
     setDeletingId(id);
     try {
-      const res = await fetch(`/api/partners/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (!res.ok && res.status !== 204) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible de supprimer ce partenaire."
-        );
-      }
-
+      const admin = require("../../services/admin").default;
+      await admin.deletePartner(id);
       setPartners((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       setError(err.message);
@@ -292,4 +253,3 @@ export default function PartnersManagement() {
     </div>
   );
 }
-
