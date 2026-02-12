@@ -79,7 +79,40 @@ async function uploadVideo(fileBuffer, mimeType, { title, description }) {
   }
 }
 
+/**
+ * Récupère le statut d'upload d'une vidéo YouTube.
+ * On se base principalement sur `status.uploadStatus` (uploaded, processed, rejected, etc.).
+ * @param {string} youtubeId
+ * @returns {Promise<{ uploadStatus: string, rejectionReason: string | null, privacyStatus: string | null }>}
+ */
+async function getVideoStatus(youtubeId) {
+  if (!YOUTUBE_CLIENT_ID || !YOUTUBE_CLIENT_SECRET || !YOUTUBE_REDIRECT_URI || !YOUTUBE_REFRESH_TOKEN) {
+    throw new HttpError(500, 'YouTube upload is not configured');
+  }
+
+  try {
+    const res = await youtube.videos.list({
+      part: ['status'],
+      id: [youtubeId],
+    });
+
+    const item = res?.data?.items && res.data.items[0];
+    if (!item || !item.status) {
+      throw new Error('Missing YouTube video status in response');
+    }
+
+    return {
+      uploadStatus: item.status.uploadStatus,
+      rejectionReason: item.status.rejectionReason || null,
+      privacyStatus: item.status.privacyStatus || null,
+    };
+  } catch (err) {
+    throw new HttpError(502, 'YouTube status check failed', { cause: err.message });
+  }
+}
+
 module.exports = {
   uploadVideo,
+  getVideoStatus,
 };
 

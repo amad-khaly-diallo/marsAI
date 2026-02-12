@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import HeaderLogo from "./HeaderLogo";
 import HeaderNavLinks from "./HeaderNavLinks";
 import HeaderBurger from "./HeaderBurger";
+import HeaderLanguageSwitcher from "./HeaderLanguageSwitcher";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -14,11 +15,13 @@ export default function Header() {
           <HeaderLogo />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-4 md:flex">
           <HeaderNavLinks orientation="horizontal" />
+          <HeaderLanguageSwitcher />
         </nav>
 
         <div className="flex items-center gap-3 md:hidden">
+          <HeaderLanguageSwitcher />
           <HeaderBurger open={open} onToggle={() => setOpen(!open)} />
         </div>
       </div>
