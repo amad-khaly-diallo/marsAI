@@ -25,7 +25,7 @@ const Partners = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="bg-slate-950 text-white min-h-screen bg-gradient-to-b from-sky-dark to-sky-light py-16 px-6">
+    <div className="bg-[#070819] text-white min-h-screen bg-gradient-to-b from-sky-dark to-sky-light py-16 px-6">
       
       
       <div className="max-w-7xl mx-auto text-center mb-16">
