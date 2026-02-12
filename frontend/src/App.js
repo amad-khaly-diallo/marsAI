@@ -11,6 +11,7 @@ import Jury from "./pages/Jury";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
+import AdminVideos from "./components/admin/All-videos";
 import Contact from "./pages/Contact";
 
 export default function App() {
