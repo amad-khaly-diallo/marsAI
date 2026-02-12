@@ -12,6 +12,7 @@ import Jury from "./pages/Jury";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
+import VideoDetail from "./pages/VideoDetail";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="/Partenaires" element={<About />} />
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
+            <Route path="/videodetail/:id" element={<VideoDetail />} />
           </Routes>
         </main>
 
