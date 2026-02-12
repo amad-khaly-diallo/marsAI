@@ -16,21 +16,11 @@ export default function DashboardOverview() {
       setLoading(true);
       setError(null);
       try {
-        const [moviesRes, filmmakersRes] = await Promise.all([
-          fetch("/api/admin/films"),
-          fetch("/api/filmmakers"),
-        ]);
-
+        const admin = require("../../services/admin").default;
         const [movies, filmmakers] = await Promise.all([
-          moviesRes.json().catch(() => []),
-          filmmakersRes.json().catch(() => []),
+          admin.getFilms(),
+          admin.getFilmmakers(),
         ]);
-
-        if (!moviesRes.ok || !filmmakersRes.ok) {
-          throw new Error(
-            "Impossible de récupérer les statistiques du festival."
-          );
-        }
 
         if (!cancelled) {
           const filmmakersList = Array.isArray(filmmakers) ? filmmakers : [];
@@ -98,7 +88,8 @@ export default function DashboardOverview() {
             {loading || stats.filmmakers === null ? "—" : stats.filmmakers}
           </p>
           <p className="mt-1 text-xs text-brand-muted">
-            Dossiers de réalisateurs créés via le formulaire &quot;Participer&quot;.
+            Dossiers de réalisateurs créés via le formulaire
+            &quot;Participer&quot;.
           </p>
         </div>
 
@@ -123,8 +114,8 @@ export default function DashboardOverview() {
           </p>
           <p className="mt-2 text-sm text-brand-muted">
             Intégrez ici un graphique (ex: nombre de visites / jour, conversions
-            vers la page &quot;Participer&quot;). Pour l&apos;instant, cette zone reste
-            un placeholder.
+            vers la page &quot;Participer&quot;). Pour l&apos;instant, cette
+            zone reste un placeholder.
           </p>
           <div className="mt-4 h-40 rounded-md border border-dashed border-brand-border/60 bg-slate-950/40" />
         </div>
@@ -143,5 +134,3 @@ export default function DashboardOverview() {
     </div>
   );
 }
-
-
