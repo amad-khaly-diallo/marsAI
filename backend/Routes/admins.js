@@ -1,14 +1,17 @@
 const express = require('express');
 const AdminController = require('../Controllers/AdminController');
-const { authenticate } = require('../Middlewares/authMiddleware');
+const { authenticate, authorize } = require('../Middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/', authenticate, AdminController.list);
-router.get('/:id', authenticate, AdminController.get);
-router.post('/auth/signup', AdminController.create);
+// Routes réservées au super_admin pour la gestion des comptes admins
+router.get('/', authenticate, authorize(['super_admin']), AdminController.list);
+router.get('/me', authenticate, AdminController.me);
+router.get('/:id', authenticate, authorize(['super_admin']), AdminController.get);
+router.post('/auth/signup', authenticate, authorize(['super_admin']), AdminController.create);
 router.post('/auth/login', AdminController.logAdmin);
-router.put('/:id', authenticate, AdminController.update);
-router.delete('/:id', authenticate, AdminController.remove);
+router.post('/auth/logout', authenticate, AdminController.logout);
+router.put('/:id', authenticate, authorize(['super_admin']), AdminController.update);
+router.delete('/:id', authenticate, authorize(['super_admin']), AdminController.remove);
 module.exports = router;
 
