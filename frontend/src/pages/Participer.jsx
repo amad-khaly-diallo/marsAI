@@ -40,6 +40,10 @@ export default function Participer() {
     handleSubmitAIDeclaration,
     handleSubmitCollaborators,
     handleSubmitAssetsTags,
+    // draft helpers
+    hasDraft,
+    loadDraft,
+    clearDraft,
   } = useParticiper();
 
   return (
@@ -64,6 +68,28 @@ export default function Participer() {
         assetsTagsSaved={assetsTagsSaved}
         collaboratorsSaved={collaboratorsSaved}
       />
+
+      {hasDraft && (
+        <div className="mb-4 flex items-center gap-3 rounded-md border border-yellow-500/40 bg-yellow-950/10 px-3 py-2 text-sm text-yellow-300">
+          <div className="flex-1 text-xs">{t("participate.draftFound")}</div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => loadDraft()}
+              className="rounded-md bg-yellow-500/80 px-3 py-1 text-xs font-semibold text-slate-900 hover:bg-yellow-400"
+            >
+              {t("participate.resumeDraft")}
+            </button>
+            <button
+              type="button"
+              onClick={() => clearDraft()}
+              className="rounded-md border border-yellow-600/30 px-3 py-1 text-xs text-yellow-200 hover:border-yellow-400"
+            >
+              {t("participate.clearDraft")}
+            </button>
+          </div>
+        </div>
+      )}
 
       {currentStep === 1 && (
         <>
