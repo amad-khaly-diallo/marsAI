@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useAdmin } from "../../context/AdminContext";
 
 export default function AdminLayout({ children, currentAdmin }) {
+  const { logout } = useAdmin();
   const role = currentAdmin?.role;
   const isSuperAdmin = role === "super_admin";
 
@@ -31,19 +33,6 @@ export default function AdminLayout({ children, currentAdmin }) {
   const initialSection = role === "admin" ? "my-movies" : "dashboard";
   const [activeSection, setActiveSection] = useState(initialSection);
 
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/admins/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (e) {
-      // ignore
-    } finally {
-      window.location.reload();
-    }
-  };
-
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 md:flex-row md:gap-6 md:py-8">
       {/* Navigation mobile (en haut) */}
@@ -59,7 +48,7 @@ export default function AdminLayout({ children, currentAdmin }) {
           </div>
           <button
             type="button"
-            onClick={handleLogout}
+            onClick={logout}
             className="rounded-full bg-slate-900/80 px-3 py-1.5 text-[11px] font-medium text-brand-muted hover:text-red-300 hover:bg-red-900/40 border border-slate-700/60"
           >
             Déconnexion
@@ -112,7 +101,7 @@ export default function AdminLayout({ children, currentAdmin }) {
         </nav>
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={logout}
           className="mt-2 inline-flex items-center justify-center rounded-full bg-slate-900/80 px-3 py-1.5 text-[11px] font-medium text-brand-muted hover:text-red-300 hover:bg-red-900/40 border border-slate-700/60"
         >
           Déconnexion
