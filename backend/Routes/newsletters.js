@@ -4,13 +4,13 @@ const { authenticate, authorize } = require('../Middlewares/authMiddleware');
 
 const router = express.Router();
 
-const onlyAdmins = ['admin', 'super_admin'];
+const onlySuperAdmin = ['super_admin'];
 
 // Liste des abonnés newsletter (admin uniquement)
 router.get(
   '/subscribers',
   authenticate,
-  authorize(onlyAdmins),
+  authorize(onlySuperAdmin),
   NewsletterController.listSubscribers
 );
 
@@ -18,7 +18,7 @@ router.get(
 router.post(
   '/send',
   authenticate,
-  authorize(onlyAdmins),
+  authorize(onlySuperAdmin),
   NewsletterController.send
 );
 
