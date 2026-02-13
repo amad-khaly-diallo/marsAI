@@ -9,9 +9,7 @@ import {
 } from "lucide-react";
 
 // --- Données (Inchangées) ---
-// ... (Je ne remets pas tout le bloc de données pour alléger la réponse) ...
 const winnersData = [
-  // ... vos données ici ...
   {
     id: 1,
     category: "Grand Prix",
@@ -126,7 +124,7 @@ export default function Winners() {
     }
   };
 
-  // --- STYLE DU MASQUE (Pour colorer le SVG) ---
+  // --- STYLE DU MASQUE ---
   const laurierMaskStyle = {
     maskImage: "url(/images/laurier.svg)",
     WebkitMaskImage: "url(/images/laurier.svg)",
@@ -140,12 +138,11 @@ export default function Winners() {
 
   return (
     <div className="min-h-screen bg-brand-bg text-slate-200 font-sans pb-20 overflow-x-hidden flex flex-col">
-      {/* --- EN-TÊTE (Positions Inversées) --- */}
-      <div className="pt-10 pb-6 px-4 flex justify-center items-center gap-2 md:gap-6 lg:gap-10 overflow-hidden relative leading-none">
-        {/* Laurier Gauche (C'est celui qui était à droite avant) */}
-        {/* Note : J'ai ENLEVÉ scale-x-[-1] ici */}
+      {/* --- EN-TÊTE (Sens des lauriers inversé) --- */}
+      <div className="pt-10 pb-6 px-4 flex justify-center items-center gap-1 md:gap-3 lg:gap-5 overflow-hidden relative leading-none">
+        {/* Laurier Gauche (AJOUT de scale-x-[-1] pour l'inverser) */}
         <div
-          className="w-16 md:w-24 lg:w-32 h-24 md:h-32 bg-brand-primary opacity-90 -translate-y-2"
+          className="w-16 md:w-24 lg:w-32 h-24 md:h-32 bg-brand-primary opacity-90 -translate-y-2 scale-x-[-1]"
           style={laurierMaskStyle}
         />
 
@@ -154,20 +151,19 @@ export default function Winners() {
           <h2 className="text-xl md:text-2xl font-bold text-brand-primary uppercase tracking-[0.3em] mb-2 drop-shadow-lg leading-tight">
             Grand Prix
           </h2>
+          <h1 className="text-3xl md:text-7xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+            MarsAI
+          </h1>
           <div className="inline-block relative mb-2">
-            <span className="text-2xl md:text-3xl font-light text-slate-400 tracking-widest">
+            <span className="text-2xl md:text-2xl font-light text-slate-400 tracking-widest">
               2026
             </span>
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-none">
-            MarsAI
-          </h1>
         </div>
 
-        {/* Laurier Droite (C'est celui qui était à gauche avant) */}
-        {/* Note : J'ai AJOUTÉ scale-x-[-1] ici pour le mettre en miroir */}
+        {/* Laurier Droite (RETRAIT de scale-x-[-1] pour le mettre normal) */}
         <div
-          className="w-16 md:w-24 lg:w-32 h-24 md:h-32 bg-brand-primary opacity-90 -translate-y-2 scale-x-[-1]"
+          className="w-16 md:w-24 lg:w-32 h-24 md:h-32 bg-brand-primary opacity-90 -translate-y-2"
           style={laurierMaskStyle}
         />
       </div>
@@ -205,7 +201,7 @@ export default function Winners() {
 
               {/* --- INFO CARD --- */}
               <div className="relative -mt-20 px-4 md:px-8 z-20">
-                <div className="bg-slate-900/95 backdrop-blur-xl border-2 border-white rounded-2xl p-6 md:p-8 shadow-2xl">
+                <div className="bg-black/90 backdrop-blur-xl border-2 border-white rounded-2xl p-6 md:p-8 shadow-2xl">
                   <div className="flex flex-col md:flex-row gap-6 justify-between items-start text-left">
                     <div className="flex-1">
                       <h2 className="text-2xl md:text-4xl font-black text-white mb-2 leading-tight line-clamp-1">
@@ -224,7 +220,7 @@ export default function Winners() {
                         {film.synopsis}
                       </p>
 
-                      <button className="bg-brand-primary hover:bg-white text-slate-900 px-6 py-2.5 rounded-full font-bold transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,200,0,0.2)] text-sm">
+                      <button className="bg-brand-white hover:bg-white text-slate-900 px-6 py-2.5 rounded-full font-bold transition-colors flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,200,0,0.2)] text-sm">
                         <Play className="w-4 h-4 fill-current" /> Voir le
                         trailer
                       </button>
@@ -232,7 +228,7 @@ export default function Winners() {
 
                     {/* Avis Jury */}
                     <div className="hidden lg:block w-1/3 border-l border-white/10 pl-6">
-                      <h3 className="text-brand-primary font-bold uppercase text-[10px] tracking-widest mb-2">
+                      <h3 className="text-brand-white font-bold uppercase text-[10px] tracking-widest mb-2">
                         L'avis du Jury
                       </h3>
                       <p className="italic text-slate-400 font-light text-sm mb-3 line-clamp-3">
