@@ -26,8 +26,9 @@ function InfoRow({ k, v }) {
     </div>
   );
 }
+import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
 
-/**
+/** 
  * Page d'accueil du festival marsAI
  * Structure refactorisée avec sections modulaires et composants réutilisables
  */
@@ -143,6 +144,7 @@ export default function Home() {
       
       {/* 6. Appel à l'action final */}
       <CTASection />
+      <CookieBanner /> {/* Affichage du bandeau de cookies */}
 
       {/* Styles personnalisés */}
       <style>{HOME_STYLES}</style>
