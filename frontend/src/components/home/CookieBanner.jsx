@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 export const CookieBanner = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+;
 
   useEffect(() => {
     // Note : Utilise la même clé que dans ton localStorage.setItem plus bas
