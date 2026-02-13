@@ -13,6 +13,7 @@ import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
 import AdminVideos from "./components/admin/All-videos";
 import Contact from "./pages/Contact";
+import VideoDetail from "./pages/VideoDetail";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/videoDetail/:id" element={<VideoDetail />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
