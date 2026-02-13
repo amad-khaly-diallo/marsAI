@@ -6,8 +6,9 @@ import { LocationSection } from "../components/sections/LocationSection";
 import { StatsSection } from "../components/sections/StatsSection";
 import { CTASection } from "../components/sections/CTASection";
 import { HOME_STYLES } from "../constants/homeStyles";
+import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
 
-/**
+/** 
  * Page d'accueil du festival marsAI
  * Structure refactorisée avec sections modulaires et composants réutilisables
  */
@@ -30,6 +31,7 @@ export default function Home() {
       <LocationSection />
       <StatsSection />
       <CTASection />
+      <CookieBanner /> {/* Affichage du bandeau de cookies */}
 
       {/* Styles personnalisés */}
       <style>{HOME_STYLES}</style>

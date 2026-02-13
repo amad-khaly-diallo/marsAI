@@ -14,6 +14,7 @@ import About from "./pages/Partenaires";
 import AdminVideos from "./components/admin/All-videos";
 import Contact from "./pages/Contact";
 import VideoDetail from "./pages/VideoDetail";
+import { CookieBanner } from "./components/home/CookieBanner"; // Importation du composant cookie banner
 
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
           <Routes>
             {/* HOME */}
             <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
+           I <Route path="/home" element={<Home />} />
             <Route path="/a-propos" element={<AProposPage />} />
             <Route path="/participer" element={<Participer />} />
             <Route path="/partenaires" element={<Partenaires />} />
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/videoDetail/:id" element={<VideoDetail />} />
             <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path= "/cookie-consent" element={<CookieBanner />} />
           </Routes>
         </main>
 
