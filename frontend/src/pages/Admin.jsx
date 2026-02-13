@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import AdminLayout from "../components/admin/AdminLayout";
 import DashboardOverview from "../components/admin/DashboardOverview";
 import AdminsManagement from "../components/admin/AdminsManagement";
@@ -8,48 +7,13 @@ import PartnersManagement from "../components/admin/PartnersManagement";
 import NewslettersManagement from "../components/admin/NewslettersManagement";
 import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
+import AdminVideos from "../components/admin/All-videos";
+import VideosDistribution from "../components/admin/VideosDistribution";
+import MyMoviesGallery from "../components/admin/MyMoviesGallery";
+import { AdminProvider, useAdmin } from "../context/AdminContext";
 
-export default function Admin() {
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authError, setAuthError] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const checkAuth = async () => {
-      setCheckingAuth(true);
-      setAuthError(null);
-      try {
-        const res = await fetch("/api/admins", {
-          method: "GET",
-          credentials: "include",
-        });
-
-        if (!cancelled) {
-          if (res.ok) {
-            setIsAuthenticated(true);
-          } else if (res.status === 401 || res.status === 403) {
-            setIsAuthenticated(false);
-          } else {
-            setAuthError("Impossible de vérifier l'authentification admin.");
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setAuthError("Erreur réseau lors de la vérification de l'accès admin.");
-        }
-      } finally {
-        if (!cancelled) setCheckingAuth(false);
-      }
-    };
-
-    checkAuth();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+function AdminContent() {
+  const { admin, checking, isAuthenticated, error, reload } = useAdmin();
 
   const renderSection = (section) => {
     switch (section) {
@@ -57,21 +21,27 @@ export default function Admin() {
         return <AdminsManagement />;
       case "jury":
         return <JuryManagement />;
+      case "my-movies":
+        return <MyMoviesGallery />;
       case "movies":
-        return <MoviesManagement />;
+        return <MoviesManagement currentAdmin={admin} />;
       case "partners":
         return <PartnersManagement />;
       case "newsletters":
         return <NewslettersManagement />;
       case "traffic":
         return <TrafficOverview />;
+      case "all-videos":
+        return <AdminVideos />;
+      case "videos-distribution":
+        return <VideosDistribution currentAdmin={admin} />;
       case "dashboard":
       default:
         return <DashboardOverview />;
     }
   };
 
-  if (checkingAuth) {
+  if (checking) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <p className="text-sm text-brand-muted">
@@ -84,19 +54,25 @@ export default function Admin() {
   if (!isAuthenticated) {
     return (
       <>
-        {authError && (
+        {error && (
           <div className="px-4 pt-4">
             <p className="mb-2 rounded-md border border-amber-500/60 bg-amber-950/40 px-3 py-2 text-xs text-amber-100">
-              {authError}
+              {error}
             </p>
           </div>
         )}
-        <AdminLogin onSuccess={() => setIsAuthenticated(true)} />
+        <AdminLogin onSuccess={reload} />
       </>
     );
   }
 
-  return <AdminLayout>{renderSection}</AdminLayout>;
+  return <AdminLayout currentAdmin={admin}>{renderSection}</AdminLayout>;
 }
 
-
+export default function Admin() {
+  return (
+    <AdminProvider>
+      <AdminContent />
+    </AdminProvider>
+  );
+}

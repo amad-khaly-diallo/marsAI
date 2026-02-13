@@ -5,21 +5,20 @@ const links = [
   { to: "/", labelKey: "nav.home", defaultLabel: "Accueil" },
   { to: "/contact", labelKey: "nav.contact", defaultLabel: "Contact" },
   { to: "/jury", labelKey: "nav.jury", defaultLabel: "Jury" },
+  { to: "/partenaires", labelKey: "nav.partners", defaultLabel: "Partenaires" },
   { to: "/admin", labelKey: "nav.admin", defaultLabel: "Admin" },
 ];
 
-export default function HeaderNavLinks({ orientation = "horizontal", onNavigate }) {
+export default function HeaderNavLinks({
+  orientation = "horizontal",
+  onNavigate,
+}) {
   const { t } = useTranslation();
   const base =
     "text-sm font-medium tracking-wide transition-colors hover:text-brand-primary-soft";
 
   const active = ({ isActive }) =>
-    [
-      base,
-      isActive
-        ? "text-brand-primary-soft"
-        : "text-slate-300",
-    ].join(" ");
+    [base, isActive ? "text-brand-primary-soft" : "text-slate-300"].join(" ");
 
   if (orientation === "vertical") {
     return (
@@ -61,4 +60,3 @@ export default function HeaderNavLinks({ orientation = "horizontal", onNavigate 
     </div>
   );
 }
-
