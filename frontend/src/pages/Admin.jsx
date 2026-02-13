@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import AdminLayout from "../components/admin/AdminLayout";
 import DashboardOverview from "../components/admin/DashboardOverview";
 import AdminsManagement from "../components/admin/AdminsManagement";
@@ -18,10 +19,8 @@ export default function Admin() {
   const [authError, setAuthError] = useState(null);
   const [currentAdmin, setCurrentAdmin] = useState(null);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const checkAuth = async () => {
+  let cancelled = false;
+  const checkAuth = async () => {
       setCheckingAuth(true);
       setAuthError(null);
       try {
@@ -50,13 +49,11 @@ export default function Admin() {
       } finally {
         if (!cancelled) setCheckingAuth(false);
       }
-    };
+  };
 
+  useEffect(() => {
     checkAuth();
-
-    return () => {
-      cancelled = true;
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderSection = (section) => {
@@ -85,32 +82,11 @@ export default function Admin() {
     }
   };
 
-  if (checkingAuth) {
-    return (
-      <div className="flex min-h-[60vh] items-center justify-center px-4">
-        <p className="text-sm text-brand-muted">
-          Vérification de l&apos;accès administrateur...
-        </p>
-      </div>
-    );
-  }
+
 
   if (!isAuthenticated) {
-    return (
-      <>
-        {authError && (
-          <div className="px-4 pt-4">
-            <p className="mb-2 rounded-md border border-amber-500/60 bg-amber-950/40 px-3 py-2 text-xs text-amber-100">
-              {authError}
-            </p>
-          </div>
-        )}
-        <AdminLogin onSuccess={() => setIsAuthenticated(true)} />
-      </>
-    );
+    return <AdminLogin onSuccess={() => checkAuth()} />;
   }
 
   return <AdminLayout currentAdmin={currentAdmin}>{renderSection}</AdminLayout>;
 }
-
-
