@@ -7,6 +7,8 @@ import About from "./pages/Partenaires";
 import Contact from "./pages/Contact";
 import { HomePhase2 } from "./components/HomePhase2";
 import { AuthProvider } from "./contexts/AuthContext";
+import VideoDetail from "./pages/VideoDetail";
+import { CookieBanner } from "./components/home/CookieBanner"; // Importation du composant cookie banner
 
 export default function App() {
   return (
@@ -19,7 +21,7 @@ export default function App() {
           <Routes>
             {/* HOME */}
             <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
+           I <Route path="/home" element={<Home />} />
             <Route path="/films" element={<HomePhase2 />} />
             <Route path="/a-propos" element={<AProposPage />} />
             <Route path="/participer" element={<Participer />} />
@@ -30,7 +32,9 @@ export default function App() {
             <Route path="/cgv" element={<CGV />} />
             <Route path="/cgu" element={<CGU />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/videoDetail/:id" element={<VideoDetail />} />
             <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path= "/cookie-consent" element={<CookieBanner />} />
           </Routes>
         </main>
           <main className="flex-grow">
