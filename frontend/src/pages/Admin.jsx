@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import AdminLayout from "../components/admin/AdminLayout";
 import DashboardOverview from "../components/admin/DashboardOverview";
 import AdminsManagement from "../components/admin/AdminsManagement";
@@ -9,16 +8,12 @@ import NewslettersManagement from "../components/admin/NewslettersManagement";
 import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
 import AdminVideos from "../components/admin/All-videos";
-import useAuth from "../hooks/useAuth";
+import VideosDistribution from "../components/admin/VideosDistribution";
+import MyMoviesGallery from "../components/admin/MyMoviesGallery";
+import { AdminProvider, useAdmin } from "../context/AdminContext";
 
-export default function Admin() {
-  const { checking, isAuthenticated, checkAuth } = useAuth();
-
-  useEffect(() => {
-    // ensure latest auth state
-    checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+function AdminContent() {
+  const { admin, checking, isAuthenticated, error, reload } = useAdmin();
 
   const renderSection = (section) => {
     switch (section) {
@@ -26,8 +21,10 @@ export default function Admin() {
         return <AdminsManagement />;
       case "jury":
         return <JuryManagement />;
+      case "my-movies":
+        return <MyMoviesGallery />;
       case "movies":
-        return <MoviesManagement />;
+        return <MoviesManagement currentAdmin={admin} />;
       case "partners":
         return <PartnersManagement />;
       case "newsletters":
@@ -36,6 +33,8 @@ export default function Admin() {
         return <TrafficOverview />;
       case "all-videos":
         return <AdminVideos />;
+      case "videos-distribution":
+        return <VideosDistribution currentAdmin={admin} />;
       case "dashboard":
       default:
         return <DashboardOverview />;
@@ -46,15 +45,34 @@ export default function Admin() {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <p className="text-sm text-brand-muted">
-          Vérification de l'accès administrateur...
+          Vérification de l&apos;accès administrateur...
         </p>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onSuccess={() => checkAuth()} />;
+    return (
+      <>
+        {error && (
+          <div className="px-4 pt-4">
+            <p className="mb-2 rounded-md border border-amber-500/60 bg-amber-950/40 px-3 py-2 text-xs text-amber-100">
+              {error}
+            </p>
+          </div>
+        )}
+        <AdminLogin onSuccess={reload} />
+      </>
+    );
   }
 
-  return <AdminLayout>{renderSection}</AdminLayout>;
+  return <AdminLayout currentAdmin={admin}>{renderSection}</AdminLayout>;
+}
+
+export default function Admin() {
+  return (
+    <AdminProvider>
+      <AdminContent />
+    </AdminProvider>
+  );
 }
