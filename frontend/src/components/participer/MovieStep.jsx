@@ -33,6 +33,7 @@ export default function MovieStep({
         onChange={onChange}
         onVideoChange={onVideoChange}
         hasError={!!error}
+        videoRequired={!value?.youtube_url}
       />
       <div className="flex items-center justify-between pt-2">
         <button
