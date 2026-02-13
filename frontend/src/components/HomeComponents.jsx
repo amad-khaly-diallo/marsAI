@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useCountUp } from "../hooks/useCountUp";
 
 /**
  * Élément de navigation actif/inactif
@@ -66,12 +67,7 @@ export function StatCard({
   gradient,
   revealed,
 }) {
-  const [count, ref] = require("../hooks/useCountUp").useCountUp(
-    value,
-    4000,
-    true,
-    revealed
-  );
+  const [count, ref] = useCountUp(value, 4000, true, revealed);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-6 backdrop-blur">
@@ -130,7 +126,9 @@ export function AnalyticsBar({
     <div className="group">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-1 sm:mb-1.5 gap-1">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-cyan-400 font-mono">[{index + 1}]</span>
+          <span className="text-[10px] text-cyan-400 font-mono">
+            [{index + 1}]
+          </span>
           <span className="text-[10px] sm:text-xs font-bold text-white uppercase tracking-wide font-mono">
             {label}
           </span>
@@ -173,8 +171,14 @@ export function AnalyticsBar({
 /**
  * Bouton de lien personnalisé
  */
-export function LinkButton({ to, className = "", variant = "primary", children }) {
-  const baseClasses = "rounded-full px-6 py-3 text-sm font-extrabold transition";
+export function LinkButton({
+  to,
+  className = "",
+  variant = "primary",
+  children,
+}) {
+  const baseClasses =
+    "rounded-full px-6 py-3 text-sm font-extrabold transition";
   const variants = {
     primary: "bg-white text-black hover:bg-white/90",
     secondary: "border border-white/20 bg-white/10 hover:bg-white/20",
