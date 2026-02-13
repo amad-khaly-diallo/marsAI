@@ -1,8 +1,8 @@
-const { query } = require('../Utils/db');
+const { query, withTransaction } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
 const { sendStatusUpdate } = require('./mail.service');
 
-async function list({ status, search }) {
+async function list({ status, search, currentUser }) {
   const where = [];
   const params = {};
 
@@ -18,14 +18,36 @@ async function list({ status, search }) {
 
   const whereClause = where.length ? `WHERE ${where.join(' AND ')}` : '';
 
+  const isBasicAdmin = currentUser && currentUser.role === 'admin';
+
+  let joinCurrentAdmin = '';
+  if (isBasicAdmin) {
+    // L'admin simple ne voit que les films qui lui sont assignés
+    joinCurrentAdmin =
+      'INNER JOIN admin_movie_assignment ama ON ama.movie_id = m.id AND ama.admin_id = :current_admin_id';
+    params.current_admin_id = currentUser.id;
+  }
+
   const rows = await query(
     `SELECT
         m.*,
         f.first_name AS filmmaker_first_name,
         f.last_name AS filmmaker_last_name,
-        f.email AS filmmaker_email
+        f.email AS filmmaker_email,
+        COALESCE(a.reviewers_count, 0) AS reviewers_count,
+        ${
+          isBasicAdmin
+            ? 'ama.rating AS my_rating, ama.comment AS my_comment'
+            : 'NULL AS my_rating, NULL AS my_comment'
+        }
      FROM movie m
      INNER JOIN filmmaker f ON f.id = m.filmmaker_id
+     ${joinCurrentAdmin}
+     LEFT JOIN (
+       SELECT movie_id, COUNT(*) AS reviewers_count
+       FROM admin_movie_assignment
+       GROUP BY movie_id
+     ) a ON a.movie_id = m.id
      ${whereClause}
      ORDER BY m.id DESC`,
     params
@@ -43,6 +65,10 @@ async function list({ status, search }) {
     status: row.status,
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
+    reviewers_count: row.reviewers_count,
+    my_rating:
+      typeof row.my_rating === 'number' ? row.my_rating : null,
+    my_comment: row.my_comment ?? null,
     filmmaker: {
       id: row.filmmaker_id,
       first_name: row.filmmaker_first_name,
@@ -52,17 +78,34 @@ async function list({ status, search }) {
   }));
 }
 
-async function getById(id) {
+async function getById(id, currentUser) {
+  const params = { id };
+
+  const isBasicAdmin = currentUser && currentUser.role === 'admin';
+
+  let joinCurrentAdmin = '';
+  if (isBasicAdmin) {
+    joinCurrentAdmin =
+      'LEFT JOIN admin_movie_assignment ama ON ama.movie_id = m.id AND ama.admin_id = :current_admin_id';
+    params.current_admin_id = currentUser.id;
+  }
+
   const rows = await query(
     `SELECT
         m.*,
         f.first_name AS filmmaker_first_name,
         f.last_name AS filmmaker_last_name,
-        f.email AS filmmaker_email
+        f.email AS filmmaker_email,
+        ${
+          isBasicAdmin
+            ? 'ama.rating AS my_rating, ama.comment AS my_comment'
+            : 'NULL AS my_rating, NULL AS my_comment'
+        }
      FROM movie m
      INNER JOIN filmmaker f ON f.id = m.filmmaker_id
+     ${joinCurrentAdmin}
      WHERE m.id = :id`,
-    { id }
+    params
   );
 
   const row = rows[0];
@@ -80,6 +123,9 @@ async function getById(id) {
     status: row.status,
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
+    my_rating:
+      typeof row.my_rating === 'number' ? row.my_rating : null,
+    my_comment: row.my_comment ?? null,
     filmmaker: {
       id: row.filmmaker_id,
       first_name: row.filmmaker_first_name,
@@ -126,9 +172,129 @@ async function updateStatus(id, { status, decision_reason }) {
   return getById(id);
 }
 
+async function upsertReview(movieId, { rating, comment }, currentUser) {
+  if (!currentUser) {
+    throw new HttpError(401, 'User not authenticated');
+  }
+
+  const adminId = currentUser.id;
+
+  let normalizedRating = null;
+  if (rating !== undefined && rating !== null && rating !== '') {
+    const num = Number(rating);
+    if (!Number.isFinite(num) || num < 1 || num > 10) {
+      throw new HttpError(400, 'Rating must be a number between 1 and 10');
+    }
+    normalizedRating = num;
+  }
+
+  const textComment =
+    typeof comment === 'string' && comment.trim().length ? comment.trim() : null;
+
+  await query(
+    `INSERT INTO admin_movie_assignment (admin_id, movie_id, rating, comment)
+     VALUES (:admin_id, :movie_id, :rating, :comment)
+     ON DUPLICATE KEY UPDATE
+       rating = VALUES(rating),
+       comment = VALUES(comment)`,
+    {
+      admin_id: adminId,
+      movie_id: movieId,
+      rating: normalizedRating,
+      comment: textComment,
+    }
+  );
+
+  return {
+    movie_id: movieId,
+    admin_id: adminId,
+    rating: normalizedRating,
+    comment: textComment,
+  };
+}
+
+async function distributeToAdmins(minReviewers = 2) {
+  const reviewersRequired = Number.isInteger(minReviewers) && minReviewers > 0 ? minReviewers : 2;
+
+  return withTransaction(async (db) => {
+    const admins = await db.query('SELECT id FROM admins WHERE role = "admin"');
+    if (!admins.length) {
+      throw new HttpError(400, 'Aucun compte admin disponible pour la répartition');
+    }
+
+    const movies = await db.query('SELECT id FROM movie');
+
+    if (!movies.length) {
+      return { moviesCount: 0, assignmentsCreated: 0 };
+    }
+
+    const countsRows = await db.query(
+      'SELECT admin_id, COUNT(*) AS cnt FROM admin_movie_assignment GROUP BY admin_id'
+    );
+
+    const assignCounts = new Map();
+    admins.forEach((a) => {
+      assignCounts.set(a.id, 0);
+    });
+
+    countsRows.forEach((row) => {
+      if (assignCounts.has(row.admin_id)) {
+        assignCounts.set(row.admin_id, row.cnt);
+      }
+    });
+
+    let assignmentsCreated = 0;
+
+    for (const movie of movies) {
+      const existingRows = await db.query(
+        'SELECT admin_id FROM admin_movie_assignment WHERE movie_id = :movie_id',
+        { movie_id: movie.id }
+      );
+
+      const existingAdminIds = new Set(existingRows.map((r) => r.admin_id));
+      let needed = reviewersRequired - existingAdminIds.size;
+
+      if (needed <= 0) continue;
+
+      while (needed > 0) {
+        const availableAdmins = admins.filter((a) => !existingAdminIds.has(a.id));
+
+        if (!availableAdmins.length) break;
+
+        availableAdmins.sort(
+          (a, b) => (assignCounts.get(a.id) || 0) - (assignCounts.get(b.id) || 0)
+        );
+
+        const chosen = availableAdmins[0];
+
+        await db.query(
+          'INSERT IGNORE INTO admin_movie_assignment (admin_id, movie_id) VALUES (:admin_id, :movie_id)',
+          {
+            admin_id: chosen.id,
+            movie_id: movie.id,
+          }
+        );
+
+        existingAdminIds.add(chosen.id);
+        assignCounts.set(chosen.id, (assignCounts.get(chosen.id) || 0) + 1);
+        assignmentsCreated += 1;
+        needed -= 1;
+      }
+    }
+
+    return {
+      moviesCount: movies.length,
+      assignmentsCreated,
+      reviewersRequired,
+    };
+  });
+}
+
 module.exports = {
   list,
   getById,
   updateStatus,
+  distributeToAdmins,
+  upsertReview,
 };
 
