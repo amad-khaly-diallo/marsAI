@@ -18,13 +18,10 @@ export default function AppRouter() {
       <Route path="/a-propos" element={<AProposPage />} />
       <Route path="/participer" element={<Participer />} />
       <Route path="/partenaires" element={<Partenaires />} />
-      {/* <Route path="/Partenaires" element={<About />} /> */}
       <Route path="/cgv" element={<CGV />} />
       <Route path="/cgu" element={<CGU />} />
       <Route path="/jury" element={<Jury />} />
       <Route path="/contact" element={<Contact />} />
-
-      {/* admin (Admin.jsx gère déjà la vérification auth) */}
       <Route path="/admin" element={<Admin />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
