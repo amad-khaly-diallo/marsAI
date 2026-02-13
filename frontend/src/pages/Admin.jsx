@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import AdminLayout from "../components/admin/AdminLayout";
 import DashboardOverview from "../components/admin/DashboardOverview";
 import AdminsManagement from "../components/admin/AdminsManagement";
@@ -9,45 +9,15 @@ import NewslettersManagement from "../components/admin/NewslettersManagement";
 import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
 import AdminVideos from "../components/admin/All-videos";
+import useAuth from "../hooks/useAuth";
 
 export default function Admin() {
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authError, setAuthError] = useState(null);
+  const { checking, isAuthenticated, checkAuth } = useAuth();
 
   useEffect(() => {
-    let cancelled = false;
-
-    const checkAuth = async () => {
-      setCheckingAuth(true);
-      setAuthError(null);
-      try {
-        const admin = require("../services/admin");
-        const ok = await admin.checkAuth();
-
-        if (!cancelled) {
-          if (ok) {
-            setIsAuthenticated(true);
-          } else {
-            setIsAuthenticated(false);
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setAuthError(
-            "Erreur réseau lors de la vérification de l'accès admin.",
-          );
-        }
-      } finally {
-        if (!cancelled) setCheckingAuth(false);
-      }
-    };
-
+    // ensure latest auth state
     checkAuth();
-
-    return () => {
-      cancelled = true;
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderSection = (section) => {
@@ -72,29 +42,18 @@ export default function Admin() {
     }
   };
 
-  if (checkingAuth) {
+  if (checking) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <p className="text-sm text-brand-muted">
-          Vérification de l&apos;accès administrateur...
+          Vérification de l'accès administrateur...
         </p>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return (
-      <>
-        {authError && (
-          <div className="px-4 pt-4">
-            <p className="mb-2 rounded-md border border-amber-500/60 bg-amber-950/40 px-3 py-2 text-xs text-amber-100">
-              {authError}
-            </p>
-          </div>
-        )}
-        <AdminLogin onSuccess={() => setIsAuthenticated(true)} />
-      </>
-    );
+    return <AdminLogin onSuccess={() => checkAuth()} />;
   }
 
   return <AdminLayout>{renderSection}</AdminLayout>;
