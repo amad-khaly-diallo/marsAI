@@ -9,6 +9,11 @@ import CGU from "../pages/CGU";
 import Admin from "../pages/Admin";
 import Jury from "../pages/Jury";
 import Contact from "../pages/Contact";
+import { HomePhase2 } from "../components/HomePhase2";
+import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
+import VideoDetail from "../pages/VideoDetail";
+import About from "../pages/Partenaires";
+// import ContactPage from "../pages/Contact";
 
 export default function AppRouter() {
   return (
