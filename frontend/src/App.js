@@ -12,6 +12,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import About from "./pages/Partenaires";
 import Contact from "./pages/Contact";
+import { HomePhase2 } from "./components/HomePhase2";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             {/* HOME */}
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/films" element={<HomePhase2 />} />
             <Route path="/a-propos" element={<AProposPage />} />
             <Route path="/participer" element={<Participer />} />
             <Route path="/partenaires" element={<Partenaires />} />
