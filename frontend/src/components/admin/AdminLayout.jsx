@@ -1,18 +1,48 @@
 import { useState } from "react";
 
-const sections = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "admins", label: "Admins" },
-  { id: "jury", label: "Jury" },
-  { id: "movies", label: "Films" },
-  { id: "partners", label: "Partenaires" },
-  { id: "newsletters", label: "Newsletters" },
-  { id: "traffic", label: "Trafic" },
-  {id: "all-videos", label: "Toutes les vidéos"}
-];
+export default function AdminLayout({ children, currentAdmin }) {
+  const role = currentAdmin?.role;
+  const isSuperAdmin = role === "super_admin";
 
-export default function AdminLayout({ children }) {
-  const [activeSection, setActiveSection] = useState("dashboard");
+  const allSections = [
+    { id: "dashboard", label: "Dashboard" },
+    { id: "admins", label: "Admins" },
+    { id: "jury", label: "Jury" },
+    { id: "partners", label: "Partenaires" },
+    { id: "newsletters", label: "Newsletters" },
+    { id: "traffic", label: "Trafic" },
+    { id: "all-videos", label: "Toutes les vidéos" },
+    { id: "videos-distribution", label: "Répartition vidéos" },
+    { id: "my-movies", label: "Mes vidéos" }, // vue personnelle pour un admin simple
+  ];
+
+  let allowedIds;
+  if (isSuperAdmin) {
+    // Super admin : toutes les sections SAUF la vue "Mes vidéos"
+    allowedIds = allSections
+      .map((s) => s.id)
+      .filter((id) => id !== "my-movies");
+  } else {
+    allowedIds = ["my-movies"];
+  }
+  const baseSections = allSections.filter((s) => allowedIds.includes(s.id));
+  const sections = [...baseSections];
+
+  const initialSection = role === "admin" ? "my-movies" : "dashboard";
+  const [activeSection, setActiveSection] = useState(initialSection);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admins/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (e) {
+      // ignore
+    } finally {
+      window.location.reload();
+    }
+  };
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 md:flex-row md:gap-6 md:py-8">
@@ -27,6 +57,13 @@ export default function AdminLayout({ children }) {
               Gestion du festival
             </p>
           </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded-full bg-slate-900/80 px-3 py-1.5 text-[11px] font-medium text-brand-muted hover:text-red-300 hover:bg-red-900/40 border border-slate-700/60"
+          >
+            Déconnexion
+          </button>
         </div>
         <div className="flex flex-wrap gap-2">
           {sections.map((section) => (
@@ -57,7 +94,7 @@ export default function AdminLayout({ children }) {
             Gestion du festival
           </p>
         </div>
-        <nav className="mt-2 flex flex-col gap-1">
+        <nav className="mt-2 flex flex-col gap-1 flex-1">
           {sections.map((section) => (
             <button
               key={section.id}
@@ -73,6 +110,13 @@ export default function AdminLayout({ children }) {
             </button>
           ))}
         </nav>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="mt-2 inline-flex items-center justify-center rounded-full bg-slate-900/80 px-3 py-1.5 text-[11px] font-medium text-brand-muted hover:text-red-300 hover:bg-red-900/40 border border-slate-700/60"
+        >
+          Déconnexion
+        </button>
       </aside>
 
       <main className="flex-1">

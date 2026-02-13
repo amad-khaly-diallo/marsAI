@@ -9,11 +9,14 @@ import NewslettersManagement from "../components/admin/NewslettersManagement";
 import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
 import AdminVideos from "../components/admin/All-videos";
+import VideosDistribution from "../components/admin/VideosDistribution";
+import MyMoviesGallery from "../components/admin/MyMoviesGallery";
 
 export default function Admin() {
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authError, setAuthError] = useState(null);
+  const [currentAdmin, setCurrentAdmin] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,13 +25,17 @@ export default function Admin() {
       setCheckingAuth(true);
       setAuthError(null);
       try {
-        const res = await fetch("/api/admins", {
+        const res = await fetch("/api/admins/me", {
           method: "GET",
           credentials: "include",
         });
 
         if (!cancelled) {
           if (res.ok) {
+            const data = await res.json().catch(() => null);
+            if (data) {
+              setCurrentAdmin(data);
+            }
             setIsAuthenticated(true);
           } else if (res.status === 401 || res.status === 403) {
             setIsAuthenticated(false);
@@ -58,16 +65,20 @@ export default function Admin() {
         return <AdminsManagement />;
       case "jury":
         return <JuryManagement />;
+      case "my-movies":
+        return <MyMoviesGallery />;
       case "movies":
-        return <MoviesManagement />;
+        return <MoviesManagement currentAdmin={currentAdmin} />;
       case "partners":
         return <PartnersManagement />;
       case "newsletters":
         return <NewslettersManagement />;
       case "traffic":
         return <TrafficOverview />;
-        case "all-videos":
-        return <AdminVideos />;
+      case "all-videos":
+        return <AdminVideos currentAdmin={currentAdmin} />;
+      case "videos-distribution":
+        return <VideosDistribution currentAdmin={currentAdmin} />;
       case "dashboard":
       default:
         return <DashboardOverview />;
@@ -99,7 +110,7 @@ export default function Admin() {
     );
   }
 
-  return <AdminLayout>{renderSection}</AdminLayout>;
+  return <AdminLayout currentAdmin={currentAdmin}>{renderSection}</AdminLayout>;
 }
 
 
