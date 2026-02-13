@@ -1,6 +1,12 @@
 const AdminService = require('../Services/AdminService');
 const { asyncHandler } = require('../Utils/http');
 
+exports.me = asyncHandler(async (req, res) => {
+  const id = req.user?.id;
+  const data = await AdminService.getById(id);
+  res.json(data);
+});
+
 exports.list = asyncHandler(async (req, res) => {
   const data = await AdminService.list();
   res.json(data);
@@ -28,6 +34,15 @@ exports.logAdmin = asyncHandler(async (req, res) => {
   });
 
   res.status(200).json(admin);
+});
+
+exports.logout = asyncHandler(async (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
+  res.status(204).send();
 });
 
 exports.update = asyncHandler(async (req, res) => {
