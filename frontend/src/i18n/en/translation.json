@@ -95,8 +95,15 @@
 
   "error.movie.originalTitle.required": "Please provide the original title of the film.",
   "error.movie.englishTitle.required": "Please provide the English title of the film.",
-  "error.movie.duration.range": "Please provide a duration in minutes between 0 and 1.5.",
+  "error.movie.duration.range": "Please provide a duration in minutes between 0 and 1.",
   "error.movie.youtube.invalid": "The YouTube link is not a valid URL.",
+  "error.movie.video.required": "Please provide a video file or a YouTube link.",
+  "error.movie.video.invalidType": "The video file must be a valid video format (mp4, webm, mov...).",
+  "error.movie.video.tooLarge": "Video file is too large (max 50 MB).",
+  "participate.videoHint": "Max 50 MB. Accepted formats: mp4, webm, mov.",
+  "participate.draftFound": "A draft of your submission was found.",
+  "participate.resumeDraft": "Resume draft",
+  "participate.clearDraft": "Delete draft",
 
   "error.ai.artworkType.required": "Please specify the type of generated work (100% AI or hybrid).",
   "error.ai.methodology.min": "Please describe the creation methodology in a few sentences (at least 30 characters).",
@@ -120,4 +127,3 @@
 
   "contact.error.generic": "An error occurred. Please try again."
 }
-

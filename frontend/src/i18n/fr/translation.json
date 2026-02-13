@@ -95,8 +95,15 @@
 
   "error.movie.originalTitle.required": "Merci de renseigner le titre original du film.",
   "error.movie.englishTitle.required": "Merci de renseigner le titre anglais du film.",
-  "error.movie.duration.range": "Merci de renseigner une durée en minutes comprise entre 0 et 1,5.",
+  "error.movie.duration.range": "Merci de renseigner une durée en minutes comprise entre 0 et 1.",
   "error.movie.youtube.invalid": "Le lien YouTube n'est pas une URL valide.",
+  "error.movie.video.required": "Merci d'ajouter un fichier vidéo ou un lien YouTube.",
+  "error.movie.video.invalidType": "Le fichier vidéo doit être un format vidéo valide (mp4, webm, mov...).",
+  "error.movie.video.tooLarge": "Le fichier vidéo est trop volumineux (max 50 MB).",
+  "participate.videoHint": "Max 50 MB. Formats acceptés : mp4, webm, mov.",
+  "participate.draftFound": "Une version brouillon de votre soumission est disponible.",
+  "participate.resumeDraft": "Reprendre le brouillon",
+  "participate.clearDraft": "Supprimer le brouillon",
 
   "error.ai.artworkType.required": "Merci de préciser le type d'œuvre générée (100% IA ou hybride).",
   "error.ai.methodology.min": "Merci de décrire la méthodologie de création en quelques phrases (au moins 30 caractères).",
@@ -120,4 +127,3 @@
 
   "contact.error.generic": "Une erreur est survenue. Merci de réessayer."
 }
-
