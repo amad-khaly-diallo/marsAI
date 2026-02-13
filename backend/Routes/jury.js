@@ -8,27 +8,27 @@ const router = express.Router();
 router.get('/', JuryController.list);
 router.get('/:id', JuryController.get);
 
-// Admin uniquement: création / mise à jour / suppression
-const onlyAdmins = [ 'admin', 'super_admin' ];
+// Admin uniquement: création / mise à jour / suppression (réservé au super_admin)
+const onlySuperAdmin = ['super_admin'];
 
 router.post(
   '/',
   authenticate,
-  authorize(onlyAdmins),
+  authorize(onlySuperAdmin),
   JuryController.create
 );
 
 router.put(
   '/:id',
   authenticate,
-  authorize(onlyAdmins),
+  authorize(onlySuperAdmin),
   JuryController.update
 );
 
 router.delete(
   '/:id',
   authenticate,
-  authorize(onlyAdmins),
+  authorize(onlySuperAdmin),
   JuryController.remove
 );
 

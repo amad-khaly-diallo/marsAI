@@ -9,22 +9,31 @@ import CGU from "../pages/CGU";
 import Admin from "../pages/Admin";
 import Jury from "../pages/Jury";
 import Contact from "../pages/Contact";
+import { HomePhase2 } from "../components/HomePhase2";
+import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
+import VideoDetail from "../pages/VideoDetail";
+import About from "../pages/Partenaires";
+// import ContactPage from "../pages/Contact";
 
 export default function AppRouter() {
   return (
     <Routes>
+      {/* HOME */}
       <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
+      I <Route path="/home" element={<Home />} />
+      <Route path="/films" element={<HomePhase2 />} />
       <Route path="/a-propos" element={<AProposPage />} />
       <Route path="/participer" element={<Participer />} />
       <Route path="/partenaires" element={<Partenaires />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/jury" element={<Jury />} />
+      <Route path="/Partenaires" element={<About />} />
       <Route path="/cgv" element={<CGV />} />
       <Route path="/cgu" element={<CGU />} />
-      <Route path="/jury" element={<Jury />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/admin" element={<Admin />} />
-
+      <Route path="/videoDetail/:id" element={<VideoDetail />} />
       <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/cookie-consent" element={<CookieBanner />} />
     </Routes>
   );
 }

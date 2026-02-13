@@ -1,4 +1,13 @@
-export default function MovieForm({ value, onChange, onVideoChange, hasError }) {
+import { useTranslation } from "react-i18next";
+
+export default function MovieForm({
+  value,
+  onChange,
+  onVideoChange,
+  hasError,
+  videoRequired = false,
+}) {
+  const { t } = useTranslation();
   const handle = (field) => (e) =>
     onChange({ ...value, [field]: e.target.value });
 
@@ -17,7 +26,8 @@ export default function MovieForm({ value, onChange, onVideoChange, hasError }) 
       return;
     }
 
-    let clamped = Math.max(0, Math.min(1.5, num));
+    // Durée en minutes : autoriser décimales entre 0 (non nul) et 1 minute max
+    let clamped = Math.max(0, Math.min(1, num));
     onChange({ ...value, duration: clamped.toString() });
   };
 
@@ -57,18 +67,19 @@ export default function MovieForm({ value, onChange, onVideoChange, hasError }) 
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-brand-muted">
-            Durée (en minutes)
-          </label>
+          <label className="text-xs text-brand-muted">Durée (en minutes)</label>
           <input
             type="number"
             min="0"
-            max="1.5"
+            max="1"
             step="0.01"
             value={value.duration || ""}
             onChange={handleDuration}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
+          <p className="mt-1 text-[11px] text-brand-muted">
+            Entrez la durée en minutes (ex: 0.75 = 45s, max 1 min).
+          </p>
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted">Langue principale</label>
@@ -112,13 +123,16 @@ export default function MovieForm({ value, onChange, onVideoChange, hasError }) 
           </label>
           <input
             type="file"
-            accept="video/*"
-            required
+            accept="video/mp4,video/webm,video/quicktime,video/*"
+            required={videoRequired}
             onChange={(e) =>
               onVideoChange && onVideoChange(e.target.files?.[0] || null)
             }
             className="block w-full text-xs text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-brand-accent"
           />
+          <p className="mt-1 text-[11px] text-brand-muted">
+            {t("participate.videoHint")}
+          </p>
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted">
@@ -136,4 +150,3 @@ export default function MovieForm({ value, onChange, onVideoChange, hasError }) 
     </section>
   );
 }
-
