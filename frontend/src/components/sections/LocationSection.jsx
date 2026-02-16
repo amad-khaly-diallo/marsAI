@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import MiniMapGTA from "../MiniMapGTA/MiniMapGTA";
-import { LinkButton } from "../HomeComponents";
-import { NAV_ROUTES, HOME_TEXTS, MAP_MODES } from "../../constants/homeConstants";
+import MiniMapGTA from "../ui/MiniMapGTA/MiniMapGTA";
+import { LinkButton } from "./HomeComponents";
+import {
+  NAV_ROUTES,
+  HOME_TEXTS,
+  MAP_MODES,
+} from "../../constants/homeConstants";
 
 export function LocationSection() {
   const [mapMode, setMapMode] = useState(MAP_MODES.GTA);
@@ -83,7 +87,9 @@ export function LocationSection() {
 
               {/* Label */}
               <div className="absolute -bottom-6 lg:-bottom-8 left-1/2 -translate-x-1/2 text-xs text-white/50 font-semibold">
-                {mapMode === MAP_MODES.GTA ? "Radar GTA-style" : "Carte réelle Marseille"}
+                {mapMode === MAP_MODES.GTA
+                  ? "Radar GTA-style"
+                  : "Carte réelle Marseille"}
               </div>
             </div>
           </div>

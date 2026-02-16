@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkButton, ProgramCard } from "../HomeComponents";
+import { LinkButton, ProgramCard } from "./HomeComponents";
 import { NAV_ROUTES } from "../../constants/homeConstants";
 
 export function ProgramSection() {
