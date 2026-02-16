@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import SubmissionStepper from "../components/participer/SubmissionStepper";
 import FilmmakerStep from "../components/participer/FilmmakerStep";
@@ -10,7 +9,6 @@ import useParticiper from "../hooks/useParticiper";
 
 export default function Participer() {
   const { t } = useTranslation();
-  const [restoreMsg, setRestoreMsg] = useState(null);
 
   const {
     filmmaker,
@@ -36,7 +34,6 @@ export default function Participer() {
     assetsTagsSaved,
     submitting,
     error,
-    // upload progress
     movieUploadProgress,
     assetsUploadProgress,
     finished,
@@ -45,10 +42,6 @@ export default function Participer() {
     handleSubmitAIDeclaration,
     handleSubmitCollaborators,
     handleSubmitAssetsTags,
-    // draft helpers
-    hasDraft,
-    loadDraft,
-    clearDraft,
   } = useParticiper();
 
   return (
@@ -57,9 +50,11 @@ export default function Participer() {
         <p className="inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand-primary-soft">
           {t("participate.badge")}
         </p>
+
         <h1 className="text-2xl font-semibold text-slate-50 md:text-3xl">
           {t("participate.title")}
         </h1>
+
         <p className="max-w-2xl text-sm text-brand-muted">
           {t("participate.subtitle")}
         </p>
@@ -73,48 +68,6 @@ export default function Participer() {
         assetsTagsSaved={assetsTagsSaved}
         collaboratorsSaved={collaboratorsSaved}
       />
-
-      {hasDraft && (
-        <div className="mb-4 flex items-center gap-3 rounded-md border border-yellow-500/40 bg-yellow-950/10 px-3 py-2 text-sm text-yellow-300">
-          <div className="flex-1 text-xs">{t("participate.draftFound")}</div>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                const ok = loadDraft();
-                if (ok) {
-                  // quick visual confirmation
-                  setRestoreMsg("ok");
-                  setTimeout(() => setRestoreMsg(null), 3000);
-                } else {
-                  setRestoreMsg("fail");
-                  setTimeout(() => setRestoreMsg(null), 3000);
-                }
-              }}
-              className="rounded-md bg-yellow-500/80 px-3 py-1 text-xs font-semibold text-slate-900 hover:bg-yellow-400"
-            >
-              {t("participate.resumeDraft")}
-            </button>
-            <button
-              type="button"
-              onClick={() => clearDraft()}
-              className="rounded-md border border-yellow-600/30 px-3 py-1 text-xs text-yellow-200 hover:border-yellow-400"
-            >
-              {t("participate.clearDraft")}
-            </button>
-          </div>
-          {restoreMsg === "ok" && (
-            <div className="ml-4 rounded bg-emerald-800/30 px-2 py-1 text-xs text-emerald-200">
-              Brouillon restauré
-            </div>
-          )}
-          {restoreMsg === "fail" && (
-            <div className="ml-4 rounded bg-red-800/20 px-2 py-1 text-xs text-red-200">
-              Impossible de restaurer le brouillon — videz-le puis réessayez
-            </div>
-          )}
-        </div>
-      )}
 
       {currentStep === 1 && (
         <>
