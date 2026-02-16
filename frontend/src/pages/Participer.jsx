@@ -36,6 +36,9 @@ export default function Participer() {
     assetsTagsSaved,
     submitting,
     error,
+    // upload progress
+    movieUploadProgress,
+    assetsUploadProgress,
     finished,
     handleSubmitFilmmaker,
     handleSubmitMovie,
@@ -141,6 +144,7 @@ export default function Participer() {
             onSubmit={handleSubmitMovie}
             submitting={submitting}
             error={error}
+            uploadProgress={movieUploadProgress}
           />
 
           {movieId && (
@@ -181,6 +185,7 @@ export default function Participer() {
             onSubmit={handleSubmitAssetsTags}
             submitting={submitting}
             error={error}
+            uploadProgress={assetsUploadProgress}
           />
 
           {assetsTagsSaved && (

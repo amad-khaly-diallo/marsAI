@@ -41,6 +41,11 @@ export default function useParticiper() {
     setSubmitting,
     error,
     setError,
+    // upload progress
+    movieUploadProgress,
+    setMovieUploadProgress,
+    assetsUploadProgress,
+    setAssetsUploadProgress,
     finished,
     hasDraft,
     loadDraft,
@@ -77,6 +82,9 @@ export default function useParticiper() {
     setSubmitting: state.setSubmitting,
     setError: state.setError,
     setCurrentStep: state.setCurrentStep,
+    // progress setters
+    setMovieUploadProgress: state.setMovieUploadProgress,
+    setAssetsUploadProgress: state.setAssetsUploadProgress,
     aiDeclaration: state.aiDeclaration,
     validateFilmmaker,
     validateMovie,
@@ -116,6 +124,9 @@ export default function useParticiper() {
     assetsTagsSaved,
     submitting,
     error,
+    // upload progress
+    movieUploadProgress,
+    assetsUploadProgress,
     finished,
     // actions
     handleSubmitFilmmaker: submit.handleSubmitFilmmaker,

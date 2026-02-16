@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function useParticiperState() {
   const [form, setForm] = useState({
@@ -57,6 +57,10 @@ export default function useParticiperState() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
+  // upload progress (0-100)
+  const [movieUploadProgress, setMovieUploadProgress] = useState(0);
+  const [assetsUploadProgress, setAssetsUploadProgress] = useState(0);
+
   // draft persistence
   const DRAFT_KEY = "participer:draft_v1";
   const [hasDraft, setHasDraft] = useState(false);
@@ -75,6 +79,9 @@ export default function useParticiperState() {
       /* ignore */
     }
   }, []);
+
+  // ref flag to suppress the immediate hasDraft toggle that can cause UI blink
+  const justRestoredRef = useRef(false);
 
   const loadDraft = () => {
     try {
@@ -123,6 +130,9 @@ export default function useParticiperState() {
       setError(null);
       setSubmitting(false);
 
+      // mark restored and clear the visible hasDraft flag — the subsequent
+      // persisting effect will be suppressed once (to avoid banner blink)
+      justRestoredRef.current = true;
       setHasDraft(false);
       return true;
     } catch (err) {
@@ -132,6 +142,37 @@ export default function useParticiperState() {
       return false;
     }
   };
+
+  // Auto-restore draft on mount if the current form is empty. This fixes the
+  // common case where the user navigates away and comes back expecting their
+  // draft to reappear without manually clicking "Reprendre le brouillon".
+  useEffect(() => {
+    if (!hasDraft) return;
+
+    const isEmptyObject = (o) =>
+      !o || (typeof o === "object" && Object.keys(o).length === 0);
+    const isFormEmpty =
+      isEmptyObject(form.filmmaker) &&
+      isEmptyObject(form.movie) &&
+      isEmptyObject(form.aiDeclaration) &&
+      Array.isArray(form.collaborators) &&
+      form.collaborators.length === 0 &&
+      Array.isArray(form.tags) &&
+      form.tags.length === 0 &&
+      Array.isArray(form.assets?.stills) &&
+      form.assets.stills.length === 0 &&
+      !form.assets?.subtitle;
+
+    if (isFormEmpty) {
+      // best-effort restore (silent) — leave hasDraft false only after a
+      // successful restore so the banner won't reappear unnecessarily.
+      const ok = loadDraft();
+      if (ok) {
+        // no-op: loadDraft already clears hasDraft on success
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasDraft]);
 
   const clearDraft = () => {
     try {
@@ -178,6 +219,16 @@ export default function useParticiperState() {
       };
 
       localStorage.setItem(DRAFT_KEY, JSON.stringify(toSave));
+      // keep the `hasDraft` flag in sync immediately after persisting, but
+      // suppress the toggle if we've just restored the draft to avoid a
+      // visible banner blink on mount/restore.
+      if (justRestoredRef.current) {
+        // consume the flag once and do not set `hasDraft` — the draft is
+        // already restored and visible to the user.
+        justRestoredRef.current = false;
+      } else {
+        setHasDraft(true);
+      }
     } catch (err) {
       /* ignore quota/serialization errors */
     }
@@ -190,6 +241,15 @@ export default function useParticiperState() {
     collaboratorsSaved,
     assetsTagsSaved,
   ]);
+
+  // listen to storage events so `hasDraft` stays accurate across tabs
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === DRAFT_KEY) setHasDraft(!!e.newValue);
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   const finished =
     filmmakerId && movieId && aiSaved && assetsTagsSaved && collaboratorsSaved;
@@ -234,6 +294,11 @@ export default function useParticiperState() {
     setSubmitting,
     error,
     setError,
+    // upload progress
+    movieUploadProgress,
+    setMovieUploadProgress,
+    assetsUploadProgress,
+    setAssetsUploadProgress,
     finished,
     // draft helpers
     hasDraft,

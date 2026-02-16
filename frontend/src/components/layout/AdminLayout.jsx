@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAdmin } from "../../contexts/AdminContext";
+import { useAdmin } from "../../contexts";
 
 export default function AdminLayout({ children, currentAdmin }) {
   const { logout } = useAdmin();
