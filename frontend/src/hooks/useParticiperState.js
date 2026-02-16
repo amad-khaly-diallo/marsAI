@@ -79,29 +79,57 @@ export default function useParticiperState() {
   const loadDraft = () => {
     try {
       const raw = localStorage.getItem(DRAFT_KEY);
-      if (!raw) return;
+      if (!raw) return false;
+
       const d = JSON.parse(raw);
+
+      // support legacy shapes where the payload might be nested under `form` or `data`
+      const source =
+        d?.form && typeof d.form === "object"
+          ? d.form
+          : d?.data && typeof d.data === "object"
+            ? d.data
+            : d;
+
       setForm((prev) => ({
         ...prev,
-        filmmaker: d.filmmaker ?? prev.filmmaker,
-        movie: d.movie ?? prev.movie,
-        aiDeclaration: d.aiDeclaration ?? prev.aiDeclaration,
-        collaborators: Array.isArray(d.collaborators)
-          ? d.collaborators
+        // merge instead of replace so partial drafts don't wipe other fields
+        filmmaker: source.filmmaker
+          ? { ...prev.filmmaker, ...source.filmmaker }
+          : prev.filmmaker,
+        movie: source.movie ? { ...prev.movie, ...source.movie } : prev.movie,
+        aiDeclaration: source.aiDeclaration
+          ? { ...prev.aiDeclaration, ...source.aiDeclaration }
+          : prev.aiDeclaration,
+        collaborators: Array.isArray(source.collaborators)
+          ? source.collaborators
           : prev.collaborators,
-        tags: Array.isArray(d.tags) ? d.tags : prev.tags,
-        assets: d.assets ?? prev.assets,
+        tags: Array.isArray(source.tags) ? source.tags : prev.tags,
+        assets: source.assets
+          ? { ...prev.assets, ...source.assets }
+          : prev.assets,
       }));
 
-      if (typeof d.currentStep === "number") setCurrentStep(d.currentStep);
-      if (d.filmmakerId) setFilmmakerId(d.filmmakerId);
-      if (d.movieId) setMovieId(d.movieId);
-      if (d.aiSaved) setAiSaved(!!d.aiSaved);
-      if (d.collaboratorsSaved) setCollaboratorsSaved(!!d.collaboratorsSaved);
-      if (d.assetsTagsSaved) setAssetsTagsSaved(!!d.assetsTagsSaved);
+      if (typeof source.currentStep === "number")
+        setCurrentStep(source.currentStep);
+      if (source.filmmakerId) setFilmmakerId(source.filmmakerId);
+      if (source.movieId) setMovieId(source.movieId);
+      if (source.aiSaved) setAiSaved(!!source.aiSaved);
+      if (source.collaboratorsSaved)
+        setCollaboratorsSaved(!!source.collaboratorsSaved);
+      if (source.assetsTagsSaved) setAssetsTagsSaved(!!source.assetsTagsSaved);
+
+      // clear transient UI states after restoring a draft
+      setError(null);
+      setSubmitting(false);
+
       setHasDraft(false);
+      return true;
     } catch (err) {
-      /* ignore parse errors */
+      // if parse fails, keep the draft flag so user can try clearing it
+      // eslint-disable-next-line no-console
+      console.warn("Failed to load draft (parse error)", err);
+      return false;
     }
   };
 
@@ -117,13 +145,29 @@ export default function useParticiperState() {
   // persist draft to localStorage (omit File objects)
   useEffect(() => {
     try {
+      // avoid serializing actual File objects — keep only lightweight metadata for stlls/subtitle
+      const stillsMeta = Array.isArray(form.assets?.stills)
+        ? form.assets.stills
+            .filter(Boolean)
+            .map((f) => ({ name: f.name, size: f.size, type: f.type }))
+        : [];
+      const subtitleMeta = form.assets?.subtitle
+        ? { name: form.assets.subtitle.name }
+        : null;
+
+      const assetsForSave = {
+        ...form.assets,
+        stills: stillsMeta,
+        subtitle: subtitleMeta,
+      };
+
       const toSave = {
         filmmaker: form.filmmaker,
         movie: form.movie,
         aiDeclaration: form.aiDeclaration,
         collaborators: form.collaborators,
         tags: form.tags,
-        assets: form.assets,
+        assets: assetsForSave,
         currentStep,
         filmmakerId,
         movieId,
@@ -132,9 +176,10 @@ export default function useParticiperState() {
         assetsTagsSaved,
         savedAt: Date.now(),
       };
+
       localStorage.setItem(DRAFT_KEY, JSON.stringify(toSave));
     } catch (err) {
-      /* ignore quota errors */
+      /* ignore quota/serialization errors */
     }
   }, [
     form,

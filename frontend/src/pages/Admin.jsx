@@ -10,7 +10,7 @@ import AdminLogin from "../components/admin/AdminLogin";
 import AdminVideos from "../components/admin/All-videos";
 import VideosDistribution from "../components/admin/VideosDistribution";
 import MyMoviesGallery from "../components/admin/MyMoviesGallery";
-import { AdminProvider, useAdmin } from "../context/AdminContext";
+import { AdminProvider, useAdmin } from "../contexts/AdminContext";
 
 function AdminContent() {
   const { admin, checking, isAuthenticated, error, reload } = useAdmin();
