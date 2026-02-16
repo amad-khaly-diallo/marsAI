@@ -1,4 +1,4 @@
-import AdminLayout from "../components/admin/AdminLayout";
+import AdminLayout from "../components/layout/AdminLayout";
 import DashboardOverview from "../components/admin/DashboardOverview";
 import AdminsManagement from "../components/admin/AdminsManagement";
 import JuryManagement from "../components/admin/JuryManagement";
