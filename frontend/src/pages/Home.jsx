@@ -10,6 +10,7 @@ import { StatsSection } from "../components/sections/StatsSection";
 import { CTASection } from "../components/sections/CTASection";
 import HeroCamera from "../components/sections/HeroCamera";
 import { HOME_STYLES } from "../constants/homeStyles";
+import { CookieBanner } from "../components/home/CookieBanner";
 
 function SmallLabel({ children }) {
   return (
@@ -28,10 +29,8 @@ function InfoRow({ k, v }) {
     </div>
   );
 }
-import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
 
-/**
- * Page d'accueil du festival marsAI
+/** * Page d'accueil du festival marsAI
  * Structure refactorisée avec sections modulaires et composants réutilisables
  */
 export default function Home() {
@@ -65,7 +64,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
 
         {/* Contenu centré avec animations */}
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+        <div className="relative z-10 flex h-full flex-col items-center mt-10 justify-center px-6 text-center">
           <div className="animate-fadeInUp">
             <SmallLabel>
               🎬 Marseille — Festival de courts-métrages IA
