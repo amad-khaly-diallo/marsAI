@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import SubmissionStepper from "../components/participer/SubmissionStepper";
 import FilmmakerStep from "../components/participer/FilmmakerStep";
@@ -9,6 +10,7 @@ import useParticiper from "../hooks/useParticiper";
 
 export default function Participer() {
   const { t } = useTranslation();
+  const [restoreMsg, setRestoreMsg] = useState(null);
 
   const {
     filmmaker,
@@ -75,7 +77,17 @@ export default function Participer() {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => loadDraft()}
+              onClick={() => {
+                const ok = loadDraft();
+                if (ok) {
+                  // quick visual confirmation
+                  setRestoreMsg("ok");
+                  setTimeout(() => setRestoreMsg(null), 3000);
+                } else {
+                  setRestoreMsg("fail");
+                  setTimeout(() => setRestoreMsg(null), 3000);
+                }
+              }}
               className="rounded-md bg-yellow-500/80 px-3 py-1 text-xs font-semibold text-slate-900 hover:bg-yellow-400"
             >
               {t("participate.resumeDraft")}
@@ -88,6 +100,16 @@ export default function Participer() {
               {t("participate.clearDraft")}
             </button>
           </div>
+          {restoreMsg === "ok" && (
+            <div className="ml-4 rounded bg-emerald-800/30 px-2 py-1 text-xs text-emerald-200">
+              Brouillon restauré
+            </div>
+          )}
+          {restoreMsg === "fail" && (
+            <div className="ml-4 rounded bg-red-800/20 px-2 py-1 text-xs text-red-200">
+              Impossible de restaurer le brouillon — videz-le puis réessayez
+            </div>
+          )}
         </div>
       )}
 

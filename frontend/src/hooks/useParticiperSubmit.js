@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import useSubmission from "./useSubmission";
+import useAsync from "./useAsync";
 
 export default function useParticiperSubmit({
   // state pieces & setters from useParticiperState
@@ -30,22 +32,119 @@ export default function useParticiperSubmit({
 }) {
   const submission = useSubmission();
 
+  // --- operations using useAsync ---
+  const filmmakerOp = useAsync(async (filmmakerLocal) => {
+    const data = await submission.createFilmmaker(filmmakerLocal);
+    setFilmmakerId(data.id);
+    setCurrentStep(2);
+    return data;
+  });
+
+  const movieOp = useAsync(async (localMovie) => {
+    const payload = { ...localMovie, filmmaker_id: filmmakerId };
+    const data = await submission.submitMovie(payload, movieVideo);
+    setMovieId(data.movie_id);
+    setCurrentStep(3);
+    return data;
+  });
+
+  const aiOp = useAsync(async (payload) => {
+    await submission.saveAiDeclaration(movieId, payload);
+    setAiSaved(true);
+    setCurrentStep(4);
+  });
+
+  const collabOp = useAsync(async () => {
+    if (!collaborators.length) {
+      setCollaboratorsSaved(true);
+      return;
+    }
+    await Promise.all(
+      collaborators.map((c) => submission.addCollaborator(movieId, c)),
+    );
+    setCollaboratorsSaved(true);
+  });
+
+  const assetsOp = useAsync(async () => {
+    const stillFiles = Array.isArray(assets.stills) ? assets.stills : [];
+    if (stillFiles.length > 0 || assets.subtitle) {
+      stillFiles.forEach((file) => {
+        if (!file.type.startsWith("image/"))
+          throw new Error(t("error.assets.still.invalidType"));
+      });
+      if (assets.subtitle) {
+        const name = assets.subtitle.name || "";
+        if (!name.toLowerCase().endsWith(".srt"))
+          throw new Error(t("error.assets.subtitle.invalidType"));
+      }
+    }
+
+    const requests = [];
+    if (stillFiles.length > 0 || assets.subtitle)
+      requests.push(
+        submission.uploadAssets(movieId, stillFiles, assets.subtitle),
+      );
+    const cleanTags = (tags || [])
+      .map((x) => x.trim())
+      .filter((x) => x.length > 0);
+    cleanTags.forEach((label) =>
+      requests.push(submission.addTag(movieId, label)),
+    );
+
+    if (requests.length > 0) await Promise.all(requests);
+
+    setAssetsTagsSaved(true);
+    setCurrentStep(5);
+  });
+
+  // aggregate loading into shared `submitting` state
+  useEffect(() => {
+    setSubmitting(
+      !!(
+        filmmakerOp.loading ||
+        movieOp.loading ||
+        aiOp.loading ||
+        collabOp.loading ||
+        assetsOp.loading
+      ),
+    );
+  }, [
+    filmmakerOp.loading,
+    movieOp.loading,
+    aiOp.loading,
+    collabOp.loading,
+    assetsOp.loading,
+    setSubmitting,
+  ]);
+
+  // propagate async errors to shared `error` state (only when an op reports an error)
+  useEffect(() => {
+    const opError =
+      filmmakerOp.error ||
+      movieOp.error ||
+      aiOp.error ||
+      collabOp.error ||
+      assetsOp.error;
+    if (opError) setError(opError.message || String(opError));
+  }, [
+    filmmakerOp.error,
+    movieOp.error,
+    aiOp.error,
+    collabOp.error,
+    assetsOp.error,
+    setError,
+  ]);
+
+  // --- public handlers (validate synchronously, then delegate to useAsync.run) ---
   const handleSubmitFilmmaker = async (filmmakerLocal) => {
     setError(null);
     const validationError = validateFilmmaker(filmmakerLocal || filmmaker);
     if (validationError) return setError(validationError);
 
-    setSubmitting(true);
     try {
-      const data = await submission.createFilmmaker(
-        filmmakerLocal || filmmaker,
-      );
-      setFilmmakerId(data.id);
-      setCurrentStep(2);
+      await filmmakerOp.run(filmmakerLocal || filmmaker);
     } catch (err) {
       setError(err.message || String(err));
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -73,16 +172,10 @@ export default function useParticiperSubmit({
       }
     }
 
-    setSubmitting(true);
     try {
-      const payload = { ...localMovie, filmmaker_id: filmmakerId };
-      const data = await submission.submitMovie(payload, movieVideo);
-      setMovieId(data.movie_id);
-      setCurrentStep(3);
+      await movieOp.run(localMovie);
     } catch (err) {
       setError(err.message || String(err));
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -93,15 +186,10 @@ export default function useParticiperSubmit({
     const validationError = validateAiDeclaration(payload);
     if (validationError) return setError(validationError);
 
-    setSubmitting(true);
     try {
-      await submission.saveAiDeclaration(movieId, payload);
-      setAiSaved(true);
-      setCurrentStep(4);
+      await aiOp.run(payload);
     } catch (err) {
       setError(err.message || String(err));
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -111,62 +199,21 @@ export default function useParticiperSubmit({
     const validationError = validateCollaborators(collaborators);
     if (validationError) return setError(validationError);
 
-    setSubmitting(true);
     try {
-      if (!collaborators.length) {
-        setCollaboratorsSaved(true);
-        return;
-      }
-      await Promise.all(
-        collaborators.map((c) => submission.addCollaborator(movieId, c)),
-      );
-      setCollaboratorsSaved(true);
+      await collabOp.run();
     } catch (err) {
       setError(t("error.collaborators.saveFailed"));
-    } finally {
-      setSubmitting(false);
     }
   };
 
   const handleSubmitAssetsTags = async () => {
     if (!movieId) return;
     setError(null);
-    setSubmitting(true);
 
     try {
-      const stillFiles = Array.isArray(assets.stills) ? assets.stills : [];
-      if (stillFiles.length > 0 || assets.subtitle) {
-        stillFiles.forEach((file) => {
-          if (!file.type.startsWith("image/"))
-            throw new Error(t("error.assets.still.invalidType"));
-        });
-        if (assets.subtitle) {
-          const name = assets.subtitle.name || "";
-          if (!name.toLowerCase().endsWith(".srt"))
-            throw new Error(t("error.assets.subtitle.invalidType"));
-        }
-      }
-
-      const requests = [];
-      if (stillFiles.length > 0 || assets.subtitle)
-        requests.push(
-          submission.uploadAssets(movieId, stillFiles, assets.subtitle),
-        );
-      const cleanTags = (tags || [])
-        .map((x) => x.trim())
-        .filter((x) => x.length > 0);
-      cleanTags.forEach((label) =>
-        requests.push(submission.addTag(movieId, label)),
-      );
-
-      if (requests.length > 0) await Promise.all(requests);
-
-      setAssetsTagsSaved(true);
-      setCurrentStep(5);
+      await assetsOp.run();
     } catch (err) {
       setError(err.message || String(err));
-    } finally {
-      setSubmitting(false);
     }
   };
 
