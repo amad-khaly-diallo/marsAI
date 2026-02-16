@@ -1,155 +1,193 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { getMovieById } from "../services/api";
 
 export default function VideoDetail() {
-  const { id } = useParams(); 
-  return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'row',
-      gap: '60px',
-      backgroundColor: '#000',
-      color: '#fff',
-      padding: '80px 10%',
-      alignItems: 'center',
-      minHeight: '70vh',
-    }}>
-      <style>
-        {`
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-.top-link {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-size: 0.75rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: #3b82f6;
-  font-weight: 500;
-  text-decoration: none;
-  margin-bottom: 35px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        setLoading(true);
+        // Simulation d'un délai réseau pour l'effet (optionnel)
+        // await new Promise(r => setTimeout(r, 800));
+        const data = await getMovieById(id);
+        setMovie(data);
+      } catch (error) {
+        console.error("Erreur chargement film:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovie();
+  }, [id]);
 
-.top-link::before {
-  content: "";
-  display: block;
-  width: 40px;
-  height: 2px;
-  background: #3b82f6;
-}
+  // --- RENDERERS ---
 
-.top-link:hover {
-  opacity: 0.7;
-  transform: translateX(-4px);
-}
+  const renderVideo = () => {
+    if (!movie) return null;
 
+    const isYoutube =
+      movie.youtube_url &&
+      (movie.youtube_url.includes("youtube") ||
+        movie.youtube_url.includes("youtu.be"));
 
-        .marsai-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 3.5rem;   /* plus cohérent */
-  font-weight: 800;    /* un peu moins lourd */
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  line-height: 1.1;
-  margin-bottom: 25px;
-}
-          .white-text {
-            color: #FFFFFF;
-          }
+    // Wrapper avec effet de lueur (Glow)
+    return (
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-white/5 group">
+        {/* Glow Effect arrière-plan (Reste bleu/violet pour la vidéo car ça contraste bien, ou tu peux le changer aussi) */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-violet-600 opacity-20 blur-2xl transition duration-1000 group-hover:opacity-30"></div>
 
-          .gradient-eo {
-            /* Dégradé MarsAI : Violet Indigo -> Rose Flash -> Orange */
-            background: linear-gradient(to right, #6366f1, #d946ef, #fb7185);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: inline-block;
-          }
-
-          .subtitle {
-            color: #FFFFFF;
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            opacity: 0.9;
-          }
-
-          .description {
-            color: #9ca3af;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 40px;
-            max-width: 500px;
-          }
-
-      .vote-btn {
-  padding: 8px 24px;
-  background: linear-gradient(90deg, #8b5cf6 0%, #d946ef 50%, #f43f5e 100%);
-  color: #FFFFFF;
-  border: none;
-  border-radius: 9999px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  width: fit-content;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3);
-}
-
-.vote-btn:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-}
-
-
-
-
-
-
-
-
-
-
-
-        `}
-      </style>
-
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {/* VID en blanc, ÉO en dégradé, #ID en blanc */}
-<Link to="/" className="top-link">
-  Retour aux films
-</Link>
-
-        <h1 className="marsai-title">
-          <span className="white-text">VID</span>
-          <span className="gradient-eo">ÉO</span>
-          <span className="white-text"> #{id}</span>
-        </h1>
-
-        <h2 className="subtitle">Description sur la vidéo</h2>
-        <p className="description">
-          L'intention artistique est mise en avant pour ce court-métrage généré par IA, 
-          conçu spécialement pour l'immersion MarsAI à Marseille.
-        </p>
-
-        <button className="vote-btn">VOTE</button>
-      </div>
-
-      <div style={{ flex: 1.8 }}>
-        <div style={{
-          width: '100%',
-          borderRadius: '20px',
-          boxShadow: '0 25px 50px -12px rgba(139, 92, 246, 0.25)', /* Lueur violette légère */
-          overflow: 'hidden',
-          border: '1px solid #262626'
-        }}>
-          <video key={id} controls width="100%" style={{ display: 'block' }}>
-            <source src={`/videos/${id}.mp4`} type="video/mp4" />
-          </video>
+        <div className="relative w-full h-full bg-black z-10">
+          {isYoutube ? (
+            <iframe
+              className="w-full h-full object-cover"
+              src={movie.youtube_url.replace("watch?v=", "embed/")}
+              title={movie.original_title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : (
+            <video
+              controls
+              className="w-full h-full object-cover"
+              src={`http://localhost:5000/${movie.video_path}`}
+            />
+          )}
         </div>
       </div>
+    );
+  };
+
+  // --- LOADER SQUELETTE ---
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-10">
+        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-12 animate-pulse">
+          <div className="lg:col-span-5 space-y-6 mt-10">
+            <div className="h-2 w-16 bg-blue-900/30 rounded"></div>
+            <div className="h-16 w-3/4 bg-white/5 rounded"></div>
+            <div className="h-6 w-1/2 bg-white/5 rounded"></div>
+            <div className="space-y-3 pt-4">
+              <div className="h-4 w-full bg-white/5 rounded"></div>
+              <div className="h-4 w-5/6 bg-white/5 rounded"></div>
+            </div>
+            <div className="h-12 w-40 bg-white/5 rounded-full mt-8"></div>
+          </div>
+          <div className="lg:col-span-7">
+            <div className="w-full aspect-video bg-white/5 rounded-lg border border-white/5"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!movie) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white">
+        <h1 className="text-4xl font-bold mb-4">404</h1>
+        <p className="text-gray-400">
+          Ce court-métrage semble s'être perdu dans l'espace.
+        </p>
+      </div>
+    );
+  }
+
+  // --- PAGE CONTENU ---
+  return (
+    <div className="min-h-screen bg-black text-white selection:bg-blue-500/30 font-sans overflow-x-hidden">
+      <div className="max-w-[1600px] mx-auto px-6 py-24 lg:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          {/* COLONNE GAUCHE */}
+          <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 relative z-10">
+            <div
+              className="w-12 h-[2px] bg-blue-500 mb-8 opacity-0 animate-fadeInLeft"
+              style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
+            ></div>
+
+            <h1
+              className="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4 opacity-0 animate-fadeInUp"
+              style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
+            >
+              {movie.original_title}
+            </h1>
+
+            <div
+              className="flex items-center gap-3 text-lg font-medium text-gray-400 mb-8 opacity-0 animate-fadeInUp"
+              style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+            >
+              <span className="text-blue-500">DIR.</span>
+              <span className="text-white tracking-widest uppercase">
+                {movie.filmmaker
+                  ? `${movie.filmmaker.first_name} ${movie.filmmaker.last_name}`
+                  : "Artiste Inconnu"}
+              </span>
+            </div>
+
+            <p
+              className="text-lg leading-relaxed text-gray-300 max-w-lg mb-12 opacity-0 animate-fadeInUp"
+              style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
+            >
+              {movie.synopsis_original ||
+                "Aucune description disponible pour cette œuvre."}
+            </p>
+
+            {/* Bouton Action avec Dégradé BLEU */}
+            <div
+              className="opacity-0 animate-fadeInUp"
+              style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
+            >
+              <button className="group relative px-8 py-4 bg-transparent overflow-hidden rounded-full transition-all hover:scale-105 active:scale-95">
+                {/* --- CHANGEMENT ICI : Gradient Bleu Électrique --- */}
+                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-700 via-blue-500 to-cyan-400 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+
+                <div className="absolute inset-[2px] bg-black rounded-full"></div>
+
+                <span className="relative z-10 font-bold tracking-widest text-sm uppercase bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200 group-hover:text-white transition-colors">
+                  Voter pour ce film
+                </span>
+
+                {/* Lueur interne BLEUE au survol */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-400/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"></div>
+              </button>
+            </div>
+          </div>
+
+          {/* COLONNE DROITE */}
+          <div
+            className="lg:col-span-7 order-1 lg:order-2 opacity-0 animate-fadeIn"
+            style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
+          >
+            {renderVideo()}
+
+            <div className="flex justify-between items-center mt-6 text-xs font-mono text-gray-600 uppercase tracking-widest border-t border-gray-900 pt-4">
+              <div>MARSAI FESTIVAL • 2026</div>
+              <div>ID: #{String(id).padStart(3, "0")}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+          from { opacity: 0; transform: translateX(-20px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fadeInUp { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .animate-fadeInLeft { animation: fadeInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .animate-fadeIn { animation: fadeIn 1.2s ease-out; }
+      `}</style>
     </div>
   );
 }
