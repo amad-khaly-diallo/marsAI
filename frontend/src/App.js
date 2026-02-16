@@ -8,7 +8,7 @@ import Contact from "./pages/Contact";
 import { HomePhase2 } from "./components/sections/HomePhase2";
 import { AuthProvider } from "./contexts/AuthContext";
 import VideoDetail from "./pages/VideoDetail";
-import { CookieBanner } from "./components/home/CookieBanner"; // Importation du composant cookie banner
+import { CookieBanner } from "./components/ui/CookieBanner"; // Importation du composant cookie banner
 
 export default function App() {
   return (
