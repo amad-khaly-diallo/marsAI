@@ -10,6 +10,7 @@ import { StatsSection } from "../components/sections/StatsSection";
 import { CTASection } from "../components/sections/CTASection";
 import HeroCamera from "../components/sections/HeroCamera";
 import { HOME_STYLES } from "../constants/homeStyles";
+import { CookieBanner } from "../components/home/CookieBanner";
 
 function SmallLabel({ children }) {
   return (
@@ -28,7 +29,6 @@ function InfoRow({ k, v }) {
     </div>
   );
 }
-import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
 
 /**
  * Page d'accueil du festival marsAI
