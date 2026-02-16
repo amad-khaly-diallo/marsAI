@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkButton } from "../HomeComponents";
+import { LinkButton } from "./HomeComponents";
 import { NAV_ROUTES, HOME_TEXTS } from "../../constants/homeConstants";
 
 export function CTASection() {
@@ -17,16 +17,10 @@ export function CTASection() {
               </div>
             </div>
             <div className="flex flex-wrap justify-center gap-3 md:justify-end">
-              <LinkButton
-                to={NAV_ROUTES.PROGRAM}
-                variant="primary"
-              >
+              <LinkButton to={NAV_ROUTES.PROGRAM} variant="primary">
                 Voir la programmation
               </LinkButton>
-              <LinkButton
-                to={NAV_ROUTES.LOGIN}
-                variant="secondary"
-              >
+              <LinkButton to={NAV_ROUTES.LOGIN} variant="secondary">
                 Connexion
               </LinkButton>
             </div>
