@@ -1,95 +1,255 @@
 import React from "react";
-import { StatCard, AnalyticsBar } from "../HomeComponents";
-import { STATS_DATA, ANALYTICS_DATA, HOME_TEXTS } from "../../constants/homeConstants";
+import { StatCard, AnalyticsBar } from "./HomeComponents";
+import {
+  STATS_DATA,
+  ANALYTICS_DATA,
+  HOME_TEXTS,
+} from "../../constants/homeConstants";
 import { useAudioContext } from "../../hooks/useAudioContext";
 
 // Import des images de roulettes
-import imgFilm from '../../assets/images/film.png';
-import imgIa from '../../assets/images/ia.png';
-import imgVisiteur from '../../assets/images/visiteur.png';
-import imgPays from '../../assets/images/pays.png';
-import imgTout from '../../assets/images/tout.png';
+import imgFilm from "../../assets/images/film.png";
+import imgIa from "../../assets/images/ia.png";
+import imgVisiteur from "../../assets/images/visiteur.png";
+import imgPays from "../../assets/images/pays.png";
+import imgTout from "../../assets/images/tout.png";
 
 // Catégories de statistiques avec leurs chiffres clés spécifiques
 const FILM_GENRES = [
-  { 
-    name: "TOUS", 
-    icon: "⭐", 
+  {
+    name: "TOUS",
+    icon: "⭐",
     color: "from-violet-500 to-fuchsia-600",
     projectorImage: null,
     stats: [
-      { icon: "🔗", title: "Visiteurs", subtitle: "Au festival", value: 1950, prefix: "", gradient: "from-violet-600 to-purple-700" },
-      { icon: "💡", title: "Professionnels IA", subtitle: "Experts mobilisés", value: 39, prefix: "+", gradient: "from-fuchsia-600 to-pink-700" },
-      { icon: "🎬", title: "Films soumis", subtitle: "Sélection mondiale", value: 390, prefix: "+", gradient: "from-amber-500 to-orange-700" },
-      { icon: "🌍", title: "Pays représentés", subtitle: "Portée mondiale", value: 78, prefix: "+", gradient: "from-cyan-500 to-blue-700" }
+      {
+        icon: "🔗",
+        title: "Visiteurs",
+        subtitle: "Au festival",
+        value: 1950,
+        prefix: "",
+        gradient: "from-violet-600 to-purple-700",
+      },
+      {
+        icon: "💡",
+        title: "Professionnels IA",
+        subtitle: "Experts mobilisés",
+        value: 39,
+        prefix: "+",
+        gradient: "from-fuchsia-600 to-pink-700",
+      },
+      {
+        icon: "🎬",
+        title: "Films soumis",
+        subtitle: "Sélection mondiale",
+        value: 390,
+        prefix: "+",
+        gradient: "from-amber-500 to-orange-700",
+      },
+      {
+        icon: "🌍",
+        title: "Pays représentés",
+        subtitle: "Portée mondiale",
+        value: 78,
+        prefix: "+",
+        gradient: "from-cyan-500 to-blue-700",
+      },
     ],
     analytics: [
-      { id: 1, label: "COURTS", percentage: 65, gradient: "from-cyan-500 to-blue-600" },
-      { id: 2, label: "DOCS", percentage: 42, gradient: "from-fuchsia-500 to-pink-600" },
-      { id: 3, label: "EXPO", percentage: 28, gradient: "from-purple-500 to-violet-600" },
-      { id: 4, label: "ANIMS", percentage: 55, gradient: "from-amber-500 to-orange-600" }
-    ]
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
   },
-  { 
-    name: "Visiteurs", 
-    icon: "🔗", 
+  {
+    name: "Visiteurs",
+    icon: "🔗",
     color: "from-violet-500 to-purple-600",
     projectorImage: "projector-visitors.png",
     stats: [
-      { icon: "🔗", title: "Visiteurs", subtitle: "Au festival", value: 1950, prefix: "", gradient: "from-violet-600 to-purple-700" }
+      {
+        icon: "🔗",
+        title: "Visiteurs",
+        subtitle: "Au festival",
+        value: 1950,
+        prefix: "",
+        gradient: "from-violet-600 to-purple-700",
+      },
     ],
     analytics: [
-      { id: 1, label: "COURTS", percentage: 65, gradient: "from-cyan-500 to-blue-600" },
-      { id: 2, label: "DOCS", percentage: 42, gradient: "from-fuchsia-500 to-pink-600" },
-      { id: 3, label: "EXPO", percentage: 28, gradient: "from-purple-500 to-violet-600" },
-      { id: 4, label: "ANIMS", percentage: 55, gradient: "from-amber-500 to-orange-600" }
-    ]
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
   },
-  { 
-    name: "Professionnels IA", 
-    icon: "💡", 
+  {
+    name: "Professionnels IA",
+    icon: "💡",
     color: "from-fuchsia-500 to-pink-600",
     projectorImage: "projector-professionals.png",
     stats: [
-      { icon: "💡", title: "Professionnels IA", subtitle: "Experts mobilisés", value: 39, prefix: "+", gradient: "from-fuchsia-600 to-pink-700" }
+      {
+        icon: "💡",
+        title: "Professionnels IA",
+        subtitle: "Experts mobilisés",
+        value: 39,
+        prefix: "+",
+        gradient: "from-fuchsia-600 to-pink-700",
+      },
     ],
     analytics: [
-      { id: 1, label: "COURTS", percentage: 65, gradient: "from-cyan-500 to-blue-600" },
-      { id: 2, label: "DOCS", percentage: 42, gradient: "from-fuchsia-500 to-pink-600" },
-      { id: 3, label: "EXPO", percentage: 28, gradient: "from-purple-500 to-violet-600" },
-      { id: 4, label: "ANIMS", percentage: 55, gradient: "from-amber-500 to-orange-600" }
-    ]
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
   },
-  { 
-    name: "Films soumis", 
-    icon: "🎬", 
+  {
+    name: "Films soumis",
+    icon: "🎬",
     color: "from-amber-500 to-orange-600",
     projectorImage: "projector-films.png",
     stats: [
-      { icon: "🎬", title: "Films soumis", subtitle: "Sélection mondiale", value: 390, prefix: "+", gradient: "from-amber-500 to-orange-700" }
+      {
+        icon: "🎬",
+        title: "Films soumis",
+        subtitle: "Sélection mondiale",
+        value: 390,
+        prefix: "+",
+        gradient: "from-amber-500 to-orange-700",
+      },
     ],
     analytics: [
-      { id: 1, label: "COURTS", percentage: 65, gradient: "from-cyan-500 to-blue-600" },
-      { id: 2, label: "DOCS", percentage: 42, gradient: "from-fuchsia-500 to-pink-600" },
-      { id: 3, label: "EXPO", percentage: 28, gradient: "from-purple-500 to-violet-600" },
-      { id: 4, label: "ANIMS", percentage: 55, gradient: "from-amber-500 to-orange-600" }
-    ]
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
   },
-  { 
-    name: "Pays représentés", 
-    icon: "🌍", 
+  {
+    name: "Pays représentés",
+    icon: "🌍",
     color: "from-cyan-500 to-blue-600",
     projectorImage: "projector-countries.png",
     stats: [
-      { icon: "🌍", title: "Pays représentés", subtitle: "Portée mondiale", value: 78, prefix: "+", gradient: "from-cyan-500 to-blue-700" }
+      {
+        icon: "🌍",
+        title: "Pays représentés",
+        subtitle: "Portée mondiale",
+        value: 78,
+        prefix: "+",
+        gradient: "from-cyan-500 to-blue-700",
+      },
     ],
     analytics: [
-      { id: 1, label: "COURTS", percentage: 65, gradient: "from-cyan-500 to-blue-600" },
-      { id: 2, label: "DOCS", percentage: 42, gradient: "from-fuchsia-500 to-pink-600" },
-      { id: 3, label: "EXPO", percentage: 28, gradient: "from-purple-500 to-violet-600" },
-      { id: 4, label: "ANIMS", percentage: 55, gradient: "from-amber-500 to-orange-600" }
-    ]
-  }
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
+  },
 ];
 
 export function StatsSection() {
@@ -111,12 +271,13 @@ export function StatsSection() {
 
   const rotateGenre = (direction) => {
     if (isRotating) return;
-    
+
     setIsRotating(true);
-    const newIndex = direction === 'next' 
-      ? (selectedGenreIndex + 1) % FILM_GENRES.length
-      : (selectedGenreIndex - 1 + FILM_GENRES.length) % FILM_GENRES.length;
-    
+    const newIndex =
+      direction === "next"
+        ? (selectedGenreIndex + 1) % FILM_GENRES.length
+        : (selectedGenreIndex - 1 + FILM_GENRES.length) % FILM_GENRES.length;
+
     setSelectedGenreIndex(newIndex);
     setTimeout(() => setIsRotating(false), 500);
   };
@@ -197,35 +358,72 @@ export function StatsSection() {
   );
 }
 
-function CameraButton({ statsRevealed, statsFlash, onToggle, selectedGenre, selectedGenreIndex, onRotateGenre, isRotating }) {
+function CameraButton({
+  statsRevealed,
+  statsFlash,
+  onToggle,
+  selectedGenre,
+  selectedGenreIndex,
+  onRotateGenre,
+  isRotating,
+}) {
   const FILM_GENRES_LOCAL = [
-    { name: "TOUS", icon: "⭐", color: "from-violet-500 to-fuchsia-600", image: imgTout },
-    { name: "Visiteurs", icon: "🔗", color: "from-violet-500 to-purple-600", image: imgVisiteur },
-    { name: "Professionnels IA", icon: "💡", color: "from-fuchsia-500 to-pink-600", image: imgIa },
-    { name: "Films soumis", icon: "🎬", color: "from-amber-500 to-orange-600", image: imgFilm },
-    { name: "Pays représentés", icon: "🌍", color: "from-cyan-500 to-blue-600", image: imgPays },
+    {
+      name: "TOUS",
+      icon: "⭐",
+      color: "from-violet-500 to-fuchsia-600",
+      image: imgTout,
+    },
+    {
+      name: "Visiteurs",
+      icon: "🔗",
+      color: "from-violet-500 to-purple-600",
+      image: imgVisiteur,
+    },
+    {
+      name: "Professionnels IA",
+      icon: "💡",
+      color: "from-fuchsia-500 to-pink-600",
+      image: imgIa,
+    },
+    {
+      name: "Films soumis",
+      icon: "🎬",
+      color: "from-amber-500 to-orange-600",
+      image: imgFilm,
+    },
+    {
+      name: "Pays représentés",
+      icon: "🌍",
+      color: "from-cyan-500 to-blue-600",
+      image: imgPays,
+    },
   ];
 
   return (
     <div className="flex-shrink-0 flex flex-col items-center gap-2 relative w-full lg:w-auto px-4 lg:px-0">
       {/* Roulette de film 35mm - visible seulement quand caméra allumée */}
       {statsRevealed && (
-        <div className="relative w-24 h-24 flex items-center justify-center animate-fadeIn" style={{ perspective: '1500px' }}>
+        <div
+          className="relative w-24 h-24 flex items-center justify-center animate-fadeIn"
+          style={{ perspective: "1500px" }}
+        >
           {/* Image de roulette qui tourne - uniquement pour Film et IA */}
           {FILM_GENRES_LOCAL[selectedGenreIndex].image && (
-            <img 
+            <img
               src={FILM_GENRES_LOCAL[selectedGenreIndex].image}
               alt={FILM_GENRES_LOCAL[selectedGenreIndex].name}
-              className={`w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 ${isRotating ? 'animate-spin' : ''}`}
+              className={`w-full h-full object-contain drop-shadow-2xl transition-transform duration-500 ${isRotating ? "animate-spin" : ""}`}
               style={{
-                filter: "drop-shadow(0 8px 30px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(147, 51, 234, 0.3))",
+                filter:
+                  "drop-shadow(0 8px 30px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(147, 51, 234, 0.3))",
               }}
             />
           )}
 
           {/* Boutons de navigation */}
           <button
-            onClick={() => !isRotating && onRotateGenre('prev')}
+            onClick={() => !isRotating && onRotateGenre("prev")}
             disabled={isRotating}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-10 w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-purple-600 border border-violet-400 text-white text-xs font-bold hover:shadow-lg hover:shadow-violet-500/50 transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center"
           >
@@ -233,7 +431,7 @@ function CameraButton({ statsRevealed, statsFlash, onToggle, selectedGenre, sele
           </button>
 
           <button
-            onClick={() => !isRotating && onRotateGenre('next')}
+            onClick={() => !isRotating && onRotateGenre("next")}
             disabled={isRotating}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-10 w-5 h-5 rounded-full bg-gradient-to-r from-fuchsia-600 to-pink-600 border border-fuchsia-400 text-white text-xs font-bold hover:shadow-lg hover:shadow-fuchsia-500/50 transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center"
           >
@@ -245,7 +443,9 @@ function CameraButton({ statsRevealed, statsFlash, onToggle, selectedGenre, sele
       {/* Étiquette */}
       {statsRevealed && (
         <div className="px-3 py-1 rounded-full bg-black/80 border border-white/20 backdrop-blur animate-fadeIn">
-          <span className="text-[10px] font-bold text-white uppercase tracking-wider">{selectedGenre.name}</span>
+          <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+            {selectedGenre.name}
+          </span>
         </div>
       )}
 
@@ -265,7 +465,9 @@ function CameraButton({ statsRevealed, statsFlash, onToggle, selectedGenre, sele
         {statsRevealed && selectedGenre.projectorImage ? (
           (() => {
             try {
-              const imageSrc = require(`../../assets/images/${selectedGenre.projectorImage}`);
+              const imageSrc = require(
+                `../../assets/images/${selectedGenre.projectorImage}`,
+              );
               return (
                 <img
                   src={imageSrc}
@@ -318,20 +520,26 @@ function CameraButton({ statsRevealed, statsFlash, onToggle, selectedGenre, sele
       >
         <div
           className={`absolute inset-0 rounded-full blur-md transition-all duration-500 -z-10 ${
-            statsRevealed ? "bg-green-500/60 opacity-100" : "bg-red-500/60 opacity-100"
+            statsRevealed
+              ? "bg-green-500/60 opacity-100"
+              : "bg-red-500/60 opacity-100"
           }`}
         />
 
         <span
           className={`absolute left-1.5 text-[9px] font-extrabold transition-all duration-500 ${
-            statsRevealed ? "text-red-200 opacity-20" : "text-red-50 opacity-100"
+            statsRevealed
+              ? "text-red-200 opacity-20"
+              : "text-red-50 opacity-100"
           }`}
         >
           OFF
         </span>
         <span
           className={`absolute right-1.5 text-[9px] font-extrabold transition-all duration-500 ${
-            statsRevealed ? "text-green-50 opacity-100" : "text-green-200 opacity-20"
+            statsRevealed
+              ? "text-green-50 opacity-100"
+              : "text-green-200 opacity-20"
           }`}
         >
           ON
@@ -362,7 +570,13 @@ function CameraButton({ statsRevealed, statsFlash, onToggle, selectedGenre, sele
   );
 }
 
-function StatsPanel({ statsRevealed, statsData, analyticsData, currentGenre, selectedGenreIndex }) {
+function StatsPanel({
+  statsRevealed,
+  statsData,
+  analyticsData,
+  currentGenre,
+  selectedGenreIndex,
+}) {
   const [showParticles, setShowParticles] = React.useState(false);
 
   // Générer des particules pour le faisceau
@@ -371,8 +585,8 @@ function StatsPanel({ statsRevealed, statsData, analyticsData, currentGenre, sel
     for (let i = 0; i < 8; i++) {
       particles.push({
         id: i,
-        tx: (Math.random() - 0.5) * 30 + 'px',
-        delay: i * 0.15 + 's',
+        tx: (Math.random() - 0.5) * 30 + "px",
+        delay: i * 0.15 + "s",
       });
     }
     return particles;
@@ -387,7 +601,8 @@ function StatsPanel({ statsRevealed, statsData, analyticsData, currentGenre, sel
         <div
           className="absolute -left-40 md:left-0 top-1/2 md:top-1/3 -translate-y-1/2 md:-translate-y-0 w-screen md:w-96 h-96 pointer-events-none z-10"
           style={{
-            background: "radial-gradient(ellipse 600px 400px at 20% 50%, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.25) 30%, transparent 70%)",
+            background:
+              "radial-gradient(ellipse 600px 400px at 20% 50%, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.25) 30%, transparent 70%)",
             filter: "blur(100px)",
           }}
         />
@@ -456,16 +671,16 @@ function StatsPanel({ statsRevealed, statsData, analyticsData, currentGenre, sel
         <div className="absolute inset-0 pointer-events-none z-21">
           {particles.map((particle) => {
             const particleStyle = {
-              position: 'absolute',
-              left: window.innerWidth >= 768 ? '80px' : '50%',
-              top: window.innerWidth >= 768 ? '40%' : '30%',
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: 'rgba(167, 139, 250, 0.8)',
+              position: "absolute",
+              left: window.innerWidth >= 768 ? "80px" : "50%",
+              top: window.innerWidth >= 768 ? "40%" : "30%",
+              width: "6px",
+              height: "6px",
+              borderRadius: "50%",
+              backgroundColor: "rgba(167, 139, 250, 0.8)",
               animation: `particleFloat 2.5s ease-out ${particle.delay} forwards`,
-              '--tx': particle.tx,
-              boxShadow: '0 0 12px rgba(147, 51, 234, 0.8)',
+              "--tx": particle.tx,
+              boxShadow: "0 0 12px rgba(147, 51, 234, 0.8)",
             };
             return (
               <div
@@ -504,7 +719,7 @@ function StatsPanel({ statsRevealed, statsData, analyticsData, currentGenre, sel
             className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay animate-grain"
             style={{
               backgroundImage:
-                'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")',
+                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
               backgroundSize: "200px 200px",
             }}
           />
@@ -534,11 +749,11 @@ function StatsPanel({ statsRevealed, statsData, analyticsData, currentGenre, sel
               aria-hidden={!statsRevealed}
             >
               {/* Grid layout adaptatif selon le nombre de cartes */}
-              <div className={`grid gap-2 ${
-                statsData.length === 1 
-                  ? 'grid-cols-1' 
-                  : 'grid-cols-2'
-              }`}>
+              <div
+                className={`grid gap-2 ${
+                  statsData.length === 1 ? "grid-cols-1" : "grid-cols-2"
+                }`}
+              >
                 {statsData.map((stat, index) => (
                   <StatCard
                     key={index}

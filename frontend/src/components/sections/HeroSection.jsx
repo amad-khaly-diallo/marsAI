@@ -1,5 +1,5 @@
 import React from "react";
-import { SmallLabel, InfoRow, LinkButton } from "../HomeComponents";
+import { SmallLabel, InfoRow, LinkButton } from "./HomeComponents";
 import { NAV_ROUTES, HOME_TEXTS } from "../../constants/homeConstants";
 
 export function HeroSection() {

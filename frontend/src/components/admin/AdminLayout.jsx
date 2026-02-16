@@ -108,10 +108,7 @@ export default function AdminLayout({ children, currentAdmin }) {
         </button>
       </aside>
 
-      <main className="flex-1">
-        {children(activeSection)}
-      </main>
+      <main className="flex-1">{children(activeSection)}</main>
     </div>
   );
 }
-

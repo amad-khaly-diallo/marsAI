@@ -1,5 +1,5 @@
 import React from "react";
-import { InfoRow, LinkButton, Divider } from "../HomeComponents";
+import { InfoRow, LinkButton, Divider } from "./HomeComponents";
 import { NAV_ROUTES, HOME_TEXTS } from "../../constants/homeConstants";
 
 export function ManifestoSection() {
