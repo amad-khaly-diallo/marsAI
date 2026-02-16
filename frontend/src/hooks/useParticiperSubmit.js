@@ -20,6 +20,9 @@ export default function useParticiperSubmit({
   setSubmitting,
   setError,
   setCurrentStep,
+  // progress setters
+  setMovieUploadProgress,
+  setAssetsUploadProgress,
   // include aiDeclaration (used as fallback in submit handler)
   aiDeclaration,
   // validators
@@ -42,7 +45,22 @@ export default function useParticiperSubmit({
 
   const movieOp = useAsync(async (localMovie) => {
     const payload = { ...localMovie, filmmaker_id: filmmakerId };
-    const data = await submission.submitMovie(payload, movieVideo);
+    // reset progress
+    if (typeof setMovieUploadProgress === "function") setMovieUploadProgress(0);
+
+    const data = await submission.submitMovieWithProgress(
+      payload,
+      movieVideo,
+      (pct) => {
+        if (typeof setMovieUploadProgress === "function")
+          setMovieUploadProgress(pct);
+      },
+    );
+
+    // ensure progress shown as complete briefly
+    if (typeof setMovieUploadProgress === "function")
+      setMovieUploadProgress(100);
+
     setMovieId(data.movie_id);
     setCurrentStep(3);
     return data;
@@ -79,10 +97,22 @@ export default function useParticiperSubmit({
       }
     }
 
+    // reset progress
+    if (typeof setAssetsUploadProgress === "function")
+      setAssetsUploadProgress(0);
+
     const requests = [];
     if (stillFiles.length > 0 || assets.subtitle)
       requests.push(
-        submission.uploadAssets(movieId, stillFiles, assets.subtitle),
+        submission.uploadAssetsWithProgress(
+          movieId,
+          stillFiles,
+          assets.subtitle,
+          (pct) => {
+            if (typeof setAssetsUploadProgress === "function")
+              setAssetsUploadProgress(pct);
+          },
+        ),
       );
     const cleanTags = (tags || [])
       .map((x) => x.trim())
@@ -92,6 +122,10 @@ export default function useParticiperSubmit({
     );
 
     if (requests.length > 0) await Promise.all(requests);
+
+    // ensure progress shown as complete briefly
+    if (typeof setAssetsUploadProgress === "function")
+      setAssetsUploadProgress(100);
 
     setAssetsTagsSaved(true);
     setCurrentStep(5);

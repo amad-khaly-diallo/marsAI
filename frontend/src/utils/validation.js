@@ -26,6 +26,32 @@ export function validateFilmmaker(f) {
   return null;
 }
 
+// Field-level validator helpers for forms (return i18n key or null)
+export function validateFilmmakerField(field, v) {
+  const val = typeof v === "string" ? v.trim() : v;
+  switch (field) {
+    case "first_name":
+      if (!val) return "error.filmmaker.firstName.required";
+      if (val.length < 2) return "error.filmmaker.firstName.min";
+      return null;
+    case "last_name":
+      if (!val) return "error.filmmaker.lastName.required";
+      if (val.length < 2) return "error.filmmaker.lastName.min";
+      return null;
+    case "email":
+      if (!val) return "error.filmmaker.email.required";
+      if (!EMAIL_SIMPLE.test(val)) return "error.filmmaker.email.invalid";
+      return null;
+    case "mobile":
+      if (!val) return null; // mobile optional
+      if (val.replace(/\D/g, "").length < 6)
+        return "error.filmmaker.mobile.minDigits";
+      return null;
+    default:
+      return null;
+  }
+}
+
 export function validateMovie(m) {
   if (!m) return null;
   if (!m.original_title || !m.original_title.trim())
