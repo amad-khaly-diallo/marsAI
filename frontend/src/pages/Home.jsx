@@ -10,7 +10,7 @@ import { StatsSection } from "../components/sections/StatsSection";
 import { CTASection } from "../components/sections/CTASection";
 import HeroCamera from "../components/sections/HeroCamera";
 import { HOME_STYLES } from "../constants/homeStyles";
-import { CookieBanner } from "../components/home/CookieBanner";
+import { CookieBanner } from "../components/ui/CookieBanner";
 
 function SmallLabel({ children }) {
   return (
