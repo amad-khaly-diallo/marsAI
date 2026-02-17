@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-
-const STATUS_LABELS = {
-  in_process: "En cours",
-  approved: "Approuvé",
-  rejected: "Rejeté",
-  selected: "Sélectionné",
-  pending: "En attente",
-};
+import { STATUS_LABELS } from "../../constants/status";
 
 export default function MoviesManagement({ currentAdmin }) {
   const [movies, setMovies] = useState([]);
@@ -70,7 +63,9 @@ export default function MoviesManagement({ currentAdmin }) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error("Erreur mise à jour.");
 
-      setMovies((prev) => prev.map((movie) => (movie.id === id ? data : movie)));
+      setMovies((prev) =>
+        prev.map((movie) => (movie.id === id ? data : movie)),
+      );
 
       showNotification(id, `Statut : ${STATUS_LABELS[status]}`);
     } catch (err) {
@@ -83,8 +78,8 @@ export default function MoviesManagement({ currentAdmin }) {
   const updateLocalReviewField = (id, field, value) => {
     setMovies((prev) =>
       prev.map((movie) =>
-        movie.id === id ? { ...movie, [field]: value } : movie
-      )
+        movie.id === id ? { ...movie, [field]: value } : movie,
+      ),
     );
   };
 
@@ -94,7 +89,9 @@ export default function MoviesManagement({ currentAdmin }) {
 
     const payload = {
       rating:
-        movie.my_rating !== null && movie.my_rating !== undefined && movie.my_rating !== ""
+        movie.my_rating !== null &&
+        movie.my_rating !== undefined &&
+        movie.my_rating !== ""
           ? Number(movie.my_rating)
           : null,
       comment: movie.my_comment || null,
@@ -102,7 +99,9 @@ export default function MoviesManagement({ currentAdmin }) {
 
     if (
       payload.rating !== null &&
-      (Number.isNaN(payload.rating) || payload.rating < 1 || payload.rating > 10)
+      (Number.isNaN(payload.rating) ||
+        payload.rating < 1 ||
+        payload.rating > 10)
     ) {
       setError("La note doit être un nombre entre 1 et 10.");
       return;
@@ -121,7 +120,7 @@ export default function MoviesManagement({ currentAdmin }) {
         throw new Error(
           data.error ||
             data.message ||
-            "Impossible d'enregistrer votre note/commentaire."
+            "Impossible d'enregistrer votre note/commentaire.",
         );
       }
 
@@ -252,12 +251,12 @@ export default function MoviesManagement({ currentAdmin }) {
                             movie.status === "approved"
                               ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : movie.status === "selected"
-                              ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                              : movie.status === "rejected"
-                              ? "bg-red-500/10 text-red-400 border-red-500/20"
-                              : movie.status === "in_process"
-                              ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                              : "bg-slate-900/80 text-brand-muted border-slate-700"
+                                ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                                : movie.status === "rejected"
+                                  ? "bg-red-500/10 text-red-400 border-red-500/20"
+                                  : movie.status === "in_process"
+                                    ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                                    : "bg-slate-900/80 text-brand-muted border-slate-700"
                           }`}
                         >
                           {STATUS_LABELS[movie.status] || movie.status}
@@ -276,18 +275,14 @@ export default function MoviesManagement({ currentAdmin }) {
                         {isBasicAdmin ? (
                           <>
                             <button
-                              onClick={() =>
-                                updateStatus(movie.id, "rejected")
-                              }
+                              onClick={() => updateStatus(movie.id, "rejected")}
                               disabled={updatingId === movie.id || locked}
                               className="rounded-lg bg-red-500/20 hover:bg-red-500/30 transition-colors py-2 text-xs font-semibold text-red-400 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               Rejeter
                             </button>
                             <button
-                              onClick={() =>
-                                updateStatus(movie.id, "selected")
-                              }
+                              onClick={() => updateStatus(movie.id, "selected")}
                               disabled={updatingId === movie.id || locked}
                               className="rounded-lg bg-brand-primary/20 hover:bg-brand-primary/30 transition-colors py-2 text-xs font-semibold text-brand-primary border border-brand-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
@@ -297,27 +292,21 @@ export default function MoviesManagement({ currentAdmin }) {
                         ) : (
                           <>
                             <button
-                              onClick={() =>
-                                updateStatus(movie.id, "approved")
-                              }
+                              onClick={() => updateStatus(movie.id, "approved")}
                               disabled={updatingId === movie.id}
                               className="rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 transition-colors py-2 text-xs font-semibold text-emerald-400"
                             >
                               Approuver
                             </button>
                             <button
-                              onClick={() =>
-                                updateStatus(movie.id, "rejected")
-                              }
+                              onClick={() => updateStatus(movie.id, "rejected")}
                               disabled={updatingId === movie.id}
                               className="rounded-lg bg-red-500/20 hover:bg-red-500/30 transition-colors py-2 text-xs font-semibold text-red-400"
                             >
                               Rejeter
                             </button>
                             <button
-                              onClick={() =>
-                                updateStatus(movie.id, "selected")
-                              }
+                              onClick={() => updateStatus(movie.id, "selected")}
                               disabled={updatingId === movie.id}
                               className="col-span-2 rounded-lg bg-brand-primary/20 hover:bg-brand-primary/30 transition-colors py-2 text-xs font-semibold text-brand-primary border border-brand-primary/40"
                             >
@@ -346,7 +335,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                 updateLocalReviewField(
                                   movie.id,
                                   "my_rating",
-                                  e.target.value
+                                  e.target.value,
                                 )
                               }
                               className="w-20 rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1 text-xs text-slate-100 outline-none"
@@ -363,7 +352,7 @@ export default function MoviesManagement({ currentAdmin }) {
                               updateLocalReviewField(
                                 movie.id,
                                 "my_comment",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
@@ -452,12 +441,12 @@ export default function MoviesManagement({ currentAdmin }) {
                               movie.status === "approved"
                                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                                 : movie.status === "selected"
-                                ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                                : movie.status === "rejected"
-                                ? "bg-red-500/10 text-red-400 border-red-500/20"
-                                : movie.status === "in_process"
-                                ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                                : "bg-slate-900/80 text-brand-muted border-slate-700"
+                                  ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                                  : movie.status === "rejected"
+                                    ? "bg-red-500/10 text-red-400 border-red-500/20"
+                                    : movie.status === "in_process"
+                                      ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                                      : "bg-slate-900/80 text-brand-muted border-slate-700"
                             }`}
                           >
                             {STATUS_LABELS[movie.status] || movie.status}
@@ -478,7 +467,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                       updateLocalReviewField(
                                         movie.id,
                                         "my_rating",
-                                        e.target.value
+                                        e.target.value,
                                       )
                                     }
                                     className="w-16 rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1 text-xs text-slate-100 outline-none"
@@ -495,7 +484,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                     updateLocalReviewField(
                                       movie.id,
                                       "my_comment",
-                                      e.target.value
+                                      e.target.value,
                                     )
                                   }
                                   className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-[11px] text-slate-100 outline-none"
