@@ -1,12 +1,5 @@
 import { useMemo, useState } from "react";
-
-const STATUS_LABELS = {
-  in_process: "En cours",
-  approved: "Approuvé",
-  rejected: "Rejeté",
-  selected: "Sélectionné",
-  pending: "En attente",
-};
+import { STATUS_LABELS } from "../../constants/status";
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -35,17 +28,14 @@ export default function MyMovieModal({
 
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
 
-  const locked =
-    movie?.status === "selected" || movie?.status === "rejected";
+  const locked = movie?.status === "selected" || movie?.status === "rejected";
 
   if (!isOpen || !movie) return null;
 
   const handleSaveReview = () => {
     onSaveReview(movie.id, {
       rating:
-        localRating !== "" && localRating !== null
-          ? Number(localRating)
-          : null,
+        localRating !== "" && localRating !== null ? Number(localRating) : null,
       comment: localComment || null,
     });
   };
@@ -102,19 +92,18 @@ export default function MyMovieModal({
                   movie.status === "approved"
                     ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                     : movie.status === "selected"
-                    ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                    : movie.status === "rejected"
-                    ? "bg-red-500/10 text-red-400 border-red-500/20"
-                    : movie.status === "in_process"
-                    ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                    : "bg-slate-900/80 text-brand-muted border-slate-700"
+                      ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                      : movie.status === "rejected"
+                        ? "bg-red-500/10 text-red-400 border-red-500/20"
+                        : movie.status === "in_process"
+                          ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                          : "bg-slate-900/80 text-brand-muted border-slate-700"
                 }`}
               >
                 {STATUS_LABELS[movie.status] || movie.status}
               </span>
               <span className="flex items-center gap-1.5 text-xs text-brand-muted">
-                ⏱{" "}
-                {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
+                ⏱ {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
               </span>
             </div>
 
@@ -153,9 +142,7 @@ export default function MyMovieModal({
               <div className="mt-2 space-y-2 border-t border-slate-800 pt-3">
                 <p className="text-[11px] text-brand-muted">
                   Votre note et commentaire{" "}
-                  <span className="font-semibold text-slate-100">
-                    (privés)
-                  </span>
+                  <span className="font-semibold text-slate-100">(privés)</span>
                   .
                 </p>
                 <div className="flex items-center gap-2">
@@ -213,4 +200,3 @@ export default function MyMovieModal({
     </div>
   );
 }
-
