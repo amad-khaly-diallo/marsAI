@@ -7,6 +7,9 @@ async function request(path, options = {}) {
   const normalizedPath = path.startsWith("/api")
     ? path
     : `/api${path.startsWith("/") ? "" : "/"}${path}`;
+  const normalizedPath = path.startsWith("/api")
+    ? path
+    : `/api${path.startsWith("/") ? "" : "/"}${path}`;
   const { body, formData, headers = {}, method = "GET", ...rest } = options;
 
   const init = {
@@ -41,6 +44,11 @@ async function request(path, options = {}) {
         res.statusText ||
         "Request failed",
     );
+    const err = new Error(
+      (data && (data.error || data.message)) ||
+        res.statusText ||
+        "Request failed",
+    );
     err.status = res.status;
     err.body = data;
     throw err;
@@ -49,11 +57,14 @@ async function request(path, options = {}) {
   return data;
 }
 
-export default {
+// Définition de l'objet API principal
+const api = {
   request,
   get: (path, opts) => request(path, { method: "GET", ...opts }),
   post: (path, body, opts) => request(path, { method: "POST", body, ...opts }),
   put: (path, body, opts) => request(path, { method: "PUT", body, ...opts }),
+  patch: (path, body, opts) =>
+    request(path, { method: "PATCH", body, ...opts }),
   patch: (path, body, opts) =>
     request(path, { method: "PATCH", body, ...opts }),
   del: (path, opts) => request(path, { method: "DELETE", ...opts }),
@@ -116,3 +127,19 @@ export default {
     });
   },
 };
+
+// --- Méthodes Métier Spécifiques (Phase 2) ---
+
+/**
+ * Récupère les détails complets d'un film par son ID
+ * @param {string|number} id - L'identifiant du film
+ * @returns {Promise<Object>} - L'objet film avec ses relations
+ */
+export const getMovieById = async (id) => {
+  // Utilise le wrapper 'api.get' défini ci-dessus
+  // La route correspond à : backend/Routes/movies.js -> router.get('/:id', ...)
+  return api.get(`/movies/${id}`);
+};
+
+// Export par défaut pour l'utilisation générique (import api from ...)
+export default api;
