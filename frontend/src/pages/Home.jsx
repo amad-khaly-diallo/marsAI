@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   HeroSection,
   ManifestoSection,
@@ -11,6 +12,7 @@ import {
 // import { HomePhase2 } from "../components/home/HomePhase2";
 import { HOME_STYLES } from "../constants/homeStyles";
 import { CookieBanner } from "../components/ui/CookieBanner";
+import { heroAnimationStyles } from "../components/sections/heroAnimations";
 
 /** * Page d'accueil du festival marsAI
  * Structure refactorisée avec sections modulaires et composants réutilisables
