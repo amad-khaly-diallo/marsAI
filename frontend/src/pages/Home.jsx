@@ -11,7 +11,6 @@ import {
 // import { HomePhase2 } from "../components/home/HomePhase2";
 import { HOME_STYLES } from "../constants/homeStyles";
 import { CookieBanner } from "../components/ui/CookieBanner";
-import { heroAnimationStyles } from "../components/sections/heroAnimations";
 
 /** * Page d'accueil du festival marsAI
  * Structure refactorisée avec sections modulaires et composants réutilisables
@@ -19,7 +18,6 @@ import { heroAnimationStyles } from "../components/sections/heroAnimations";
 export default function Home() {
   return (
     <div className="relative min-h-screen text-white">
-      <style>{heroAnimationStyles}</style>
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[#070819]" />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-[#0b0d28]/70 via-[#070819] to-[#05060f]" />
       <div className="pointer-events-none fixed inset-0 -z-10">
