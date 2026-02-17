@@ -13,7 +13,6 @@ import { HomePhase2 } from "../components/home/HomePhase2";
 import { CookieBanner } from "../components/ui/CookieBanner"; // Importation du composant cookie banner
 import VideoDetail from "../pages/VideoDetail";
 import About from "../pages/Partenaires";
-// import ContactPage from "../pages/Contact";
 
 export default function AppRouter() {
   return (
@@ -34,6 +33,7 @@ export default function AppRouter() {
       <Route path="/videoDetail/:id" element={<VideoDetail />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/cookie-consent" element={<CookieBanner />} />
+      <Route path="/watch/:id" element={<VideoDetail />} />
     </Routes>
   );
 }
