@@ -9,12 +9,11 @@ import CGU from "../pages/CGU";
 import Admin from "../pages/Admin";
 import Jury from "../pages/Jury";
 import Contact from "../pages/Contact";
-import { HomePhase2 } from "../components/HomePhase2";
 import TimerTest from "../pages/TimerTest";
-import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
+import { HomePhase2 } from "../components/home/HomePhase2";
+import { CookieBanner } from "../components/ui/CookieBanner"; // Importation du composant cookie banner
 import VideoDetail from "../pages/VideoDetail";
 import About from "../pages/Partenaires";
-// import ContactPage from "../pages/Contact";
 
 export default function AppRouter() {
   return (
@@ -36,6 +35,7 @@ export default function AppRouter() {
       <Route path="/timer-test" element={<TimerTest />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/cookie-consent" element={<CookieBanner />} />
+      <Route path="/watch/:id" element={<VideoDetail />} />
     </Routes>
   );
 }

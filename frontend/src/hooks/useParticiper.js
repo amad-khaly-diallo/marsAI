@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import useParticiperState from "./useParticiperState";
 import useParticiperValidation from "./useParticiperValidation";
@@ -9,7 +9,6 @@ export default function useParticiper() {
 
   const state = useParticiperState();
 
-  // keep destructured names for backwards compatibility
   const {
     filmmaker,
     setFilmmaker,
@@ -41,13 +40,12 @@ export default function useParticiper() {
     setSubmitting,
     error,
     setError,
+    movieUploadProgress,
+    setMovieUploadProgress,
+    assetsUploadProgress,
+    setAssetsUploadProgress,
     finished,
-    hasDraft,
-    loadDraft,
-    clearDraft,
   } = state;
-
-  const emailRegex = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/, []);
 
   const {
     validateFilmmaker,
@@ -56,12 +54,12 @@ export default function useParticiper() {
     validateCollaborators,
   } = useParticiperValidation();
 
-  // clear step error when user navigates between steps
+  // clear error when step changes
   useEffect(() => {
     setError(null);
   }, [currentStep]);
 
-  // delegate submission handlers to the focused submit hook
+  // submission logic
   const submit = useParticiperSubmit({
     filmmaker: state.filmmaker,
     movie: state.movie,
@@ -79,6 +77,8 @@ export default function useParticiper() {
     setSubmitting: state.setSubmitting,
     setError: state.setError,
     setCurrentStep: state.setCurrentStep,
+    setMovieUploadProgress: state.setMovieUploadProgress,
+    setAssetsUploadProgress: state.setAssetsUploadProgress,
     aiDeclaration: state.aiDeclaration,
     validateFilmmaker,
     validateMovie,
@@ -87,14 +87,7 @@ export default function useParticiper() {
     t,
   });
 
-  // clear stored draft when submission is fully finished
-  useEffect(() => {
-    if (finished) state.clearDraft();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finished]);
-
   return {
-    // state
     filmmaker,
     setFilmmaker,
     movie,
@@ -118,16 +111,13 @@ export default function useParticiper() {
     assetsTagsSaved,
     submitting,
     error,
+    movieUploadProgress,
+    assetsUploadProgress,
     finished,
-    // actions
     handleSubmitFilmmaker: submit.handleSubmitFilmmaker,
     handleSubmitMovie: submit.handleSubmitMovie,
     handleSubmitAIDeclaration: submit.handleSubmitAIDeclaration,
     handleSubmitCollaborators: submit.handleSubmitCollaborators,
     handleSubmitAssetsTags: submit.handleSubmitAssetsTags,
-    // draft helpers
-    hasDraft,
-    loadDraft,
-    clearDraft,
   };
 }

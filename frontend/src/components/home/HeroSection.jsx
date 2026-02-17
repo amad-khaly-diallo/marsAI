@@ -1,10 +1,14 @@
 import React from "react";
-import { SmallLabel, InfoRow, LinkButton } from "../HomeComponents";
-import { NAV_ROUTES, HOME_TEXTS } from "../../constants/homeConstants";
+import { SmallLabel, InfoRow, LinkButton } from "./HomeComponents";
+import { NAV_ROUTES } from "../../constants/homeConstants";
+import { useTranslation } from "react-i18next";
+import { heroAnimationStyles } from "../sections/heroAnimations";
 
 export function HeroSection() {
+  const { t } = useTranslation();
   return (
     <section className="relative h-screen w-full overflow-hidden">
+      <style>{heroAnimationStyles}</style>
       {/* Vidéo */}
       <video
         className="absolute inset-0 h-full w-full object-cover brightness-110 contrast-110 saturate-115"
@@ -24,15 +28,15 @@ export function HeroSection() {
 
       {/* Contenu centré */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        <SmallLabel>{HOME_TEXTS.HERO_LABEL}</SmallLabel>
+        <SmallLabel>{t("home.hero.label")}</SmallLabel>
 
         <h1 className="mt-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
-          {HOME_TEXTS.HERO_TITLE}{" "}
+          {t("home.hero.title")}{" "}
           <span className="text-white/90">en une minute.</span>
         </h1>
 
         <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
-          {HOME_TEXTS.HERO_SUBTITLE}
+          {t("home.hero.subtitle")}
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-4">
