@@ -7,9 +7,6 @@ async function request(path, options = {}) {
   const normalizedPath = path.startsWith("/api")
     ? path
     : `/api${path.startsWith("/") ? "" : "/"}${path}`;
-  const normalizedPath = path.startsWith("/api")
-    ? path
-    : `/api${path.startsWith("/") ? "" : "/"}${path}`;
   const { body, formData, headers = {}, method = "GET", ...rest } = options;
 
   const init = {
@@ -44,11 +41,7 @@ async function request(path, options = {}) {
         res.statusText ||
         "Request failed",
     );
-    const err = new Error(
-      (data && (data.error || data.message)) ||
-        res.statusText ||
-        "Request failed",
-    );
+
     err.status = res.status;
     err.body = data;
     throw err;
