@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import MyMoviesGrid from "./MyMoviesGrid";
 import MyMovieModal from "./MyMovieModal";
+
+const ALLOWED_STATUSES = ["selected", "in_process"];
 
 export default function MyMoviesGallery() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  /** "" = les deux, "in_process" = en cours, "selected" = sélectionnés */
   const [statusFilter, setStatusFilter] = useState("");
 
   const [activeIndex, setActiveIndex] = useState(null);
@@ -16,10 +19,7 @@ export default function MyMoviesGallery() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams();
-      if (statusFilter) params.set("status", statusFilter);
-
-      const res = await fetch(`/api/admin/films?${params.toString()}`, {
+      const res = await fetch("/api/admin/films", {
         method: "GET",
         credentials: "include",
       });
@@ -37,8 +37,14 @@ export default function MyMoviesGallery() {
 
   useEffect(() => {
     fetchMovies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusFilter]);
+  }, []);
+
+  /** Galerie limitée aux films sélectionnés ou en cours, puis filtre optionnel */
+  const displayMovies = useMemo(() => {
+    const allowed = movies.filter((m) => ALLOWED_STATUSES.includes(m.status));
+    if (!statusFilter) return allowed;
+    return allowed.filter((m) => m.status === statusFilter);
+  }, [movies, statusFilter]);
 
   const handleChangeStatus = async (id, status) => {
     setSavingStatusId(id);
@@ -107,21 +113,21 @@ export default function MyMoviesGallery() {
   };
 
   const currentMovie =
-    activeIndex !== null && activeIndex >= 0 && activeIndex < movies.length
-      ? movies[activeIndex]
+    activeIndex !== null && activeIndex >= 0 && activeIndex < displayMovies.length
+      ? displayMovies[activeIndex]
       : null;
 
   const goNext = () => {
-    if (!movies.length) return;
+    if (!displayMovies.length) return;
     setActiveIndex((prev) => {
       if (prev === null) return 0;
       const next = prev + 1;
-      return next >= movies.length ? prev : next;
+      return next >= displayMovies.length ? prev : next;
     });
   };
 
   const goPrev = () => {
-    if (!movies.length) return;
+    if (!displayMovies.length) return;
     setActiveIndex((prev) => {
       if (prev === null) return 0;
       const next = prev - 1;
@@ -155,10 +161,9 @@ export default function MyMoviesGallery() {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="rounded-full border border-slate-800/80 bg-slate-950/60 px-3 py-1.5 text-xs text-slate-100 outline-none"
             >
-              <option value="">Tous</option>
+              <option value="">Sélectionnés et en cours</option>
               <option value="in_process">En cours</option>
               <option value="selected">Sélectionnés</option>
-              <option value="rejected">Rejetés</option>
             </select>
           </div>
         </div>
@@ -177,7 +182,7 @@ export default function MyMoviesGallery() {
 
         {!loading && (
           <MyMoviesGrid
-            movies={movies}
+            movies={displayMovies}
             onSelect={(index) => setActiveIndex(index)}
           />
         )}

@@ -10,6 +10,7 @@ import Admin from "../pages/Admin";
 import Jury from "../pages/Jury";
 import Contact from "../pages/Contact";
 import { HomePhase2 } from "../components/HomePhase2";
+import TimerTest from "../pages/TimerTest";
 import { CookieBanner } from "../components/home/CookieBanner"; // Importation du composant cookie banner
 import VideoDetail from "../pages/VideoDetail";
 import About from "../pages/Partenaires";
@@ -20,7 +21,7 @@ export default function AppRouter() {
     <Routes>
       {/* HOME */}
       <Route path="/" element={<Home />} />
-      I <Route path="/home" element={<Home />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/films" element={<HomePhase2 />} />
       <Route path="/a-propos" element={<AProposPage />} />
       <Route path="/participer" element={<Participer />} />
@@ -32,6 +33,7 @@ export default function AppRouter() {
       <Route path="/cgu" element={<CGU />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/videoDetail/:id" element={<VideoDetail />} />
+      <Route path="/timer-test" element={<TimerTest />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/cookie-consent" element={<CookieBanner />} />
     </Routes>
