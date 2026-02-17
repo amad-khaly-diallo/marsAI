@@ -1,19 +1,27 @@
 import React from "react";
 import { LinkButton } from "./HomeComponents";
+<<<<<<< HEAD:frontend/src/components/sections/CTASection.jsx
 import { NAV_ROUTES, HOME_TEXTS } from "../../constants/homeConstants";
+=======
+import { NAV_ROUTES } from "../../constants/homeConstants";
+import { useTranslation } from "react-i18next";
+import { heroAnimationStyles } from "../sections/heroAnimations";
+>>>>>>> refacto_components:frontend/src/components/home/CTASection.jsx
 
 export function CTASection() {
+  const { t } = useTranslation();
   return (
     <section className="px-6 pb-20">
+      <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-8 backdrop-blur animate-fadeIn">
           <div className="flex flex-col items-center gap-4 text-center md:flex-row md:justify-between md:text-left">
             <div>
               <div className="text-xl font-extrabold">
-                {HOME_TEXTS.CTA_TITLE}
+                {t("home.cta.title")}
               </div>
               <div className="mt-1 text-sm text-white/70">
-                {HOME_TEXTS.CTA_SUBTITLE}
+                {t("home.cta.subtitle")}
               </div>
             </div>
             <div className="flex flex-wrap justify-center gap-3 md:justify-end">

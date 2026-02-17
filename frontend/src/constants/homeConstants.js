@@ -122,26 +122,8 @@ export const NAV_ROUTES = {
   LOGIN: "/login",
 };
 
-// Textes constants
-export const HOME_TEXTS = {
-  HERO_LABEL: "Marseille — Festival de courts (1 minute)",
-  HERO_TITLE: "Un festival pour raconter fort, en une minute.",
-  HERO_SUBTITLE:
-    "Projections, talks et ateliers. Une programmation courte, précise, et une direction artistique pensée comme une expérience — pas comme un produit.",
-  MANIFESTO_LABEL: "Manifeste",
-  MANIFESTO_TITLE:
-    "La technologie n'est pas le sujet. L'intention l'est.",
-  MANIFESTO_DESC:
-    "marsAI met en avant la réalisation, l'écriture, le montage et la direction artistique. L'IA peut faire partie du processus — mais ce qui compte, c'est la forme finale : une idée lisible, une image tenue, un son travaillé.",
-  LOCATION_TITLE: "Marseille, comme décor et énergie",
-  LOCATION_DESC:
-    "Une ville qui inspire des récits forts : lumière, contrastes, énergie. L'événement s'ancre ici — et invite à regarder autrement.",
-  STATS_TITLE: "Chiffres clés du festival",
-  STATS_DESC:
-    "Une co-création de l'école du numérique La Plateforme et le Mobile Film Festival. En nous basant sur les résultats obtenus par les événements et sélections organisés.",
-  CTA_TITLE: "Prêt à découvrir marsAI ?",
-  CTA_SUBTITLE: "La programmation arrive — reste proche.",
-};
+// HOME_TEXTS has been migrated to i18n (see src/i18n/*/translation.json)
+// (left intentionally empty to avoid duplication)
 
 // Configuration des maps
 export const MAP_MODES = {
