@@ -9,6 +9,7 @@ const juryRoutes = require('./jury');
 const authRoutes = require('./auth');
 const partnerRoutes = require('./partners');
 const newsletterRoutes = require('./newsletters');
+const festivalPhaseRoutes = require('./festivalPhase');
 const cookieParser = require('cookie-parser');
 
 const router = express.Router();
@@ -28,6 +29,7 @@ router.use('/auth', authRoutes);
 router.use('/jury', juryRoutes);// Jury public + admin CRUD
 router.use('/partners', partnerRoutes);// Partenaires public + admin CRUD
 router.use('/newsletters', newsletterRoutes);// Gestion des newsletters par les admins
+router.use('/festival-phase', festivalPhaseRoutes);// Phase du festival + timer
 
 module.exports = router;
 
