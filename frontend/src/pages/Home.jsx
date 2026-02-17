@@ -65,12 +65,6 @@ export default function Home() {
 
         {/* Contenu centré avec animations */}
         <div className="relative z-10 flex h-full flex-col items-center mt-10 justify-center px-6 text-center">
-          <div className="animate-fadeInUp">
-            <SmallLabel>
-              🎬 Marseille — Festival de courts-métrages IA
-            </SmallLabel>
-          </div>
-
           <h1
             className="mt-8 max-w-5xl text-5xl font-black leading-[1.1] tracking-tight md:text-7xl lg:text-8xl animate-fadeInUp"
             style={{ animationDelay: "0.1s" }}
