@@ -19,7 +19,6 @@ export default function AppRouter() {
     <Routes>
       {/* HOME */}
       <Route path="/" element={<Home />} />
-      I <Route path="/home" element={<Home />} />
       <Route path="/films" element={<HomePhase2 />} />
       <Route path="/a-propos" element={<AProposPage />} />
       <Route path="/participer" element={<Participer />} />
