@@ -1,23 +1,27 @@
 import React, { useState } from "react";
-import MiniMapGTA from "../MiniMapGTA/MiniMapGTA";
-import { LinkButton } from "../HomeComponents";
-import { NAV_ROUTES, HOME_TEXTS, MAP_MODES } from "../../constants/homeConstants";
+import MiniMapGTA from "../ui/MiniMapGTA/MiniMapGTA";
+import { LinkButton } from "./HomeComponents";
+import { NAV_ROUTES, MAP_MODES } from "../../constants/homeConstants";
+import { useTranslation } from "react-i18next";
+import { heroAnimationStyles } from "../sections/heroAnimations";
 
 export function LocationSection() {
+  const { t } = useTranslation();
   const [mapMode, setMapMode] = useState(MAP_MODES.GTA);
 
   return (
     <section className="px-6 pb-24">
+      <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 items-center">
           {/* Contenu texte */}
           <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-7 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur animate-fadeIn">
             <div className="text-xs font-semibold text-white/60">Lieu</div>
             <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-              {HOME_TEXTS.LOCATION_TITLE}
+              {t("home.location.title")}
             </h3>
             <p className="mt-3 text-sm leading-7 text-white/70">
-              {HOME_TEXTS.LOCATION_DESC}
+              {t("home.location.desc")}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -83,7 +87,9 @@ export function LocationSection() {
 
               {/* Label */}
               <div className="absolute -bottom-6 lg:-bottom-8 left-1/2 -translate-x-1/2 text-xs text-white/50 font-semibold">
-                {mapMode === MAP_MODES.GTA ? "Radar GTA-style" : "Carte réelle Marseille"}
+                {mapMode === MAP_MODES.GTA
+                  ? "Radar GTA-style"
+                  : "Carte réelle Marseille"}
               </div>
             </div>
           </div>

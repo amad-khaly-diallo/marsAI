@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAdmin } from "../../context/AdminContext";
+import { useAdmin } from "../../contexts";
 
 export default function AdminLayout({ children, currentAdmin }) {
   const { logout } = useAdmin();
@@ -108,10 +108,7 @@ export default function AdminLayout({ children, currentAdmin }) {
         </button>
       </aside>
 
-      <main className="flex-1">
-        {children(activeSection)}
-      </main>
+      <main className="flex-1">{children(activeSection)}</main>
     </div>
   );
 }
-

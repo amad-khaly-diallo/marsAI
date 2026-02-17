@@ -1,34 +1,14 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { validateFilmmakerField } from "../../utils/validation";
 
 export default function FilmmakerForm({ value, onChange, hasError }) {
   const { t } = useTranslation();
   const [errors, setErrors] = useState({});
 
   const validateField = (field, v) => {
-    const val = typeof v === "string" ? v.trim() : v;
-    switch (field) {
-      case "first_name":
-        if (!val) return t("error.filmmaker.firstName.required");
-        if (val.length < 2) return t("error.filmmaker.firstName.min");
-        return null;
-      case "last_name":
-        if (!val) return t("error.filmmaker.lastName.required");
-        if (val.length < 2) return t("error.filmmaker.lastName.min");
-        return null;
-      case "email":
-        if (!val) return t("error.filmmaker.email.required");
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val))
-          return t("error.filmmaker.email.invalid");
-        return null;
-      case "mobile":
-        if (!val) return null; // mobile optionnel
-        if (val.replace(/\D/g, "").length < 6)
-          return t("error.filmmaker.mobile.minDigits");
-        return null;
-      default:
-        return null;
-    }
+    const key = validateFilmmakerField(field, v);
+    return key ? t(key) : null;
   };
 
   const setField = (field, v) => {
@@ -43,7 +23,7 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
   const handle = (field) => (e) =>
     setField(
       field,
-      e.target.type === "checkbox" ? e.target.checked : e.target.value
+      e.target.type === "checkbox" ? e.target.checked : e.target.value,
     );
 
   const handleMobile = (e) => {
@@ -203,4 +183,3 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
     </section>
   );
 }
-

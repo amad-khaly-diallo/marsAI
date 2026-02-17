@@ -1,10 +1,12 @@
 import React from "react";
-import { LinkButton, ProgramCard } from "../HomeComponents";
+import { LinkButton, ProgramCard } from "./HomeComponents";
 import { NAV_ROUTES } from "../../constants/homeConstants";
+import { heroAnimationStyles } from "../sections/heroAnimations";
 
 export function ProgramSection() {
   return (
     <section className="px-6 pb-20">
+      <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         <div className="flex items-end justify-between gap-6">
           <div>
