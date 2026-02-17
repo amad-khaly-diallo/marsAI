@@ -46,7 +46,7 @@ const Partners = () => {
         </div>
       </div>
 
-      {/* Avantages du Partenariat */}
+      {/* Section Avantages */}
       <div className="max-w-6xl mx-auto px-6 -mt-10 mb-16 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#0a0b2e]/80 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
@@ -64,7 +64,7 @@ const Partners = () => {
         </div>
       </div>
 
-      {/*  Nouvelle Section: Impact Numbers */}
+      {/*  Section Impact Numbers */}
       <div className="max-w-5xl mx-auto px-6 mb-24">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
           <div className="flex flex-col items-center">
@@ -80,10 +80,9 @@ const Partners = () => {
             <span className="text-gray-400 text-sm uppercase tracking-widest font-bold">{t("partners.stats.views", "Vues Médias")}</span>
           </div>
         </div>
-        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent mt-12"></div>
       </div>
      
-      {/* Section Logos - Inchangée */}
+      {/*  Section Logos avec lien cliquable */}
       <div className="max-w-6xl mx-auto px-6 mt-20 space-y-20">
         <section>
           <h2 className="text-3xl font-bold text-navy mb-10 border-l-4 border-primary pl-4">
@@ -91,16 +90,22 @@ const Partners = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {partners.map((partner) => (
-              <div key={partner.id} className="group relative  flex flex-col items-center justify-center p-8 shadow-glass hover:shadow-glow hover:-translate-y-1 transition-all duration-300">
+              <a 
+                href={partner.website_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                key={partner.id} 
+                className="group relative  flex flex-col items-center justify-center p-8 shadow-glass hover:shadow-glow hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+              >
                 <img src={partner.logo_url} alt={partner.name} className="max-h-24 max-w-full opacity-80 group-hover:opacity-100 transition-opacity mb-4" />
                 <h3 className="text-xl font-semibold text-white/90">{partner.name}</h3>
                 {partner.description && <p className="text-gray-400 text-sm mt-2 text-center">{partner.description}</p>}
-              </div>
+              </a>
             ))}
           </div>
         </section>
 
-        {/* Section CTA - Inchangée */}
+        {/*Section CTA - Inchangée */}
         <div className="border border-white/10 bg-white/5 bg-gradient-to-r from-navy to-sky-dark rounded-3xl p-12 text-center text-white shadow-2xl relative overflow-hidden transform hover:scale-[1.01] transition-transform duration-500">
           <h3 className="text-3xl font-bold mb-6 relative z-10">Devenir Partenaire ?</h3>
           <p className="mb-8 text-white/90 text-lg max-w-xl mx-auto relative z-10">{t("partners.ctaText", "Rejoignez l'aventure MarsAI.")}</p>
