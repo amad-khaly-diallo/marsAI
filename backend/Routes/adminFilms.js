@@ -13,8 +13,19 @@ router.get('/', AdminFilmController.list);
 // GET /api/admin/films/:id
 router.get('/:id', AdminFilmController.get);
 
-// PATCH /api/admin/films/:id/status
-router.patch('/:id/status', AdminFilmController.updateStatus);
+// PATCH /api/admin/films/:id/status - uniquement ADMIN (pas super_admin)
+router.patch(
+  '/:id/status',
+  authorize(['admin']),
+  AdminFilmController.updateStatus
+);
+
+// PATCH /api/admin/films/:id/winner - uniquement SUPER_ADMIN
+router.patch(
+  '/:id/winner',
+  authorize(['super_admin']),
+  AdminFilmController.updateWinner
+);
 
 // PATCH /api/admin/films/:id/review
 router.patch('/:id/review', AdminFilmController.updateReview);

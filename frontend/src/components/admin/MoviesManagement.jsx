@@ -8,10 +8,12 @@ export default function MoviesManagement({ currentAdmin }) {
   const [statusFilter, setStatusFilter] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
   const [reviewSavingId, setReviewSavingId] = useState(null);
+  const [updatingWinnerId, setUpdatingWinnerId] = useState(null);
 
   const [notification, setNotification] = useState({ id: null, message: null });
 
   const isBasicAdmin = currentAdmin?.role === "admin";
+  const isSuperAdmin = currentAdmin?.role === "super_admin";
 
   const isDecisionLocked = (movie) =>
     movie.status === "selected" || movie.status === "rejected";
@@ -51,6 +53,8 @@ export default function MoviesManagement({ currentAdmin }) {
     fetchMovies();
   }, [statusFilter]);
 
+  const winnersCount = movies.filter((m) => m.is_winner).length;
+
   const updateStatus = async (id, status) => {
     setUpdatingId(id);
     try {
@@ -72,6 +76,41 @@ export default function MoviesManagement({ currentAdmin }) {
       setError(err.message);
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const toggleWinner = async (id, makeWinner) => {
+    setUpdatingWinnerId(id);
+    try {
+      const res = await fetch(`/api/admin/films/${id}/winner`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ is_winner: makeWinner }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(
+          data.error ||
+            data.message ||
+            "Impossible de mettre à jour le statut gagnant."
+        );
+      }
+
+      setMovies((prev) =>
+        prev.map((movie) => (movie.id === id ? data : movie)),
+      );
+
+      showNotification(
+        id,
+        makeWinner
+          ? "Marqué comme gagnant."
+          : "Retiré de la liste des gagnants.",
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUpdatingWinnerId(null);
     }
   };
 
@@ -176,6 +215,14 @@ export default function MoviesManagement({ currentAdmin }) {
           <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">
             {isBasicAdmin ? "Mes vidéos" : "Liste des films"}
           </p>
+          {!isBasicAdmin && (
+            <p className="text-[11px] text-brand-muted">
+              Gagnants actuels :{" "}
+              <span className="font-semibold text-slate-100">
+                {winnersCount} / 6
+              </span>
+            </p>
+          )}
           <div className="flex items-center gap-2">
             <label className="text-[11px] font-medium text-brand-muted">
               Filtre:
@@ -272,7 +319,7 @@ export default function MoviesManagement({ currentAdmin }) {
                       )}
 
                       <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800">
-                        {isBasicAdmin ? (
+                        {isBasicAdmin && (
                           <>
                             <button
                               onClick={() => updateStatus(movie.id, "rejected")}
@@ -289,30 +336,24 @@ export default function MoviesManagement({ currentAdmin }) {
                               ★ Sélectionner
                             </button>
                           </>
-                        ) : (
-                          <>
-                            <button
-                              onClick={() => updateStatus(movie.id, "approved")}
-                              disabled={updatingId === movie.id}
-                              className="rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 transition-colors py-2 text-xs font-semibold text-emerald-400"
-                            >
-                              Approuver
-                            </button>
-                            <button
-                              onClick={() => updateStatus(movie.id, "rejected")}
-                              disabled={updatingId === movie.id}
-                              className="rounded-lg bg-red-500/20 hover:bg-red-500/30 transition-colors py-2 text-xs font-semibold text-red-400"
-                            >
-                              Rejeter
-                            </button>
-                            <button
-                              onClick={() => updateStatus(movie.id, "selected")}
-                              disabled={updatingId === movie.id}
-                              className="col-span-2 rounded-lg bg-brand-primary/20 hover:bg-brand-primary/30 transition-colors py-2 text-xs font-semibold text-brand-primary border border-brand-primary/40"
-                            >
-                              ★ Sélectionner
-                            </button>
-                          </>
+                        )}
+                        {isSuperAdmin && movie.status === "selected" && (
+                          <button
+                            onClick={() =>
+                              toggleWinner(movie.id, !movie.is_winner)
+                            }
+                            disabled={
+                              updatingWinnerId === movie.id ||
+                              (!movie.is_winner && winnersCount >= 6)
+                            }
+                            className={`col-span-2 mt-1 rounded-lg py-2 text-xs font-semibold border transition-colors ${
+                              movie.is_winner
+                                ? "bg-amber-400/20 border-amber-400/60 text-amber-300 hover:bg-amber-400/30"
+                                : "bg-slate-800/40 border-slate-600 text-slate-200 hover:bg-slate-700/60"
+                            } disabled:opacity-50 disabled:cursor-not-allowed`}
+                          >
+                            {movie.is_winner ? "🏆 Gagnant" : "Marquer comme gagnant"}
+                          </button>
                         )}
                       </div>
 
@@ -451,6 +492,12 @@ export default function MoviesManagement({ currentAdmin }) {
                           >
                             {STATUS_LABELS[movie.status] || movie.status}
                           </span>
+                          {isSuperAdmin && movie.is_winner && (
+                            <div className="mt-1 text-[10px] text-amber-300 flex items-center justify-center gap-1">
+                              <span>🏆</span>
+                              <span>Gagnant</span>
+                            </div>
+                          )}
                         </td>
 
                         {isBasicAdmin && (
@@ -523,7 +570,7 @@ export default function MoviesManagement({ currentAdmin }) {
                           )}
 
                           <div className="flex items-center justify-end gap-1">
-                            {isBasicAdmin ? (
+                            {isBasicAdmin && (
                               <>
                                 <button
                                   onClick={() =>
@@ -568,70 +615,42 @@ export default function MoviesManagement({ currentAdmin }) {
                                   </svg>
                                 </button>
                               </>
-                            ) : (
-                              <>
-                                <button
-                                  onClick={() =>
-                                    updateStatus(movie.id, "approved")
-                                  }
-                                  title="Approuver"
-                                  className="p-2 text-emerald-400 hover:bg-emerald-500/10 rounded-md transition-colors"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <polyline points="20 6 9 17 4 12" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    updateStatus(movie.id, "rejected")
-                                  }
-                                  title="Rejeter"
-                                  className="p-2 text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <line x1="18" y1="6" x2="6" y2="18" />
-                                    <line x1="6" y1="6" x2="18" y2="18" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    updateStatus(movie.id, "selected")
-                                  }
-                                  title="Sélectionner"
-                                  className="p-2 text-brand-primary hover:bg-brand-primary/10 rounded-md transition-colors"
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    stroke="none"
-                                  >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                  </svg>
-                                </button>
+                            )}
 
+                            {isSuperAdmin && movie.status === "selected" && (
+                              <button
+                                onClick={() =>
+                                  toggleWinner(movie.id, !movie.is_winner)
+                                }
+                                title={
+                                  movie.is_winner
+                                    ? "Retirer des gagnants"
+                                    : "Marquer comme gagnant"
+                                }
+                                disabled={
+                                  updatingWinnerId === movie.id ||
+                                  (!movie.is_winner && winnersCount >= 6)
+                                }
+                                className={`p-2 rounded-md transition-colors ${
+                                  movie.is_winner
+                                    ? "text-amber-300 hover:bg-amber-400/10"
+                                    : "text-slate-400 hover:text-amber-300 hover:bg-slate-700/40"
+                                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor"
+                                >
+                                  <path d="M12 2l2.5 5.1 5.6.8-4.05 3.95.95 5.55L12 15.9l-5.0 2.5.95-5.55L3.9 7.9l5.6-.8L12 2z" />
+                                </svg>
+                              </button>
+                            )}
+
+                            {!isBasicAdmin && (
+                              <>
                                 <div className="w-px h-5 bg-slate-700 mx-1"></div>
                                 <button
                                   onClick={() => deleteMovie(movie.id)}
