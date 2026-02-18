@@ -228,6 +228,36 @@ const heroStyles = `
       opacity: 0;
     }
   }
+
+  @keyframes clap {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(-18deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  .animate-clap {
+    animation: clap 0.6s ease-out forwards;
+  }
+
+  .clap-stripes {
+    background: repeating-linear-gradient(
+      135deg,
+      rgba(0,0,0,0.8) 0px,
+      rgba(0,0,0,0.8) 8px,
+      rgba(255,255,255,0.9) 8px,
+      rgba(255,255,255,0.9) 16px
+    );
+    opacity: 0.9;
+  }
+
+  .clap-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 0.35;
+  }
 `;
 
 // Helper: Calculate coverflow position
@@ -243,121 +273,362 @@ function calculateCoverflowPosition(index, totalCards, radius = 250) {
 }
 
 export default function HeroCamera() {
-  const [selectedGenre, setSelectedGenre] = useState(GENRES[0]);
-  const [carouselPage, setCarouselPage] = useState(0);
+  const [cameraOn, setCameraOn] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedFilmIndex, setSelectedFilmIndex] = useState(0);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [powerOnAnim, setPowerOnAnim] = useState(false);
+  const [isBooting, setIsBooting] = useState(false);
+  const [showClap, setShowClap] = useState(false);
 
   const getGenreMovies = () => {
-    if (!selectedGenre || selectedGenre.name === "Tous") return DEMO_MOVIES;
+    if (!selectedGenre) return [];
+    if (selectedGenre.name === "Tous") return DEMO_MOVIES;
     return DEMO_MOVIES.filter((m) => m.genre === selectedGenre.name);
   };
 
-  const getCarouselMovies = () => {
-    const movies = getGenreMovies();
-    const start = carouselPage * 3;
-    return movies.slice(start, start + 3);
+  useEffect(() => {
+    if (!cameraOn) {
+      setSelectedGenre(null);
+      setSelectedFilmIndex(0);
+      setSelectedMovie(null);
+    }
+  }, [cameraOn]);
+
+  const toggleCamera = () => {
+    setCameraOn((p) => {
+      const next = !p;
+      if (next) {
+        setSelectedGenre(GENRES[0]);
+        setSelectedFilmIndex(0);
+        setSelectedMovie(null);
+        setPowerOnAnim(true);
+        setIsBooting(true);
+        setShowClap(true);
+        window.setTimeout(() => {
+          setPowerOnAnim(false);
+          setIsBooting(false);
+          setShowClap(false);
+        }, 750);
+      } else {
+        setIsBooting(false);
+      }
+      return next;
+    });
   };
 
-  const nextPage = () => {
+  const nextFilm = () => {
     const movies = getGenreMovies();
-    const maxPage = Math.max(0, Math.ceil(movies.length / 3) - 1);
-    setCarouselPage((p) => Math.min(maxPage, p + 1));
+    if (movies.length > 0) {
+      setSelectedFilmIndex((prev) => (prev + 1) % movies.length);
+    }
   };
 
-  const prevPage = () => {
-    setCarouselPage((p) => Math.max(0, p - 1));
+  const prevFilm = () => {
+    const movies = getGenreMovies();
+    if (movies.length > 0) {
+      setSelectedFilmIndex((prev) => (prev - 1 + movies.length) % movies.length);
+    }
   };
+
+  const colsForMovies = (count) => (count <= 4 ? 2 : count <= 6 ? 3 : 4);
+
+  const navigateUp = () => {
+    const movies = getGenreMovies();
+    if (movies.length === 0) return;
+    const cols = colsForMovies(movies.length);
+    const nextIndex = selectedFilmIndex - cols;
+    if (nextIndex >= 0) setSelectedFilmIndex(nextIndex);
+  };
+
+  const navigateDown = () => {
+    const movies = getGenreMovies();
+    if (movies.length === 0) return;
+    const cols = colsForMovies(movies.length);
+    const nextIndex = selectedFilmIndex + cols;
+    if (nextIndex < movies.length) setSelectedFilmIndex(nextIndex);
+  };
+
+  const navigateLeft = () => {
+    const movies = getGenreMovies();
+    if (movies.length === 0) return;
+    const cols = colsForMovies(movies.length);
+    if (selectedFilmIndex % cols !== 0) {
+      setSelectedFilmIndex(selectedFilmIndex - 1);
+    }
+  };
+
+  const navigateRight = () => {
+    const movies = getGenreMovies();
+    if (movies.length === 0) return;
+    const cols = colsForMovies(movies.length);
+    if ((selectedFilmIndex + 1) % cols !== 0 && selectedFilmIndex + 1 < movies.length) {
+      setSelectedFilmIndex(selectedFilmIndex + 1);
+    }
+  };
+
+  const playFilm = () => {
+    const movies = getGenreMovies();
+    if (movies.length > 0) setSelectedMovie(movies[selectedFilmIndex]);
+  };
+
+  const closeMovie = () => setSelectedMovie(null);
+
+  const movies = getGenreMovies();
+  const currentMovie = movies[selectedFilmIndex];
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-20">
+    <div className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-16">
       <style>{heroStyles + heroAnimationStyles}</style>
-      <div className="mb-6 flex items-center gap-4 overflow-x-auto">
-        {GENRES.map((g) => (
-          <button
-            key={g.name}
-            onClick={() => {
-              setSelectedGenre(g);
-              setCarouselPage(0);
-            }}
-            className={`rounded-full px-4 py-2 text-sm font-bold transition mr-2 ${
-              selectedGenre.name === g.name
-                ? "bg-white text-black"
-                : "bg-white/6 text-white/80"
-            }`}
-          >
-            {g.icon} {g.name}
-          </button>
-        ))}
-        <div className="ml-auto flex gap-2">
-          <button
-            onClick={prevPage}
-            className="rounded-full bg-white/6 px-3 py-2"
-          >
-            ◀
-          </button>
-          <button
-            onClick={nextPage}
-            className="rounded-full bg-white/6 px-3 py-2"
-          >
-            ▶
-          </button>
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {getCarouselMovies().map((m, i) => (
-          <div
-            key={m.id}
-            className="rounded-2xl overflow-hidden border border-white/10 bg-black/30 p-3 card-levitating"
-          >
-            <img
-              src={m.thumbnail}
-              alt={m.title}
-              className="w-full h-48 object-cover rounded-lg crisp backface-hidden"
-            />
-            <div className="mt-3 flex items-center justify-between">
-              <div>
-                <div className="text-sm font-semibold hologram-title">
-                  {m.title}
-                </div>
-                <div className="text-xs text-white/60">
-                  {m.filmmaker} • {m.duration}s
+      <div className="relative flex items-center justify-center">
+        <div className="relative flex items-center gap-0 flex-wrap justify-center">
+          {/* TV */}
+          <div className="relative">
+            <div className="relative" style={{ width: "clamp(720px, 70vw, 1000px)", height: "clamp(420px, 45vw, 600px)" }}>
+              <div
+                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-900 via-black to-slate-950"
+                style={{
+                  padding: "10px",
+                  boxShadow: "0 30px 80px rgba(0,0,0,0.85), inset 0 0 20px rgba(255,255,255,0.05)",
+                }}
+              >
+                <div
+                  className="absolute -inset-1 rounded-[20px]"
+                  style={{
+                    background: "linear-gradient(120deg, rgba(34,211,238,0.25), rgba(168,85,247,0.25), rgba(59,130,246,0.25))",
+                    filter: "blur(18px)",
+                    opacity: 0.6,
+                  }}
+                />
+                <div
+                  className="relative w-full h-full rounded-xl overflow-hidden bg-black"
+                  style={{ boxShadow: "inset 0 0 50px rgba(0,0,0,0.9)" }}
+                >
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/6 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
+                  </div>
+                  {cameraOn && powerOnAnim && (
+                    <div className="absolute inset-0 pointer-events-none z-20">
+                      <div
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 bg-white/90"
+                        style={{ animation: "expand 0.55s ease-out forwards" }}
+                      />
+                      <div className="absolute inset-0 bg-white/5 animate-pulse" />
+                    </div>
+                  )}
+                  {!cameraOn && (
+                    <div className="relative w-full h-full bg-gradient-to-br from-gray-900/60 to-black flex items-center justify-center">
+                      <div className="text-gray-700/30 text-6xl font-bold">MARS.AI</div>
+                    </div>
+                  )}
+
+                  {cameraOn && isBooting && (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-black">
+                      {showClap ? (
+                        <div className="relative w-44 h-32">
+                          {/* Ombre */}
+                          <div className="absolute -inset-2 rounded-2xl bg-cyan-500/10 blur-xl" />
+                          {/* Clap top */}
+                          <div className="absolute left-1/2 top-0 h-9 w-44 -translate-x-1/2 rounded-t-xl bg-gradient-to-r from-slate-200 to-slate-400 origin-bottom animate-clap" style={{ boxShadow: "0 6px 20px rgba(0,0,0,0.45)" }}>
+                            <div className="absolute inset-0 rounded-t-xl clap-stripes" />
+                          </div>
+                          {/* Hinge */}
+                          <div className="absolute left-1/2 top-7 h-2 w-12 -translate-x-1/2 rounded-full bg-black/70" />
+                          {/* Clap body */}
+                          <div className="absolute inset-0 rounded-xl border border-white/15 bg-gradient-to-br from-slate-800 via-slate-900 to-black" style={{ boxShadow: "inset 0 0 20px rgba(0,0,0,0.7)" }}>
+                            <div className="absolute inset-0 rounded-xl clap-grid" />
+                            <div className="absolute top-3 left-4 text-[11px] font-bold text-white/80 tracking-widest">MARS.AI</div>
+                            <div className="absolute bottom-3 left-4 text-[10px] text-white/55">TAKE 01</div>
+                            <div className="absolute bottom-3 right-4 text-[10px] text-white/55">SCENE 01</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="text-6xl font-black text-white/10 tracking-[0.3em] select-none">
+                            MARS.AI
+                          </div>
+                          <div className="mt-4 h-1 w-56 rounded-full bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 opacity-70" />
+                          <div className="mt-6 text-sm text-white/40">Démarrage…</div>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {cameraOn && !isBooting && selectedMovie && (
+                    <div className="w-full h-full flex flex-col p-6 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white">{selectedMovie.title}</h3>
+                          <p className="text-sm text-cyan-400/70">{selectedMovie.filmmaker} • {selectedMovie.duration}s</p>
+                        </div>
+                        <button
+                          onClick={closeMovie}
+                          className="px-3 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20"
+                        >
+                          Fermer
+                        </button>
+                      </div>
+                      <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30">
+                        <video className="w-full h-full bg-black" src={selectedMovie.video} controls autoPlay />
+                      </div>
+                    </div>
+                  )}
+
+                  {cameraOn && !isBooting && selectedGenre && !selectedMovie && (
+                    <div className="w-full h-full flex flex-col p-8 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
+                      <div className="flex items-center justify-between mb-4">
+                        <div>
+                          <h2 className="text-2xl font-bold text-white">MarsAI</h2>
+                          <p className="text-xs text-cyan-400/60">Festival de courts-métrages IA</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-gray-400">Films sélectionnés</p>
+                        </div>
+                      </div>
+
+                      {(() => {
+                        const count = movies.length;
+                        const cols = count === 3 ? 3 : count <= 4 ? 2 : count <= 6 ? 3 : 4;
+                        const cardSize = count <= 4
+                          ? { width: "200px", height: "280px" }
+                          : count <= 6
+                            ? { width: "185px", height: "255px" }
+                            : { width: "170px", height: "235px" };
+
+                        return (
+                          <div
+                            className="grid gap-5 place-items-start w-full"
+                            style={{
+                              gridTemplateColumns: `repeat(${cols}, ${cardSize.width})`,
+                              justifyContent: "start",
+                            }}
+                          >
+                        {movies.map((movie, idx) => {
+                          const isSelected = idx === selectedFilmIndex;
+                          return (
+                            <div
+                              key={movie.id}
+                              className={`relative rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:scale-105 ${
+                                isSelected ? "border-cyan-400 shadow-cyan-400/60" : "border-cyan-400/20 opacity-80"
+                              }`}
+                              style={{ width: cardSize.width, height: cardSize.height }}
+                              onClick={() => setSelectedFilmIndex(idx)}
+                              onDoubleClick={() => {
+                                setSelectedFilmIndex(idx);
+                                setSelectedMovie(movie);
+                              }}
+                            >
+                              <img src={movie.thumbnail} alt={movie.title} className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                              <div className="absolute bottom-2 left-2 right-2 text-sm font-bold text-white truncate">
+                                {movie.title}
+                              </div>
+                            </div>
+                          );
+                        })}
+                          </div>
+                        );
+                      })()}
+
+                      <div className="mt-6 text-center">
+                        <button
+                          onClick={playFilm}
+                          className="px-6 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold"
+                        >
+                          Lancer: {currentMovie ? currentMovie.title : ""}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              <button
-                onClick={() => setSelectedMovie(m)}
-                className="rounded-full bg-white px-3 py-2 text-sm font-bold text-black"
-              >
-                Voir
-              </button>
             </div>
           </div>
-        ))}
-      </div>
 
-      {/* Modal simple */}
-      {selectedMovie && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
-          <div className="bg-black rounded-xl overflow-hidden w-full max-w-3xl">
-            <div className="p-4 flex justify-between items-center border-b border-white/10">
-              <div className="text-lg font-bold">{selectedMovie.title}</div>
-              <button
-                onClick={() => setSelectedMovie(null)}
-                className="text-white/60"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="p-4">
-              <video
-                src={selectedMovie.video}
-                controls
-                className="w-full rounded-lg"
+          {/* Télécommande */}
+          <div className="relative" style={{ width: "clamp(180px, 20vw, 240px)", height: "clamp(420px, 45vw, 600px)" }}>
+            <div
+              className="absolute inset-0 rounded-[28px] bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700/60"
+              style={{
+                boxShadow: "0 18px 40px rgba(0,0,0,0.7), inset 0 1px 2px rgba(255,255,255,0.08)",
+              }}
+            >
+              <div
+                className="absolute inset-2 rounded-[22px] border border-white/5 pointer-events-none"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%)",
+                }}
               />
+              <div className="px-6 pt-6 pb-4">
+                <button
+                  onClick={toggleCamera}
+                  className={`w-full py-3 rounded-xl font-bold text-base transition-all text-white ${
+                    cameraOn
+                      ? "bg-gradient-to-br from-red-600 to-red-700 shadow-[0_0_20px_rgba(239,68,68,0.4)]"
+                      : "bg-gradient-to-br from-green-600 to-green-700 shadow-[0_0_20px_rgba(34,197,94,0.35)]"
+                  }`}
+                >
+                  ⏻ {cameraOn ? "OFF" : "ON"}
+                </button>
+              </div>
+
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-6 mb-4" />
+
+              <div className="px-6 mb-4">
+                <p className="text-[12px] text-gray-300 uppercase mb-3 text-center tracking-wider">Genres</p>
+
+                {/* Bouton Tous en tête */}
+                <button
+                  onClick={() => cameraOn && setSelectedGenre(GENRES[0])}
+                  disabled={!cameraOn}
+                  className={`w-full mb-3 py-3 rounded-2xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+                    selectedGenre?.name === "Tous"
+                      ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_0_18px_rgba(168,85,247,0.4)]"
+                      : "bg-gray-800/60 text-gray-300 hover:bg-gray-700/70"
+                  }`}
+                >
+                  <span className="text-lg">{GENRES[0].icon}</span> Tous les films
+                </button>
+
+                {/* Grille 2 colonnes */}
+                <div className="grid grid-cols-2 gap-3">
+                  {GENRES.slice(1).map((genre) => (
+                    <button
+                      key={genre.name}
+                      onClick={() => cameraOn && setSelectedGenre(genre)}
+                      disabled={!cameraOn}
+                      className={`py-4 rounded-2xl text-sm font-semibold transition-all flex flex-col items-center gap-1 ${
+                        selectedGenre?.name === genre.name
+                          ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-[0_0_16px_rgba(34,211,238,0.35)]"
+                          : "bg-gray-800/60 text-gray-300 hover:bg-gray-700/70"
+                      }`}
+                    >
+                      <span className="text-xl">{genre.icon}</span>
+                      <span>{genre.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-6 mb-4" />
+
+              <div className="px-6 mb-4">
+                <p className="text-[11px] text-gray-400 uppercase mb-3 text-center tracking-wider">Navigation</p>
+                <div className="relative w-36 h-36 mx-auto">
+                  <button onClick={navigateUp} disabled={!cameraOn || !selectedGenre} className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-11 rounded-t-xl bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-md">▲</button>
+                  <button onClick={navigateDown} disabled={!cameraOn || !selectedGenre} className="absolute bottom-0 left-1/2 -translate-x-1/2 w-11 h-11 rounded-b-xl bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-md">▼</button>
+                  <button onClick={navigateLeft} disabled={!cameraOn || !selectedGenre} className="absolute left-0 top-1/2 -translate-y-1/2 w-11 h-11 rounded-l-xl bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-md">◀</button>
+                  <button onClick={navigateRight} disabled={!cameraOn || !selectedGenre} className="absolute right-0 top-1/2 -translate-y-1/2 w-11 h-11 rounded-r-xl bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-md">▶</button>
+                  <button onClick={playFilm} disabled={!cameraOn || !selectedGenre} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white font-bold shadow-[0_0_16px_rgba(34,197,94,0.4)]">OK</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
