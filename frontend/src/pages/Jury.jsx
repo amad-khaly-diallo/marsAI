@@ -16,10 +16,15 @@ const Jury = () => {
 
   const imagesContext = require.context('../assets/images', false, /\.(png|jpe?g|svg)$/);
 
-  const getAssetImage = (imageName) => {
-    if (!imageName) return defaultAvatar;
+  const getAssetImage = (imagePath) => {
+    if (!imagePath) return defaultAvatar;
+
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+
     try {
-      return imagesContext(`./${imageName}`);
+      return imagesContext(`./${imagePath}`);
     } catch (err) {
       return defaultAvatar;
     }
@@ -46,7 +51,14 @@ const Jury = () => {
     if (scrollRef.current) {
       const activeItem = scrollRef.current.children[activeIndex];
       if (activeItem) {
-        activeItem.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        const timer = setTimeout(() => {
+          activeItem.scrollIntoView({ 
+            behavior: 'smooth', 
+            inline: 'center', 
+            block: 'nearest' 
+          });
+        }, 100);
+        return () => clearTimeout(timer);
       }
     }
   }, [activeIndex]);
@@ -55,7 +67,7 @@ const Jury = () => {
   const prevMember = () => setActiveIndex((prev) => (prev - 1 + juryMembers.length) % juryMembers.length);
   const handleAvatarClick = (index) => setActiveIndex(index);
 
-  if (loading) return <div className="text-white text-center py-20 bg-[#070819] min-h-screen">Chargement... [cite: 131]</div>;
+  if (loading) return <div className="text-white text-center py-20 bg-[#070819] min-h-screen">Chargement...</div>;
   if (error) return <div className="text-red-500 text-center py-20 bg-[#070819] min-h-screen">Erreur: {error}</div>;
   if (juryMembers.length === 0) return null;
 
@@ -81,14 +93,16 @@ const Jury = () => {
           <div
             key={member.id}
             onClick={() => handleAvatarClick(index)}
-            className="flex flex-col items-center flex-shrink-0 gap-2 cursor-pointer"
+            className="flex flex-col items-center flex-shrink-0 gap-2 cursor-pointer group"
           >
-            <div className={`w-14 h-14 rounded-full p-0.5 transition-all duration-300 ${
-              index === activeIndex ? 'ring-2 ring-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]' : 'opacity-50 grayscale'
+            <div className={`w-14 h-14 rounded-full p-[1.5px] transition-all duration-300 bg-white ${
+              index === activeIndex 
+                ? 'shadow-[0_0_15px_rgba(249,115,22,0.8)]' 
+                : 'hover:ring-2 hover:ring-blue-600'
             }`}>
               <img src={getAssetImage(member.photo_url)} alt={member.first_name} className="w-full h-full rounded-full object-cover border border-white/20" />
             </div>
-            <span className={`text-[10px] font-bold whitespace-nowrap transition-colors ${index === activeIndex ? 'text-orange-500' : 'text-gray-500'}`}>
+            <span className={`text-[10px] font-bold whitespace-nowrap transition-colors ${index === activeIndex ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>
               {member.first_name}
             </span>
           </div>
@@ -98,13 +112,13 @@ const Jury = () => {
       <div className="relative w-full h-[480px] md:h-[550px] flex items-center justify-center scale-95 md:scale-100">
         
         <div 
-          className="absolute z-30 w-[270px] h-[320px] bg-white rounded-2xl pt-12 text-center flex flex-col items-center border border-gray-100"
+          className="absolute z-30 w-[270px] h-[320px] bg-blue-700 rounded-2xl pt-12 text-center flex flex-col items-center border border-gray-100"
           style={{ 
             boxShadow: `0 0 40px rgba(30, 58, 138, 0.7), 0 0 80px rgba(30, 58, 138, 0.4), 0 25px 60px rgba(7, 8, 25, 0.9)` 
           }}
         >
-          <div className="absolute -top-14 w-28 h-28 rounded-full p-1 bg-gradient-to-b from-orange-400 to-red-500 shadow-xl z-50">
-            <div className="w-full h-full rounded-full border-4 border-white overflow-hidden bg-white">
+          <div className="absolute -top-14 w-28 h-28 rounded-full p-1 bg-gradient-to-b from-blue-600 to-blue-700 z-50">
+            <div className="w-full h-full rounded-full border-2 border-white overflow-hidden bg-white">
               <img 
                 src={getAssetImage(activeMember.photo_url)} 
                 alt={activeMember.first_name}
@@ -114,17 +128,17 @@ const Jury = () => {
             </div>
           </div>
 
-          <h2 className="text-base md:text-lg font-bold text-gray-900 mb-0.5 mt-4 w-full px-2">
+          <h2 className="text-base md:text-lg font-bold text-white mb-0.5 mt-4 w-full px-2">
             {activeMember.first_name} {activeMember.last_name !== '-' ? activeMember.last_name : ''}
           </h2>
           
-          <span className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-2 block border-b border-blue-500 pb-1 mx-6">
+          <span className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-2 block border-b border-blue-500 pb-1 mx-6">
             {activeMember.role}
           </span>
           
           <div className="w-full h-full overflow-y-auto px-3 custom-scroll-jury pb-10">
             <style>{`.custom-scroll-jury::-webkit-scrollbar { width: 3px; } .custom-scroll-jury::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }`}</style>
-            <p className="text-gray-700 text-xs md:text-sm font-medium leading-relaxed text-center">
+            <p className="text-white text-xs md:text-sm font-medium leading-relaxed text-center">
               {activeMember.bio || "Aucune biographie disponible."}
             </p>
           </div>
@@ -147,16 +161,23 @@ const Jury = () => {
               <div
                 key={member.id}
                 onClick={() => handleAvatarClick(index)}
-                className="absolute top-1/2 left-1/2 w-14 h-14 -ml-7 -mt-7 cursor-pointer z-20 transition-all duration-500"
+                className="absolute top-1/2 left-1/2 w-14 h-14 -ml-7 -mt-7 cursor-pointer z-20 transition-all duration-500 flex flex-col items-center group"
                 style={{
                   transform: `rotate(${angle}deg) translate(${radius}px) rotate(${-angle + (activeIndex * angleStep)}deg)`
                 }}
               >
-                <div className={`w-full h-full rounded-full p-1 shadow-lg transition-all duration-500 ${
-                  isActive ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-90 hover:scale-110 bg-white ring-2 ring-white/10'
+                <div className={`w-full h-full rounded-full p-[1.5px] transition-all duration-500 bg-white group-hover:scale-125 group-hover:ring-2 group-hover:ring-blue-600 group-hover:shadow-[0_0_15px_rgba(37,99,235,0.6)] ${
+                  isActive 
+                    ? 'scale-110 shadow-[0_0_25px_rgba(249,115,22,0.9)]' 
+                    : 'opacity-90 ring-1 ring-white/10 shadow-lg'
                 }`}>
                   <img src={getAssetImage(member.photo_url)} alt={member.first_name} className="w-full h-full rounded-full object-cover" />
                 </div>
+                <span className={`absolute top-full mt-2 text-[11px] font-bold text-white transition-opacity duration-300 whitespace-nowrap drop-shadow-md pointer-events-none ${
+                  isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}>
+                  {member.first_name}
+                </span>
               </div>
             );
           })}
