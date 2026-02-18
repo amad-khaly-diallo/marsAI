@@ -16,16 +16,54 @@ function mapMovie(row) {
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
     filmmaker_id: row.filmmaker_id,
+    is_winner: !!row.winner_id,
+    winner_ranking: row.winner_ranking ?? null,
+    winner_category: row.winner_category ?? null,
   };
 }
 
 async function list() {
-  const rows = await query("SELECT * FROM movie WHERE status = 'selected' ORDER BY id DESC");
+  const rows = await query(
+    `SELECT
+       m.*,
+       w.id AS winner_id,
+       w.ranking AS winner_ranking,
+       w.category AS winner_category
+     FROM movie m
+     LEFT JOIN winner w ON w.movie_id = m.id
+     WHERE m.status = 'selected'
+     ORDER BY m.id DESC`
+  );
+  return rows.map(mapMovie);
+}
+
+async function listWinners() {
+  const rows = await query(
+    `SELECT
+       m.*,
+       w.id AS winner_id,
+       w.ranking AS winner_ranking,
+       w.category AS winner_category
+     FROM winner w
+     INNER JOIN movie m ON m.id = w.movie_id
+     ORDER BY w.ranking ASC, w.id ASC
+     LIMIT 6`
+  );
   return rows.map(mapMovie);
 }
 
 async function getById(id) {
-  const rows = await query('SELECT * FROM movie WHERE id = :id', { id });
+  const rows = await query(
+    `SELECT
+       m.*,
+       w.id AS winner_id,
+       w.ranking AS winner_ranking,
+       w.category AS winner_category
+     FROM movie m
+     LEFT JOIN winner w ON w.movie_id = m.id
+     WHERE m.id = :id`,
+    { id }
+  );
   const row = rows[0];
   if (!row) throw new HttpError(404, 'Movie not found');
   return mapMovie(row);
@@ -190,5 +228,6 @@ module.exports = {
   removeTag,
   getAiDeclaration,
   upsertAiDeclaration,
+  listWinners,
 };
 

@@ -23,6 +23,14 @@ exports.updateStatus = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+// PATCH /api/admin/films/:id/winner
+exports.updateWinner = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
+  const { is_winner } = req.body || {};
+  const data = await AdminFilmService.updateWinner(id, { is_winner });
+  res.json(data);
+});
+
 // POST /api/admin/films/distribute
 exports.distribute = asyncHandler(async (req, res) => {
   const { minReviewers } = req.body || {};

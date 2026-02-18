@@ -43,8 +43,10 @@ const uploadAssets = multer({
 // POST /api/movies/submit - Soumission publique (crée uniquement movie)
 router.post('/submit', upload.single('video'), FilmSubmissionController.submit);
 
-// GET /api/movies - Liste tous les films
+// GET /api/movies - Liste tous les films sélectionnés (catalogue)
 router.get('/', MovieController.list);
+// GET /api/movies/winners - Liste des films gagnants
+router.get('/winners', MovieController.listWinners);
 router.post('/', MovieController.create);
 
 // GET /api/movies/:id - Détails d'un film
