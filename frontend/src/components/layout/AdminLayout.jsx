@@ -15,6 +15,7 @@ export default function AdminLayout({ children, currentAdmin }) {
     { id: "traffic", label: "Trafic" },
     { id: "all-videos", label: "Galerie des vidéos" },
     { id: "videos-distribution", label: "Répartition vidéos" },
+    { id: "movies", label: "Films (sélection & gagnants)" },
     { id: "my-movies", label: "Mes vidéos" }, // vue personnelle pour un admin simple
   ];
 
@@ -83,7 +84,7 @@ export default function AdminLayout({ children, currentAdmin }) {
             Gestion du festival
           </p>
         </div>
-        <nav className="mt-2 flex flex-col gap-1 flex-1">
+        <nav className="mt-2 flex flex-col gap-1">
           {sections.map((section) => (
             <button
               key={section.id}
