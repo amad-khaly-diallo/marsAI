@@ -105,6 +105,23 @@
   "participate.resumeDraft": "Reprendre le brouillon",
   "participate.clearDraft": "Supprimer le brouillon",
 
+  "home.hero.label": "Marseille — Festival de courts (1 minute)",
+  "home.hero.title": "Un festival pour raconter fort, en une minute.",
+  "home.hero.subtitle": "Projections, talks et ateliers. Une programmation courte, précise, et une direction artistique pensée comme une expérience — pas comme un produit.",
+
+  "home.manifesto.label": "Manifeste",
+  "home.manifesto.title": "La technologie n'est pas le sujet. L'intention l'est.",
+  "home.manifesto.desc": "marsAI met en avant la réalisation, l'écriture, le montage et la direction artistique. L'IA peut faire partie du processus — mais ce qui compte, c'est la forme finale : une idée lisible, une image tenue, un son travaillé.",
+
+  "home.location.title": "Marseille, comme décor et énergie",
+  "home.location.desc": "Une ville qui inspire des récits forts : lumière, contrastes, énergie. L'événement s'ancre ici — et invite à regarder autrement.",
+
+  "home.stats.title": "Chiffres clés du festival",
+  "home.stats.desc": "Une co-création de l'école du numérique La Plateforme et le Mobile Film Festival. En nous basant sur les résultats obtenus par les événements et sélections organisés.",
+
+  "home.cta.title": "Prêt à découvrir marsAI ?",
+  "home.cta.subtitle": "La programmation arrive — reste proche.",
+
   "error.ai.artworkType.required": "Merci de préciser le type d'œuvre générée (100% IA ou hybride).",
   "error.ai.methodology.min": "Merci de décrire la méthodologie de création en quelques phrases (au moins 30 caractères).",
 

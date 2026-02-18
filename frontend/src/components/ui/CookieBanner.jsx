@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export const CookieBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
-;
+  ;
 
   useEffect(() => {
     // Note : Utilise la même clé que dans ton localStorage.setItem plus bas
@@ -10,12 +10,24 @@ export const CookieBanner = () => {
     if (!consent) setIsVisible(true);
   }, []);
 
+  let cookieData = null;
+  fetch('http://localhost:1337/api/cookie?locale=en')
+    .then(response => response.json())
+    .then(data => {
+      cookieData = data;
+    })
+    .catch(error => {
+      console.error('Error fetching cookie data:', error);
+    });
+
   const accept = () => {
     localStorage.setItem('MarsIA_cookie_consent', 'true');
     setIsVisible(false);
   };
 
   if (!isVisible) return null;
+
+ 
 
   return (
     // Style adapté : Fond sombre, bordure fine, effet de flou (backdrop-blur)
@@ -27,8 +39,8 @@ export const CookieBanner = () => {
         </p>
       </div>
       <div className="flex gap-4">
-        <button 
-          onClick={accept} 
+        <button
+          onClick={accept}
           className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:scale-105 transition-transform text-white px-8 py-2 rounded-full font-bold text-sm uppercase tracking-widest"
         >
           Accepter

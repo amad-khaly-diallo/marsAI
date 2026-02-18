@@ -1,6 +1,6 @@
 import React from "react";
 
-import { STATUS_LABELS } from "./statusLabels";
+import { STATUS_LABELS } from "../../constants/status";
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -66,12 +66,12 @@ export default function MyMoviesGrid({ movies, onSelect }) {
                     movie.status === "approved"
                       ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                       : movie.status === "selected"
-                      ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                      : movie.status === "rejected"
-                      ? "bg-red-500/10 text-red-400 border-red-500/20"
-                      : movie.status === "in_process"
-                      ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                      : "bg-slate-900/80 text-brand-muted border-slate-700"
+                        ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                        : movie.status === "rejected"
+                          ? "bg-red-500/10 text-red-400 border-red-500/20"
+                          : movie.status === "in_process"
+                            ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                            : "bg-slate-900/80 text-brand-muted border-slate-700"
                   }`}
                 >
                   {STATUS_LABELS[movie.status] || movie.status}
@@ -99,4 +99,3 @@ export default function MyMoviesGrid({ movies, onSelect }) {
     </div>
   );
 }
-

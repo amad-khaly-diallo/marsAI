@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 const STATUS_LABELS = {
   in_process: "En cours",
@@ -35,17 +35,27 @@ export default function MyMovieModal({
 
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
 
-  const locked =
+  /** Blocage après décision : rejet ou sélection déjà faite par cet admin */
+  const decisionLocked =
     movie?.status === "selected" || movie?.status === "rejected";
+  /** Blocage du formulaire de note une fois l’avis enregistré */
+  const reviewLocked =
+    movie?.status === "selected" &&
+    movie?.my_rating != null &&
+    typeof movie.my_rating === "number";
+
+  useEffect(() => {
+    if (!movie) return;
+    setLocalRating(movie.my_rating ?? "");
+    setLocalComment(movie.my_comment ?? "");
+  }, [movie?.id, movie?.my_rating, movie?.my_comment]);
 
   if (!isOpen || !movie) return null;
 
   const handleSaveReview = () => {
     onSaveReview(movie.id, {
       rating:
-        localRating !== "" && localRating !== null
-          ? Number(localRating)
-          : null,
+        localRating !== "" && localRating !== null ? Number(localRating) : null,
       comment: localComment || null,
     });
   };
@@ -102,19 +112,18 @@ export default function MyMovieModal({
                   movie.status === "approved"
                     ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                     : movie.status === "selected"
-                    ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                    : movie.status === "rejected"
-                    ? "bg-red-500/10 text-red-400 border-red-500/20"
-                    : movie.status === "in_process"
-                    ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                    : "bg-slate-900/80 text-brand-muted border-slate-700"
+                      ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                      : movie.status === "rejected"
+                        ? "bg-red-500/10 text-red-400 border-red-500/20"
+                        : movie.status === "in_process"
+                          ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                          : "bg-slate-900/80 text-brand-muted border-slate-700"
                 }`}
               >
                 {STATUS_LABELS[movie.status] || movie.status}
               </span>
               <span className="flex items-center gap-1.5 text-xs text-brand-muted">
-                ⏱{" "}
-                {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
+                ⏱ {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
               </span>
             </div>
 
@@ -133,7 +142,7 @@ export default function MyMovieModal({
               <button
                 type="button"
                 onClick={() => onChangeStatus(movie.id, "rejected")}
-                disabled={savingStatus === movie.id || locked}
+                disabled={savingStatus === movie.id || decisionLocked}
                 className="inline-flex items-center rounded-full bg-red-500/15 px-3 py-1.5 text-[11px] font-semibold text-red-300 hover:bg-red-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Rejeter
@@ -141,7 +150,7 @@ export default function MyMovieModal({
               <button
                 type="button"
                 onClick={() => onChangeStatus(movie.id, "selected")}
-                disabled={savingStatus === movie.id || locked}
+                disabled={savingStatus === movie.id || decisionLocked}
                 className="inline-flex items-center rounded-full bg-brand-primary/15 px-3 py-1.5 text-[11px] font-semibold text-brand-primary hover:bg-brand-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 ★ Sélectionner
@@ -153,9 +162,7 @@ export default function MyMovieModal({
               <div className="mt-2 space-y-2 border-t border-slate-800 pt-3">
                 <p className="text-[11px] text-brand-muted">
                   Votre note et commentaire{" "}
-                  <span className="font-semibold text-slate-100">
-                    (privés)
-                  </span>
+                  <span className="font-semibold text-slate-100">(privés)</span>
                   .
                 </p>
                 <div className="flex items-center gap-2">
@@ -165,7 +172,9 @@ export default function MyMovieModal({
                     max={10}
                     value={localRating}
                     onChange={(e) => setLocalRating(e.target.value)}
-                    className="w-20 rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1 text-xs text-slate-100 outline-none"
+                    disabled={reviewLocked}
+                    readOnly={reviewLocked}
+                    className="w-20 rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1 text-xs text-slate-100 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
                     placeholder="Note"
                   />
                   <span className="text-[11px] text-brand-muted">/10</span>
@@ -174,19 +183,27 @@ export default function MyMovieModal({
                   rows={3}
                   value={localComment}
                   onChange={(e) => setLocalComment(e.target.value)}
-                  className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
+                  disabled={reviewLocked}
+                  readOnly={reviewLocked}
+                  className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
                   placeholder="Votre commentaire (optionnel, visible uniquement par vous)..."
                 />
-                <button
-                  type="button"
-                  onClick={handleSaveReview}
-                  disabled={savingReview === movie.id}
-                  className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {savingReview === movie.id
-                    ? "Enregistrement..."
-                    : "Enregistrer mon avis"}
-                </button>
+                {reviewLocked ? (
+                  <p className="text-[11px] font-medium text-emerald-400/90">
+                    Avis enregistré — modification non autorisée.
+                  </p>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleSaveReview}
+                    disabled={savingReview === movie.id}
+                    className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {savingReview === movie.id
+                      ? "Enregistrement..."
+                      : "Enregistrer mon avis"}
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -213,4 +230,3 @@ export default function MyMovieModal({
     </div>
   );
 }
-
