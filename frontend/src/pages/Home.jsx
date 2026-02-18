@@ -1,34 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { HeroSection } from "../components/sections/HeroSection";
-import { WinnersSection } from "../components/sections/WinnersSection";
-import { ManifestoSection } from "../components/sections/ManifestoSection";
-import { ProgramSection } from "../components/sections/ProgramSection";
-import VideoSelectionSection from "../components/sections/VideoSelectionSectionNew";
-import { LocationSection } from "../components/sections/LocationSection";
-import { StatsSection } from "../components/sections/StatsSection";
-import { CTASection } from "../components/sections/CTASection";
-import HeroCamera from "../components/sections/HeroCamera";
+import {
+  HeroSection,
+  ManifestoSection,
+  ProgramSection,
+  LocationSection,
+  StatsSection,
+  CTASection,
+  HeroCamera,
+} from "../components/home";
+// import { HomePhase2 } from "../components/home/HomePhase2";
 import { HOME_STYLES } from "../constants/homeStyles";
-import { CookieBanner } from "../components/home/CookieBanner";
-
-function SmallLabel({ children }) {
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white/85 backdrop-blur">
-      <span className="h-2 w-2 rounded-full bg-white/70" />
-      {children}
-    </span>
-  );
-}
-
-function InfoRow({ k, v }) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur">
-      <div className="text-xs font-semibold text-white/60">{k}</div>
-      <div className="text-sm font-extrabold text-white">{v}</div>
-    </div>
-  );
-}
+import { CookieBanner } from "../components/ui/CookieBanner";
+import { heroAnimationStyles } from "../components/sections/heroAnimations";
 
 /** * Page d'accueil du festival marsAI
  * Structure refactorisée avec sections modulaires et composants réutilisables
@@ -162,6 +146,7 @@ export default function Home() {
       <HeroCamera />
       {/* 4. Programme détaillé */}
       <ProgramSection />
+      {/* <HomePhase2 /> Nouvelle section pour la phase 2 du festival */}
       {/* 5. Localisation */}
       <LocationSection />
       {/* 6. Appel à l'action final */}
@@ -191,6 +176,7 @@ export default function Home() {
           100% { background-position: 0% 50%; }
         }
       `}</style>
+      <style>{heroAnimationStyles}</style>
     </div>
   );
 }

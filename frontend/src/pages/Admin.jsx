@@ -1,4 +1,4 @@
-import AdminLayout from "../components/admin/AdminLayout";
+import AdminLayout from "../components/layout/AdminLayout";
 import DashboardOverview from "../components/admin/DashboardOverview";
 import AdminsManagement from "../components/admin/AdminsManagement";
 import JuryManagement from "../components/admin/JuryManagement";
@@ -10,7 +10,7 @@ import AdminLogin from "../components/admin/AdminLogin";
 import AdminVideos from "../components/admin/All-videos";
 import VideosDistribution from "../components/admin/VideosDistribution";
 import MyMoviesGallery from "../components/admin/MyMoviesGallery";
-import { AdminProvider, useAdmin } from "../context/AdminContext";
+import { AdminProvider, useAdmin } from "../contexts";
 
 function AdminContent() {
   const { admin, checking, isAuthenticated, error, reload } = useAdmin();
