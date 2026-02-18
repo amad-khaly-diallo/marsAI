@@ -5,41 +5,43 @@ import { heroAnimationStyles } from "../sections/heroAnimations";
 
 export function ProgramSection() {
   return (
-    <section className="px-6 pb-20">
+    <section className="px-6 py-20">
       <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <div className="text-xs font-semibold text-white/60">Programme</div>
-            <h3 className="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">
-              Projections • Talks • Ateliers
-            </h3>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-white/70">
-              Une structure simple : regarder, comprendre, expérimenter.
-            </p>
+        <div className="mb-8 animate-fadeIn">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-fuchsia-500/30 bg-fuchsia-500/10 px-3 py-1.5 mb-4">
+            <div className="h-1.5 w-1.5 rounded-full bg-fuchsia-400"></div>
+            <span className="text-xs font-semibold text-fuchsia-300 uppercase tracking-wider">Programme</span>
           </div>
-          <LinkButton
-            to={NAV_ROUTES.PROGRAM}
-            variant="secondary"
-            className="hidden md:inline-flex"
-          >
-            Voir le programme →
-          </LinkButton>
+
+          <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+            Trois <span className="bg-gradient-to-r from-fuchsia-400 to-pink-400 bg-clip-text text-transparent">volets</span>
+          </h3>
+          <p className="mt-3 max-w-2xl text-base text-white/70">
+            Regarder. Comprendre. Expérimenter.
+          </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-8">
           <ProgramCard
             title="Projections"
-            description="Courts au format 1 minute. Un rythme, une idée, une tenue visuelle."
+            description="Courts 60s. Un rythme, une idée, une vision."
           />
           <ProgramCard
             title="Talks"
-            description="Créateurs, producteurs, retours d'expérience et discussions."
+            description="Créateurs partagent leurs retours d'expérience."
           />
           <ProgramCard
             title="Ateliers"
-            description="Expérimentation : écriture, montage, direction artistique."
+            description="Pratique : écriture, montage, direction."
           />
+        </div>
+
+        <div className="text-center animate-fadeIn">
+          <LinkButton to={NAV_ROUTES.PROGRAM} variant="primary">
+            Programme complet →
+          </LinkButton>
         </div>
       </div>
     </section>
