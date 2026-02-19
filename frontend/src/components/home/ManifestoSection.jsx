@@ -1,5 +1,5 @@
 import React from "react";
-import { InfoRow, LinkButton, Divider } from "./HomeComponents";
+import { LinkButton, ProgramCard } from "./HomeComponents";
 import { NAV_ROUTES } from "../../constants/homeConstants";
 import { useTranslation } from "react-i18next";
 import { heroAnimationStyles } from "../sections/heroAnimations";
@@ -10,43 +10,57 @@ export function ManifestoSection() {
     <section className="px-6 py-20">
       <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-14">
+        {/* Main Grid: Texte + Volets */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Colonne 1: Texte Manifesto */}
           <div className="animate-fadeIn">
-            <div className="text-xs font-semibold text-white/60">
-              {t("home.manifesto.label")}
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 mb-4">
+              <div className="h-1.5 w-1.5 rounded-full bg-cyan-400"></div>
+              <span className="text-xs font-semibold text-cyan-300 uppercase tracking-wider">Vision</span>
             </div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
-              {t("home.manifesto.title")}{" "}
-              <span className="text-white/80">L'intention l'est.</span>
+
+            {/* Title */}
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mt-3">
+              La technologie n'est pas le sujet.{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                L'intention l'est.
+              </span>
             </h2>
-            <p className="mt-5 text-sm leading-7 text-white/70 md:text-base">
-              {t("home.manifesto.desc")}
+
+            {/* Description */}
+            <p className="mt-4 max-w-2xl text-base leading-7 text-white/75 md:text-lg">
+              marsAI met en avant la réalisation, l'écriture, le montage et la direction artistique. L'IA peut faire partie du processus — mais ce qui compte, c'est la forme finale : une idée lisible, une image tenue, un son travaillé.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            {/* Subtitle */}
+            <p className="mt-3 text-sm text-white/60 italic">
+              Un rendez-vous culturel, pas un produit tech.
+            </p>
+
+            {/* CTA */}
+            <div className="mt-6">
               <LinkButton to={NAV_ROUTES.ABOUT} variant="secondary">
-                À propos
-              </LinkButton>
-              <LinkButton to={NAV_ROUTES.CONTACT} variant="tertiary">
-                Contact →
+                En savoir plus →
               </LinkButton>
             </div>
           </div>
 
-          <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-6 shadow-[0_18px_60px_rgba(0,0,0,.18)] backdrop-blur-xl animate-fadeIn">
-            <div className="text-xs font-semibold text-white/60">En bref</div>
-            <div className="mt-4 grid gap-3">
-              <InfoRow k="Projections" v="Sélection courte" />
-              <InfoRow k="Talks" v="Intervenants & retours" />
-              <InfoRow k="Ateliers" v="Workshops" />
-              <InfoRow k="Ambiance" v="Éditorial / ciné" />
-            </div>
-
-            <Divider />
-
-            <div className="mt-5 text-sm text-white/70">
-              Une expérience pensée comme un rendez-vous culturel — pas un
-              produit tech.
+          {/* Colonne 2: Les 3 Volets */}
+          <div className="animate-fadeIn">
+            <div className="grid grid-cols-1 gap-4">
+              <ProgramCard
+                title="Projections"
+                description="Courts 60s. Un rythme, une idée, une vision."
+              />
+              <ProgramCard
+                title="Talks"
+                description="Créateurs partagent leurs retours d'expérience."
+              />
+              <ProgramCard
+                title="Ateliers"
+                description="Pratique : écriture, montage, direction."
+              />
             </div>
           </div>
         </div>

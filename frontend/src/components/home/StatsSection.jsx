@@ -56,14 +56,30 @@ export function StatsSection() {
         <div className="relative max-w-6xl mx-auto">
           <div className="relative flex flex-col lg:flex-row gap-3 items-center lg:items-start justify-center lg:justify-start">
             <div className="flex-shrink-0 flex flex-col items-center gap-2 relative w-full lg:w-auto px-4 lg:px-0">
-              {/* CameraButton simplifié pour copie */}
-              <div className="relative w-24 h-24 flex items-center justify-center animate-fadeIn">
+              {/* Projecteur ON/OFF */}
+              <button
+                type="button"
+                onClick={handleStatsReveal}
+                className={`relative w-24 h-24 flex items-center justify-center transition-all ${
+                  statsRevealed ? "scale-105" : "opacity-90 hover:opacity-100"
+                }`}
+                aria-pressed={statsRevealed}
+                aria-label={statsRevealed ? "Éteindre le projecteur" : "Allumer le projecteur"}
+              >
                 <img
                   src={imgTout}
-                  alt="roulette"
-                  className="w-full h-full object-contain"
+                  alt="projecteur"
+                  className={`w-full h-full object-contain ${
+                    statsRevealed ? "drop-shadow-[0_0_16px_rgba(34,211,238,0.6)]" : ""
+                  }`}
                 />
-              </div>
+                {statsFlash && (
+                  <span className="absolute inset-0 rounded-full bg-cyan-400/20 blur-xl" />
+                )}
+              </button>
+              <span className="text-[11px] font-semibold text-white/70">
+                {statsRevealed ? "Projecteur ON" : "Projecteur OFF"}
+              </span>
             </div>
 
             <div className="flex-1">
