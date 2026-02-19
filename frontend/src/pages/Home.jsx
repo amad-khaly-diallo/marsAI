@@ -1,11 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  ManifestoSection,
-  CTASection,
-  HeroCamera,
-} from "../components/home";
-import { StatsSection as ProjectorStatsSection } from "../components/sections/StatsSection";
+import { ManifestoSection, CTASection, HeroCamera } from "../components/home";
+import { StatsSection as ProjectorStatsSection } from "../components/home/StatsSection";
 import { HOME_STYLES } from "../constants/homeStyles";
 import { CookieBanner } from "../components/ui/CookieBanner";
 import { heroAnimationStyles } from "../components/sections/heroAnimations";
@@ -67,10 +63,7 @@ export default function Home() {
             className="mt-8 max-w-5xl text-5xl font-black leading-[1.1] tracking-tight md:text-7xl lg:text-8xl animate-fadeInUp"
             style={{ animationDelay: "0.1s" }}
           >
-            Des films IA qui
-            <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-              marquent
-            </span>
+            Des films IA qui marquent
             <br />
             <span className="text-white/80">en 60 secondes</span>
           </h1>
@@ -100,7 +93,9 @@ export default function Home() {
                 }
                 aria-label={cta.label}
               >
-                <span className={cta.variant === "primary" ? "relative z-10" : ""}>
+                <span
+                  className={cta.variant === "primary" ? "relative z-10" : ""}
+                >
                   {cta.label}
                 </span>
                 {cta.variant === "primary" && (
@@ -122,8 +117,8 @@ export default function Home() {
                   card.colorClass === "cyan"
                     ? "border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 hover:border-cyan-400/40 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
                     : card.colorClass === "violet"
-                    ? "border-violet-400/20 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
-                    : "border-fuchsia-400/20 bg-gradient-to-br from-fuchsia-500/10 to-pink-500/10 hover:border-fuchsia-400/40 hover:shadow-[0_0_20px_rgba(217,70,239,0.2)]"
+                      ? "border-violet-400/20 bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 hover:border-violet-400/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                      : "border-fuchsia-400/20 bg-gradient-to-br from-fuchsia-500/10 to-pink-500/10 hover:border-fuchsia-400/40 hover:shadow-[0_0_20px_rgba(217,70,239,0.2)]"
                 } px-6 py-5`}
               >
                 <div
@@ -131,8 +126,8 @@ export default function Home() {
                     card.colorClass === "cyan"
                       ? "text-cyan-400"
                       : card.colorClass === "violet"
-                      ? "text-violet-400"
-                      : "text-fuchsia-400"
+                        ? "text-violet-400"
+                        : "text-fuchsia-400"
                   }`}
                 >
                   {card.value}
@@ -161,7 +156,7 @@ export default function Home() {
       <ProjectorStatsSection />
       <ManifestoSection />
       <CTASection />
-      
+
       {/* Footer */}
       <CookieBanner />
 
