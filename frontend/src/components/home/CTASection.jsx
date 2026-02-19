@@ -10,7 +10,7 @@ export function CTASection() {
   const [mapMode, setMapMode] = useState(MAP_MODES.GTA);
 
   return (
-    <section className="px-6 py-20">
+    <section className="px-6 py-16">
       <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         {/* Header */}
@@ -25,10 +25,11 @@ export function CTASection() {
         </div>
 
         {/* Map Container */}
-        <div className="flex justify-center animate-fadeIn">
+        <div className="flex justify-center animate-fadeIn pb-8">
           <div className="relative w-full">
             {/* Toggle buttons */}
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 shadow-2xl hover:border-white/40 transition-all">
+            <div className="flex justify-center mb-4 z-20">
+              <div className="flex items-center gap-1.5 bg-gradient-to-r from-black/80 to-black/60 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 shadow-2xl hover:border-white/40 transition-all">
               <button
                 onClick={() => setMapMode(MAP_MODES.GTA)}
                 className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
@@ -51,12 +52,13 @@ export function CTASection() {
               >
                 MAP
               </button>
+              </div>
             </div>
 
             {/* GTA Map */}
             {mapMode === MAP_MODES.GTA && (
               <div className="transition-all duration-500 transform animate-fadeIn">
-                <div className="rounded-3xl overflow-hidden shadow-2xl shadow-violet-500/20 border border-violet-500/20 hover:border-violet-500/40 transition-all h-[450px] w-full flex items-center justify-center">
+                <div className="rounded-3xl overflow-hidden shadow-2xl shadow-violet-500/20 border border-violet-500/20 hover:border-violet-500/40 transition-all h-[400px] w-full flex items-center justify-center">
                   <div className="w-full h-full flex items-center justify-center">
                     <div style={{ width: "100%", height: "100%" }}>
                       <MiniMapGTA />
@@ -69,7 +71,7 @@ export function CTASection() {
             {/* Real Map */}
             {mapMode === MAP_MODES.REAL && (
               <div className="transition-all duration-500 transform animate-fadeIn rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 p-3 shadow-2xl shadow-blue-500/20 hover:border-blue-500/40 transition-all">
-                <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur h-[450px] w-full">
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/40 backdrop-blur h-[400px] w-full">
                   <iframe
                     title="Carte Marseille"
                     className="h-full w-full"
@@ -82,7 +84,7 @@ export function CTASection() {
             )}
 
             {/* Label */}
-            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs font-semibold text-white/30 tracking-widest uppercase">
+            <div className="text-center mt-6 text-xs font-semibold text-white/30 tracking-widest uppercase">
               {mapMode === MAP_MODES.GTA ? "GTA" : "MAP"}
             </div>
           </div>

@@ -67,10 +67,8 @@ export default function Home() {
             className="mt-8 max-w-5xl text-5xl font-black leading-[1.1] tracking-tight md:text-7xl lg:text-8xl animate-fadeInUp"
             style={{ animationDelay: "0.1s" }}
           >
-            Des films IA qui
-            <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-              marquent
-            </span>
+            Des films IA qui marquent  
+            
             <br />
             <span className="text-white/80">en 60 secondes</span>
           </h1>
