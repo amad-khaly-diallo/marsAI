@@ -10,13 +10,20 @@ router.use(authenticate, authorize(['admin', 'super_admin']));
 // GET /api/admin/films
 router.get('/', AdminFilmController.list);
 
+// GET /api/admin/films/green-flags - uniquement SUPER_ADMIN
+router.get(
+  '/green-flags',
+  authorize(['super_admin']),
+  AdminFilmController.listGreenFlagFavorites
+);
+
 // GET /api/admin/films/:id
 router.get('/:id', AdminFilmController.get);
 
-// PATCH /api/admin/films/:id/status - uniquement ADMIN (pas super_admin)
+// PATCH /api/admin/films/:id/status - ADMIN et SUPER_ADMIN
 router.patch(
   '/:id/status',
-  authorize(['admin']),
+  authorize(['super_admin']),
   AdminFilmController.updateStatus
 );
 

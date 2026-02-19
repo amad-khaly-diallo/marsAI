@@ -22,6 +22,10 @@ export async function getFilms(params = {}) {
   return await api.get(`/admin/films${qs ? `?${qs}` : ""}`);
 }
 
+export async function getGreenFlagFavorites() {
+  return await api.get("/admin/films/green-flags");
+}
+
 export async function updateFilmStatus(id, status) {
   return await api.patch(`/admin/films/${id}/status`, { status });
 }
@@ -33,6 +37,7 @@ export async function deleteFilm(id) {
 export async function getFilmmakers() {
   return await api.get("/filmmakers");
 }
+
 
 // Jury
 export async function getJury() {
@@ -70,6 +75,7 @@ export default {
   getAdmins,
   createAdmin,
   getFilms,
+  getGreenFlagFavorites,
   updateFilmStatus,
   deleteFilm,
   getFilmmakers,
