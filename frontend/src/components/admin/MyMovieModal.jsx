@@ -1,14 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { X, Clock, Star, ChevronLeft, ChevronRight } from "lucide-react";
 
-const STATUS_LABELS = {
-  in_process: "En cours",
-  approved: "Approuvé",
-  rejected: "Rejeté",
-  selected: "Sélectionné",
-  pending: "En attente",
-};
-
 function getYouTubeEmbed(url) {
   if (!url) return null;
   const regExp =
@@ -26,24 +18,15 @@ export default function MyMovieModal({
   onClose,
   onNext,
   onPrev,
-  onChangeStatus,
   onSaveReview,
-  savingStatus,
   savingReview,
+  onUpdateFlag,
+  savingFlag,
 }) {
   const [localRating, setLocalRating] = useState(movie?.my_rating ?? "");
   const [localComment, setLocalComment] = useState(movie?.my_comment ?? "");
 
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
-
-  /** Blocage après décision : rejet ou sélection déjà faite par cet admin */
-  const decisionLocked =
-    movie?.status === "selected" || movie?.status === "rejected";
-  /** Blocage du formulaire de note une fois l’avis enregistré */
-  const reviewLocked =
-    movie?.status === "selected" &&
-    movie?.my_rating != null &&
-    typeof movie.my_rating === "number";
 
   useEffect(() => {
     if (!movie) return;
@@ -107,23 +90,8 @@ export default function MyMovieModal({
           </div>
 
           <div className="flex flex-1 flex-col gap-3">
-            {/* Statut + durée */}
+            {/* Métadonnées */}
             <div className="flex items-center justify-between gap-3">
-              <span
-                className={`inline-flex rounded-full px-3 py-1 text-[11px] font-bold uppercase border ${
-                  movie.status === "approved"
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                    : movie.status === "selected"
-                      ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                      : movie.status === "rejected"
-                        ? "bg-red-500/10 text-red-400 border-red-500/20"
-                        : movie.status === "in_process"
-                          ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                          : "bg-slate-900/80 text-brand-muted border-slate-700"
-                }`}
-              >
-                {STATUS_LABELS[movie.status] || movie.status}
-              </span>
               <span className="flex items-center gap-1.5 text-xs text-brand-muted">
                 <Clock className="w-3.5 h-3.5 shrink-0" />
                 {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
@@ -140,76 +108,80 @@ export default function MyMovieModal({
               </p>
             </div>
 
-            {/* Actions décision */}
-            <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-slate-800 pt-3">
+            {/* Note + commentaire + flags personnels */}
+            <div className="mt-2 space-y-2 border-t border-slate-800 pt-3">
+              <p className="text-[11px] text-brand-muted">
+                Votre note et commentaire{" "}
+                <span className="font-semibold text-slate-100">(privés)</span>.
+              </p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={1}
+                  max={10}
+                  value={localRating}
+                  onChange={(e) => setLocalRating(e.target.value)}
+                  className="w-20 rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1 text-xs text-slate-100 outline-none"
+                  placeholder="Note"
+                />
+                <span className="text-[11px] text-brand-muted">/10</span>
+              </div>
+              <textarea
+                rows={3}
+                value={localComment}
+                onChange={(e) => setLocalComment(e.target.value)}
+                className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
+                placeholder="Votre commentaire (optionnel, visible uniquement par vous)..."
+              />
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {["green", "yellow", "red"].map((flag) => {
+                  const isActive = movie.my_flag === flag;
+                  const baseColor =
+                    flag === "green"
+                      ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/40"
+                      : flag === "yellow"
+                        ? "bg-amber-500/10 text-amber-300 border-amber-500/40"
+                        : "bg-red-500/10 text-red-300 border-red-500/40";
+
+                  return (
+                    <button
+                      key={flag}
+                      type="button"
+                      onClick={() =>
+                        savingReview // on évite de spammer pendant un save de review
+                          ? null
+                          : onUpdateFlag(
+                              movie.id,
+                              movie.my_flag === flag ? null : flag,
+                            )
+                      }
+                      disabled={savingReview === movie.id}
+                      className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold transition-colors ${
+                        isActive
+                          ? `${baseColor}`
+                          : "bg-slate-900/60 text-slate-300 border-slate-700 hover:bg-slate-800/80"
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      {flag === "green"
+                        ? "Green"
+                        : flag === "yellow"
+                          ? "Yellow"
+                          : "Red"}
+                    </button>
+                  );
+                })}
+              </div>
               <button
                 type="button"
-                onClick={() => onChangeStatus(movie.id, "rejected")}
-                disabled={savingStatus === movie.id || decisionLocked}
-                className="inline-flex items-center rounded-full bg-red-500/15 px-3 py-1.5 text-[11px] font-semibold text-red-300 hover:bg-red-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleSaveReview}
+                disabled={savingReview === movie.id}
+                className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Rejeter
-              </button>
-              <button
-                type="button"
-                onClick={() => onChangeStatus(movie.id, "selected")}
-                disabled={savingStatus === movie.id || decisionLocked}
-                className="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/15 px-3 py-1.5 text-[11px] font-semibold text-brand-primary hover:bg-brand-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Star className="w-3.5 h-3.5 fill-current" />
-                Sélectionner
+                {savingReview === movie.id
+                  ? "Enregistrement..."
+                  : "Enregistrer mon avis"}
               </button>
             </div>
-
-            {/* Note + commentaire (uniquement si sélectionné) */}
-            {movie.status === "selected" && (
-              <div className="mt-2 space-y-2 border-t border-slate-800 pt-3">
-                <p className="text-[11px] text-brand-muted">
-                  Votre note et commentaire{" "}
-                  <span className="font-semibold text-slate-100">(privés)</span>
-                  .
-                </p>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    min={1}
-                    max={10}
-                    value={localRating}
-                    onChange={(e) => setLocalRating(e.target.value)}
-                    disabled={reviewLocked}
-                    readOnly={reviewLocked}
-                    className="w-20 rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1 text-xs text-slate-100 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
-                    placeholder="Note"
-                  />
-                  <span className="text-[11px] text-brand-muted">/10</span>
-                </div>
-                <textarea
-                  rows={3}
-                  value={localComment}
-                  onChange={(e) => setLocalComment(e.target.value)}
-                  disabled={reviewLocked}
-                  readOnly={reviewLocked}
-                  className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
-                  placeholder="Votre commentaire (optionnel, visible uniquement par vous)..."
-                />
-                {reviewLocked ? (
-                  <p className="text-[11px] font-medium text-emerald-400/90">
-                    Avis enregistré — modification non autorisée.
-                  </p>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleSaveReview}
-                    disabled={savingReview === movie.id}
-                    className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
-                  >
-                    {savingReview === movie.id
-                      ? "Enregistrement..."
-                      : "Enregistrer mon avis"}
-                  </button>
-                )}
-              </div>
-            )}
           </div>
         </div>
 

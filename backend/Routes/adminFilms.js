@@ -30,6 +30,16 @@ router.patch(
 // PATCH /api/admin/films/:id/review
 router.patch('/:id/review', AdminFilmController.updateReview);
 
+// PATCH /api/admin/films/:id/flag - uniquement ADMIN (flag personnel)
+router.patch(
+  '/:id/flag',
+  authorize(['admin']),
+  AdminFilmController.updateFlag
+);
+
+// GET /api/admin/films/:id/reviews
+router.get('/:id/reviews', AdminFilmController.listReviews);
+
 // POST /api/admin/films/distribute - uniquement SUPER_ADMIN
 router.post(
   '/distribute',
