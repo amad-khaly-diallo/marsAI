@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { X, Clock, Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 const STATUS_LABELS = {
   in_process: "En cours",
@@ -79,8 +80,9 @@ export default function MyMovieModal({
             type="button"
             onClick={onClose}
             className="rounded-full bg-slate-900/80 p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+            aria-label="Fermer"
           >
-            ✕
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -123,7 +125,8 @@ export default function MyMovieModal({
                 {STATUS_LABELS[movie.status] || movie.status}
               </span>
               <span className="flex items-center gap-1.5 text-xs text-brand-muted">
-                ⏱ {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
+                <Clock className="w-3.5 h-3.5 shrink-0" />
+                {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
               </span>
             </div>
 
@@ -151,9 +154,10 @@ export default function MyMovieModal({
                 type="button"
                 onClick={() => onChangeStatus(movie.id, "selected")}
                 disabled={savingStatus === movie.id || decisionLocked}
-                className="inline-flex items-center rounded-full bg-brand-primary/15 px-3 py-1.5 text-[11px] font-semibold text-brand-primary hover:bg-brand-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 rounded-full bg-brand-primary/15 px-3 py-1.5 text-[11px] font-semibold text-brand-primary hover:bg-brand-primary/25 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                ★ Sélectionner
+                <Star className="w-3.5 h-3.5 fill-current" />
+                Sélectionner
               </button>
             </div>
 
@@ -216,14 +220,16 @@ export default function MyMovieModal({
             onClick={onPrev}
             className="inline-flex items-center gap-1 rounded-full px-2 py-1 hover:bg-slate-900/70"
           >
-            ← Précédente
+            <ChevronLeft className="w-4 h-4" />
+            Précédente
           </button>
           <button
             type="button"
             onClick={onNext}
             className="inline-flex items-center gap-1 rounded-full px-2 py-1 hover:bg-slate-900/70"
           >
-            Suivante →
+            Suivante
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Clock, Eye } from "lucide-react";
 import { getYouTubeEmbed } from "../../utils/youtube";
 import { STATUS_LABELS } from "../../constants/status";
 import admin from "../../services/admin";
@@ -9,9 +10,7 @@ export default function AllVideos() {
   const [error, setError] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("");
 
-  // ===========================================
-  // 1. recuperer des informations réelles à partir de la base de données
-  // ===========================================
+  // recuperer des informations réelles à partir de la base de données
   const fetchMovies = async () => {
     setLoading(true);
     setError(null);
@@ -33,9 +32,6 @@ export default function AllVideos() {
 
   return (
     <div className="space-y-6">
-      {/* =======================
-          HEADER & FILTER
-          ======================= */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-brand-surface/80 border border-slate-800/80 rounded-xl p-5 shadow-soft-sm">
         <div>
           <h2 className="text-2xl font-bold text-slate-50">
@@ -156,20 +152,7 @@ VUE GRILLE
                     <div className="flex items-center gap-4">
                       {/* durée */}
                       <span className="flex items-center gap-1.5" title="Durée">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx="12" cy="12" r="10" />
-                          <polyline points="12 6 12 12 16 14" />
-                        </svg>
+                        <Clock className="w-3.5 h-3.5 shrink-0" />
                         {movie.duration ? `${movie.duration} min` : "N/A"}
                       </span>
 
@@ -178,20 +161,7 @@ VUE GRILLE
                         className="flex items-center gap-1.5 text-brand-primary font-medium"
                         title="Vues"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                          <circle cx="12" cy="12" r="3" />
-                        </svg>
+                        <Eye className="w-3.5 h-3.5 shrink-0" />
                         {movie.views || 0}
                       </span>
                     </div>

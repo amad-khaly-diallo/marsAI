@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Clock } from "lucide-react";
 import { STATUS_LABELS } from "../../constants/status";
 
 function getYouTubeEmbed(url) {
@@ -83,8 +83,9 @@ export default function MyMoviesGrid({ movies, onSelect }) {
               </p>
 
               <div className="mt-auto flex items-center justify-between pt-2 text-[11px] text-slate-400 border-t border-slate-800/70">
-                <span>
-                  ⏱ {movie.duration ? `${movie.duration} min` : "Durée ?"}
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 shrink-0" />
+                  {movie.duration ? `${movie.duration} min` : "Durée ?"}
                 </span>
                 {typeof movie.my_rating === "number" && (
                   <span className="text-brand-primary font-semibold">
