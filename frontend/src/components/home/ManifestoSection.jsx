@@ -7,7 +7,7 @@ import { heroAnimationStyles } from "../sections/heroAnimations";
 export function ManifestoSection() {
   const { t } = useTranslation();
   return (
-    <section className="px-6 py-20">
+    <section className="px-6 py-12">
       <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         {/* Main Grid: Texte + Volets */}
