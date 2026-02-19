@@ -102,8 +102,6 @@ export default function NewslettersManagement() {
               <thead className="border-b border-slate-800/80 text-[11px] uppercase tracking-wide text-brand-muted">
                 <tr>
                   <th className="px-2 py-2">Email</th>
-                  <th className="px-2 py-2">Nom</th>
-                  <th className="px-2 py-2 text-right">Statut</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/80 text-[13px] text-slate-100">
@@ -133,14 +131,6 @@ export default function NewslettersManagement() {
                   subscribers.map((sub) => (
                     <tr key={sub.id}>
                       <td className="px-2 py-2">{sub.email}</td>
-                      <td className="px-2 py-2">
-                        {sub.first_name} {sub.last_name}
-                      </td>
-                      <td className="px-2 py-2 text-right">
-                        <span className="inline-flex rounded-full bg-slate-900/80 px-2 py-0.5 text-[11px] text-brand-muted">
-                          Actif
-                        </span>
-                      </td>
                     </tr>
                   ))}
               </tbody>
@@ -161,10 +151,7 @@ export default function NewslettersManagement() {
               <label className="block text-[11px] font-medium text-brand-muted">
                 Sujet
               </label>
-              <input
-                type="text"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+              <input type="text"  value={subject} onChange={(e) => setSubject(e.target.value)}
                 className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none focus:border-brand-primary-soft"
                 required
               />
@@ -173,10 +160,7 @@ export default function NewslettersManagement() {
               <label className="block text-[11px] font-medium text-brand-muted">
                 Contenu du message
               </label>
-              <textarea
-                rows={5}
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
+              <textarea rows={5} value={body} onChange={(e) => setBody(e.target.value)}
                 className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none focus:border-brand-primary-soft"
                 required
               />
@@ -195,10 +179,7 @@ export default function NewslettersManagement() {
             )}
 
             <div className="flex justify-end pt-1">
-              <button
-                type="submit"
-                disabled={sending}
-                className="inline-flex items-center rounded-full bg-brand-primary px-4 py-1.5 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
+              <button type="submit" disabled={sending} className="inline-flex items-center rounded-full bg-brand-primary px-4 py-1.5 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {sending ? "Envoi..." : "Envoyer la newsletter"}
               </button>

@@ -314,6 +314,75 @@ async function updateFlag(movieId, { flag }, currentUser) {
   };
 }
 
+async function listGreenFlaggedByAdmin() {
+  const rows = await query(
+    `SELECT
+       ama.admin_id,
+       a.first_name AS admin_first_name,
+       a.last_name AS admin_last_name,
+       a.email AS admin_email,
+       m.id AS movie_id,
+       m.original_title,
+       m.english_title,
+       m.duration,
+       m.language,
+       m.synopsis_original,
+       m.synopsis_english,
+       m.youtube_url,
+       m.status,
+       f.id AS filmmaker_id,
+       f.first_name AS filmmaker_first_name,
+       f.last_name AS filmmaker_last_name,
+       ama.rating,
+       ama.comment,
+       ama.flag
+     FROM admin_movie_assignment ama
+     INNER JOIN admins a ON a.id = ama.admin_id
+     INNER JOIN movie m ON m.id = ama.movie_id
+     INNER JOIN filmmaker f ON f.id = m.filmmaker_id
+     WHERE ama.flag = 'green'
+     ORDER BY a.last_name, a.first_name, m.id`,
+    {}
+  );
+
+  const byAdmin = new Map();
+
+  rows.forEach((row) => {
+    if (!byAdmin.has(row.admin_id)) {
+      byAdmin.set(row.admin_id, {
+        admin_id: row.admin_id,
+        first_name: row.admin_first_name,
+        last_name: row.admin_last_name,
+        email: row.admin_email,
+        movies: [],
+      });
+    }
+
+    const adminGroup = byAdmin.get(row.admin_id);
+    adminGroup.movies.push({
+      id: row.movie_id,
+      original_title: row.original_title,
+      english_title: row.english_title,
+      duration: row.duration,
+      language: row.language,
+      synopsis_original: row.synopsis_original,
+      synopsis_english: row.synopsis_english,
+      youtube_url: row.youtube_url,
+      status: row.status,
+      rating: typeof row.rating === 'number' ? row.rating : null,
+      comment: row.comment ?? null,
+      flag: row.flag,
+      filmmaker: {
+        id: row.filmmaker_id,
+        first_name: row.filmmaker_first_name,
+        last_name: row.filmmaker_last_name,
+      },
+    });
+  });
+
+  return Array.from(byAdmin.values());
+}
+
 async function listReviews(movieId) {
   const rows = await query(
     `SELECT
@@ -426,5 +495,6 @@ module.exports = {
   updateFlag,
   listReviews,
   updateWinner,
+  listGreenFlaggedByAdmin,
 };
 

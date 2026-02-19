@@ -61,3 +61,9 @@ exports.listReviews = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+// GET /api/admin/films/green-flags - super admin : favoris (green flags) par admin
+exports.listGreenFlagFavorites = asyncHandler(async (req, res) => {
+  const data = await AdminFilmService.listGreenFlaggedByAdmin();
+  res.json(data);
+});
+

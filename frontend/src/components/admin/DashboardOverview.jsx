@@ -17,9 +17,10 @@ export default function DashboardOverview() {
       setError(null);
       try {
         const admin = require("../../services/admin").default;
-        const [movies, filmmakers] = await Promise.all([
+        const [movies, filmmakers, newsletter] = await Promise.all([
           admin.getFilms(),
           admin.getFilmmakers(),
+          admin.getNewsletterSubscribers(),
         ]);
 
         if (!cancelled) {
@@ -27,7 +28,7 @@ export default function DashboardOverview() {
           setStats({
             movies: Array.isArray(movies) ? movies.length : null,
             filmmakers: filmmakersList.length,
-            newsletter: filmmakersList.filter((f) => f.newsletter).length,
+            newsletter: Array.isArray(newsletter) ? newsletter.length : null,
           });
         }
       } catch (err) {
@@ -104,31 +105,6 @@ export default function DashboardOverview() {
             Réalisateurs ayant accepté de recevoir les communications du
             festival.
           </p>
-        </div>
-      </section>
-
-      <section className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-md">
-          <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">
-            Trafic du site
-          </p>
-          <p className="mt-2 text-sm text-brand-muted">
-            Intégrez ici un graphique (ex: nombre de visites / jour, conversions
-            vers la page &quot;Participer&quot;). Pour l&apos;instant, cette
-            zone reste un placeholder.
-          </p>
-          <div className="mt-4 h-40 rounded-md border border-dashed border-brand-border/60 bg-slate-950/40" />
-        </div>
-
-        <div className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-md">
-          <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">
-            Dernières activités
-          </p>
-          <ul className="mt-3 space-y-2 text-sm text-brand-muted">
-            <li>— Nouvelle soumission de court-métrage</li>
-            <li>— Nouveau réalisateur inscrit</li>
-            <li>— Nouvel inscrit à la newsletter</li>
-          </ul>
         </div>
       </section>
     </div>
