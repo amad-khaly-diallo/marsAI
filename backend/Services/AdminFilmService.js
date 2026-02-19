@@ -35,6 +35,9 @@ async function list({ status, search, currentUser }) {
         f.last_name AS filmmaker_last_name,
         f.email AS filmmaker_email,
         COALESCE(a.reviewers_count, 0) AS reviewers_count,
+        w.id AS winner_id,
+        w.ranking AS winner_ranking,
+        w.category AS winner_category,
         ${
           isBasicAdmin
             ? 'ama.rating AS my_rating, ama.comment AS my_comment'
@@ -48,6 +51,7 @@ async function list({ status, search, currentUser }) {
        FROM admin_movie_assignment
        GROUP BY movie_id
      ) a ON a.movie_id = m.id
+     LEFT JOIN winner w ON w.movie_id = m.id
      ${whereClause}
      ORDER BY m.id DESC`,
     params
@@ -66,6 +70,9 @@ async function list({ status, search, currentUser }) {
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
     reviewers_count: row.reviewers_count,
+    is_winner: !!row.winner_id,
+    winner_ranking: row.winner_ranking ?? null,
+    winner_category: row.winner_category ?? null,
     my_rating:
       typeof row.my_rating === 'number' ? row.my_rating : null,
     my_comment: row.my_comment ?? null,
@@ -96,6 +103,9 @@ async function getById(id, currentUser) {
         f.first_name AS filmmaker_first_name,
         f.last_name AS filmmaker_last_name,
         f.email AS filmmaker_email,
+        w.id AS winner_id,
+        w.ranking AS winner_ranking,
+        w.category AS winner_category,
         ${
           isBasicAdmin
             ? 'ama.rating AS my_rating, ama.comment AS my_comment'
@@ -103,6 +113,7 @@ async function getById(id, currentUser) {
         }
      FROM movie m
      INNER JOIN filmmaker f ON f.id = m.filmmaker_id
+     LEFT JOIN winner w ON w.movie_id = m.id
      ${joinCurrentAdmin}
      WHERE m.id = :id`,
     params
@@ -123,6 +134,9 @@ async function getById(id, currentUser) {
     status: row.status,
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
+    is_winner: !!row.winner_id,
+    winner_ranking: row.winner_ranking ?? null,
+    winner_category: row.winner_category ?? null,
     my_rating:
       typeof row.my_rating === 'number' ? row.my_rating : null,
     my_comment: row.my_comment ?? null,
@@ -133,6 +147,51 @@ async function getById(id, currentUser) {
       email: row.filmmaker_email,
     },
   };
+}
+
+async function updateWinner(id, { is_winner }) {
+  const flag = !!is_winner;
+
+  const movie = await getById(id, null);
+
+  if (movie.status !== 'selected' && flag) {
+    throw new HttpError(400, 'Seuls les films sélectionnés peuvent être gagnants.');
+  }
+
+  // Compte actuel de gagnants (tous films confondus)
+  const countRows = await query('SELECT COUNT(*) AS cnt FROM winner', {});
+  const currentCount =
+    countRows[0] && typeof countRows[0].cnt === 'number' ? countRows[0].cnt : 0;
+
+  if (flag) {
+    if (!movie.is_winner && currentCount >= 6) {
+      throw new HttpError(400, 'Vous avez déjà 6 films gagnants.');
+    }
+
+    if (!movie.is_winner) {
+      // Nouveau gagnant : on lui attribue le prochain ranking
+      const rankRows = await query('SELECT COALESCE(MAX(ranking), 0) AS max_rank FROM winner', {});
+      const nextRank =
+        rankRows[0] && typeof rankRows[0].max_rank === 'number'
+          ? rankRows[0].max_rank + 1
+          : currentCount + 1;
+
+      await query(
+        `INSERT INTO winner (ranking, category, movie_id)
+         VALUES (:ranking, :category, :movie_id)`,
+        {
+          ranking: nextRank,
+          category: 'Grand Prix',
+          movie_id: id,
+        }
+      );
+    }
+  } else if (movie.is_winner) {
+    // On retire simplement le film de la table winner
+    await query('DELETE FROM winner WHERE movie_id = :movie_id', { movie_id: id });
+  }
+
+  return getById(id, null);
 }
 
 async function updateStatus(id, { status, decision_reason }) {
@@ -296,5 +355,6 @@ module.exports = {
   updateStatus,
   distributeToAdmins,
   upsertReview,
+  updateWinner,
 };
 
