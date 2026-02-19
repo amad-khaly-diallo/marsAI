@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { SmallLabel, InfoRow, Divider } from "../components/ui";
 
 export default function AProposPage() {
   const { t } = useTranslation();
@@ -212,22 +213,6 @@ const ContentCard = ({ title, text }) => (
     <p className="mt-2 text-sm leading-7 text-white/70">{text}</p>
   </div>
 );
-
-const SmallLabel = ({ children }) => (
-  <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs font-semibold text-white/85 backdrop-blur">
-    <span className="h-2 w-2 rounded-full bg-white/70" />
-    {children}
-  </span>
-);
-
-const InfoRow = ({ label, value }) => (
-  <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur">
-    <div className="text-xs font-semibold text-white/60">{label}</div>
-    <div className="text-sm font-extrabold text-white">{value}</div>
-  </div>
-);
-
-const Divider = () => <div className="h-px w-full bg-white/10 my-5" />;
 
 const ActionButton = ({ to, label, variant = "primary" }) => {
   const baseStyles =
