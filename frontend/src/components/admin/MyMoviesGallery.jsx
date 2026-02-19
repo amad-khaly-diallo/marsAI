@@ -2,18 +2,17 @@ import { useEffect, useState, useMemo } from "react";
 import MyMoviesGrid from "./MyMoviesGrid";
 import MyMovieModal from "./MyMovieModal";
 
-const ALLOWED_STATUSES = ["selected", "in_process"];
-
 export default function MyMoviesGallery() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  /** "" = les deux, "in_process" = en cours, "selected" = sélectionnés */
-  const [statusFilter, setStatusFilter] = useState("");
+  /** Filtre local par flag: "", "green", "yellow", "red", "unseen" */
+  const [flagFilter, setFlagFilter] = useState("");
 
   const [activeIndex, setActiveIndex] = useState(null);
   const [savingStatusId, setSavingStatusId] = useState(null);
   const [savingReviewId, setSavingReviewId] = useState(null);
+  const [savingFlagId, setSavingFlagId] = useState(null);
 
   const fetchMovies = async () => {
     setLoading(true);
@@ -39,12 +38,18 @@ export default function MyMoviesGallery() {
     fetchMovies();
   }, []);
 
-  /** Galerie limitée aux films sélectionnés ou en cours, puis filtre optionnel */
+  /**
+   * Les films visibles ici viennent déjà de la table d'assignation
+   * (filtrage par admin fait côté backend).
+   * On applique uniquement un filtre local sur le flag perso.
+   */
   const displayMovies = useMemo(() => {
-    const allowed = movies.filter((m) => ALLOWED_STATUSES.includes(m.status));
-    if (!statusFilter) return allowed;
-    return allowed.filter((m) => m.status === statusFilter);
-  }, [movies, statusFilter]);
+    if (!flagFilter) return movies;
+    if (flagFilter === "unseen") {
+      return movies.filter((m) => !m.my_flag);
+    }
+    return movies.filter((m) => m.my_flag === flagFilter);
+  }, [movies, flagFilter]);
 
   const handleChangeStatus = async (id, status) => {
     setSavingStatusId(id);
@@ -112,6 +117,34 @@ export default function MyMoviesGallery() {
     }
   };
 
+  const handleUpdateFlag = async (id, flag) => {
+    setSavingFlagId(id);
+    try {
+      const res = await fetch(`/api/admin/films/${id}/flag`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ flag }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(
+          data.error ||
+            data.message ||
+            "Impossible de mettre à jour votre flag personnel.",
+        );
+      }
+
+      setMovies((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, my_flag: flag } : m)),
+      );
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSavingFlagId(null);
+    }
+  };
+
   const currentMovie =
     activeIndex !== null && activeIndex >= 0 && activeIndex < displayMovies.length
       ? displayMovies[activeIndex]
@@ -157,13 +190,15 @@ export default function MyMoviesGallery() {
               Filtre:
             </label>
             <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              value={flagFilter}
+              onChange={(e) => setFlagFilter(e.target.value)}
               className="rounded-full border border-slate-800/80 bg-slate-950/60 px-3 py-1.5 text-xs text-slate-100 outline-none"
             >
-              <option value="">Sélectionnés et en cours</option>
-              <option value="in_process">En cours</option>
-              <option value="selected">Sélectionnés</option>
+              <option value="">Tous mes films</option>
+              <option value="green">Green flag</option>
+              <option value="yellow">Yellow flag</option>
+              <option value="red">Red flag</option>
+              <option value="unseen">Non visionnés</option>
             </select>
           </div>
         </div>
@@ -194,10 +229,10 @@ export default function MyMoviesGallery() {
         onClose={() => setActiveIndex(null)}
         onNext={goNext}
         onPrev={goPrev}
-        onChangeStatus={handleChangeStatus}
         onSaveReview={handleSaveReview}
-        savingStatus={savingStatusId}
+        onUpdateFlag={handleUpdateFlag}
         savingReview={savingReviewId}
+        savingFlag={savingFlagId}
       />
     </div>
   );
