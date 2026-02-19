@@ -4,6 +4,7 @@ import JuryCard from './JuryCard';
 import JuryAvatar from './JuryAvatar';
 import JuryHeader from './JuryHeader';
 import styles from './Jury.module.css';
+import backgroundImage from '../../assets/images/bn05.png';
 
 const Jury = () => {
   const [juryMembers, setJuryMembers] = useState([]);
@@ -44,8 +45,17 @@ const Jury = () => {
   if (loading || !juryMembers.length) return null;
 
   return (
+    
     <div className="w-full min-h-screen bg-[#070819] text-white py-4 px-2 flex flex-col items-center justify-start overflow-hidden relative font-sans">
-      
+      {/*Arrière-plan*/}
+<div className="absolute inset-0 z-0 pointer-events-none">
+  <img 
+    src={backgroundImage} 
+    alt="Background" 
+    className="w-full h-full object-cover opacity-50" 
+  />
+  <div className="absolute inset-0 bg-[#070819]/50"></div>
+</div>
       <JuryHeader />
 
       {/* Section mobile */}
