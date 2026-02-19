@@ -1,142 +1,121 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-
-import marsai from '../assets/images/marsai.png'; 
-import mobilefilm from '../assets/images/mobilefilm.png';
-import laplateforme from '../assets/images/laplateforme.png';
-import bannerImg from '../assets/images/banner.jpg'; 
-
-const mainPartners = [
-  { id: 1, name: "La plateforme", logo: laplateforme },
-  { id: 2, name: "Mobile Film festival", logo: mobilefilm },
-  { id: 3, name: "MarsAI", logo: marsai },
-];
-
-const techPartners = [
-  { id: 4, name: "Gemini", logo: "images/gemini-logo.png" },
-  { id: 5, name: "Vision 8K", logo: "images/vision-8k-logo.png" },
-  { id: 6, name: "Audio Pro", logo: "images/audio-pro-logo.png" },
-  { id: 7, name: "Sora video", logo: "images/sora-video-logo.png" },
-];
+import { useNavigate } from "react-router-dom"; 
+import banner01 from '../assets/images/banner.jpg'; 
 
 const Partners = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate(); 
   const [loaded, setLoaded] = useState(false);
+  const [partners, setPartners] = useState([]); 
 
+  // Récupération des données
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoaded(true);
-    }, 100);
+    const fetchPartners = async () => {
+      try {
+        const response = await fetch('/api/partners'); 
+        const data = await response.json();
+        setPartners(data);
+      } catch (error) {
+        console.error("Erreur chargement partenaires:", error);
+      }
+    };
+    fetchPartners();
+    const timer = setTimeout(() => { setLoaded(true); }, 100);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="bg-[#070819] text-white min-h-screen bg-gradient-to-b from-sky-dark to-sky-light pb-20">
+    <div className="bg-[#070819] text-white min-h-screen bg-gradient-to-b from-sky-dark to-sky-light pb-20 font-sans">
       
-      
-      
-      <div className="w-full bg-[#0a0b2e] shadow-2xl relative z-10">
-        <div className="flex flex-col md:flex-row h-auto md:h-[500px]">
-        
-          <div className="w-full md:w-1/2 h-64 md:h-full relative overflow-hidden">
-            <img 
-              src={bannerImg} 
-              alt="Bannière MarsAI" 
-              className={`w-full h-full object-cover transition-transform duration-[2000ms] ease-out ${loaded ? 'scale-105' : 'scale-100'}`}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0b2e]"></div>
+      {/* Section Bannière - Inchangée */}
+      <div className="relative w-full h-[400px] md:h-[550px] overflow-hidden pt-[120px]">
+        <div 
+          className="absolute inset-0 z-0 bg-center bg-no-repeat transition-all duration-1000 blur-[2px]"
+          style={{ backgroundImage: `url(${banner01})`, backgroundSize: 'contain' }}
+        ></div>
+        <div className="absolute inset-0 bg-black/20 z-1"></div>
+        <div className={`relative z-10 flex flex-col items-center justify-center h-full text-center px-6 pb-32 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <h1 className="text-3xl md:text-4xl font-extrabold mb-3 uppercase tracking-tighter" style={{ textShadow: '0 0 20px rgba(30, 58, 138, 0.8), 0 0 40px rgba(59, 130, 246, 0.5)' }}>
+            {t("partners.title", "Nos Partenaires")}
+          </h1>
+          <div className="h-1 w-20 bg-orange-500 rounded-full mb-5 shadow-[0_0_15px_rgba(249,115,22,0.5)]"></div>
+          <p className="text-white text-base md:text-xl font-medium max-w-xl leading-relaxed drop-shadow-lg">
+            {t("partners.subtitle", "Ils soutiennent l'innovation et la créativité.")}
+          </p>
+        </div>
+      </div>
+
+      {/* Section Avantages */}
+      <div className="max-w-6xl mx-auto px-6 -mt-10 mb-16 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-[#0a0b2e]/80 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="text-[#FF0080] mb-4 text-2xl font-bold">01. Branding</div>
+            <p className="text-gray-300 text-sm leading-relaxed">{t("partners.benefit1", "Exposition maximale de votre logo sur nos supports digitaux.")}</p>
           </div>
-
-          
-          <div className="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center text-left space-y-6">
-            
-            <h1 className={`text-4xl md:text-6xl font-extrabold transition-all duration-1000 ease-out
-              ${loaded 
-                ? 'text-white translate-y-0 opacity-100 [text-shadow:_0_0_30px_#000080,_0_0_60px_rgba(0,0,128,0.9)]' 
-                : 'text-transparent translate-y-10 opacity-0'
-              }
-            `}>
-              {t("partners.title", "Nos Partenaires")}
-            </h1>
-            
-            <div className={`h-1 bg-primary rounded-full transition-all duration-1000 delay-300 ${loaded ? 'w-24' : 'w-0'}`}></div>
-
-            <p className={`text-gray-300 text-lg md:text-xl leading-relaxed transition-all duration-1000 delay-500
-               ${loaded 
-                 ? 'translate-y-0 opacity-100 [text-shadow:_0_0_15px_rgba(0,0,128,0.6)]' 
-                 : 'translate-y-10 opacity-0'
-               }
-            `}>
-              {t(
-                "partners.subtitle",
-                "Ils soutiennent l'innovation et la créativité. Découvrez les organisations qui rendent le festival MarsAI possible."
-              )}
-            </p>
-
-            <div className={`transition-all duration-1000 delay-700 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-                <button className="mt-6 px-10 py-3 bg-blue-900/40 hover:bg-blue-800 border border-blue-500/30 rounded-full text-white transition-all shadow-[0_0_20px_rgba(0,0,128,0.4)] hover:shadow-[0_0_30px_rgba(0,0,128,0.7)]">
-                  En savoir plus
-                </button>
-            </div>
-
+          <div className="bg-[#0a0b2e]/80 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="text-orange-500 mb-4 text-2xl font-bold">02. Networking</div>
+            <p className="text-gray-300 text-sm leading-relaxed">{t("partners.benefit2", "Accès privilégié aux experts de l'IA et aux cinéastes.")}</p>
           </div>
+          <div className="bg-[#0a0b2e]/80 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="text-[#2933D3] mb-4 text-2xl font-bold">03. Innovation</div>
+            <p className="text-gray-300 text-sm leading-relaxed">{t("partners.benefit3", "Soutenez le premier festival dédié aux films générés par IA.")}</p>
+          </div>
+        </div>
+      </div>
 
+      {/*  Section Impact Numbers */}
+      <div className="max-w-5xl mx-auto px-6 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+          <div className="flex flex-col items-center">
+            <span className="text-5xl font-black bg-gradient-to-r from-[#FF0080] to-[#2933D3] bg-clip-text text-transparent mb-2">+5000</span>
+            <span className="text-gray-400 text-sm uppercase tracking-widest font-bold">{t("partners.stats.visitors", "Participants")}</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-5xl font-black bg-gradient-to-r from-[#FF0080] to-[#2933D3] bg-clip-text text-transparent mb-2">+300</span>
+            <span className="text-gray-400 text-sm uppercase tracking-widest font-bold">{t("partners.stats.movies", "Films AI")}</span>
+          </div>
+          <div className="flex flex-col items-center">
+            <span className="text-5xl font-black bg-gradient-to-r from-[#FF0080] to-[#2933D3] bg-clip-text text-transparent mb-2">100K</span>
+            <span className="text-gray-400 text-sm uppercase tracking-widest font-bold">{t("partners.stats.views", "Vues Médias")}</span>
+          </div>
         </div>
       </div>
      
+      {/*  Section Logos avec lien cliquable */}
       <div className="max-w-6xl mx-auto px-6 mt-20 space-y-20">
-
         <section>
           <h2 className="text-3xl font-bold text-navy mb-10 border-l-4 border-primary pl-4">
             {t("partners.official", "Partenaires Officiels")}
           </h2>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {mainPartners.map((partner) => (
-              <div key={partner.id} className="group relative border-white/80 rounded-2xl flex items-center justify-center p-8 shadow-glass hover:shadow-glow hover:-translate-y-1 transition-all duration-300">
-                <img 
-                  src={partner.logo} 
-                  alt={partner.name} 
-                  className="max-h-full max-w-full opacity-80 group-hover:opacity-100 transition-opacity group-hover:grayscale-0" 
-                />
-              </div>
+            {partners.map((partner) => (
+              <a 
+                href={partner.website_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                key={partner.id} 
+                className="group relative  flex flex-col items-center justify-center p-8 shadow-glass hover:shadow-glow hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+              >
+                <img src={partner.logo_url} alt={partner.name} className="max-h-24 max-w-full opacity-80 group-hover:opacity-100 transition-opacity mb-4" />
+                <h3 className="text-xl font-semibold text-white/90">{partner.name}</h3>
+                {partner.description && <p className="text-gray-400 text-sm mt-2 text-center">{partner.description}</p>}
+              </a>
             ))}
           </div>
         </section>
 
-        <section>
-          <h2 className="text-3xl font-bold text-navy mb-10 border-l-4 border-accent pl-4">
-            {t("partners.techTitle", "Technologies & Outils")}
-          </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {techPartners.map((partner) => (
-              <div key={partner.id} className="group h-32 backdrop-blur-sm border border-blue-900 rounded-xl flex items-center justify-center p-6 hover:bg-white/20 transition-colors duration-300">
-                <img 
-                  src={partner.logo} 
-                  alt={partner.name} 
-                  className="max-h-full max-w-full opacity-70 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all" 
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-        
-        <div className="bg-gradient-to-r from-navy to-sky-dark rounded-3xl p-12 text-center text-white shadow-2xl relative overflow-hidden transform hover:scale-[1.01] transition-transform duration-500">
-          <div className="absolute top-0 left-0 w-40 h-40 bg-white/30 rounded-full blur-3xl -translate-x-10 -translate-y-10"></div>
-          
+        {/*Section CTA - Inchangée */}
+        <div className="border border-white/10 bg-white/5 bg-gradient-to-r from-navy to-sky-dark rounded-3xl p-12 text-center text-white shadow-2xl relative overflow-hidden transform hover:scale-[1.01] transition-transform duration-500">
           <h3 className="text-3xl font-bold mb-6 relative z-10">Devenir Partenaire ?</h3>
-          <p className="mb-8 text-white/90 text-lg max-w-xl mx-auto relative z-10">
-            {t(
-              "partners.ctaText",
-              "Rejoignez l'aventure MarsAI et associez votre marque à l'avenir du cinéma et de l'intelligence artificielle."
-            )}
-          </p>
-          <button className="bg-primary hover:bg-accent text-white font-bold py-4 px-10 rounded-full transition-all duration-300 shadow-lg hover:shadow-blue-900/50 relative z-10 text-lg">
+          <p className="mb-8 text-white/90 text-lg max-w-xl mx-auto relative z-10">{t("partners.ctaText", "Rejoignez l'aventure MarsAI.")}</p>
+          <button 
+            onClick={() => navigate("/contact")}
+            className="bg-gradient-to-r from-[#FF0080] to-[#2933D3] hover:from-[#e60073] hover:to-[#1e27a3] text-white font-bold py-2 px-5 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(255,0,128,0.4)] relative z-10 text-base"
+          >
             {t("partners.ctaButton", "Nous Contacter")}
           </button>
         </div>
-
       </div>
     </div>
   );
