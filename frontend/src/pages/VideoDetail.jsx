@@ -135,25 +135,6 @@ export default function VideoDetail() {
                 "Aucune description disponible pour cette œuvre."}
             </p>
 
-            {/* Bouton Action avec Dégradé BLEU */}
-            <div
-              className="opacity-0 animate-fadeInUp"
-              style={{ animationDelay: "0.5s", animationFillMode: "forwards" }}
-            >
-              <button className="group relative px-8 py-4 bg-transparent overflow-hidden rounded-full transition-all hover:scale-105 active:scale-95">
-                {/* --- CHANGEMENT ICI : Gradient Bleu Électrique --- */}
-                <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-700 via-blue-500 to-cyan-400 opacity-80 group-hover:opacity-100 transition-opacity"></div>
-
-                <div className="absolute inset-[2px] bg-black rounded-full"></div>
-
-                <span className="relative z-10 font-bold tracking-widest text-sm uppercase bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200 group-hover:text-white transition-colors">
-                  Voter pour ce film
-                </span>
-
-                {/* Lueur interne BLEUE au survol */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-400/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"></div>
-              </button>
-            </div>
           </div>
 
           {/* COLONNE DROITE */}

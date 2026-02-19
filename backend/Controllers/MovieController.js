@@ -7,6 +7,11 @@ exports.list = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+exports.listWinners = asyncHandler(async (req, res) => {
+  const data = await MovieService.listWinners();
+  res.json(data);
+});
+
 exports.get = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
   const data = await MovieService.getById(id);

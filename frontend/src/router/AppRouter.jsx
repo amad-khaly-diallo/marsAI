@@ -7,9 +7,10 @@ import Partenaires from "../pages/Partenaires";
 import CGV from "../pages/CGV";
 import CGU from "../pages/CGU";
 import Admin from "../pages/Admin";
-import Jury from "../pages/Jury";
+import Jury from "../components/jury/Jury";
 import Contact from "../pages/Contact";
 import TimerTest from "../pages/TimerTest";
+import Gallery from "../pages/Gallery";
 import { HomePhase2 } from "../components/home/HomePhase2";
 import { CookieBanner } from "../components/ui/CookieBanner"; // Importation du composant cookie banner
 import VideoDetail from "../pages/VideoDetail";
@@ -22,6 +23,7 @@ export default function AppRouter() {
       <Route path="/" element={<Home />} />
       <Route path="/home" element={<Home />} />
       <Route path="/films" element={<HomePhase2 />} />
+      <Route path="/catalogue" element={<Gallery />} />
       <Route path="/a-propos" element={<AProposPage />} />
       <Route path="/participer" element={<Participer />} />
       <Route path="/partenaires" element={<Partenaires />} />
