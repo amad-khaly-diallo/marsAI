@@ -7,7 +7,7 @@ import Partenaires from "../pages/Partenaires";
 import CGV from "../pages/CGV";
 import CGU from "../pages/CGU";
 import Admin from "../pages/Admin";
-import Jury from "../pages/Jury";
+import Jury from "../components/jury/Jury";
 import Contact from "../pages/Contact";
 import TimerTest from "../pages/TimerTest";
 import Gallery from "../pages/Gallery";
