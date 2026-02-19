@@ -1,4 +1,6 @@
 export { HeroSection } from "./HeroSection";
+export { PageBackground } from "./PageBackground";
+export { HeroStats } from "./HeroStats";
 export { WinnersSection } from "./WinnersSection";
 export { ManifestoSection } from "./ManifestoSection";
 export { ProgramSection } from "./ProgramSection";
