@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Trash2, X, Star, Clock, Trophy } from "lucide-react";
 import { STATUS_LABELS } from "../../constants/status";
 
 export default function MoviesManagement({ currentAdmin }) {
@@ -331,9 +332,10 @@ export default function MoviesManagement({ currentAdmin }) {
                             <button
                               onClick={() => updateStatus(movie.id, "selected")}
                               disabled={updatingId === movie.id || locked}
-                              className="rounded-lg bg-brand-primary/20 hover:bg-brand-primary/30 transition-colors py-2 text-xs font-semibold text-brand-primary border border-brand-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-primary/20 hover:bg-brand-primary/30 transition-colors py-2 text-xs font-semibold text-brand-primary border border-brand-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              ★ Sélectionner
+                              <Star className="w-3.5 h-3.5 fill-current" />
+                              Sélectionner
                             </button>
                           </>
                         )}
@@ -346,13 +348,14 @@ export default function MoviesManagement({ currentAdmin }) {
                               updatingWinnerId === movie.id ||
                               (!movie.is_winner && winnersCount >= 6)
                             }
-                            className={`col-span-2 mt-1 rounded-lg py-2 text-xs font-semibold border transition-colors ${
+                            className={`col-span-2 mt-1 inline-flex items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-semibold border transition-colors ${
                               movie.is_winner
                                 ? "bg-amber-400/20 border-amber-400/60 text-amber-300 hover:bg-amber-400/30"
                                 : "bg-slate-800/40 border-slate-600 text-slate-200 hover:bg-slate-700/60"
                             } disabled:opacity-50 disabled:cursor-not-allowed`}
                           >
-                            {movie.is_winner ? "🏆 Gagnant" : "Marquer comme gagnant"}
+                            <Trophy className="w-3.5 h-3.5 shrink-0" />
+                            {movie.is_winner ? "Gagnant" : "Marquer comme gagnant"}
                           </button>
                         )}
                       </div>
@@ -469,7 +472,7 @@ export default function MoviesManagement({ currentAdmin }) {
                               : "—"}
                           </div>
                           <div className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                            <span>⏱</span>{" "}
+                            <Clock className="w-3.5 h-3.5 shrink-0" />
                             {movie.duration ? `${movie.duration} min` : "N/A"}
                           </div>
                         </td>
@@ -494,7 +497,7 @@ export default function MoviesManagement({ currentAdmin }) {
                           </span>
                           {isSuperAdmin && movie.is_winner && (
                             <div className="mt-1 text-[10px] text-amber-300 flex items-center justify-center gap-1">
-                              <span>🏆</span>
+                              <Trophy className="w-3.5 h-3.5 shrink-0" />
                               <span>Gagnant</span>
                             </div>
                           )}
@@ -580,20 +583,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                   disabled={updatingId === movie.id || locked}
                                   className="p-2 text-red-400 hover:bg-red-500/10 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <line x1="18" y1="6" x2="6" y2="18" />
-                                    <line x1="6" y1="6" x2="18" y2="18" />
-                                  </svg>
+                                  <X className="w-5 h-5" />
                                 </button>
                                 <button
                                   onClick={() =>
@@ -603,16 +593,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                   disabled={updatingId === movie.id || locked}
                                   className="p-2 text-brand-primary hover:bg-brand-primary/10 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="22"
-                                    height="22"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    stroke="none"
-                                  >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                  </svg>
+                                  <Star className="w-5 h-5 fill-current" />
                                 </button>
                               </>
                             )}
@@ -637,15 +618,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                     : "text-slate-400 hover:text-amber-300 hover:bg-slate-700/40"
                                 } disabled:opacity-50 disabled:cursor-not-allowed`}
                               >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="20"
-                                  height="20"
-                                  viewBox="0 0 24 24"
-                                  fill="currentColor"
-                                >
-                                  <path d="M12 2l2.5 5.1 5.6.8-4.05 3.95.95 5.55L12 15.9l-5.0 2.5.95-5.55L3.9 7.9l5.6-.8L12 2z" />
-                                </svg>
+                                <Star className="w-5 h-5 fill-current" />
                               </button>
                             )}
 
@@ -657,22 +630,7 @@ export default function MoviesManagement({ currentAdmin }) {
                                   title="Supprimer"
                                   className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <polyline points="3 6 5 6 21 6" />
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                    <line x1="10" y1="11" x2="10" y2="17" />
-                                    <line x1="14" y1="11" x2="14" y2="17" />
-                                  </svg>
+                                  <Trash2 className="w-5 h-5" />
                                 </button>
                               </>
                             )}

@@ -5,7 +5,6 @@ import JuryManagement from "../components/admin/JuryManagement";
 import MoviesManagement from "../components/admin/MoviesManagement";
 import PartnersManagement from "../components/admin/PartnersManagement";
 import NewslettersManagement from "../components/admin/NewslettersManagement";
-import TrafficOverview from "../components/admin/TrafficOverview";
 import AdminLogin from "../components/admin/AdminLogin";
 import AdminVideos from "../components/admin/All-videos";
 import VideosDistribution from "../components/admin/VideosDistribution";
@@ -29,8 +28,6 @@ function AdminContent() {
         return <PartnersManagement />;
       case "newsletters":
         return <NewslettersManagement />;
-      case "traffic":
-        return <TrafficOverview />;
       case "all-videos":
         return <AdminVideos />;
       case "videos-distribution":
