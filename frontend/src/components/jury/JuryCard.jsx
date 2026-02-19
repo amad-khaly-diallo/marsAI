@@ -4,43 +4,52 @@ import styles from './Jury.module.css';
 
 const JuryCard = ({ member, isHovering, onPrev, onNext, getMemberImage, defaultAvatar }) => (
   <article 
-    className={`absolute z-30 w-[270px] h-[320px] bg-white rounded-2xl pt-12 text-center flex flex-col items-center border border-gray-100 transition-all duration-700 ease-in-out ${
+    className={`absolute z-30 w-[270px] h-[320px] rounded-2xl p-[1.5px] transition-all duration-700 ease-in-out ${
       isHovering ? 'grayscale opacity-70 scale-95' : 'grayscale-0 opacity-100 scale-100'
-    }`}
-    style={{ boxShadow: `0 0 40px rgba(30, 58, 138, 0.7), 0 25px 60px rgba(7, 8, 25, 0.9)` }}
+    } bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500`}
+    style={{ boxShadow: `0 0 40px rgba(30, 58, 138, 0.5), 0 25px 60px rgba(7, 8, 25, 0.9)` }}
   >
-    <div className="absolute -top-14 w-28 h-28 rounded-full p-[3px] bg-gradient-to-b from-blue-600 to-blue-700 z-50">
-      <div className="w-full h-full rounded-full border-2 border-white overflow-hidden bg-white">
-        <img 
-          src={getMemberImage(member.photo_url)} 
-          alt={member.first_name}
-          className="w-full h-full object-cover"
-          onError={(e) => {e.target.src = defaultAvatar}}
-        />
+    <div className="w-full h-full bg-[#020617] rounded-[14px] pt-12 text-center flex flex-col items-center relative">
+      
+      <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 rounded-full p-[2px] bg-gradient-to-tr from-blue-500 to-pink-500 z-[100] shadow-2xl">
+        <div className="w-full h-full rounded-full border-[3px] border-[#020617] overflow-hidden bg-[#020617]">
+          <img 
+            src={getMemberImage(member.photo_url)} 
+            alt={member.first_name}
+            className="w-full h-full object-cover"
+            onError={(e) => {e.target.src = defaultAvatar}}
+          />
+        </div>
       </div>
-    </div>
 
-    <h2 className="text-base md:text-lg font-bold text-gray-900 mb-0.5 mt-4 w-full px-2">
-      {member.first_name} {member.last_name !== '-' ? member.last_name : ''}
-    </h2>
-    
-    <span className="text-xs font-bold text-orange-600 uppercase tracking-widest mb-2 block border-b border-blue-500 pb-1 mx-6">
-      {member.role}
-    </span>
-    
-    <div className={`w-full h-full overflow-y-auto px-3 pb-10 ${styles.customScrollJury}`}>
-      <p className="text-gray-700 text-xs md:text-sm font-medium leading-relaxed">
-        {member.bio || "Aucune biographie disponible."}
-      </p>
-    </div>
+      <h2 className="text-base md:text-lg font-bold text-white mb-0.5 mt-4 w-full px-2 tracking-tight italic uppercase">
+        {member.first_name} {member.last_name !== '-' ? member.last_name : ''}
+      </h2>
+      
+      <span className="text-[13px] font-black text-pink-400 uppercase tracking-[0.2em] mb-2 block border-b border-blue-500/40 pb-1 mx-8">
+        {member.role}
+      </span>
+      
+      <div className={`w-full flex-1 overflow-y-auto px-4 mb-14 ${styles.customScrollJury}`}>
+        <p className="text-slate-300 text-xs md:text-sm font-light leading-relaxed">
+          {member.bio || "Aucune biographie disponible."}
+        </p>
+      </div>
 
-    <div className="absolute bottom-1.5 left-0 right-0 flex justify-center gap-8 py-2 pointer-events-none z-50">
-      <button onClick={onPrev} className="pointer-events-auto p-1.5 rounded-full bg-white text-gray-400 border border-gray-100 hover:ring-2 hover:ring-orange-500 shadow-md">
-        <ChevronLeft size={16} />
-      </button>
-      <button onClick={onNext} className="pointer-events-auto p-1.5 rounded-full bg-white text-gray-400 border border-gray-200 hover:ring-2 hover:ring-orange-500 shadow-md">
-        <ChevronRight size={16} />
-      </button>
+      <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-10 py-1 pointer-events-none z-[110]">
+        <button 
+          onClick={onPrev} 
+          className="pointer-events-auto p-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-pink-600 transition-all shadow-lg backdrop-blur-sm"
+        >
+          <ChevronLeft size={16} />
+        </button>
+        <button 
+          onClick={onNext} 
+          className="pointer-events-auto p-1.5 rounded-full bg-white/5 border border-white/10 text-white hover:bg-blue-600 transition-all shadow-lg backdrop-blur-sm"
+        >
+          <ChevronRight size={16} />
+        </button>
+      </div>
     </div>
   </article>
 );
