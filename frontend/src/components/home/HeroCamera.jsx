@@ -378,7 +378,7 @@ export default function HeroCamera() {
   const currentMovie = movies[selectedFilmIndex];
 
   return (
-    <div className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-16">
+    <div className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-12">
       <style>{heroStyles + heroAnimationStyles}</style>
 
       <div className="relative flex items-center justify-center">
@@ -562,67 +562,67 @@ export default function HeroCamera() {
                     "linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 40%)",
                 }}
               />
-              <div className="px-6 pt-6 pb-4">
+              <div className="px-4 pt-4 pb-3">
                 <button
                   onClick={toggleCamera}
-                  className={`w-full py-3 rounded-xl font-bold text-base transition-all text-white ${
+                  className={`w-full py-2 px-3 rounded-lg font-bold text-sm transition-all text-white ${
                     cameraOn
-                      ? "bg-gradient-to-br from-red-600 to-red-700 shadow-[0_0_20px_rgba(239,68,68,0.4)]"
-                      : "bg-gradient-to-br from-green-600 to-green-700 shadow-[0_0_20px_rgba(34,197,94,0.35)]"
+                      ? "bg-gradient-to-br from-red-600 to-red-700 shadow-[0_0_16px_rgba(239,68,68,0.3)]"
+                      : "bg-gradient-to-br from-green-600 to-green-700 shadow-[0_0_16px_rgba(34,197,94,0.3)]"
                   }`}
                 >
                   ⏻ {cameraOn ? "OFF" : "ON"}
                 </button>
               </div>
 
-              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-6 mb-4" />
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-4 mb-3" />
 
-              <div className="px-6 mb-4">
-                <p className="text-[12px] text-gray-300 uppercase mb-3 text-center tracking-wider">Genres</p>
+              <div className="px-4 mb-3">
+                <p className="text-[11px] text-gray-300 uppercase mb-2 text-center tracking-wider">Genres</p>
 
                 {/* Bouton Tous en tête */}
                 <button
                   onClick={() => cameraOn && setSelectedGenre(GENRES[0])}
                   disabled={!cameraOn}
-                  className={`w-full mb-3 py-3 rounded-2xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
+                  className={`w-full mb-2 py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
                     selectedGenre?.name === "Tous"
-                      ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_0_18px_rgba(168,85,247,0.4)]"
-                      : "bg-gray-800/60 text-gray-300 hover:bg-gray-700/70"
+                      ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_0_14px_rgba(168,85,247,0.3)]"
+                      : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/60"
                   }`}
                 >
-                  <span className="text-lg">{GENRES[0].icon}</span> Tous les films
+                  <span className="text-sm">{GENRES[0].icon}</span> <span>Tous</span>
                 </button>
 
                 {/* Grille 2 colonnes */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   {GENRES.slice(1).map((genre) => (
                     <button
                       key={genre.name}
                       onClick={() => cameraOn && setSelectedGenre(genre)}
                       disabled={!cameraOn}
-                      className={`py-4 rounded-2xl text-sm font-semibold transition-all flex flex-col items-center gap-1 ${
+                      className={`py-2 px-1 rounded-lg text-xs font-semibold transition-all flex flex-col items-center gap-0.5 ${
                         selectedGenre?.name === genre.name
-                          ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-[0_0_16px_rgba(34,211,238,0.35)]"
-                          : "bg-gray-800/60 text-gray-300 hover:bg-gray-700/70"
+                          ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-[0_0_12px_rgba(34,211,238,0.3)]"
+                          : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/60"
                       }`}
                     >
-                      <span className="text-xl">{genre.icon}</span>
-                      <span>{genre.name}</span>
+                      <span className="text-base">{genre.icon}</span>
+                      <span className="text-[9px] leading-tight">{genre.name}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
-              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-6 mb-4" />
+              <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-4 mb-3" />
 
-              <div className="px-6 mb-4">
-                <p className="text-[11px] text-gray-400 uppercase mb-3 text-center tracking-wider">Navigation</p>
-                <div className="relative w-36 h-36 mx-auto">
-                  <button onClick={navigateUp} disabled={!cameraOn || !selectedGenre} className="absolute top-0 left-1/2 -translate-x-1/2 w-11 h-11 rounded-t-xl bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-md">▲</button>
-                  <button onClick={navigateDown} disabled={!cameraOn || !selectedGenre} className="absolute bottom-0 left-1/2 -translate-x-1/2 w-11 h-11 rounded-b-xl bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-md">▼</button>
-                  <button onClick={navigateLeft} disabled={!cameraOn || !selectedGenre} className="absolute left-0 top-1/2 -translate-y-1/2 w-11 h-11 rounded-l-xl bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-md">◀</button>
-                  <button onClick={navigateRight} disabled={!cameraOn || !selectedGenre} className="absolute right-0 top-1/2 -translate-y-1/2 w-11 h-11 rounded-r-xl bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-md">▶</button>
-                  <button onClick={playFilm} disabled={!cameraOn || !selectedGenre} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white font-bold shadow-[0_0_16px_rgba(34,197,94,0.4)]">OK</button>
+              <div className="px-4 mb-2">
+                <p className="text-[10px] text-gray-400 uppercase mb-2 text-center tracking-wider">Navigation</p>
+                <div className="relative w-32 h-32 mx-auto">
+                  <button onClick={navigateUp} disabled={!cameraOn || !selectedGenre} className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-t-lg bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-md text-xs">▲</button>
+                  <button onClick={navigateDown} disabled={!cameraOn || !selectedGenre} className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-b-lg bg-gradient-to-b from-gray-700 to-gray-800 text-white shadow-md text-xs">▼</button>
+                  <button onClick={navigateLeft} disabled={!cameraOn || !selectedGenre} className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-l-lg bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-md text-xs">◀</button>
+                  <button onClick={navigateRight} disabled={!cameraOn || !selectedGenre} className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-r-lg bg-gradient-to-r from-gray-700 to-gray-800 text-white shadow-md text-xs">▶</button>
+                  <button onClick={playFilm} disabled={!cameraOn || !selectedGenre} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white font-bold shadow-[0_0_12px_rgba(34,197,94,0.3)] text-xs">OK</button>
                 </div>
               </div>
             </div>
