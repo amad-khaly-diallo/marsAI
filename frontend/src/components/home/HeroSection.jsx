@@ -1,5 +1,5 @@
 import React from "react";
-import { SmallLabel, InfoRow, LinkButton } from "./HomeComponents";
+import { SmallLabel, InfoRow, LinkButton } from "../ui";
 import { NAV_ROUTES } from "../../constants/homeConstants";
 import { useTranslation } from "react-i18next";
 import { heroAnimationStyles } from "../sections/heroAnimations";

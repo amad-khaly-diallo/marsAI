@@ -1,5 +1,6 @@
 import React from "react";
-import { LinkButton, ProgramCard } from "./HomeComponents";
+import { ProgramCard } from "./HomeWidgets";
+import { LinkButton } from "../ui";
 import { NAV_ROUTES } from "../../constants/homeConstants";
 import { useTranslation } from "react-i18next";
 import { heroAnimationStyles } from "../sections/heroAnimations";
@@ -17,7 +18,9 @@ export function ManifestoSection() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 mb-4">
               <div className="h-1.5 w-1.5 rounded-full bg-cyan-400"></div>
-              <span className="text-xs font-semibold text-cyan-300 uppercase tracking-wider">Vision</span>
+              <span className="text-xs font-semibold text-cyan-300 uppercase tracking-wider">
+                Vision
+              </span>
             </div>
 
             {/* Title */}
@@ -30,7 +33,10 @@ export function ManifestoSection() {
 
             {/* Description */}
             <p className="mt-4 max-w-2xl text-base leading-7 text-white/75 md:text-lg">
-              marsAI met en avant la réalisation, l'écriture, le montage et la direction artistique. L'IA peut faire partie du processus — mais ce qui compte, c'est la forme finale : une idée lisible, une image tenue, un son travaillé.
+              marsAI met en avant la réalisation, l'écriture, le montage et la
+              direction artistique. L'IA peut faire partie du processus — mais
+              ce qui compte, c'est la forme finale : une idée lisible, une image
+              tenue, un son travaillé.
             </p>
 
             {/* Subtitle */}
