@@ -1,4 +1,6 @@
 export { HeroSection } from "./HeroSection";
+export { PageBackground } from "./PageBackground";
+export { HeroStats } from "./HeroStats";
 export { WinnersSection } from "./WinnersSection";
 export { ManifestoSection } from "./ManifestoSection";
 export { ProgramSection } from "./ProgramSection";
@@ -6,7 +8,9 @@ export { default as VideoSelectionSection } from "./VideoSelectionSectionNew";
 export { LocationSection } from "./LocationSection";
 export { StatsSection } from "./StatsSection";
 export { CTASection } from "./CTASection";
+export { ProjectorButton } from "./ProjectorButton";
+export { StatsPanel, AnalyticsPanel } from "./StatsPanel";
 export { default as HeroCamera } from "./HeroCamera";
 export { HeroCameraWithAPI } from "./HeroCameraWithAPI";
-export * from "./HomeComponents";
+export * from "./HomeWidgets";
 export * from "../sections/heroAnimations";

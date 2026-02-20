@@ -45,7 +45,7 @@ export default function Participer() {
   } = useParticiper();
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
+    <div className="mx-auto max-w-5xl px-4 pt-32 pb-20">
       <header className="mb-4 space-y-2">
         <p className="inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand-primary-soft">
           {t("participate.badge")}

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MiniMapGTA from "../ui/MiniMapGTA/MiniMapGTA";
-import { LinkButton } from "./HomeComponents";
+import { LinkButton } from "../ui";
 import { NAV_ROUTES, MAP_MODES } from "../../constants/homeConstants";
 import { useTranslation } from "react-i18next";
 import { heroAnimationStyles } from "../sections/heroAnimations";

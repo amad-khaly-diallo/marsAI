@@ -1,16 +1,247 @@
 import React from "react";
-import { StatCard, AnalyticsBar } from "./HomeComponents";
-import { STATS_DATA, ANALYTICS_DATA } from "../../constants/homeConstants";
+import { ProjectorButton } from "./ProjectorButton";
+import { StatsPanel } from "./StatsPanel";
 import { useAudioContext } from "../../hooks/useAudioContext";
 import { useTranslation } from "react-i18next";
 import { heroAnimationStyles } from "../sections/heroAnimations";
 
-// Import des images de roulettes
-import imgFilm from "../../assets/images/film.png";
-import imgIa from "../../assets/images/ia.png";
-import imgVisiteur from "../../assets/images/visiteur.png";
-import imgPays from "../../assets/images/pays.png";
-import imgTout from "../../assets/images/tout.png";
+// Jeux de données locaux (spécifiques au projecteur)
+const FILM_GENRES = [
+  {
+    name: "TOUS",
+    icon: "⭐",
+    color: "from-violet-500 to-fuchsia-600",
+    projectorImage: null,
+    stats: [
+      {
+        icon: "🔗",
+        title: "Visiteurs",
+        subtitle: "Au festival",
+        value: 1950,
+        prefix: "",
+        gradient: "from-violet-600 to-purple-700",
+      },
+      {
+        icon: "💡",
+        title: "Professionnels IA",
+        subtitle: "Experts mobilisés",
+        value: 39,
+        prefix: "+",
+        gradient: "from-fuchsia-600 to-pink-700",
+      },
+      {
+        icon: "🎬",
+        title: "Films soumis",
+        subtitle: "Sélection mondiale",
+        value: 390,
+        prefix: "+",
+        gradient: "from-amber-500 to-orange-700",
+      },
+      {
+        icon: "🌍",
+        title: "Pays représentés",
+        subtitle: "Portée mondiale",
+        value: 78,
+        prefix: "+",
+        gradient: "from-cyan-500 to-blue-700",
+      },
+    ],
+    analytics: [
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
+  },
+  {
+    name: "Visiteurs",
+    icon: "🔗",
+    color: "from-violet-500 to-purple-600",
+    projectorImage: "projector-visitors.png",
+    stats: [
+      {
+        icon: "🔗",
+        title: "Visiteurs",
+        subtitle: "Au festival",
+        value: 1950,
+        prefix: "",
+        gradient: "from-violet-600 to-purple-700",
+      },
+    ],
+    analytics: [
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
+  },
+  {
+    name: "Professionnels IA",
+    icon: "💡",
+    color: "from-fuchsia-500 to-pink-600",
+    projectorImage: "projector-professionals.png",
+    stats: [
+      {
+        icon: "💡",
+        title: "Professionnels IA",
+        subtitle: "Experts mobilisés",
+        value: 39,
+        prefix: "+",
+        gradient: "from-fuchsia-600 to-pink-700",
+      },
+    ],
+    analytics: [
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
+  },
+  {
+    name: "Films soumis",
+    icon: "🎬",
+    color: "from-amber-500 to-orange-600",
+    projectorImage: "projector-films.png",
+    stats: [
+      {
+        icon: "🎬",
+        title: "Films soumis",
+        subtitle: "Sélection mondiale",
+        value: 390,
+        prefix: "+",
+        gradient: "from-amber-500 to-orange-700",
+      },
+    ],
+    analytics: [
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
+  },
+  {
+    name: "Pays représentés",
+    icon: "🌍",
+    color: "from-cyan-500 to-blue-600",
+    projectorImage: "projector-countries.png",
+    stats: [
+      {
+        icon: "🌍",
+        title: "Pays représentés",
+        subtitle: "Portée mondiale",
+        value: 78,
+        prefix: "+",
+        gradient: "from-cyan-500 to-blue-700",
+      },
+    ],
+    analytics: [
+      {
+        id: 1,
+        label: "COURTS",
+        percentage: 65,
+        gradient: "from-cyan-500 to-blue-600",
+      },
+      {
+        id: 2,
+        label: "DOCS",
+        percentage: 42,
+        gradient: "from-fuchsia-500 to-pink-600",
+      },
+      {
+        id: 3,
+        label: "EXPO",
+        percentage: 28,
+        gradient: "from-purple-500 to-violet-600",
+      },
+      {
+        id: 4,
+        label: "ANIMS",
+        percentage: 55,
+        gradient: "from-amber-500 to-orange-600",
+      },
+    ],
+  },
+];
 
 export function StatsSection() {
   const { t } = useTranslation();
@@ -23,14 +254,16 @@ export function StatsSection() {
   const handleStatsReveal = () => {
     const nextState = !statsRevealed;
     setStatsRevealed(nextState);
-    if (nextState) {
-      playCameraSound();
-    }
+    if (nextState) playCameraSound();
     setStatsFlash(true);
     window.setTimeout(() => setStatsFlash(false), 1200);
   };
 
-  // (le reste de la section reste inchangé — contenu inchangé pour la copie)
+  const rotateGenre = () => {};
+
+  const currentGenre = FILM_GENRES[0];
+  const filteredStats = currentGenre.stats;
+  const filteredAnalytics = currentGenre.analytics;
 
   return (
     <section className="px-4 pb-12">
@@ -52,54 +285,48 @@ export function StatsSection() {
           </p>
         </div>
 
-        {/* Stats Container (abrégé pour la copie) */}
         <div className="relative max-w-6xl mx-auto">
+          {statsRevealed && (
+            <>
+              <div
+                className="absolute left-0 top-1/2 -translate-y-1/2 -z-10 pointer-events-none transition-all duration-700"
+                style={{
+                  width: "400px",
+                  height: "400px",
+                  background:
+                    "radial-gradient(circle, rgba(147, 51, 234, 0.4) 0%, rgba(147, 51, 234, 0.2) 30%, transparent 70%)",
+                  filter: "blur(40px)",
+                }}
+              />
+              <div
+                className="absolute inset-0 -z-10 pointer-events-none transition-all duration-700 rounded-full blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)",
+                }}
+              />
+            </>
+          )}
+
           <div className="relative flex flex-col lg:flex-row gap-3 items-center lg:items-start justify-center lg:justify-start">
-            <div className="flex-shrink-0 flex flex-col items-center gap-2 relative w-full lg:w-auto px-4 lg:px-0">
-              {/* Projecteur ON/OFF */}
-              <button
-                type="button"
-                onClick={handleStatsReveal}
-                className={`relative w-24 h-24 flex items-center justify-center transition-all ${
-                  statsRevealed ? "scale-105" : "opacity-90 hover:opacity-100"
-                }`}
-                aria-pressed={statsRevealed}
-                aria-label={statsRevealed ? "Éteindre le projecteur" : "Allumer le projecteur"}
-              >
-                <img
-                  src={imgTout}
-                  alt="projecteur"
-                  className={`w-full h-full object-contain ${
-                    statsRevealed ? "drop-shadow-[0_0_16px_rgba(34,211,238,0.6)]" : ""
-                  }`}
-                />
-                {statsFlash && (
-                  <span className="absolute inset-0 rounded-full bg-cyan-400/20 blur-xl" />
-                )}
-              </button>
-              <span className="text-[11px] font-semibold text-white/70">
-                {statsRevealed ? "Projecteur ON" : "Projecteur OFF"}
-              </span>
-            </div>
+            <ProjectorButton
+              statsRevealed={statsRevealed}
+              statsFlash={statsFlash}
+              onToggle={handleStatsReveal}
+              selectedGenre={currentGenre}
+              selectedGenreIndex={selectedGenreIndex}
+              onRotateGenre={rotateGenre}
+              isRotating={isRotating}
+            />
 
-            <div className="flex-1">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                {STATS_DATA.map((s, i) => (
-                  <StatCard
-                    key={i}
-                    {...s}
-                    isLarge={i === 0}
-                    revealed={statsRevealed}
-                  />
-                ))}
-              </div>
-
-              <div className="mt-6 grid gap-3">
-                {ANALYTICS_DATA.map((a, idx) => (
-                  <AnalyticsBar key={idx} {...a} index={idx} />
-                ))}
-              </div>
-            </div>
+            <StatsPanel
+              statsRevealed={statsRevealed}
+              statsData={filteredStats}
+              analyticsData={filteredAnalytics}
+              currentGenre={currentGenre}
+              selectedGenreIndex={selectedGenreIndex}
+              total={FILM_GENRES.length}
+            />
           </div>
         </div>
       </div>
