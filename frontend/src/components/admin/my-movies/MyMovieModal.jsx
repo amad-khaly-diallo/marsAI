@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import { X, Clock, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, Clock, ChevronLeft, ChevronRight } from "lucide-react";
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -32,7 +32,7 @@ export default function MyMovieModal({
     if (!movie) return;
     setLocalRating(movie.my_rating ?? "");
     setLocalComment(movie.my_comment ?? "");
-  }, [movie?.id, movie?.my_rating, movie?.my_comment]);
+  }, [movie]);
 
   if (!isOpen || !movie) return null;
 
