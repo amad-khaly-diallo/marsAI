@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Variables globales pour un thème “modern tech” */
+/* Variables globales pour un thème "Noir & Bleu" */
 :root {
   --color-bg: 0 0 0; /* #000000 - black */
   --color-surface: 17 24 39; /* #111827 - gray-900 */
@@ -23,7 +23,7 @@ body {
 }
 
 a {
-  @apply text-brand-primary-soft hover:text-brand-accent transition-colors;
+  @apply text-blue-500 hover:text-blue-400 transition-colors;
 }
 
 /* FICHIER: frontend/src/index.css (ajoute en bas) */
