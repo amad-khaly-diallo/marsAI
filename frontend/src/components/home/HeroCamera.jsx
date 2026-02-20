@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 
 // Import des animations globales pour HeroCamera
 import { heroAnimationStyles } from "../sections/heroAnimations";
+import { getYouTubeThumbnail, getYouTubeEmbed } from "../../utils/youtube";
 
 // Import des images SD
 import sdScifi from "../../assets/images/sd_scifi.png";
@@ -272,7 +273,26 @@ function calculateCoverflowPosition(index, totalCards, radius = 250) {
   return { x, y: 0, rotation: rotationY, scale: 1 };
 }
 
-export default function HeroCamera() {
+/** Normalise un film API (table movie) vers le format attendu par HeroCamera */
+function normalizeApiMovie(m) {
+  const filmmaker =
+    m.filmmaker &&
+    typeof m.filmmaker === "object" &&
+    (m.filmmaker.first_name != null || m.filmmaker.last_name != null)
+      ? [m.filmmaker.first_name, m.filmmaker.last_name].filter(Boolean).join(" ") || "—"
+      : "—";
+  return {
+    id: m.id,
+    title: m.original_title || m.english_title || "Sans titre",
+    filmmaker,
+    duration: m.duration ?? 0,
+    thumbnail: getYouTubeThumbnail(m.youtube_url) || "",
+    video: null,
+    youtube_url: m.youtube_url || null,
+  };
+}
+
+export default function HeroCamera({ moviesFromApi }) {
   const [cameraOn, setCameraOn] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [selectedFilmIndex, setSelectedFilmIndex] = useState(0);
@@ -281,7 +301,14 @@ export default function HeroCamera() {
   const [isBooting, setIsBooting] = useState(false);
   const [showClap, setShowClap] = useState(false);
 
+  const normalizedApiMovies = useMemo(() => {
+    if (!moviesFromApi || !Array.isArray(moviesFromApi) || moviesFromApi.length === 0)
+      return [];
+    return moviesFromApi.map(normalizeApiMovie);
+  }, [moviesFromApi]);
+
   const getGenreMovies = () => {
+    if (normalizedApiMovies.length > 0) return normalizedApiMovies;
     if (!selectedGenre) return [];
     if (selectedGenre.name === "Tous") return DEMO_MOVIES;
     return DEMO_MOVIES.filter((m) => m.genre === selectedGenre.name);
@@ -299,7 +326,7 @@ export default function HeroCamera() {
     setCameraOn((p) => {
       const next = !p;
       if (next) {
-        setSelectedGenre(GENRES[0]);
+        setSelectedGenre(normalizedApiMovies.length > 0 ? { name: "Tous" } : GENRES[0]);
         setSelectedFilmIndex(0);
         setSelectedMovie(null);
         setPowerOnAnim(true);
@@ -470,8 +497,18 @@ export default function HeroCamera() {
                           Fermer
                         </button>
                       </div>
-                      <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30">
-                        <video className="w-full h-full bg-black" src={selectedMovie.video} controls autoPlay />
+                      <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30 min-h-0">
+                        {selectedMovie.youtube_url ? (
+                          <iframe
+                            src={getYouTubeEmbed(selectedMovie.youtube_url) + "?autoplay=1"}
+                            className="w-full h-full bg-black"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            title={selectedMovie.title}
+                          />
+                        ) : (
+                          <video className="w-full h-full bg-black" src={selectedMovie.video} controls autoPlay />
+                        )}
                       </div>
                     </div>
                   )}
@@ -578,39 +615,41 @@ export default function HeroCamera() {
               <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-4 mb-3" />
 
               <div className="px-4 mb-3">
-                <p className="text-[11px] text-gray-300 uppercase mb-2 text-center tracking-wider">Genres</p>
-
-                {/* Bouton Tous en tête */}
-                <button
-                  onClick={() => cameraOn && setSelectedGenre(GENRES[0])}
-                  disabled={!cameraOn}
-                  className={`w-full mb-2 py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
-                    selectedGenre?.name === "Tous"
-                      ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_0_14px_rgba(168,85,247,0.3)]"
-                      : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/60"
-                  }`}
-                >
-                  <span className="text-sm">{GENRES[0].icon}</span> <span>Tous</span>
-                </button>
-
-                {/* Grille 2 colonnes */}
-                <div className="grid grid-cols-2 gap-2">
-                  {GENRES.slice(1).map((genre) => (
+                {normalizedApiMovies.length > 0 ? (
+                  <p className="text-[11px] text-gray-300 uppercase mb-2 text-center tracking-wider">Films sélectionnés</p>
+                ) : (
+                  <>
+                    <p className="text-[11px] text-gray-300 uppercase mb-2 text-center tracking-wider">Genres</p>
                     <button
-                      key={genre.name}
-                      onClick={() => cameraOn && setSelectedGenre(genre)}
+                      onClick={() => cameraOn && setSelectedGenre(GENRES[0])}
                       disabled={!cameraOn}
-                      className={`py-2 px-1 rounded-lg text-xs font-semibold transition-all flex flex-col items-center gap-0.5 ${
-                        selectedGenre?.name === genre.name
-                          ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-[0_0_12px_rgba(34,211,238,0.3)]"
+                      className={`w-full mb-2 py-2 px-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-1 ${
+                        selectedGenre?.name === "Tous"
+                          ? "bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_0_14px_rgba(168,85,247,0.3)]"
                           : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/60"
                       }`}
                     >
-                      <span className="text-base">{genre.icon}</span>
-                      <span className="text-[9px] leading-tight">{genre.name}</span>
+                      <span className="text-sm">{GENRES[0].icon}</span> <span>Tous</span>
                     </button>
-                  ))}
-                </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {GENRES.slice(1).map((genre) => (
+                        <button
+                          key={genre.name}
+                          onClick={() => cameraOn && setSelectedGenre(genre)}
+                          disabled={!cameraOn}
+                          className={`py-2 px-1 rounded-lg text-xs font-semibold transition-all flex flex-col items-center gap-0.5 ${
+                            selectedGenre?.name === genre.name
+                              ? "bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-[0_0_12px_rgba(34,211,238,0.3)]"
+                              : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/60"
+                          }`}
+                        >
+                          <span className="text-base">{genre.icon}</span>
+                          <span className="text-[9px] leading-tight">{genre.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent mx-4 mb-3" />
