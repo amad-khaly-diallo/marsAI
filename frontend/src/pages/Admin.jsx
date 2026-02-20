@@ -1,15 +1,16 @@
 import AdminLayout from "../components/layout/AdminLayout";
-import DashboardOverview from "../components/admin/DashboardOverview";
-import AdminsManagement from "../components/admin/AdminsManagement";
-import JuryManagement from "../components/admin/JuryManagement";
-import MoviesManagement from "../components/admin/MoviesManagement";
-import PartnersManagement from "../components/admin/PartnersManagement";
-import NewslettersManagement from "../components/admin/NewslettersManagement";
-import TrafficOverview from "../components/admin/TrafficOverview";
-import AdminLogin from "../components/admin/AdminLogin";
-import AdminVideos from "../components/admin/All-videos";
-import VideosDistribution from "../components/admin/VideosDistribution";
-import MyMoviesGallery from "../components/admin/MyMoviesGallery";
+import {
+  DashboardOverview,
+  AdminsManagement,
+  JuryManagement,
+  MoviesManagement,
+  PartnersManagement,
+  NewslettersManagement,
+  AdminLogin,
+  GreenFlagGallery,
+  VideosDistribution,
+  MyMoviesGallery,
+} from "../components/admin";
 import { AdminProvider, useAdmin } from "../contexts";
 
 function AdminContent() {
@@ -29,10 +30,8 @@ function AdminContent() {
         return <PartnersManagement />;
       case "newsletters":
         return <NewslettersManagement />;
-      case "traffic":
-        return <TrafficOverview />;
       case "all-videos":
-        return <AdminVideos />;
+        return <GreenFlagGallery />;
       case "videos-distribution":
         return <VideosDistribution currentAdmin={admin} />;
       case "dashboard":
