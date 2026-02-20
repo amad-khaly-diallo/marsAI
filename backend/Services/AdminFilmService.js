@@ -40,8 +40,8 @@ async function list({ status, search, currentUser }) {
         w.category AS winner_category,
         ${
           isBasicAdmin
-            ? 'ama.rating AS my_rating, ama.comment AS my_comment'
-            : 'NULL AS my_rating, NULL AS my_comment'
+            ? 'ama.rating AS my_rating, ama.comment AS my_comment, ama.flag AS my_flag'
+            : 'NULL AS my_rating, NULL AS my_comment, NULL AS my_flag'
         }
      FROM movie m
      INNER JOIN filmmaker f ON f.id = m.filmmaker_id
@@ -76,6 +76,7 @@ async function list({ status, search, currentUser }) {
     my_rating:
       typeof row.my_rating === 'number' ? row.my_rating : null,
     my_comment: row.my_comment ?? null,
+    my_flag: row.my_flag ?? null,
     filmmaker: {
       id: row.filmmaker_id,
       first_name: row.filmmaker_first_name,
@@ -108,8 +109,8 @@ async function getById(id, currentUser) {
         w.category AS winner_category,
         ${
           isBasicAdmin
-            ? 'ama.rating AS my_rating, ama.comment AS my_comment'
-            : 'NULL AS my_rating, NULL AS my_comment'
+            ? 'ama.rating AS my_rating, ama.comment AS my_comment, ama.flag AS my_flag'
+            : 'NULL AS my_rating, NULL AS my_comment, NULL AS my_flag'
         }
      FROM movie m
      INNER JOIN filmmaker f ON f.id = m.filmmaker_id
@@ -140,6 +141,7 @@ async function getById(id, currentUser) {
     my_rating:
       typeof row.my_rating === 'number' ? row.my_rating : null,
     my_comment: row.my_comment ?? null,
+    my_flag: row.my_flag ?? null,
     filmmaker: {
       id: row.filmmaker_id,
       first_name: row.filmmaker_first_name,
@@ -272,6 +274,141 @@ async function upsertReview(movieId, { rating, comment }, currentUser) {
   };
 }
 
+async function updateFlag(movieId, { flag }, currentUser) {
+  if (!currentUser) {
+    throw new HttpError(401, 'User not authenticated');
+  }
+
+  if (currentUser.role !== 'admin') {
+    throw new HttpError(403, 'Only basic admins can manage flags');
+  }
+
+  const adminId = currentUser.id;
+
+  let normalizedFlag = null;
+  if (flag === null || flag === undefined || flag === '') {
+    normalizedFlag = null;
+  } else if (flag === 'green' || flag === 'yellow' || flag === 'red') {
+    normalizedFlag = flag;
+  } else {
+    throw new HttpError(400, 'Invalid flag', {
+      allowed: ['green', 'yellow', 'red', null],
+    });
+  }
+
+  await query(
+    `UPDATE admin_movie_assignment
+     SET flag = :flag
+     WHERE admin_id = :admin_id AND movie_id = :movie_id`,
+    {
+      flag: normalizedFlag,
+      admin_id: adminId,
+      movie_id: movieId,
+    }
+  );
+
+  return {
+    movie_id: movieId,
+    admin_id: adminId,
+    flag: normalizedFlag,
+  };
+}
+
+async function listGreenFlaggedByAdmin() {
+  const rows = await query(
+    `SELECT
+       ama.admin_id,
+       a.first_name AS admin_first_name,
+       a.last_name AS admin_last_name,
+       a.email AS admin_email,
+       m.id AS movie_id,
+       m.original_title,
+       m.english_title,
+       m.duration,
+       m.language,
+       m.synopsis_original,
+       m.synopsis_english,
+       m.youtube_url,
+       m.status,
+       f.id AS filmmaker_id,
+       f.first_name AS filmmaker_first_name,
+       f.last_name AS filmmaker_last_name,
+       ama.rating,
+       ama.comment,
+       ama.flag
+     FROM admin_movie_assignment ama
+     INNER JOIN admins a ON a.id = ama.admin_id
+     INNER JOIN movie m ON m.id = ama.movie_id
+     INNER JOIN filmmaker f ON f.id = m.filmmaker_id
+     WHERE ama.flag = 'green'
+     ORDER BY a.last_name, a.first_name, m.id`,
+    {}
+  );
+
+  const byAdmin = new Map();
+
+  rows.forEach((row) => {
+    if (!byAdmin.has(row.admin_id)) {
+      byAdmin.set(row.admin_id, {
+        admin_id: row.admin_id,
+        first_name: row.admin_first_name,
+        last_name: row.admin_last_name,
+        email: row.admin_email,
+        movies: [],
+      });
+    }
+
+    const adminGroup = byAdmin.get(row.admin_id);
+    adminGroup.movies.push({
+      id: row.movie_id,
+      original_title: row.original_title,
+      english_title: row.english_title,
+      duration: row.duration,
+      language: row.language,
+      synopsis_original: row.synopsis_original,
+      synopsis_english: row.synopsis_english,
+      youtube_url: row.youtube_url,
+      status: row.status,
+      rating: typeof row.rating === 'number' ? row.rating : null,
+      comment: row.comment ?? null,
+      flag: row.flag,
+      filmmaker: {
+        id: row.filmmaker_id,
+        first_name: row.filmmaker_first_name,
+        last_name: row.filmmaker_last_name,
+      },
+    });
+  });
+
+  return Array.from(byAdmin.values());
+}
+
+async function listReviews(movieId) {
+  const rows = await query(
+    `SELECT
+       ama.rating,
+       ama.flag,
+       ama.created_at,
+       a.id AS admin_id,
+       a.first_name,
+       a.last_name
+     FROM admin_movie_assignment ama
+     INNER JOIN admins a ON a.id = ama.admin_id
+     WHERE ama.movie_id = :movie_id
+     ORDER BY a.last_name, a.first_name`,
+    { movie_id: movieId }
+  );
+
+  return rows.map((row) => ({
+    admin_id: row.admin_id,
+    first_name: row.first_name,
+    last_name: row.last_name,
+    rating: typeof row.rating === 'number' ? row.rating : null,
+    flag: row.flag ?? null,
+    created_at: row.created_at,
+  }));
+}
+
 async function distributeToAdmins(minReviewers = 2) {
   const reviewersRequired = Number.isInteger(minReviewers) && minReviewers > 0 ? minReviewers : 2;
 
@@ -355,6 +492,9 @@ module.exports = {
   updateStatus,
   distributeToAdmins,
   upsertReview,
+  updateFlag,
+  listReviews,
   updateWinner,
+  listGreenFlaggedByAdmin,
 };
 
