@@ -7,7 +7,7 @@ const links = [
   { to: "/contact", labelKey: "nav.contact", defaultLabel: "Contact" },
   { to: "/jury", labelKey: "nav.jury", defaultLabel: "Jury" },
   { to: "/partenaires", labelKey: "nav.partners", defaultLabel: "Partenaires" },
-  { to: "/admin", labelKey: "nav.admin", defaultLabel: "Admin" },
+  { to: "/catalogue", labelKey: "nav.catalogue", defaultLabel: "Catalogue" },
 ];
 
 export default function HeaderNavLinks({

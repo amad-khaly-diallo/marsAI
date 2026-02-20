@@ -3,7 +3,7 @@ const { query, withTransaction } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
 
 function mapMovie(row) {
-  return {
+  const movie = {
     id: row.id,
     original_title: row.original_title,
     english_title: row.english_title,
@@ -20,6 +20,13 @@ function mapMovie(row) {
     winner_ranking: row.winner_ranking ?? null,
     winner_category: row.winner_category ?? null,
   };
+  if (row.filmmaker_first_name != null || row.filmmaker_last_name != null) {
+    movie.filmmaker = {
+      first_name: row.filmmaker_first_name ?? '',
+      last_name: row.filmmaker_last_name ?? '',
+    };
+  }
+  return movie;
 }
 
 async function list() {
@@ -28,9 +35,12 @@ async function list() {
        m.*,
        w.id AS winner_id,
        w.ranking AS winner_ranking,
-       w.category AS winner_category
+       w.category AS winner_category,
+       f.first_name AS filmmaker_first_name,
+       f.last_name AS filmmaker_last_name
      FROM movie m
      LEFT JOIN winner w ON w.movie_id = m.id
+     LEFT JOIN filmmaker f ON f.id = m.filmmaker_id
      WHERE m.status = 'selected'
      ORDER BY m.id DESC`
   );
