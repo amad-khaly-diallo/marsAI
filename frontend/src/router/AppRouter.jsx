@@ -5,7 +5,7 @@ import AProposPage from "../pages/AProposPage";
 import Participer from "../pages/Participer";
 import Partenaires from "../pages/Partenaires";
 import CGV from "../pages/CGV";
-import CGU from "../pages/CGU";
+import CGU from "../components/CGU/CGU";
 import Admin from "../pages/Admin";
 import Jury from "../components/jury/Jury";
 import Contact from "../pages/Contact";
