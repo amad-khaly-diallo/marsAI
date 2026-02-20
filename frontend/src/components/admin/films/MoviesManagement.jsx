@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import AdminFilmGallery from "./AdminFilmGallery";
 
 export default function MoviesManagement({ currentAdmin }) {
@@ -6,69 +6,48 @@ export default function MoviesManagement({ currentAdmin }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState("");
-
   const isSuperAdmin = currentAdmin?.role === "super_admin";
 
-  const fetchMovies = async () => {
+  const fetchMovies = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const params = new URLSearchParams();
       if (statusFilter) params.set("status", statusFilter);
-
-      const res = await fetch(`/api/admin/films?${params.toString()}`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const res = await fetch(`/api/admin/films?${params.toString()}`, { method: "GET", credentials: "include" });
       const data = await res.json().catch(() => []);
-
       if (!res.ok) throw new Error(data.error || "Erreur de chargement.");
-
       setMovies(data || []);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
 
   useEffect(() => {
     fetchMovies();
-  }, [statusFilter]);
+  }, [fetchMovies]);
 
   const winnersCount = movies.filter((m) => m.is_winner).length;
 
   return (
     <div className="space-y-4 relative">
       <header className="space-y-1">
-        <h2 className="text-lg font-semibold text-slate-50">
-          Gestion des films
-        </h2>
-        <p className="text-sm text-brand-muted">
-          Visualisez les soumissions, filtrez par statut et marquez les films gagnants.
-        </p>
+        <h2 className="text-lg font-semibold text-slate-50">Gestion des films</h2>
+        <p className="text-sm text-brand-muted">Visualisez les soumissions, filtrez par statut et marquez les films gagnants.</p>
       </header>
-
       <div className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-sm">
         {!isSuperAdmin ? (
           <p className="text-xs text-brand-muted">
-            Cette section est réservée au super administrateur. Utilisez l&apos;onglet
-            <span className="font-semibold text-slate-100"> « Mes vidéos »</span>{" "}
-            pour gérer vos films assignés.
+            Cette section est réservée au super administrateur. Utilisez l&apos;onglet <span className="font-semibold text-slate-100">« Mes vidéos »</span> pour gérer vos films assignés.
           </p>
         ) : (
           <>
             <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">
-                Liste des films
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">Liste des films</p>
               <div className="flex items-center gap-3 text-[11px] text-brand-muted">
-                <span>
-                  Gagnants actuels :{" "}
-                  <span className="font-semibold text-slate-100">
-                    {winnersCount} / 6
-                  </span>
-                </span>
+                <span>Gagnants actuels : <span className="font-semibold text-slate-100">{winnersCount} / 6</span></span>
                 <div className="flex items-center gap-1">
                   <label className="font-medium">Filtre:</label>
                   <select
@@ -85,13 +64,7 @@ export default function MoviesManagement({ currentAdmin }) {
                 </div>
               </div>
             </div>
-
-            <AdminFilmGallery
-              movies={movies}
-              loading={loading}
-              error={error}
-              onReload={fetchMovies}
-            />
+            <AdminFilmGallery movies={movies} loading={loading} error={error} onReload={fetchMovies} />
           </>
         )}
       </div>
