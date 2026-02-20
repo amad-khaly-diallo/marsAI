@@ -125,7 +125,7 @@ export default function CGU() {
 
         {/* Footer Info */}
         <div className="mt-24 text-center relative z-10 px-4">
-          <p className="text-[12px] md:text-[20px] text-slate-600 uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 font-mono leading-loose">
+          <p className="text-[12px] md:text-[15px] text-slate-600 uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 font-mono leading-loose">
             MarsAI x Mobile Film Festival x La Plateforme
           </p>
         </div>
