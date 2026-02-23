@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mariadb:3306
--- Généré le : ven. 13 fév. 2026 à 14:30
+-- Généré le : lun. 23 fév. 2026 à 11:01
 -- Version du serveur : 11.8.5-MariaDB-ubu2404
 -- Version de PHP : 8.3.26
 
@@ -62,6 +62,7 @@ CREATE TABLE `admin_movie_assignment` (
   `movie_id` int(11) NOT NULL,
   `rating` tinyint(4) DEFAULT NULL,
   `comment` text DEFAULT NULL,
+  `flag` enum('green','yellow','red') DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -69,44 +70,52 @@ CREATE TABLE `admin_movie_assignment` (
 -- Déchargement des données de la table `admin_movie_assignment`
 --
 
-INSERT INTO `admin_movie_assignment` (`id`, `admin_id`, `movie_id`, `rating`, `comment`, `created_at`) VALUES
-(1, 2, 1, NULL, NULL, '2026-02-12 15:03:41'),
-(2, 3, 1, NULL, NULL, '2026-02-12 15:03:41'),
-(3, 4, 1, NULL, NULL, '2026-02-12 15:03:41'),
-(4, 5, 1, NULL, NULL, '2026-02-12 15:03:41'),
-(5, 6, 2, NULL, NULL, '2026-02-12 15:03:41'),
-(6, 2, 2, NULL, NULL, '2026-02-12 15:03:41'),
-(7, 3, 2, NULL, NULL, '2026-02-12 15:03:41'),
-(8, 4, 2, NULL, NULL, '2026-02-12 15:03:41'),
-(9, 5, 4, NULL, NULL, '2026-02-12 15:03:41'),
-(10, 6, 4, NULL, NULL, '2026-02-12 15:03:41'),
-(11, 2, 4, NULL, NULL, '2026-02-12 15:03:41'),
-(12, 3, 4, NULL, NULL, '2026-02-12 15:03:41'),
-(13, 4, 5, NULL, NULL, '2026-02-12 15:03:41'),
-(14, 5, 5, NULL, NULL, '2026-02-12 15:03:41'),
-(15, 6, 5, NULL, NULL, '2026-02-12 15:03:41'),
-(16, 2, 5, NULL, NULL, '2026-02-12 15:03:41'),
-(17, 3, 6, NULL, NULL, '2026-02-12 15:03:41'),
-(18, 4, 6, NULL, NULL, '2026-02-12 15:03:41'),
-(19, 5, 6, NULL, NULL, '2026-02-12 15:03:41'),
-(20, 6, 6, NULL, NULL, '2026-02-12 15:03:41'),
-(21, 2, 7, NULL, NULL, '2026-02-12 15:03:41'),
-(22, 3, 7, NULL, NULL, '2026-02-12 15:03:41'),
-(23, 4, 7, NULL, NULL, '2026-02-12 15:03:41'),
-(24, 5, 7, NULL, NULL, '2026-02-12 15:03:41'),
-(25, 6, 8, NULL, NULL, '2026-02-12 15:03:41'),
-(26, 2, 8, NULL, NULL, '2026-02-12 15:03:41'),
-(27, 3, 8, NULL, NULL, '2026-02-12 15:03:41'),
-(28, 4, 8, NULL, NULL, '2026-02-12 15:03:41'),
-(29, 5, 9, NULL, NULL, '2026-02-12 15:03:41'),
-(30, 6, 9, NULL, NULL, '2026-02-12 15:03:41'),
-(31, 2, 9, NULL, NULL, '2026-02-12 15:03:41'),
-(32, 3, 9, NULL, NULL, '2026-02-12 15:03:41'),
-(33, 4, 10, NULL, NULL, '2026-02-12 15:03:41'),
-(34, 5, 10, NULL, NULL, '2026-02-12 15:03:41'),
-(35, 6, 10, NULL, NULL, '2026-02-12 15:03:41'),
-(36, 2, 10, NULL, NULL, '2026-02-12 15:03:41'),
-(37, 6, 9, 10, 'jgfhg', '2026-02-12 15:15:57');
+INSERT INTO `admin_movie_assignment` (`id`, `admin_id`, `movie_id`, `rating`, `comment`, `flag`, `created_at`) VALUES
+(1, 2, 1, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(2, 3, 1, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(3, 4, 1, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(4, 5, 1, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(5, 6, 2, NULL, NULL, 'red', '2026-02-12 15:03:41'),
+(6, 2, 2, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(7, 3, 2, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(8, 4, 2, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(9, 5, 4, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(10, 6, 4, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(11, 2, 4, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(12, 3, 4, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(13, 4, 5, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(14, 5, 5, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(15, 6, 5, NULL, NULL, 'yellow', '2026-02-12 15:03:41'),
+(16, 2, 5, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(17, 3, 6, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(18, 4, 6, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(19, 5, 6, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(20, 6, 6, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(21, 2, 7, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(22, 3, 7, NULL, NULL, 'red', '2026-02-12 15:03:41'),
+(23, 4, 7, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(24, 5, 7, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(25, 6, 8, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(26, 2, 8, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(27, 3, 8, NULL, NULL, 'yellow', '2026-02-12 15:03:41'),
+(28, 4, 8, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(29, 5, 9, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(30, 6, 9, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(31, 2, 9, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(32, 3, 9, NULL, NULL, 'green', '2026-02-12 15:03:41'),
+(33, 4, 10, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(34, 5, 10, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(35, 6, 10, NULL, NULL, 'green', '2026-02-12 15:03:41'),
+(36, 2, 10, NULL, NULL, NULL, '2026-02-12 15:03:41'),
+(37, 6, 9, 10, 'jgfhg', NULL, '2026-02-12 15:15:57'),
+(38, 3, 6, 3, 'il respect pas les aspects', NULL, '2026-02-19 10:58:16'),
+(39, 6, 10, 6, 'pas ouf', NULL, '2026-02-19 13:41:46'),
+(40, 6, 2, 2, NULL, NULL, '2026-02-19 13:51:22'),
+(41, 6, 5, 5, 'passable', NULL, '2026-02-19 13:51:53'),
+(42, 3, 9, 7, NULL, 'green', '2026-02-20 09:02:50'),
+(43, 3, 8, NULL, NULL, NULL, '2026-02-20 09:03:03'),
+(44, 3, 7, NULL, NULL, NULL, '2026-02-20 09:03:26'),
+(45, 3, 9, 7, NULL, NULL, '2026-02-20 13:48:58');
 
 -- --------------------------------------------------------
 
@@ -130,7 +139,8 @@ INSERT INTO `ai_declaration` (`id`, `artwork_type`, `tech_stack`, `methodology`,
 (1, '100_ai', 'Sora', 'prompt', 6),
 (2, '100_ai', 'Freepik', 'j\'ai pris une vidéo par hasard sur freepik', 7),
 (3, '100_ai', 'Artist.io', 'prompt', 8),
-(4, 'hybrid', 'photoshop, sora et capcut', 'j\'ai fais un rpompt a l\'AI et ensuite j\'ai use photoshop pour modifier certaines partis et utiliser capcut pour monter', 9);
+(4, 'hybrid', 'photoshop, sora et capcut', 'j\'ai fais un rpompt a l\'AI et ensuite j\'ai use photoshop pour modifier certaines partis et utiliser capcut pour monter', 9),
+(5, '100_ai', 'FreePik', 'qsdlkfhqmsdlkfqsdflqksj qlsdjfhqlsdjkf q sldkjfhl', 11);
 
 -- --------------------------------------------------------
 
@@ -240,7 +250,11 @@ INSERT INTO `filmmaker` (`id`, `civility`, `first_name`, `last_name`, `birth_dat
 (4, 'Mr', 'sadjo', 'kanoute', '1920-12-24', 'sadjo.kanoute@laplateforme.io', NULL, '01234567', 'DEV', NULL, NULL, 'Paris', 'France', 'laplateforme', 0),
 (5, 'Mr', 'amad', 'diallo', '2000-11-03', 'amad.diallo@laplateforme.io', NULL, '01234567', 'DEV', NULL, NULL, 'Paris', 'Belgique', 'Famille', 0),
 (7, 'Mr', 'amad', 'diallo', '2004-01-20', 'khalyamad.d@gqsdfl.com', NULL, '0758854873', 'TESTER', NULL, NULL, 'Paris', 'France', 'collègue', 0),
-(8, 'Mr', 'mehdi', 'mehdi', '2001-02-20', 'mehdi.mehdi@laplateforme.io', NULL, '01234567', 'student', NULL, NULL, 'Paris', 'France', 'famille', 0);
+(8, 'Mr', 'mehdi', 'mehdi', '2001-02-20', 'mehdi.mehdi@laplateforme.io', NULL, '01234567', 'student', NULL, NULL, 'Paris', 'France', 'famille', 0),
+(9, 'Mr', 'pierre', 'pierre', '1988-02-20', 'pierre@gmail.com', NULL, '01234567', 'Prof', NULL, NULL, 'France', 'PAris', 'formation', 0),
+(12, 'Mr', 'diallo', 'khaly', '2000-01-20', 'khalyamad.d@gmail.com', NULL, '01234567', 'DEV', NULL, NULL, 'Parsi', 'Fr', 'family', 0),
+(13, 'Mr', 'AMAD', 'DIALLO', '2000-02-20', 'khalyamad.d@gmail.com', NULL, '01234567', 'Dev', NULL, NULL, 'Parsi', 'Fr', 'sld', 0),
+(14, 'Mr', 'qmsldk', 'qmsdlk', '2000-02-20', 'amad-khaly.diallo@laplateforme.io', NULL, '01234567', 'Dev', NULL, NULL, 'Paris', 'Fr', 'dsmfk', 0);
 
 -- --------------------------------------------------------
 
@@ -259,6 +273,18 @@ CREATE TABLE `jury` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+--
+-- Déchargement des données de la table `jury`
+--
+
+INSERT INTO `jury` (`id`, `first_name`, `last_name`, `role`, `bio`, `photo_url`, `created_at`, `updated_at`) VALUES
+(2, 'Nordine', '-', 'President du Jury', 'Réalisateur éminent et leader dans l\'utilisation de l\'intelligence artificielle au cinéma.', '/images/allumer.png', '2026-02-13 09:08:00', '2026-02-13 09:15:43'),
+(3, 'Ahamd', '-', 'Critique Cinema', 'Critique principal de magazines de cinéma et analyste technologique.', '/uploads/avatar.jpg', '2026-02-13 09:08:00', '2026-02-13 09:08:00'),
+(4, 'Mehdi', '', 'Expert AI', 'Chercheur principal en modèles linguistiques et production d\'images.', 'Mehdi.jpg', '2026-02-13 09:08:00', '2026-02-13 11:09:10'),
+(5, 'Sofia', 'Martinez', 'Productrice', 'Producteur de projets indépendants en Europe.', 'banner.png', '2026-02-13 09:08:00', '2026-02-13 11:12:01'),
+(6, 'John', 'Doe', 'Producteur', 'Producteur de projets indépendants en Europe.', 'john.jpg', '2026-02-13 09:08:00', '2026-02-13 11:15:05'),
+(7, 'Jane', 'Smith', 'Productrice', 'Productrice de projets indépendants en Europe.', '/uploads/avatar.jpg', '2026-02-13 09:08:00', '2026-02-13 09:08:00');
+
 -- --------------------------------------------------------
 
 --
@@ -273,10 +299,12 @@ CREATE TABLE `movie` (
   `language` varchar(50) DEFAULT NULL,
   `synopsis_original` varchar(300) DEFAULT NULL,
   `synopsis_english` varchar(300) DEFAULT NULL,
-  `youtube_url` varchar(255) NOT NULL,
+  `youtube_url` varchar(255) DEFAULT NULL,
+  `video_url` varchar(255) DEFAULT NULL,
   `status` enum('in_process','approved','rejected','selected') DEFAULT 'in_process',
   `decision_reason` text DEFAULT NULL,
   `decision_at` datetime DEFAULT NULL,
+  `is_winner` tinyint(1) NOT NULL DEFAULT 0,
   `filmmaker_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
@@ -284,16 +312,17 @@ CREATE TABLE `movie` (
 -- Déchargement des données de la table `movie`
 --
 
-INSERT INTO `movie` (`id`, `original_title`, `english_title`, `duration`, `language`, `synopsis_original`, `synopsis_english`, `youtube_url`, `status`, `decision_reason`, `decision_at`, `filmmaker_id`) VALUES
-(1, 'Le Film Test', 'The Test Movie', 120, 'French', 'Ceci est un synopsis en français.', 'This is an English synopsis.', 'https://youtu.be/dQw4w9WgXcQ', 'rejected', NULL, '2026-02-05 15:26:47', 1),
-(2, 'Le Film Test', 'The Test Movie', 120, 'French', 'Ceci est un synopsis en français.', 'This is an English synopsis.', 'https://youtu.be/dQw4w9WgXcQ', 'rejected', NULL, '2026-02-06 13:42:40', 1),
-(4, 'title', 'title', 1, 'anglais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=CyMS7UqT53w', 'in_process', NULL, NULL, 1),
-(5, 'title', 'title', 10, 'angais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=LuykUqIniFE', 'selected', NULL, '2026-02-12 14:26:40', 1),
-(6, 'title', 'title', 5, 'anglais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=pHKFWb5Zgk8', 'selected', 'je sais pas pourquoi', '2026-02-03 09:49:04', 1),
-(7, 'savane', 'savane', 1, 'Français', 'dans la savane', 'dans la savane', 'https://www.youtube.com/watch?v=0vI-icmWPww', 'in_process', NULL, NULL, 4),
-(8, 'Title', 'title', 0, 'English', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=OERknocIYKI', 'rejected', NULL, '2026-02-12 14:26:36', 5),
-(9, 'Futur souhaitable', 'futur', 1, 'Français', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=sdN8gdoYOYo', 'selected', NULL, '2026-02-12 15:15:47', 7),
-(10, 'titre', 'titre', 1, 'french', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=nTWKt1yKxVg', 'rejected', NULL, '2026-02-12 14:26:27', 8);
+INSERT INTO `movie` (`id`, `original_title`, `english_title`, `duration`, `language`, `synopsis_original`, `synopsis_english`, `youtube_url`, `video_url`, `status`, `decision_reason`, `decision_at`, `is_winner`, `filmmaker_id`) VALUES
+(1, 'Le Film Test', 'The Test Movie', 120, 'French', 'Ceci est un synopsis en français.', 'This is an English synopsis.', 'https://youtu.be/dQw4w9WgXcQ', NULL, 'rejected', NULL, '2026-02-05 15:26:47', 0, 1),
+(2, 'Le Film Test', 'The Test Movie', 120, 'French', 'Ceci est un synopsis en français.', 'This is an English synopsis.', 'https://youtu.be/dQw4w9WgXcQ', NULL, 'rejected', NULL, '2026-02-06 13:42:40', 0, 1),
+(4, 'title', 'title', 1, 'anglais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=CyMS7UqT53w', NULL, 'rejected', NULL, '2026-02-19 10:58:29', 0, 1),
+(5, 'title', 'title', 10, 'angais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=LuykUqIniFE', NULL, 'selected', NULL, '2026-02-12 14:26:40', 0, 1),
+(6, 'title', 'title', 5, 'anglais', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=pHKFWb5Zgk8', NULL, 'selected', 'je sais pas pourquoi', '2026-02-03 09:49:04', 0, 1),
+(7, 'savane', 'savane', 1, 'Français', 'dans la savane', 'dans la savane', 'https://www.youtube.com/watch?v=0vI-icmWPww', NULL, 'in_process', NULL, NULL, 0, 4),
+(8, 'Title', 'title', 0, 'English', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=OERknocIYKI', NULL, 'rejected', NULL, '2026-02-12 14:26:36', 0, 5),
+(9, 'Futur souhaitable', 'futur', 1, 'Français', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=sdN8gdoYOYo', NULL, 'selected', NULL, '2026-02-12 15:15:47', 1, 7),
+(10, 'titre', 'titre', 1, 'french', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=nTWKt1yKxVg', NULL, 'selected', NULL, '2026-02-20 09:17:46', 0, 8),
+(11, 'titre', 'title', 15, 'En', 'synopsis', 'synopsis', 'https://www.youtube.com/watch?v=C5fbefyCXD8', 'uploads/videos/1771841693129-245859721.mp4', 'selected', NULL, NULL, 0, 14);
 
 -- --------------------------------------------------------
 
@@ -486,8 +515,7 @@ ALTER TABLE `collaborator`
 -- Index pour la table `filmmaker`
 --
 ALTER TABLE `filmmaker`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `jury`
@@ -558,13 +586,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT pour la table `admin_movie_assignment`
 --
 ALTER TABLE `admin_movie_assignment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT pour la table `ai_declaration`
 --
 ALTER TABLE `ai_declaration`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `asset`
@@ -588,19 +616,19 @@ ALTER TABLE `collaborator`
 -- AUTO_INCREMENT pour la table `filmmaker`
 --
 ALTER TABLE `filmmaker`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `jury`
 --
 ALTER TABLE `jury`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pour la table `movie`
 --
 ALTER TABLE `movie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT pour la table `newsletters`

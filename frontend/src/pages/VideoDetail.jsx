@@ -29,10 +29,17 @@ export default function VideoDetail() {
   const renderVideo = () => {
     if (!movie) return null;
 
-    const isYoutube =
+    // Cas 1 : lien YouTube
+    const isYoutube = 
       movie.youtube_url &&
       (movie.youtube_url.includes("youtube") ||
         movie.youtube_url.includes("youtu.be"));
+
+    // Cas 2 : fichier vidéo hébergé sur le backend
+    const hasFileOnDisk = !!movie.video_url;
+    const fileSrc = hasFileOnDisk
+      ? `http://localhost:5000/${movie.video_url}`
+      : null;
 
     // Wrapper avec effet de lueur (Glow)
     return (
@@ -41,7 +48,13 @@ export default function VideoDetail() {
         <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-violet-600 opacity-20 blur-2xl transition duration-1000 group-hover:opacity-30"></div>
 
         <div className="relative w-full h-full bg-black z-10">
-          {isYoutube ? (
+          { hasFileOnDisk && fileSrc ? (
+            <video
+              controls
+              className="w-full h-full object-cover"
+              src={fileSrc}
+            />
+          ) : isYoutube ? (
             <iframe
               className="w-full h-full object-cover"
               src={movie.youtube_url.replace("watch?v=", "embed/")}
@@ -51,11 +64,9 @@ export default function VideoDetail() {
               allowFullScreen
             />
           ) : (
-            <video
-              controls
-              className="w-full h-full object-cover"
-              src={`http://localhost:5000/${movie.video_path}`}
-            />
+            <div className="flex h-full w-full items-center justify-center text-sm text-gray-300">
+              Vidéo non disponible
+            </div>
           )}
         </div>
       </div>

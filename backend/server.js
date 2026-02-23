@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
@@ -19,6 +20,9 @@ app.use(cors({
   credentials: true, // Permet l'envoi/réception des cookies
 }));
 app.use(express.json());
+
+// Fichiers uploadés (vidéos soumises, assets)
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Route d'accueil simple 
 app.get('/', (req, res) => {

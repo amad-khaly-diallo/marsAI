@@ -27,6 +27,10 @@ export default function MyMovieModal({
   const [localComment, setLocalComment] = useState(movie?.my_comment ?? "");
 
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
+  const hasLocalVideo = !!movie?.video_url;
+  const localSrc = hasLocalVideo
+    ? `http://localhost:5000/${movie.video_url}`
+    : null;
 
   useEffect(() => {
     if (!movie) return;
@@ -73,7 +77,13 @@ export default function MyMovieModal({
         <div className="flex flex-col gap-4 md:flex-row">
           <div className="md:w-3/5">
             <div className="relative w-full overflow-hidden rounded-xl bg-black aspect-video border border-slate-800">
-              {embedUrl ? (
+              {hasLocalVideo && localSrc ? (
+                <video
+                  src={localSrc}
+                  className="h-full w-full object-cover"
+                  controls
+                />
+              ) : embedUrl ? (
                 <iframe
                   src={embedUrl}
                   className="h-full w-full"
@@ -83,7 +93,7 @@ export default function MyMovieModal({
                 />
               ) : (
                 <div className="flex h-full items-center justify-center text-xs text-gray-500">
-                  Pas de lien vidéo
+                  Pas de vidéo disponible
                 </div>
               )}
             </div>
