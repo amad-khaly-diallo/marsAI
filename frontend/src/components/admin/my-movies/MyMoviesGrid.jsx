@@ -24,6 +24,10 @@ export default function MyMoviesGrid({ movies, onSelect }) {
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
       {movies.map((movie, index) => {
+        const hasLocalVideo = !!movie.video_url;
+        const localSrc = hasLocalVideo
+          ? `http://localhost:5000/${movie.video_url}`
+          : null;
         const embedUrl = getYouTubeEmbed(movie.youtube_url);
         return (
           <button
@@ -33,7 +37,13 @@ export default function MyMoviesGrid({ movies, onSelect }) {
             className="group flex flex-col overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/80 text-left shadow-soft-sm hover:border-brand-primary/60 hover:shadow-brand-primary/15 transition-all"
           >
             <div className="relative w-full aspect-video bg-black">
-              {embedUrl ? (
+              {hasLocalVideo && localSrc ? (
+                <video
+                  src={localSrc}
+                  className="h-full w-full object-cover"
+                  controls
+                />
+              ) : embedUrl ? (
                 <iframe
                   src={embedUrl}
                   className="h-full w-full"
@@ -43,7 +53,7 @@ export default function MyMoviesGrid({ movies, onSelect }) {
                 />
               ) : (
                 <div className="flex h-full items-center justify-center text-xs text-gray-500">
-                  Pas de lien YouTube
+                  Pas de vidéo disponible
                 </div>
               )}
             </div>

@@ -11,7 +11,8 @@ function mapMovie(row) {
     language: row.language,
     synopsis_original: row.synopsis_original,
     synopsis_english: row.synopsis_english,
-    youtube_url: row.youtube_url,
+    youtube_url: row.youtube_url ?? null,
+    video_url: row.video_url ?? null,
     status: row.status,
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
@@ -224,10 +225,28 @@ async function upsertAiDeclaration(movieId, payload) {
   });
 }
 
+async function setVideoUrl(movieId, url) {
+  await query(
+    'UPDATE movie SET video_url = :url WHERE id = :movieId',
+    { movieId, url }
+  );
+  return getById(movieId);
+}
+
+async function setYoutubeUrl(movieId, url) {
+  await query(
+    'UPDATE movie SET youtube_url = :url WHERE id = :movieId',
+    { movieId, url }
+  );
+  return getById(movieId);
+}
+
 module.exports = {
   list,
   getById,
   remove,
+  setVideoUrl,
+  setYoutubeUrl,
   listAssets,
   addAsset,
   getAssetById,

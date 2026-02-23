@@ -45,8 +45,14 @@ exports.submit = asyncHandler(async (req, res) => {
     );
   }
 
+  // On enregistre la durée côté backend (en secondes, arrondie)
+  const movieWithDuration = {
+    ...movie,
+    duration: Math.round(duration),
+  };
+
   const result = await FilmSubmissionService.submit({
-    movie,
+    movie: movieWithDuration,
     videoFile: req.file || null,
   });
 

@@ -59,15 +59,6 @@ export function validateMovie(m) {
   if (!m.english_title || !m.english_title.trim())
     return "error.movie.englishTitle.required";
 
-  const durationNumber = Number(m.duration);
-  // duration is expressed in minutes (0 < duration <= 1)
-  if (
-    !Number.isFinite(durationNumber) ||
-    durationNumber <= 0 ||
-    durationNumber > 1
-  )
-    return "error.movie.duration.range";
-
   if (m.youtube_url && m.youtube_url.length > 0) {
     try {
       // basic URL check
