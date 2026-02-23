@@ -5,7 +5,7 @@ export default function MoviesManagement({ currentAdmin }) {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [statusFilter, setStatusFilter] = useState("");
+  // Onglet "Films (sélection & gagnants)" : on ne charge que les films selected (et donc les gagnants, qui en sont un sous-ensemble).
   const isSuperAdmin = currentAdmin?.role === "super_admin";
 
   const fetchMovies = useCallback(async () => {
@@ -13,7 +13,7 @@ export default function MoviesManagement({ currentAdmin }) {
     setError(null);
     try {
       const params = new URLSearchParams();
-      if (statusFilter) params.set("status", statusFilter);
+      params.set("statuses", "selected,winner");
       const res = await fetch(`/api/admin/films?${params.toString()}`, { method: "GET", credentials: "include" });
       const data = await res.json().catch(() => []);
       if (!res.ok) throw new Error(data.error || "Erreur de chargement.");
@@ -23,7 +23,7 @@ export default function MoviesManagement({ currentAdmin }) {
     } finally {
       setLoading(false);
     }
-  }, [statusFilter]);
+  }, []);
 
   useEffect(() => {
     fetchMovies();
@@ -49,18 +49,9 @@ export default function MoviesManagement({ currentAdmin }) {
               <div className="flex items-center gap-3 text-[11px] text-brand-muted">
                 <span>Gagnants actuels : <span className="font-semibold text-slate-100">{winnersCount} / 6</span></span>
                 <div className="flex items-center gap-1">
-                  <label className="font-medium">Filtre:</label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="rounded-full border border-slate-800/80 bg-slate-950/60 px-3 py-1.5 text-xs text-slate-100 outline-none"
-                  >
-                    <option value="">Tous</option>
-                    <option value="in_process">En cours</option>
-                    <option value="approved">Approuvés</option>
-                    <option value="selected">Sélectionnés</option>
-                    <option value="rejected">Rejetés</option>
-                  </select>
+                  <span className="font-medium">
+                    Affichage : <span className="text-slate-100">Sélectionnés & Gagnants</span>
+                  </span>
                 </div>
               </div>
             </div>

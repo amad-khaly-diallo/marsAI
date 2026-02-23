@@ -2,9 +2,15 @@ const AdminFilmService = require('../Services/AdminFilmService');
 const { asyncHandler } = require('../Utils/http');
 
 // GET /api/admin/films
+// Query: status (single) ou statuses (liste comma-separated, ex. statuses=selected,winner)
 exports.list = asyncHandler(async (req, res) => {
-  const { status, q } = req.query;
-  const data = await AdminFilmService.list({ status, search: q, currentUser: req.user });
+  const { status, statuses, q } = req.query;
+  const data = await AdminFilmService.list({
+    status,
+    statuses: statuses ? statuses.split(',').map((s) => s.trim()).filter(Boolean) : undefined,
+    search: q,
+    currentUser: req.user,
+  });
   res.json(data);
 });
 
@@ -26,8 +32,8 @@ exports.updateStatus = asyncHandler(async (req, res) => {
 // PATCH /api/admin/films/:id/winner
 exports.updateWinner = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
-  const { is_winner } = req.body || {};
-  const data = await AdminFilmService.updateWinner(id, { is_winner });
+  const { is_winner, ranking, category } = req.body || {};
+  const data = await AdminFilmService.updateWinner(id, { is_winner, ranking, category });
   res.json(data);
 });
 
