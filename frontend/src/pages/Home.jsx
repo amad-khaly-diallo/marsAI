@@ -15,8 +15,10 @@ import api from "../services/api";
  * Phase 3 : Grand Prix / Palmarès (winners)
  */
 export default function Home() {
-  const [phase] = useState(2);
+  const [phase] = useState(3);
   const [phase2Movies, setPhase2Movies] = useState([]);
+  const [phase3Winners, setPhase3Winners] = useState([]);
+  const [phase3Loading, setPhase3Loading] = useState(false);
 
   useEffect(() => {
     if (phase !== 2) return;
@@ -27,6 +29,23 @@ export default function Home() {
         if (!cancelled) setPhase2Movies(Array.isArray(data) ? data : []);
       } catch {
         if (!cancelled) setPhase2Movies([]);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== 3) return;
+    let cancelled = false;
+    setPhase3Loading(true);
+    (async () => {
+      try {
+        const data = await api.get("/movies/winners");
+        if (!cancelled) setPhase3Winners(Array.isArray(data) ? data : []);
+      } catch {
+        if (!cancelled) setPhase3Winners([]);
+      } finally {
+        if (!cancelled) setPhase3Loading(false);
       }
     })();
     return () => { cancelled = true; };
@@ -71,7 +90,7 @@ export default function Home() {
       {/* ——— Phase 3 : Grand Prix / Palmarès ——— */}
       {phase === 3 && (
         <>
-          <Phase3Winners />
+          <Phase3Winners winnersFromApi={phase3Winners} loading={phase3Loading} />
         </>
       )}
 
