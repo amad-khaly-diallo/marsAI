@@ -63,6 +63,35 @@ async function sendSubmissionConfirmation({ to, filmmakerName, movieTitle }) {
   await sendMail({ to, subject, text });
 }
 
+async function sendYouTubeUploadSuccessEmail({ to, filmmakerName, movieTitle, youtubeUrl }) {
+  const subject = 'marsAI – Votre vidéo est en ligne sur YouTube';
+  const text = [
+    `Bonjour ${filmmakerName || ''}`.trim(),
+    '',
+    `Votre film "${movieTitle}" a été mis en ligne sur YouTube avec succès.`,
+    '',
+    `Lien : ${youtubeUrl || ''}`,
+    '',
+    'L’équipe marsAI',
+  ].join('\n');
+
+  await sendMail({ to, subject, text });
+}
+
+async function sendUploadFailureEmail({ to, filmmakerName, movieTitle }) {
+  const subject = 'marsAI – Échec de l’upload YouTube';
+  const text = [
+    `Bonjour ${filmmakerName || ''}`.trim(),
+    '',
+    `L’upload vers YouTube de votre film "${movieTitle}" n’a pas abouti.`,
+    'Votre vidéo est bien enregistrée côté festival ; vous serez informé(e) en cas de nouvel envoi vers YouTube.',
+    '',
+    'L’équipe marsAI',
+  ].join('\n');
+
+  await sendMail({ to, subject, text });
+}
+
 async function sendStatusUpdate({ to, filmmakerName, movieTitle, status, decisionReason }) {
   let subject;
   const lines = [];
@@ -109,6 +138,8 @@ async function sendStatusUpdate({ to, filmmakerName, movieTitle, status, decisio
 module.exports = {
   sendMail,
   sendSubmissionConfirmation,
+  sendYouTubeUploadSuccessEmail,
+  sendUploadFailureEmail,
   sendStatusUpdate,
 };
 

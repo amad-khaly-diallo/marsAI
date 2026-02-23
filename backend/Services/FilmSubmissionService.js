@@ -1,7 +1,38 @@
+const fs = require('fs');
+const path = require('path');
 const { withTransaction, query } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
 const { uploadVideo, getVideoStatus } = require('./youtube.service');
-const { sendSubmissionConfirmation } = require('./mail.service');
+const {
+  sendSubmissionConfirmation,
+  sendYouTubeUploadSuccessEmail,
+  sendUploadFailureEmail,
+} = require('./mail.service');
+const MovieService = require('./MovieService');
+
+const VIDEOS_DIR = path.join(process.cwd(), 'uploads', 'videos');
+
+function getExtension(mimetype) {
+  const map = { 'video/mp4': '.mp4'};
+  return map[mimetype] || '.mp4';
+}
+
+/**
+ * Enregistre la vidéo sur disque et retourne le chemin relatif (ex: uploads/videos/xxx.mp4).
+ */
+function saveVideoToDisk(videoFile) {
+  if (!videoFile || !videoFile.buffer) {
+    throw new HttpError(400, 'Invalid video file');
+  }
+  if (!fs.existsSync(VIDEOS_DIR)) {
+    fs.mkdirSync(VIDEOS_DIR, { recursive: true });
+  }
+  const ext = getExtension(videoFile.mimetype);
+  const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+  const filePath = path.join(VIDEOS_DIR, filename);
+  fs.writeFileSync(filePath, videoFile.buffer);
+  return path.join('uploads', 'videos', filename);
+}
 
 function validateMoviePayload(movie) {
   const required = ['original_title', 'english_title', 'duration', 'filmmaker_id'];
@@ -19,17 +50,62 @@ async function verifyFilmmakerExists(filmmakerId) {
   return rows[0];
 }
 
-async function handleYoutubeUpload(videoFile, movie) {
-  if (!videoFile || !videoFile.buffer) {
-    throw new HttpError(400, 'Invalid video file');
+/**
+ * Upload vers YouTube en arrière-plan (fichier déjà enregistré sur disque).
+ * Succès : met à jour youtube_url et envoie un email avec le lien.
+ * Échec : envoie un email pour informer (pas de rollback, la vidéo reste enregistrée).
+ */
+async function doYoutubeUploadAndNotify(movieId, videoFilePath, mimetype, movie, filmmaker) {
+  const absolutePath = path.isAbsolute(videoFilePath)
+    ? videoFilePath
+    : path.join(process.cwd(), videoFilePath);
+
+  if (!fs.existsSync(absolutePath)) {
+    // eslint-disable-next-line no-console
+    console.error('Fichier vidéo introuvable pour upload YouTube:', absolutePath);
+    try {
+      await sendUploadFailureEmail({
+        to: filmmaker.email,
+        filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
+        movieTitle: movie.original_title,
+      });
+    } catch (mailErr) {
+      // eslint-disable-next-line no-console
+      console.error('Envoi email échec upload', mailErr);
+    }
+    return;
   }
 
-  const youtubeId = await uploadVideo(videoFile.buffer, videoFile.mimetype, {
-    title: movie.original_title || movie.english_title,
-    description: movie.synopsis_original || movie.synopsis_english || '',
-  });
+  try {
+    const buffer = fs.readFileSync(absolutePath);
+    const youtubeId = await uploadVideo(buffer, mimetype, {
+      title: movie.original_title || movie.english_title,
+      description: movie.synopsis_original || movie.synopsis_english || '',
+    });
+    const youtubeUrl = `https://www.youtube.com/watch?v=${youtubeId}`;
 
-  return `https://www.youtube.com/watch?v=${youtubeId}`;
+    await MovieService.setYoutubeUrl(movieId, youtubeUrl);
+
+    await sendYouTubeUploadSuccessEmail({
+      to: filmmaker.email,
+      filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
+      movieTitle: movie.original_title,
+      youtubeUrl,
+    });
+  } catch (err) {
+    try {
+      await sendUploadFailureEmail({
+        to: filmmaker.email,
+        filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
+        movieTitle: movie.original_title,
+      });
+    } catch (mailErr) {
+      // eslint-disable-next-line no-console
+      console.error('Envoi email échec upload', mailErr);
+    }
+    // eslint-disable-next-line no-console
+    console.error('Échec upload YouTube (vidéo déjà enregistrée côté serveur)', err.message || err);
+  }
 }
 
 function extractYoutubeIdFromUrl(youtubeUrl) {
@@ -107,30 +183,71 @@ async function submit({ movie, videoFile }) {
 
   validateMoviePayload(movie);
 
-  // Vérifier que le filmmaker existe
   const filmmaker = await verifyFilmmakerExists(movie.filmmaker_id);
 
-  let youtubeUrl = movie.youtube_url || null;
+  const hasUpload = videoFile && videoFile.buffer;
+  const youtubeUrlFromPayload = movie.youtube_url || null;
 
-  // 1. Si fichier vidéo fourni, upload sur YouTube
-  if (videoFile) {
-    youtubeUrl = await handleYoutubeUpload(videoFile, movie);
-  }
-
-  // 2. Si pas de fichier et pas de youtube_url => erreur
-  if (!youtubeUrl) {
+  if (!hasUpload && !youtubeUrlFromPayload) {
     throw new HttpError(400, 'Either a video file or a youtube_url is required');
   }
 
-  // 3. Transaction SQL : création movie uniquement + envoi mail
   try {
+    if (hasUpload) {
+      // ——— Flux upload : enregistrer la vidéo, insérer avec video_url, mail confirmation, puis YouTube en arrière-plan ———
+      const videoRelativePath = saveVideoToDisk(videoFile);
+
+      const result = await withTransaction(async (trx) => {
+        const movieInsert = await trx.query(
+          `INSERT INTO movie
+            (original_title, english_title, duration, language, synopsis_original, synopsis_english, youtube_url, video_url, status, filmmaker_id)
+           VALUES
+            (:original_title, :english_title, :duration, :language, :synopsis_original, :synopsis_english, NULL, :video_url, 'in_process', :filmmaker_id)`,
+          {
+            original_title: movie.original_title,
+            english_title: movie.english_title,
+            duration: movie.duration,
+            language: movie.language ?? null,
+            synopsis_original: movie.synopsis_original ?? null,
+            synopsis_english: movie.synopsis_english ?? null,
+            video_url: videoRelativePath,
+            filmmaker_id: movie.filmmaker_id,
+          }
+        );
+        const movieId = movieInsert.insertId;
+        return {
+          movie_id: movieId,
+          video_url: videoRelativePath,
+          status: 'in_process',
+        };
+      });
+
+      await sendSubmissionConfirmation({
+        to: filmmaker.email,
+        filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
+        movieTitle: movie.original_title,
+      });
+
+      setImmediate(() => {
+        doYoutubeUploadAndNotify(
+          result.movie_id,
+          videoRelativePath,
+          videoFile.mimetype,
+          movie,
+          filmmaker
+        ).catch(() => {});
+      });
+
+      return result;
+    }
+
+    // ——— Flux lien YouTube : insert avec youtube_url + envoi mail immédiat ———
     const result = await withTransaction(async (trx) => {
-      // Insert movie avec status in_process
       const movieInsert = await trx.query(
         `INSERT INTO movie
-          (original_title, english_title, duration, language, synopsis_original, synopsis_english, youtube_url, status, filmmaker_id)
+          (original_title, english_title, duration, language, synopsis_original, synopsis_english, youtube_url, video_url, status, filmmaker_id)
          VALUES
-          (:original_title, :english_title, :duration, :language, :synopsis_original, :synopsis_english, :youtube_url, :status, :filmmaker_id)`,
+          (:original_title, :english_title, :duration, :language, :synopsis_original, :synopsis_english, :youtube_url, NULL, 'in_process', :filmmaker_id)`,
         {
           original_title: movie.original_title,
           english_title: movie.english_title,
@@ -138,15 +255,12 @@ async function submit({ movie, videoFile }) {
           language: movie.language ?? null,
           synopsis_original: movie.synopsis_original ?? null,
           synopsis_english: movie.synopsis_english ?? null,
-          youtube_url: youtubeUrl,
-          status: 'in_process',
+          youtube_url: youtubeUrlFromPayload,
           filmmaker_id: movie.filmmaker_id,
         }
       );
-
       const movieId = movieInsert.insertId;
 
-      // Envoi mail de confirmation (si ça jette, la transaction sera rollback)
       await sendSubmissionConfirmation({
         to: filmmaker.email,
         filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
@@ -155,12 +269,11 @@ async function submit({ movie, videoFile }) {
 
       return {
         movie_id: movieId,
-        youtube_url: youtubeUrl,
+        youtube_url: youtubeUrlFromPayload,
         status: 'in_process',
       };
     });
 
-    // 4. Planifier un contrôle automatique 30 minutes plus tard
     scheduleYoutubeApprovalCheck({
       movieId: result.movie_id,
       youtubeUrl: result.youtube_url,

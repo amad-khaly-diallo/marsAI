@@ -31,6 +31,7 @@ export default function useParticiperSubmit({
   validateAiDeclaration,
   validateCollaborators,
   // translation helper
+  currentStep,
   t,
 }) {
   const submission = useSubmission();
@@ -131,23 +132,26 @@ export default function useParticiperSubmit({
     setCurrentStep(5);
   });
 
-  // aggregate loading into shared `submitting` state
+  // aggregate loading dans l'état global `submitting`,
+  // mais uniquement pour l'étape courante (pour éviter qu'une étape
+  // précédente laisse le bouton de la nouvelle étape bloqué en mode "loading").
   useEffect(() => {
     setSubmitting(
       !!(
-        filmmakerOp.loading ||
-        movieOp.loading ||
-        aiOp.loading ||
-        collabOp.loading ||
-        assetsOp.loading
-      ),
+        (currentStep === 1 && filmmakerOp.loading) ||
+        (currentStep === 2 && movieOp.loading) ||
+        (currentStep === 3 && aiOp.loading) ||
+        (currentStep === 4 && assetsOp.loading) ||
+        (currentStep === 5 && collabOp.loading)
+      )
     );
   }, [
     filmmakerOp.loading,
     movieOp.loading,
     aiOp.loading,
-    collabOp.loading,
     assetsOp.loading,
+    collabOp.loading,
+    currentStep,
     setSubmitting,
   ]);
 

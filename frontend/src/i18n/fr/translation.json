@@ -105,6 +105,10 @@
   "participate.resumeDraft": "Reprendre le brouillon",
   "participate.clearDraft": "Supprimer le brouillon",
 
+  "participate.successTitle": "Votre film a bien été soumis !",
+  "participate.successMessage": "Merci pour votre participation à marsAI. Vous allez être redirigé vers la page d’accueil dans quelques secondes.",
+  "participate.goHome": "Retourner à l'accueil",
+
   "home.hero.label": "Marseille — Festival de courts (1 minute)",
   "home.hero.title": "Un festival pour raconter fort, en une minute.",
   "home.hero.subtitle": "Projections, talks et ateliers. Une programmation courte, précise, et une direction artistique pensée comme une expérience — pas comme un produit.",

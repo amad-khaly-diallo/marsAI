@@ -62,9 +62,11 @@ export default function useSubmission() {
   return {
     createFilmmaker,
     submitMovie,
+    submitMovieWithProgress,
     saveAiDeclaration,
     addCollaborator,
     uploadAssets,
+    uploadAssetsWithProgress,
     addTag,
   };
 }
