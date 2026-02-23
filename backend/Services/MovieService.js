@@ -54,9 +54,12 @@ async function listWinners() {
        m.*,
        w.id AS winner_id,
        w.ranking AS winner_ranking,
-       w.category AS winner_category
+       w.category AS winner_category,
+       f.first_name AS filmmaker_first_name,
+       f.last_name AS filmmaker_last_name
      FROM winner w
      INNER JOIN movie m ON m.id = w.movie_id
+     LEFT JOIN filmmaker f ON f.id = m.filmmaker_id
      ORDER BY w.ranking ASC, w.id ASC
      LIMIT 6`
   );

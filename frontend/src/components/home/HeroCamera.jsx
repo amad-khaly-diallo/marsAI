@@ -281,14 +281,16 @@ function normalizeApiMovie(m) {
     (m.filmmaker.first_name != null || m.filmmaker.last_name != null)
       ? [m.filmmaker.first_name, m.filmmaker.last_name].filter(Boolean).join(" ") || "—"
       : "—";
+  const thumbnail = getYouTubeThumbnail(m.youtube_url) || "";
   return {
     id: m.id,
     title: m.original_title || m.english_title || "Sans titre",
     filmmaker,
     duration: m.duration ?? 0,
-    thumbnail: getYouTubeThumbnail(m.youtube_url) || "",
+    thumbnail,
     video: null,
     youtube_url: m.youtube_url || null,
+    video_url: m.video_url || null,
   };
 }
 
@@ -498,7 +500,14 @@ export default function HeroCamera({ moviesFromApi }) {
                         </button>
                       </div>
                       <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30 min-h-0">
-                        {selectedMovie.youtube_url ? (
+                        {selectedMovie.video_url ? (
+                          <video
+                            className="w-full h-full bg-black"
+                            src={`http://localhost:5000/${selectedMovie.video_url}`}
+                            controls
+                            autoPlay
+                          />
+                        ) : selectedMovie.youtube_url ? (
                           <iframe
                             src={getYouTubeEmbed(selectedMovie.youtube_url) + "?autoplay=1"}
                             className="w-full h-full bg-black"

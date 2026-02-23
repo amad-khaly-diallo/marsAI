@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { X, Clock, Star, Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { STATUS_LABELS } from "../../../constants/status";
 
@@ -32,6 +32,20 @@ export default function AdminFilmModal({
   const localSrc = hasLocalVideo
     ? `http://localhost:5000/${movie.video_url}`
     : null;
+
+  const [winnerFormOpen, setWinnerFormOpen] = useState(false);
+  const [winnerRanking, setWinnerRanking] = useState("");
+  const [winnerCategory, setWinnerCategory] = useState("Grand Prix");
+
+  useEffect(() => {
+    if (!movie) return;
+    // Pré-remplir avec les valeurs existantes ou un rang suggéré.
+    setWinnerRanking(
+      movie.winner_ranking != null ? String(movie.winner_ranking) : winnersCount + 1
+    );
+    setWinnerCategory(movie.winner_category || "Grand Prix");
+    setWinnerFormOpen(false);
+  }, [movie, winnersCount]);
 
   if (!isOpen || !movie) return null;
 
@@ -85,29 +99,32 @@ export default function AdminFilmModal({
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold uppercase ${
-                  movie.status === "approved"
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                    : movie.status === "selected"
-                      ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                      : movie.status === "rejected"
-                        ? "bg-red-500/10 text-red-400 border-red-500/20"
-                        : movie.status === "in_process"
-                          ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                          : "bg-slate-900/80 text-brand-muted border-slate-700"
+                  movie.is_winner
+                    ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                    : movie.status === "approved"
+                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                      : movie.status === "selected"
+                        ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                        : movie.status === "rejected"
+                          ? "bg-red-500/10 text-red-400 border-red-500/20"
+                          : movie.status === "in_process"
+                            ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                            : "bg-slate-900/80 text-brand-muted border-slate-700"
                 }`}
               >
-                <span>{STATUS_LABELS[movie.status] || movie.status}</span>
-                {movie.is_winner && (
-                  <span className="inline-flex items-center gap-1 text-amber-300">
-                    <Trophy className="h-3.5 w-3.5" />
-                    Gagnant
-                  </span>
+                {movie.is_winner ? (
+                  <>
+                    <Trophy className="h-3.5 w-3.5 shrink-0" />
+                    <span>{STATUS_LABELS.winner}</span>
+                  </>
+                ) : (
+                  <span>{STATUS_LABELS[movie.status] || movie.status}</span>
                 )}
               </span>
               <div className="flex flex-col items-end gap-1 text-xs text-brand-muted">
                 <span className="inline-flex items-center gap-1.5">
                   <Clock className="h-3.5 w-3.5 shrink-0" />
-                  {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
+                  {movie.duration ? `${movie.duration} sec` : "Durée inconnue"}
                 </span>
                 {typeof movie.reviewers_count === "number" && <span className="text-[11px]">{movie.reviewers_count} avis admin</span>}
               </div>
@@ -123,7 +140,13 @@ export default function AdminFilmModal({
             <div className="mt-1 border-t border-slate-800 pt-3">
               <button
                 type="button"
-                onClick={() => onToggleWinner(movie)}
+                onClick={() => {
+                  if (movie.is_winner) {
+                    onToggleWinner(movie);
+                  } else {
+                    setWinnerFormOpen(true);
+                  }
+                }}
                 disabled={!canMarkWinner}
                 className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                   movie.is_winner
@@ -138,6 +161,63 @@ export default function AdminFilmModal({
                 )}
               </button>
               {winnerError && <p className="mt-1 text-xs text-red-300">{winnerError}</p>}
+
+              {!movie.is_winner && winnerFormOpen && (
+                <div className="mt-3 space-y-2 rounded-md border border-slate-800 bg-slate-900/70 p-3">
+                  <p className="text-[11px] text-brand-muted mb-1">
+                    Renseignez les informations pour ce gagnant (table <code>winner</code>).
+                  </p>
+                  <div className="flex flex-col gap-2 md:flex-row">
+                    <div className="flex-1">
+                      <label className="mb-1 block text-[11px] font-medium text-brand-muted">
+                        Catégorie
+                      </label>
+                      <input
+                        type="text"
+                        value={winnerCategory}
+                        onChange={(e) => setWinnerCategory(e.target.value)}
+                        className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
+                        placeholder="Grand Prix, Mention spéciale..."
+                      />
+                    </div>
+                    <div className="w-28">
+                      <label className="mb-1 block text-[11px] font-medium text-brand-muted">
+                        Rang (1–6)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={6}
+                        value={winnerRanking}
+                        onChange={(e) => setWinnerRanking(e.target.value)}
+                        className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setWinnerFormOpen(false)}
+                      className="rounded-full border border-slate-700 px-3 py-1 text-[11px] text-slate-300 hover:bg-slate-900/80"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isToggling || !winnerCategory || !winnerRanking}
+                      onClick={() =>
+                        onToggleWinner(movie, {
+                          ranking: winnerRanking,
+                          category: winnerCategory,
+                        })
+                      }
+                      className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {isToggling ? "Enregistrement..." : "Valider comme gagnant"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-2 flex-1 space-y-2 overflow-hidden border-t border-slate-800 pt-3">
