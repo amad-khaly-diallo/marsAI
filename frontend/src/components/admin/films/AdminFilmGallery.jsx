@@ -72,7 +72,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
     });
   };
 
-  const handleToggleWinner = async (movie) => {
+  const handleToggleWinner = async (movie, options = {}) => {
     if (!movie) return;
     setTogglingWinnerId(movie.id);
     setWinnerError(null);
@@ -81,7 +81,11 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ is_winner: !movie.is_winner }),
+        body: JSON.stringify({
+          is_winner: !movie.is_winner,
+          ranking: options.ranking,
+          category: options.category,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || data.message || "Impossible de mettre à jour le statut gagnant.");
@@ -136,24 +140,26 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
                     </div>
                     <span
                       className={`inline-flex shrink-0 rounded-full px-2 py-0.5 text-[10px] border ${
-                        movie.status === "approved"
-                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                          : movie.status === "selected"
-                            ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
-                            : movie.status === "rejected"
-                              ? "bg-red-500/10 text-red-400 border-red-500/20"
-                              : movie.status === "in_process"
-                                ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
-                                : "bg-slate-900/80 text-brand-muted border-slate-700"
+                        movie.is_winner
+                          ? "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                          : movie.status === "approved"
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                            : movie.status === "selected"
+                              ? "bg-brand-primary/10 text-brand-primary border-brand-primary/20"
+                              : movie.status === "rejected"
+                                ? "bg-red-500/10 text-red-400 border-red-500/20"
+                                : movie.status === "in_process"
+                                  ? "bg-orange-500/10 text-orange-400 border-orange-500/20"
+                                  : "bg-slate-900/80 text-brand-muted border-slate-700"
                       }`}
                     >
-                      {STATUS_LABELS[movie.status] || movie.status}
+                      {movie.is_winner ? STATUS_LABELS.winner : (STATUS_LABELS[movie.status] || movie.status)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-brand-muted">
                     <span className="inline-flex items-center gap-1">
                       <Clock className="h-3.5 w-3.5 shrink-0" />
-                      {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
+                      {movie.duration ? `${movie.duration} sec` : "Durée inconnue"}
                     </span>
                     {typeof movie.reviewers_count === "number" && <span>{movie.reviewers_count} avis</span>}
                   </div>
