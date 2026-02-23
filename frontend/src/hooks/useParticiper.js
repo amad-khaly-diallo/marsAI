@@ -54,10 +54,11 @@ export default function useParticiper() {
     validateCollaborators,
   } = useParticiperValidation();
 
-  // clear error when step changes
+  // clear erreurs et état de soumission global quand on change d'étape
   useEffect(() => {
     setError(null);
-  }, [currentStep]);
+    setSubmitting(false);
+  }, [currentStep, setError, setSubmitting]);
 
   // submission logic
   const submit = useParticiperSubmit({
@@ -84,6 +85,7 @@ export default function useParticiper() {
     validateMovie,
     validateAiDeclaration,
     validateCollaborators,
+    currentStep: state.currentStep,
     t,
   });
 

@@ -79,10 +79,6 @@ async function create(payload) {
 
     return getById(result.insertId);
   } catch (err) {
-    // 1062 = duplicate key (email unique)
-    if (err && err.code === 'ER_DUP_ENTRY') {
-      throw new HttpError(409, 'Email already exists');
-    }
     throw err;
   }
 }

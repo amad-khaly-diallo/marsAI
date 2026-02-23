@@ -67,21 +67,6 @@ export default function MovieForm({
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-xs text-brand-muted">Durée (en minutes)</label>
-          <input
-            type="number"
-            min="0"
-            max="1"
-            step="0.01"
-            value={value.duration || ""}
-            onChange={handleDuration}
-            className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
-          />
-          <p className="mt-1 text-[11px] text-brand-muted">
-            Entrez la durée en minutes (ex: 0.75 = 45s, max 1 min).
-          </p>
-        </div>
-        <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted">Langue principale</label>
           <input
             type="text"
