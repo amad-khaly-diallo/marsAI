@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { HeroSection, PageBackground } from "../components/home";
-import { Phase1Hero, FestivalDescription, Phase1Chronology, Phase1Map, NewsletterSection } from "../components/home/Phase1";
+import {
+  Phase1Hero,
+  FestivalDescription,
+  Phase1Chronology,
+  Phase1Map,
+  NewsletterSection,
+} from "../components/home/Phase1";
 import { ManifestoSection, CTASection, HeroCamera } from "../components/home";
 import { StatsSection as ProjectorStatsSection } from "../components/home/StatsSection";
 import { Phase3Winners } from "../components/home/Phase3";
@@ -15,7 +21,7 @@ import api from "../services/api";
  * Phase 3 : Grand Prix / Palmarès (winners)
  */
 export default function Home() {
-  const [phase] = useState(3);
+  const [phase] = useState(1);
   const [phase2Movies, setPhase2Movies] = useState([]);
   const [phase3Winners, setPhase3Winners] = useState([]);
   const [phase3Loading, setPhase3Loading] = useState(false);
@@ -31,7 +37,9 @@ export default function Home() {
         if (!cancelled) setPhase2Movies([]);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [phase]);
 
   useEffect(() => {
@@ -48,7 +56,9 @@ export default function Home() {
         if (!cancelled) setPhase3Loading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [phase]);
 
   return (
@@ -69,8 +79,8 @@ export default function Home() {
           <Phase1Chronology />
           <Phase1Map />
           <NewsletterSection />
-
-        </>)}
+        </>
+      )}
       {/* ——— Phase 2 : Camera, stats, manifeste, CTA ——— */}
       {phase === 2 && (
         <>
@@ -90,7 +100,10 @@ export default function Home() {
       {/* ——— Phase 3 : Grand Prix / Palmarès ——— */}
       {phase === 3 && (
         <>
-          <Phase3Winners winnersFromApi={phase3Winners} loading={phase3Loading} />
+          <Phase3Winners
+            winnersFromApi={phase3Winners}
+            loading={phase3Loading}
+          />
         </>
       )}
 
