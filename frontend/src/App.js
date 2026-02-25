@@ -5,11 +5,14 @@ import Header from "./components/layout/Header/Header";
 import Footer from "./components/layout/Footer/Footer";
 import { AuthProvider } from "./contexts";
 import ScrollToTop from "./components/ui/ScrollToTop";
+import GoogleAnalytics from "./components/G-Analytics/GoogleAnalytics";
 
 export default function App() {
   return (
     <AuthProvider>
       <Router>
+        <GoogleAnalytics />
+
         <ScrollToTop />
 
         <div className="flex min-h-screen flex-col">
