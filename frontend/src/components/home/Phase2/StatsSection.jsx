@@ -1,9 +1,9 @@
 import React from 'react';
 import { ProjectorButton } from './ProjectorButton';
 import { StatsPanel } from './StatsPanel';
-import { useAudioContext } from '../../hooks/useAudioContext';
+import { useAudioContext } from '../../../hooks/useAudioContext';
 import { useTranslation } from 'react-i18next';
-import { heroAnimationStyles } from '../sections/heroAnimations';
+import { heroAnimationStyles } from '../../sections/heroAnimations';
 
 // Jeux de données locaux (spécifiques au projecteur)
 const FILM_GENRES = [

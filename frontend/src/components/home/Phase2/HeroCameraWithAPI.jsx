@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { heroAnimationStyles } from '../sections/heroAnimations';
+import { heroAnimationStyles } from '../../sections/heroAnimations';
 
 export function HeroCameraWithAPI() {
   const [selectedGenreIdx, setSelectedGenreIdx] = useState(0);

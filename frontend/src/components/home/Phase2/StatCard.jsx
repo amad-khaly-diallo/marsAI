@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCountUp } from '../../hooks/useCountUp';
+import { useCountUp } from '../../../hooks/useCountUp';
 
 export function StatCard({
   icon,
