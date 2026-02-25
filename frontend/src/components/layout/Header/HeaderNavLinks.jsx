@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAdmin } from '../../../contexts';
 
 const links = [
   { to: '/', labelKey: 'nav.home', defaultLabel: 'Accueil' },
@@ -15,6 +16,8 @@ export default function HeaderNavLinks({
   onNavigate,
 }) {
   const { t } = useTranslation();
+  const { isAuthenticated: isAdmin, checking } = useAdmin();
+  const showAdminLink = !checking && isAdmin;
 
   const base =
     'text-sm font-medium tracking-wide transition-colors duration-200';
@@ -42,6 +45,17 @@ export default function HeaderNavLinks({
             {t(link.labelKey, link.defaultLabel)}
           </NavLink>
         ))}
+        {showAdminLink && (
+          <NavLink
+            to="/admin"
+            className={({ isActive }) =>
+              `text-lg font-medium transition-colors ${isActive ? 'text-brand-primary' : 'text-slate-200'}`
+            }
+            onClick={onNavigate}
+          >
+            {t('nav.admin', 'Admin')}
+          </NavLink>
+        )}
         <NavLink
           to="/participer"
           className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-brand-primary px-4 py-3 text-sm font-bold text-slate-900 shadow-soft-sm uppercase"
@@ -60,6 +74,11 @@ export default function HeaderNavLinks({
           {t(link.labelKey, link.defaultLabel)}
         </NavLink>
       ))}
+      {showAdminLink && (
+        <NavLink to="/admin" className={active}>
+          {t('nav.admin', 'Admin')}
+        </NavLink>
+      )}
     </div>
   );
 }

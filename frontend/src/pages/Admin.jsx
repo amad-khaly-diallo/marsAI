@@ -11,7 +11,7 @@ import {
   VideosDistribution,
   MyMoviesGallery,
 } from '../components/admin';
-import { AdminProvider, useAdmin } from '../contexts';
+import { useAdmin } from '../contexts';
 
 function AdminContent() {
   const { admin, checking, isAuthenticated, error, reload } = useAdmin();
@@ -68,10 +68,9 @@ function AdminContent() {
   return <AdminLayout currentAdmin={admin}>{renderSection}</AdminLayout>;
 }
 
+// The app already wraps everything with a single AdminProvider in App.js.
+// Avoid creating a second provider here, otherwise the header and other
+// components will read a different slice of state and won't see updates.
 export default function Admin() {
-  return (
-    <AdminProvider>
-      <AdminContent />
-    </AdminProvider>
-  );
+  return <AdminContent />;
 }
