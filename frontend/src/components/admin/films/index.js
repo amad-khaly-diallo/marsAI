@@ -1,1 +1,1 @@
-export { default as MoviesManagement } from "./MoviesManagement";
+export { default as MoviesManagement } from './MoviesManagement';

@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
-import MiniMapGTA from "../components/ui/MiniMapGTA/MiniMapGTA";
+import React, { useEffect, useState, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import MiniMapGTA from '../components/ui/MiniMapGTA/MiniMapGTA';
 
 /* ---------- Helpers ---------- */
 
@@ -62,11 +62,11 @@ function NavItem({ to, children }) {
     <Link
       to={to}
       className={[
-        "rounded-full px-4 py-2 text-sm font-semibold transition",
+        'rounded-full px-4 py-2 text-sm font-semibold transition',
         active
-          ? "bg-white/20 text-white"
-          : "text-white/80 hover:bg-white/15 hover:text-white",
-      ].join(" ")}
+          ? 'bg-white/20 text-white'
+          : 'text-white/80 hover:bg-white/15 hover:text-white',
+      ].join(' ')}
     >
       {children}
     </Link>
@@ -86,7 +86,7 @@ function SmallLabel({ children }) {
   );
 }
 
-function StatCounter({ label, value, description, prefix = "" }) {
+function StatCounter({ label, value, description, prefix = '' }) {
   const [count, ref] = useCountUp(value);
 
   return (
@@ -95,7 +95,7 @@ function StatCounter({ label, value, description, prefix = "" }) {
         <p className="text-xs font-semibold text-white/60">{label}</p>
         <h3 className="mt-2 text-5xl font-black text-white">
           {prefix && <span className="text-3xl">{prefix}</span>}
-          {count.toLocaleString("fr-FR")}
+          {count.toLocaleString('fr-FR')}
         </h3>
         <p className="mt-2 text-xs text-white/60">{description}</p>
       </div>
@@ -156,7 +156,7 @@ function StatCard({
           className={`text-3xl font-black text-transparent bg-clip-text ${gradient.textGradient}`}
         >
           {prefix}
-          {count.toLocaleString("fr-FR")}
+          {count.toLocaleString('fr-FR')}
         </div>
         <p className="text-xs text-white/60 mt-1">{subtitle}</p>
       </div>
@@ -190,11 +190,11 @@ function AnalyticsRow({ label, percentage, colorFrom, colorTo, textColor }) {
 export default function Home() {
   const [statsRevealed, setStatsRevealed] = useState(false);
   const [statsFlash, setStatsFlash] = useState(false);
-  const [mapMode, setMapMode] = useState("gta"); // 'gta' ou 'real'
+  const [mapMode, setMapMode] = useState('gta'); // 'gta' ou 'real'
   const audioCtxRef = useRef(null);
 
   const playCameraSound = () => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -204,7 +204,7 @@ export default function Home() {
     const ctx = audioCtxRef.current ?? new AudioContext();
     audioCtxRef.current = ctx;
 
-    if (ctx.state === "suspended") {
+    if (ctx.state === 'suspended') {
       ctx.resume();
     }
 
@@ -254,15 +254,15 @@ export default function Home() {
           d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z"
         />
       ),
-      title: "Visiteurs",
-      subtitle: "Au festival",
+      title: 'Visiteurs',
+      subtitle: 'Au festival',
       value: 3000,
-      prefix: "",
+      prefix: '',
       gradient: {
-        bg: "from-violet-500/20 to-violet-600/20",
-        border: "border-violet-500/30",
-        text: "text-violet-400",
-        textGradient: "bg-gradient-to-r from-violet-400 to-violet-300",
+        bg: 'from-violet-500/20 to-violet-600/20',
+        border: 'border-violet-500/30',
+        text: 'text-violet-400',
+        textGradient: 'bg-gradient-to-r from-violet-400 to-violet-300',
       },
     },
     {
@@ -274,15 +274,15 @@ export default function Home() {
           d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
         />
       ),
-      title: "Professionnels IA",
-      subtitle: "Experts mobilisés",
+      title: 'Professionnels IA',
+      subtitle: 'Experts mobilisés',
       value: 60,
-      prefix: "+",
+      prefix: '+',
       gradient: {
-        bg: "from-fuchsia-500/20 to-fuchsia-600/20",
-        border: "border-fuchsia-500/30",
-        text: "text-fuchsia-400",
-        textGradient: "bg-gradient-to-r from-fuchsia-400 to-fuchsia-300",
+        bg: 'from-fuchsia-500/20 to-fuchsia-600/20',
+        border: 'border-fuchsia-500/30',
+        text: 'text-fuchsia-400',
+        textGradient: 'bg-gradient-to-r from-fuchsia-400 to-fuchsia-300',
       },
     },
     {
@@ -294,15 +294,15 @@ export default function Home() {
           d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       ),
-      title: "Pays représentés",
-      subtitle: "Portée mondiale",
+      title: 'Pays représentés',
+      subtitle: 'Portée mondiale',
       value: 120,
-      prefix: "+",
+      prefix: '+',
       gradient: {
-        bg: "from-cyan-500/20 to-cyan-600/20",
-        border: "border-cyan-500/30",
-        text: "text-cyan-400",
-        textGradient: "bg-gradient-to-r from-cyan-400 to-cyan-300",
+        bg: 'from-cyan-500/20 to-cyan-600/20',
+        border: 'border-cyan-500/30',
+        text: 'text-cyan-400',
+        textGradient: 'bg-gradient-to-r from-cyan-400 to-cyan-300',
       },
     },
     {
@@ -314,47 +314,47 @@ export default function Home() {
           d="M7 4v16m0 0H3m4 0h10m0 0h4m-4 0v-2a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m0 0v2a2 2 0 002 2h4a2 2 0 002-2v-2m0 0h4"
         />
       ),
-      title: "Films soumis",
-      subtitle: "Sélection mondiale",
+      title: 'Films soumis',
+      subtitle: 'Sélection mondiale',
       value: 600,
-      prefix: "+",
+      prefix: '+',
       gradient: {
-        bg: "from-amber-500/20 to-amber-600/20",
-        border: "border-amber-500/30",
-        text: "text-amber-400",
-        textGradient: "bg-gradient-to-r from-amber-400 to-amber-300",
+        bg: 'from-amber-500/20 to-amber-600/20',
+        border: 'border-amber-500/30',
+        text: 'text-amber-400',
+        textGradient: 'bg-gradient-to-r from-amber-400 to-amber-300',
       },
     },
   ];
 
   const analyticsData = [
     {
-      label: "Courts",
+      label: 'Courts',
       percentage: 65,
-      colorFrom: "cyan",
-      colorTo: "blue",
-      textColor: "cyan",
+      colorFrom: 'cyan',
+      colorTo: 'blue',
+      textColor: 'cyan',
     },
     {
-      label: "Docs",
+      label: 'Docs',
       percentage: 42,
-      colorFrom: "fuchsia",
-      colorTo: "pink",
-      textColor: "fuchsia",
+      colorFrom: 'fuchsia',
+      colorTo: 'pink',
+      textColor: 'fuchsia',
     },
     {
-      label: "Expo",
+      label: 'Expo',
       percentage: 28,
-      colorFrom: "green",
-      colorTo: "emerald",
-      textColor: "green",
+      colorFrom: 'green',
+      colorTo: 'emerald',
+      textColor: 'green',
     },
     {
-      label: "Anims",
+      label: 'Anims',
       percentage: 55,
-      colorFrom: "amber",
-      colorTo: "yellow",
-      textColor: "amber",
+      colorFrom: 'amber',
+      colorTo: 'yellow',
+      textColor: 'amber',
     },
   ];
 
@@ -393,7 +393,7 @@ export default function Home() {
           <SmallLabel>Marseille — Festival de courts (1 minute)</SmallLabel>
 
           <h1 className="mt-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
-            Un festival pour raconter fort,{" "}
+            Un festival pour raconter fort,{' '}
             <span className="text-white/90">en une minute.</span>
           </h1>
 
@@ -442,7 +442,7 @@ export default function Home() {
                 Manifeste
               </div>
               <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
-                La technologie n'est pas le sujet.{" "}
+                La technologie n'est pas le sujet.{' '}
                 <span className="text-white/80">L'intention l'est.</span>
               </h2>
               <p className="mt-5 text-sm leading-7 text-white/70 md:text-base">
@@ -575,21 +575,21 @@ export default function Home() {
                 {/* Toggle Map Mode */}
                 <div className="absolute -top-10 lg:-top-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/60 backdrop-blur border border-white/20 rounded-full px-4 py-2">
                   <button
-                    onClick={() => setMapMode("gta")}
+                    onClick={() => setMapMode('gta')}
                     className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
-                      mapMode === "gta"
-                        ? "bg-violet-500 text-white"
-                        : "text-white/60 hover:text-white"
+                      mapMode === 'gta'
+                        ? 'bg-violet-500 text-white'
+                        : 'text-white/60 hover:text-white'
                     }`}
                   >
                     GTA
                   </button>
                   <button
-                    onClick={() => setMapMode("real")}
+                    onClick={() => setMapMode('real')}
                     className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
-                      mapMode === "real"
-                        ? "bg-violet-500 text-white"
-                        : "text-white/60 hover:text-white"
+                      mapMode === 'real'
+                        ? 'bg-violet-500 text-white'
+                        : 'text-white/60 hover:text-white'
                     }`}
                   >
                     MAP
@@ -597,14 +597,14 @@ export default function Home() {
                 </div>
 
                 {/* GTA Style Map */}
-                {mapMode === "gta" && (
+                {mapMode === 'gta' && (
                   <div className="transition-all duration-500">
                     <GTAMiniMap />
                   </div>
                 )}
 
                 {/* Real OpenStreetMap */}
-                {mapMode === "real" && (
+                {mapMode === 'real' && (
                   <div className="transition-all duration-500 rounded-[32px] border border-white/10 bg-white/[0.05] p-3 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur">
                     <div className="overflow-hidden rounded-[26px] border border-white/10 bg-black/20">
                       <iframe
@@ -619,9 +619,9 @@ export default function Home() {
                 )}
 
                 <div className="absolute -bottom-6 lg:-bottom-8 left-1/2 -translate-x-1/2 text-xs text-white/50 font-semibold">
-                  {mapMode === "gta"
-                    ? "Radar GTA-style"
-                    : "Carte réelle Marseille"}
+                  {mapMode === 'gta'
+                    ? 'Radar GTA-style'
+                    : 'Carte réelle Marseille'}
                 </div>
               </div>
             </div>
@@ -658,11 +658,11 @@ export default function Home() {
                 <div
                   className="absolute left-0 top-1/2 -translate-y-1/2 -z-10 pointer-events-none transition-all duration-700"
                   style={{
-                    width: "400px",
-                    height: "400px",
+                    width: '400px',
+                    height: '400px',
                     background:
-                      "radial-gradient(circle, rgba(147, 51, 234, 0.4) 0%, rgba(147, 51, 234, 0.2) 30%, transparent 70%)",
-                    filter: "blur(40px)",
+                      'radial-gradient(circle, rgba(147, 51, 234, 0.4) 0%, rgba(147, 51, 234, 0.2) 30%, transparent 70%)',
+                    filter: 'blur(40px)',
                   }}
                 />
                 {/* Halo secondaire */}
@@ -670,7 +670,7 @@ export default function Home() {
                   className="absolute inset-0 -z-10 pointer-events-none transition-all duration-700 rounded-full blur-3xl"
                   style={{
                     background:
-                      "radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)",
+                      'radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)',
                   }}
                 />
               </>
@@ -685,8 +685,8 @@ export default function Home() {
                   onClick={handleStatsReveal}
                   className={`relative w-full sm:w-56 md:w-64 h-64 sm:h-72 md:h-80 flex items-center justify-center rounded-3xl bg-black border-2 transition-all cursor-pointer group overflow-hidden ${
                     statsRevealed
-                      ? "border-green-400/60 shadow-xl shadow-green-500/40"
-                      : "border-white/10 hover:border-violet-400/50 hover:shadow-2xl hover:shadow-violet-500/30"
+                      ? 'border-green-400/60 shadow-xl shadow-green-500/40'
+                      : 'border-white/10 hover:border-violet-400/50 hover:shadow-2xl hover:shadow-violet-500/30'
                   }`}
                   aria-label="Révéler les chiffres"
                 >
@@ -702,10 +702,10 @@ export default function Home() {
                   <img
                     src={
                       statsRevealed
-                        ? require("../assets/images/allumer.png")
-                        : require("../assets/images/éteint.png")
+                        ? require('../assets/images/allumer.png')
+                        : require('../assets/images/éteint.png')
                     }
-                    alt={statsRevealed ? "Caméra allumée" : "Caméra éteinte"}
+                    alt={statsRevealed ? 'Caméra allumée' : 'Caméra éteinte'}
                     className="w-full h-full object-cover transition-all duration-500 relative z-10"
                   />
 
@@ -726,11 +726,11 @@ export default function Home() {
                   onClick={handleStatsReveal}
                   className={`relative inline-flex h-8 w-16 items-center rounded-full transition-all duration-500 cursor-pointer border-2 focus:outline-none focus:ring-2 focus:ring-offset-2 group ${
                     statsRevealed
-                      ? "bg-gradient-to-r from-green-600/60 to-emerald-600/60 border-green-400 focus:ring-green-500/50 shadow-lg shadow-green-500/50"
-                      : "bg-gradient-to-r from-red-600/60 to-rose-600/60 border-red-400 focus:ring-red-500/50 shadow-lg shadow-red-500/30"
+                      ? 'bg-gradient-to-r from-green-600/60 to-emerald-600/60 border-green-400 focus:ring-green-500/50 shadow-lg shadow-green-500/50'
+                      : 'bg-gradient-to-r from-red-600/60 to-rose-600/60 border-red-400 focus:ring-red-500/50 shadow-lg shadow-red-500/30'
                   }`}
                   aria-label={
-                    statsRevealed ? "Éteindre la caméra" : "Allumer la caméra"
+                    statsRevealed ? 'Éteindre la caméra' : 'Allumer la caméra'
                   }
                   role="switch"
                   aria-checked={statsRevealed}
@@ -739,8 +739,8 @@ export default function Home() {
                   <div
                     className={`absolute inset-0 rounded-full blur-md transition-all duration-500 -z-10 ${
                       statsRevealed
-                        ? "bg-green-500/60 opacity-100"
-                        : "bg-red-500/60 opacity-100"
+                        ? 'bg-green-500/60 opacity-100'
+                        : 'bg-red-500/60 opacity-100'
                     }`}
                   />
 
@@ -748,8 +748,8 @@ export default function Home() {
                   <span
                     className={`absolute left-1.5 text-[9px] font-extrabold transition-all duration-500 ${
                       statsRevealed
-                        ? "text-red-200 opacity-20"
-                        : "text-red-50 opacity-100"
+                        ? 'text-red-200 opacity-20'
+                        : 'text-red-50 opacity-100'
                     }`}
                   >
                     OFF
@@ -757,8 +757,8 @@ export default function Home() {
                   <span
                     className={`absolute right-1.5 text-[9px] font-extrabold transition-all duration-500 ${
                       statsRevealed
-                        ? "text-green-50 opacity-100"
-                        : "text-green-200 opacity-20"
+                        ? 'text-green-50 opacity-100'
+                        : 'text-green-200 opacity-20'
                     }`}
                   >
                     ON
@@ -767,14 +767,14 @@ export default function Home() {
                   {/* Sliding circle */}
                   <div
                     className={`relative h-6 w-6 transform rounded-full bg-white shadow-xl transition-all duration-500 flex items-center justify-center group-hover:shadow-2xl ${
-                      statsRevealed ? "translate-x-8" : "translate-x-1"
+                      statsRevealed ? 'translate-x-8' : 'translate-x-1'
                     }`}
                   >
                     <div
                       className={`relative w-2 h-2 rounded-full transition-all duration-500 ${
                         statsRevealed
-                          ? "bg-green-500 shadow-lg shadow-green-500/80"
-                          : "bg-red-500 shadow-lg shadow-red-500/80"
+                          ? 'bg-green-500 shadow-lg shadow-green-500/80'
+                          : 'bg-red-500 shadow-lg shadow-red-500/80'
                       }`}
                     >
                       {statsRevealed && (
@@ -793,8 +793,8 @@ export default function Home() {
                 <div
                   className="absolute left-1/2 sm:left-40 md:left-52 top-[36%] -translate-y-1/2 md:-translate-y-0 md:top-auto md:bottom-0 w-[calc(100%-6rem)] sm:w-[calc(100%-10rem)] md:w-[calc(100%-13rem)] h-12 sm:h-16 md:h-20 md:w-12 md:h-full pointer-events-none z-20 overflow-visible"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
+                    display: 'flex',
+                    flexDirection: 'column',
                   }}
                 >
                   <div
@@ -802,13 +802,13 @@ export default function Home() {
                     style={{
                       background:
                         window.innerWidth >= 768
-                          ? "linear-gradient(90deg, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.3) 30%, rgba(147, 51, 234, 0.15) 60%, transparent 100%)"
-                          : "linear-gradient(180deg, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.3) 30%, rgba(147, 51, 234, 0.15) 60%, transparent 100%)",
+                          ? 'linear-gradient(90deg, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.3) 30%, rgba(147, 51, 234, 0.15) 60%, transparent 100%)'
+                          : 'linear-gradient(180deg, rgba(147, 51, 234, 0.5) 0%, rgba(147, 51, 234, 0.3) 30%, rgba(147, 51, 234, 0.15) 60%, transparent 100%)',
                       clipPath:
                         window.innerWidth >= 768
-                          ? "polygon(0% 45%, 100% 0%, 100% 100%, 0% 55%)"
-                          : "polygon(45% 0%, 0% 100%, 100% 100%, 55% 0%)",
-                      filter: "blur(25px)",
+                          ? 'polygon(0% 45%, 100% 0%, 100% 100%, 0% 55%)'
+                          : 'polygon(45% 0%, 0% 100%, 100% 100%, 55% 0%)',
+                      filter: 'blur(25px)',
                     }}
                   />
                 </div>
@@ -820,8 +820,8 @@ export default function Home() {
                   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 pointer-events-none transition-all duration-500 z-30"
                   style={{
                     background:
-                      "radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(147, 51, 234, 0.3) 35%, transparent 70%)",
-                    filter: "blur(40px)",
+                      'radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(147, 51, 234, 0.3) 35%, transparent 70%)',
+                    filter: 'blur(40px)',
                   }}
                 />
               )}
@@ -830,8 +830,8 @@ export default function Home() {
               <div
                 className={`relative flex-1 rounded-3xl p-4 sm:p-6 min-h-[320px] transition-all duration-700 overflow-hidden w-full md:flex-1 ${
                   statsRevealed
-                    ? "bg-white/[0.05] border border-white/10 shadow-2xl shadow-violet-500/30"
-                    : "bg-black/98 border border-black/50"
+                    ? 'bg-white/[0.05] border border-white/10 shadow-2xl shadow-violet-500/30'
+                    : 'bg-black/98 border border-black/50'
                 }`}
               >
                 {/* Film grain effect (subtil) */}
@@ -841,7 +841,7 @@ export default function Home() {
                     style={{
                       backgroundImage:
                         "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
-                      backgroundSize: "200px 200px",
+                      backgroundSize: '200px 200px',
                     }}
                   />
                 )}
@@ -852,7 +852,7 @@ export default function Home() {
                     className="absolute inset-0 pointer-events-none"
                     style={{
                       background:
-                        "radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.3) 100%)",
+                        'radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.3) 100%)',
                     }}
                   />
                 )}
@@ -865,8 +865,8 @@ export default function Home() {
                     <div
                       className={`grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 transition-all duration-700 ${
                         statsRevealed
-                          ? "opacity-100 translate-x-0"
-                          : "opacity-0 -translate-x-8 pointer-events-none"
+                          ? 'opacity-100 translate-x-0'
+                          : 'opacity-0 -translate-x-8 pointer-events-none'
                       }`}
                       aria-hidden={!statsRevealed}
                     >
@@ -889,8 +889,8 @@ export default function Home() {
                   <div
                     className={`flex-1 transition-all duration-700 delay-150 ${
                       statsRevealed
-                        ? "opacity-100 translate-x-0"
-                        : "opacity-0 translate-x-8 pointer-events-none"
+                        ? 'opacity-100 translate-x-0'
+                        : 'opacity-0 translate-x-8 pointer-events-none'
                     }`}
                     aria-hidden={!statsRevealed}
                   >
@@ -900,8 +900,8 @@ export default function Home() {
                         className="absolute inset-0 opacity-10 pointer-events-none"
                         style={{
                           backgroundImage:
-                            "linear-gradient(rgba(0, 255, 255, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.3) 1px, transparent 1px)",
-                          backgroundSize: "20px 20px",
+                            'linear-gradient(rgba(0, 255, 255, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.3) 1px, transparent 1px)',
+                          backgroundSize: '20px 20px',
                         }}
                       />
 
@@ -922,7 +922,7 @@ export default function Home() {
                           <h3
                             className="text-xs sm:text-sm font-black text-cyan-400 uppercase tracking-widest"
                             style={{
-                              textShadow: "0 0 10px rgba(0, 255, 255, 0.8)",
+                              textShadow: '0 0 10px rgba(0, 255, 255, 0.8)',
                             }}
                           >
                             ≡ DISTRIBUTION
@@ -935,7 +935,7 @@ export default function Home() {
                           <div
                             className="w-1.5 h-1.5 bg-cyan-400 animate-pulse"
                             style={{
-                              boxShadow: "0 0 8px rgba(0, 255, 255, 0.8)",
+                              boxShadow: '0 0 8px rgba(0, 255, 255, 0.8)',
                             }}
                           />
                           <span className="text-[10px] font-bold text-cyan-300 font-mono">
@@ -1010,7 +1010,7 @@ export default function Home() {
                             <p
                               className="text-base font-black text-cyan-400 font-mono"
                               style={{
-                                textShadow: "0 0 10px rgba(0, 255, 255, 0.8)",
+                                textShadow: '0 0 10px rgba(0, 255, 255, 0.8)',
                               }}
                             >
                               47.5%
@@ -1026,7 +1026,7 @@ export default function Home() {
                             <p
                               className="text-xs font-black text-magenta-400 font-mono uppercase"
                               style={{
-                                textShadow: "0 0 10px rgba(255, 0, 255, 0.8)",
+                                textShadow: '0 0 10px rgba(255, 0, 255, 0.8)',
                               }}
                             >
                               Courts

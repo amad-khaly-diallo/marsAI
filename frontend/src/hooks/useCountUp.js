@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from 'react';
 
 /**
  * Hook personnalisé pour animer un compteur avec IntersectionObserver
@@ -12,7 +12,7 @@ export function useCountUp(
   target,
   duration = 4000,
   triggerOnce = true,
-  enabled = true
+  enabled = true,
 ) {
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
@@ -42,7 +42,7 @@ export function useCountUp(
           requestAnimationFrame(animate);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     if (ref.current) {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 
 export default function useAdmins() {
   const [admins, setAdmins] = useState([]);
@@ -9,7 +9,7 @@ export default function useAdmins() {
     setLoading(true);
     setError(null);
     try {
-      const admin = require("../../../services/admin").default;
+      const admin = require('../../../services/admin').default;
       const data = await admin.getAdmins();
       setAdmins(Array.isArray(data) ? data : []);
     } catch (err) {

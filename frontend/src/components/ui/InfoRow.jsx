@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 // backward-compatible API: accepts (k, v) or (label, value)
 export function InfoRow({ k, v, label, value }) {

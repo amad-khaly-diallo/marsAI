@@ -1,15 +1,15 @@
-import React from "react";
-import { StatCard, AnalyticsBar } from "./HomeWidgets";
-import ProjectorBeam from "./ProjectorBeam";
-import Particles from "./Particles";
+import React from 'react';
+import { StatCard, AnalyticsBar } from './HomeWidgets';
+import ProjectorBeam from './ProjectorBeam';
+import Particles from './Particles';
 
 export function AnalyticsPanel({ statsRevealed, analyticsData }) {
   return (
     <div
       className={`flex-1 transition-all duration-700 delay-150 ${
         statsRevealed
-          ? "opacity-100 translate-x-0"
-          : "opacity-0 translate-x-8 pointer-events-none"
+          ? 'opacity-100 translate-x-0'
+          : 'opacity-0 translate-x-8 pointer-events-none'
       }`}
       aria-hidden={!statsRevealed}
     >
@@ -18,8 +18,8 @@ export function AnalyticsPanel({ statsRevealed, analyticsData }) {
           className="absolute inset-0 opacity-5 pointer-events-none"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(0, 255, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.2) 1px, transparent 1px)",
-            backgroundSize: "30px 30px",
+              'linear-gradient(rgba(0, 255, 255, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.2) 1px, transparent 1px)',
+            backgroundSize: '30px 30px',
           }}
         />
 
@@ -36,7 +36,7 @@ export function AnalyticsPanel({ statsRevealed, analyticsData }) {
           <div>
             <h3
               className="text-xs font-black text-cyan-400/90 uppercase tracking-widest"
-              style={{ textShadow: "0 0 8px rgba(0, 255, 255, 0.5)" }}
+              style={{ textShadow: '0 0 8px rgba(0, 255, 255, 0.5)' }}
             >
               ≡ DISTRIBUTION
             </h3>
@@ -47,7 +47,7 @@ export function AnalyticsPanel({ statsRevealed, analyticsData }) {
           <div className="flex items-center gap-1.5 px-2 py-1 bg-cyan-500/10 border border-cyan-400/40 rounded">
             <div
               className="w-1.5 h-1.5 bg-cyan-400 animate-pulse"
-              style={{ boxShadow: "0 0 6px rgba(0, 255, 255, 0.5)" }}
+              style={{ boxShadow: '0 0 6px rgba(0, 255, 255, 0.5)' }}
             />
             <span className="text-[10px] font-bold text-cyan-300/80 font-mono">
               ACTIVE
@@ -80,7 +80,7 @@ export function AnalyticsPanel({ statsRevealed, analyticsData }) {
               </p>
               <p
                 className="text-sm font-black text-cyan-400 font-mono"
-                style={{ textShadow: "0 0 10px rgba(0, 255, 255, 0.8)" }}
+                style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.8)' }}
               >
                 47.5%
               </p>
@@ -94,7 +94,7 @@ export function AnalyticsPanel({ statsRevealed, analyticsData }) {
               </p>
               <p
                 className="text-xs font-black text-magenta-400 font-mono uppercase"
-                style={{ textShadow: "0 0 10px rgba(255, 0, 255, 0.8)" }}
+                style={{ textShadow: '0 0 10px rgba(255, 0, 255, 0.8)' }}
               >
                 Courts
               </p>
@@ -121,8 +121,8 @@ export function StatsPanel({
     for (let i = 0; i < 8; i++) {
       particles.push({
         id: i,
-        tx: (Math.random() - 0.5) * 30 + "px",
-        delay: i * 0.15 + "s",
+        tx: (Math.random() - 0.5) * 30 + 'px',
+        delay: i * 0.15 + 's',
       });
     }
     return particles;
@@ -141,14 +141,14 @@ export function StatsPanel({
 
       {/* Main panel */}
       <div
-        className={`relative flex-1 rounded-lg p-2 sm:p-3 lg:max-w-3xl transition-all duration-700 overflow-hidden w-full ${statsRevealed ? "bg-white/[0.05] border border-white/10 shadow-2xl shadow-violet-500/30" : "bg-black/98 border border-black/50"}`}
+        className={`relative flex-1 rounded-lg p-2 sm:p-3 lg:max-w-3xl transition-all duration-700 overflow-hidden w-full ${statsRevealed ? 'bg-white/[0.05] border border-white/10 shadow-2xl shadow-violet-500/30' : 'bg-black/98 border border-black/50'}`}
       >
         {statsRevealed && (
           <div
             className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay animate-grain"
             style={{
               backgroundImage: noiseDataUrl,
-              backgroundSize: "200px 200px",
+              backgroundSize: '200px 200px',
             }}
           />
         )}
@@ -157,7 +157,7 @@ export function StatsPanel({
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.3) 100%)",
+                'radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.3) 100%)',
             }}
           />
         )}
@@ -165,11 +165,11 @@ export function StatsPanel({
         <div className="flex flex-col lg:flex-row gap-2 md:gap-4 h-full">
           <div className="flex-1">
             <div
-              className={`h-full transition-all duration-700 ${statsRevealed ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8 pointer-events-none"}`}
+              className={`h-full transition-all duration-700 ${statsRevealed ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8 pointer-events-none'}`}
               aria-hidden={!statsRevealed}
             >
               <div
-                className={`grid gap-2 ${statsData.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}
+                className={`grid gap-2 ${statsData.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}
               >
                 {statsData.map((stat, index) => (
                   <StatCard

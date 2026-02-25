@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import adminService from "../services/admin";
-import api from "../services/api";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import adminService from '../services/admin';
+import api from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     // credentials: { email, password }
-    const data = await api.post("/admins/auth/login", credentials);
+    const data = await api.post('/admins/auth/login', credentials);
     // backend should set session cookie; re-check auth
     await checkAuth();
     return data;
@@ -34,7 +34,7 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     // best-effort: call logout endpoint if present, then update state
     try {
-      await api.post("/admins/auth/logout");
+      await api.post('/admins/auth/logout');
     } catch (err) {
       // ignore network errors — still clear client state
     }
@@ -58,6 +58,6 @@ export function AuthProvider({ children }) {
 
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuthContext must be used within AuthProvider");
+  if (!ctx) throw new Error('useAuthContext must be used within AuthProvider');
   return ctx;
 }

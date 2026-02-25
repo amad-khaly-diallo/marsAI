@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 export function useAdminAuth() {
   const [checking, setChecking] = useState(true);
@@ -11,9 +11,9 @@ export function useAdminAuth() {
     setError(null);
 
     try {
-      const res = await fetch("/api/admins/me", {
-        method: "GET",
-        credentials: "include",
+      const res = await fetch('/api/admins/me', {
+        method: 'GET',
+        credentials: 'include',
       });
 
       if (res.ok) {
@@ -42,9 +42,9 @@ export function useAdminAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await fetch("/api/admins/auth/logout", {
-        method: "POST",
-        credentials: "include",
+      await fetch('/api/admins/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
       });
     } catch {
       // ignore
@@ -64,4 +64,3 @@ export function useAdminAuth() {
     logout,
   };
 }
-

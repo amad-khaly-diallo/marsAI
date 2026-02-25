@@ -1,4 +1,4 @@
-import AdminLayout from "../components/layout/AdminLayout";
+import AdminLayout from '../components/layout/AdminLayout';
 import {
   DashboardOverview,
   AdminsManagement,
@@ -10,31 +10,31 @@ import {
   GreenFlagGallery,
   VideosDistribution,
   MyMoviesGallery,
-} from "../components/admin";
-import { AdminProvider, useAdmin } from "../contexts";
+} from '../components/admin';
+import { AdminProvider, useAdmin } from '../contexts';
 
 function AdminContent() {
   const { admin, checking, isAuthenticated, error, reload } = useAdmin();
 
   const renderSection = (section) => {
     switch (section) {
-      case "admins":
+      case 'admins':
         return <AdminsManagement />;
-      case "jury":
+      case 'jury':
         return <JuryManagement />;
-      case "my-movies":
+      case 'my-movies':
         return <MyMoviesGallery />;
-      case "movies":
+      case 'movies':
         return <MoviesManagement currentAdmin={admin} />;
-      case "partners":
+      case 'partners':
         return <PartnersManagement />;
-      case "newsletters":
+      case 'newsletters':
         return <NewslettersManagement />;
-      case "all-videos":
+      case 'all-videos':
         return <GreenFlagGallery />;
-      case "videos-distribution":
+      case 'videos-distribution':
         return <VideosDistribution currentAdmin={admin} />;
-      case "dashboard":
+      case 'dashboard':
       default:
         return <DashboardOverview />;
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 
 export default function usePartners() {
   const [partners, setPartners] = useState([]);
@@ -9,7 +9,7 @@ export default function usePartners() {
     setLoading(true);
     setError(null);
     try {
-      const admin = require("../../../services/admin").default;
+      const admin = require('../../../services/admin').default;
       const data = await admin.getPartners();
       setPartners(Array.isArray(data) ? data : []);
     } catch (err) {

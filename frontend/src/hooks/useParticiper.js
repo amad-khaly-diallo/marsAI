@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import useParticiperState from "./useParticiperState";
-import useParticiperValidation from "./useParticiperValidation";
-import useParticiperSubmit from "./useParticiperSubmit";
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import useParticiperState from './useParticiperState';
+import useParticiperValidation from './useParticiperValidation';
+import useParticiperSubmit from './useParticiperSubmit';
 
 export default function useParticiper() {
   const { t } = useTranslation();

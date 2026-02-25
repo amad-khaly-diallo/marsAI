@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import BannerBg from '../../assets/images/bn03.png';
 import { legalData } from './legalData';
 import LegalCard from './LegalCard';
@@ -10,14 +10,14 @@ export default function CGU() {
 
   return (
     <div className="relative w-full min-h-screen bg-[#020617] text-slate-200 py-20 px-6 font-sans overflow-hidden">
-      
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 pointer-events-none"
-        style={{ 
+        style={{
           backgroundImage: `url(${BannerBg})`,
           maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)'
+          WebkitMaskImage:
+            'linear-gradient(to bottom, black 50%, transparent 100%)',
         }}
       ></div>
 

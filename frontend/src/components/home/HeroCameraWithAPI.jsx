@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { heroAnimationStyles } from "../sections/heroAnimations";
+import React, { useState, useEffect } from 'react';
+import { heroAnimationStyles } from '../sections/heroAnimations';
 
 export function HeroCameraWithAPI() {
   const [selectedGenreIdx, setSelectedGenreIdx] = useState(0);
@@ -20,12 +20,12 @@ export function HeroCameraWithAPI() {
 
   const fetchGenres = async () => {
     try {
-      const res = await fetch("/api/genres");
+      const res = await fetch('/api/genres');
       const data = await res.json();
       setGenres(data);
       setLoading(false);
     } catch {
-      setError("Erreur chargement genres");
+      setError('Erreur chargement genres');
       setLoading(false);
     }
   };
@@ -70,7 +70,7 @@ export function HeroCameraWithAPI() {
       {/* TITLE */}
       <div className="text-center pt-20 mb-16">
         <h1
-          className={`text-5xl font-black text-white mb-4 ${isCameraOn ? "hologram-title" : ""}`}
+          className={`text-5xl font-black text-white mb-4 ${isCameraOn ? 'hologram-title' : ''}`}
         >
           Découvrez les films
         </h1>
@@ -78,14 +78,14 @@ export function HeroCameraWithAPI() {
 
       {/* CAROUSEL */}
       <div
-        className={`relative w-full h-96 flex items-center justify-center ${isInserting ? "slot-glow" : ""}`}
-        style={{ perspective: "1200px" }}
+        className={`relative w-full h-96 flex items-center justify-center ${isInserting ? 'slot-glow' : ''}`}
+        style={{ perspective: '1200px' }}
       >
         <div
           style={{
-            width: "500px",
-            height: "300px",
-            transformStyle: "preserve-3d",
+            width: '500px',
+            height: '300px',
+            transformStyle: 'preserve-3d',
             transform: `rotateY(${rotation}deg)`,
           }}
         >
@@ -95,16 +95,16 @@ export function HeroCameraWithAPI() {
             return (
               <div
                 key={idx}
-                className={`absolute cursor-pointer ${isActiveInsert ? "camera-insert" : ""}`}
+                className={`absolute cursor-pointer ${isActiveInsert ? 'camera-insert' : ''}`}
                 style={{
                   transform: `rotateY(${angle}deg) translateZ(220px)`,
-                  left: "50%",
-                  top: "50%",
+                  left: '50%',
+                  top: '50%',
                 }}
                 onClick={() => handleCardClick(idx)}
               >
                 <div
-                  className={`w-32 h-40 bg-slate-800 rounded-xl flex items-center justify-center text-white ${isActiveInsert ? "hologram-card" : "card-levitating"}`}
+                  className={`w-32 h-40 bg-slate-800 rounded-xl flex items-center justify-center text-white ${isActiveInsert ? 'hologram-card' : 'card-levitating'}`}
                 >
                   {g.name}
                 </div>

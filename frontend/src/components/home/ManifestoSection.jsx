@@ -1,9 +1,9 @@
-import React from "react";
-import { ProgramCard } from "./HomeWidgets";
-import { LinkButton } from "../ui";
-import { NAV_ROUTES } from "../../constants/homeConstants";
-import { useTranslation } from "react-i18next";
-import { heroAnimationStyles } from "../sections/heroAnimations";
+import React from 'react';
+import { ProgramCard } from './HomeWidgets';
+import { LinkButton } from '../ui';
+import { NAV_ROUTES } from '../../constants/homeConstants';
+import { useTranslation } from 'react-i18next';
+import { heroAnimationStyles } from '../sections/heroAnimations';
 
 export function ManifestoSection() {
   const { t } = useTranslation();
@@ -25,7 +25,7 @@ export function ManifestoSection() {
 
             {/* Title */}
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mt-3">
-              La technologie n'est pas le sujet.{" "}
+              La technologie n'est pas le sujet.{' '}
               <span className="bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                 L'intention l'est.
               </span>
