@@ -8,8 +8,11 @@ import {
   Phase1Map,
   NewsletterSection,
 } from '../components/home/Phase1';
-import { CTASection, HeroCamera } from '../components/home';
-import { StatsSection as ProjectorStatsSection } from '../components/home/StatsSection';
+import {
+  CTASection,
+  HeroCamera,
+  StatsSection as ProjectorStatsSection,
+} from '../components/home/Phase2';
 import { Phase3Winners } from '../components/home/Phase3';
 import { HOME_STYLES } from '../constants/homeStyles';
 import { CookieBanner } from '../components/ui/CookieBanner';

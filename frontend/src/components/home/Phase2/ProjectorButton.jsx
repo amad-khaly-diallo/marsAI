@@ -1,9 +1,9 @@
 import React from 'react';
 // Images spécifiques au projecteur
-import imgFilm from '../../assets/images/film.png';
-import imgIa from '../../assets/images/ia.png';
-import imgVisiteur from '../../assets/images/visiteur.png';
-import imgPays from '../../assets/images/pays.png';
+import imgFilm from '../../../assets/images/film.png';
+import imgIa from '../../../assets/images/ia.png';
+import imgVisiteur from '../../../assets/images/visiteur.png';
+import imgPays from '../../../assets/images/pays.png';
 
 export function ProjectorButton({
   statsRevealed,
@@ -42,7 +42,7 @@ export function ProjectorButton({
           (() => {
             try {
               const imageSrc = require(
-                `../../assets/images/${selectedGenre.projectorImage}`,
+                `../../../assets/images/${selectedGenre.projectorImage}`,
               );
               return (
                 <img
@@ -54,7 +54,7 @@ export function ProjectorButton({
             } catch (e) {
               return (
                 <img
-                  src={require('../../assets/images/allumer.png')}
+                  src={require('../../../assets/images/allumer.png')}
                   alt="Caméra allumée"
                   className="w-full h-full object-cover transition-all duration-500 relative z-10"
                 />
@@ -65,8 +65,8 @@ export function ProjectorButton({
           <img
             src={
               statsRevealed
-                ? require('../../assets/images/allumer.png')
-                : require('../../assets/images/éteint.png')
+                ? require('../../../assets/images/allumer.png')
+                : require('../../../assets/images/éteint.png')
             }
             alt={statsRevealed ? 'Caméra allumée' : 'Caméra éteinte'}
             className="w-full h-full object-cover transition-all duration-500 relative z-10"

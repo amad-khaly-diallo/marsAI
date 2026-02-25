@@ -1,9 +1,9 @@
 import React from 'react';
-import { ProgramCard } from './HomeWidgets';
-import { LinkButton } from '../ui';
-import { NAV_ROUTES } from '../../constants/homeConstants';
+import { ProgramCard } from './ProgramCard';
+import { LinkButton } from '../../ui';
+import { NAV_ROUTES } from '../../../constants/homeConstants';
 import { useTranslation } from 'react-i18next';
-import { heroAnimationStyles } from '../sections/heroAnimations';
+import { heroAnimationStyles } from '../../sections/heroAnimations';
 
 export function ManifestoSection() {
   const { t } = useTranslation();

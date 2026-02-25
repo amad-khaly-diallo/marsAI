@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 // Import des animations globales pour HeroCamera
-import { heroAnimationStyles } from '../sections/heroAnimations';
-import { getYouTubeThumbnail, getYouTubeEmbed } from '../../utils/youtube';
+import { heroAnimationStyles } from '../../sections/heroAnimations';
+import { getYouTubeThumbnail, getYouTubeEmbed } from '../../../utils/youtube';
 
 // Import des images SD
-import sdScifi from '../../assets/images/sd_scifi.png';
-import sdAction from '../../assets/images/sd_action.png';
-import sdDrama from '../../assets/images/sd_drama.png';
-import sdComedy from '../../assets/images/sd_comedy.png';
+import sdScifi from '../../../assets/images/sd_scifi.png';
+import sdAction from '../../../assets/images/sd_action.png';
+import sdDrama from '../../../assets/images/sd_drama.png';
+import sdComedy from '../../../assets/images/sd_comedy.png';
 
 // Données des films
 const DEMO_MOVIES = [
@@ -278,7 +278,7 @@ function normalizeApiMovie(m) {
   const filmmaker =
     m.filmmaker &&
     typeof m.filmmaker === 'object' &&
-    (m.filmmaker.first_name != null || m.filmmaker.last_name != null)
+    (m.filmmaker.first_name !== null || m.filmmaker.last_name !== null)
       ? [m.filmmaker.first_name, m.filmmaker.last_name]
           .filter(Boolean)
           .join(' ') || '—'
