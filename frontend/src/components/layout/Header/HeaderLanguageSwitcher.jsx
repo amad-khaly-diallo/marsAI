@@ -1,13 +1,13 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const LANGS = [
-  { code: "fr", label: "FR" },
-  { code: "en", label: "EN" },
+  { code: 'fr', label: 'FR' },
+  { code: 'en', label: 'EN' },
 ];
 
 export default function HeaderLanguageSwitcher() {
   const { i18n } = useTranslation();
-  const current = i18n.language || "fr";
+  const current = i18n.language || 'fr';
 
   const changeLang = (code) => {
     if (code === current) return;
@@ -24,11 +24,11 @@ export default function HeaderLanguageSwitcher() {
             type="button"
             onClick={() => changeLang(lang.code)}
             className={[
-              "px-2 py-0.5 rounded-full font-semibold transition-colors",
+              'px-2 py-0.5 rounded-full font-semibold transition-colors',
               active
-                ? "bg-brand-primary text-slate-900"
-                : "text-slate-300 hover:text-white",
-            ].join(" ")}
+                ? 'bg-brand-primary text-slate-900'
+                : 'text-slate-300 hover:text-white',
+            ].join(' ')}
           >
             {lang.label}
           </button>
@@ -37,4 +37,3 @@ export default function HeaderLanguageSwitcher() {
     </div>
   );
 }
-

@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 // Images spécifiques au projecteur
-import imgFilm from "../../assets/images/film.png";
-import imgIa from "../../assets/images/ia.png";
-import imgVisiteur from "../../assets/images/visiteur.png";
-import imgPays from "../../assets/images/pays.png";
+import imgFilm from '../../assets/images/film.png';
+import imgIa from '../../assets/images/ia.png';
+import imgVisiteur from '../../assets/images/visiteur.png';
+import imgPays from '../../assets/images/pays.png';
 
 export function ProjectorButton({
   statsRevealed,
@@ -31,8 +31,8 @@ export function ProjectorButton({
         onClick={onToggle}
         className={`relative w-full sm:w-36 lg:w-40 h-36 sm:h-40 lg:h-44 flex items-center justify-center rounded-xl bg-black border-2 transition-all cursor-pointer group overflow-hidden ${
           statsRevealed
-            ? "border-green-400/40 shadow-lg shadow-green-500/20"
-            : "border-white/10 hover:border-violet-400/50 hover:shadow-2xl hover:shadow-violet-500/30"
+            ? 'border-green-400/40 shadow-lg shadow-green-500/20'
+            : 'border-white/10 hover:border-violet-400/50 hover:shadow-2xl hover:shadow-violet-500/30'
         }`}
         aria-label="Révéler les chiffres"
       >
@@ -54,7 +54,7 @@ export function ProjectorButton({
             } catch (e) {
               return (
                 <img
-                  src={require("../../assets/images/allumer.png")}
+                  src={require('../../assets/images/allumer.png')}
                   alt="Caméra allumée"
                   className="w-full h-full object-cover transition-all duration-500 relative z-10"
                 />
@@ -65,10 +65,10 @@ export function ProjectorButton({
           <img
             src={
               statsRevealed
-                ? require("../../assets/images/allumer.png")
-                : require("../../assets/images/éteint.png")
+                ? require('../../assets/images/allumer.png')
+                : require('../../assets/images/éteint.png')
             }
-            alt={statsRevealed ? "Caméra allumée" : "Caméra éteinte"}
+            alt={statsRevealed ? 'Caméra allumée' : 'Caméra éteinte'}
             className="w-full h-full object-cover transition-all duration-500 relative z-10"
           />
         )}
@@ -87,26 +87,26 @@ export function ProjectorButton({
         onClick={onToggle}
         className={`relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-500 cursor-pointer border-2 focus:outline-none focus:ring-2 focus:ring-offset-2 group ${
           statsRevealed
-            ? "bg-gradient-to-r from-green-600/60 to-emerald-600/60 border-green-400 focus:ring-green-500/50 shadow-lg shadow-green-500/50"
-            : "bg-gradient-to-r from-red-600/60 to-rose-600/60 border-red-400 focus:ring-red-500/50 shadow-lg shadow-red-500/30"
+            ? 'bg-gradient-to-r from-green-600/60 to-emerald-600/60 border-green-400 focus:ring-green-500/50 shadow-lg shadow-green-500/50'
+            : 'bg-gradient-to-r from-red-600/60 to-rose-600/60 border-red-400 focus:ring-red-500/50 shadow-lg shadow-red-500/30'
         }`}
-        aria-label={statsRevealed ? "Éteindre la caméra" : "Allumer la caméra"}
+        aria-label={statsRevealed ? 'Éteindre la caméra' : 'Allumer la caméra'}
         role="switch"
         aria-checked={statsRevealed}
       >
         <div
           className={`absolute inset-0 rounded-full blur-md transition-all duration-500 -z-10 ${
             statsRevealed
-              ? "bg-green-500/60 opacity-100"
-              : "bg-red-500/60 opacity-100"
+              ? 'bg-green-500/60 opacity-100'
+              : 'bg-red-500/60 opacity-100'
           }`}
         />
 
         <span
           className={`absolute left-1.5 text-[9px] font-extrabold transition-all duration-500 ${
             statsRevealed
-              ? "text-red-200 opacity-20"
-              : "text-red-50 opacity-100"
+              ? 'text-red-200 opacity-20'
+              : 'text-red-50 opacity-100'
           }`}
         >
           OFF
@@ -114,8 +114,8 @@ export function ProjectorButton({
         <span
           className={`absolute right-1.5 text-[9px] font-extrabold transition-all duration-500 ${
             statsRevealed
-              ? "text-green-50 opacity-100"
-              : "text-green-200 opacity-20"
+              ? 'text-green-50 opacity-100'
+              : 'text-green-200 opacity-20'
           }`}
         >
           ON
@@ -123,14 +123,14 @@ export function ProjectorButton({
 
         <div
           className={`relative h-5 w-5 transform rounded-full bg-white shadow-xl transition-all duration-500 flex items-center justify-center group-hover:shadow-2xl ${
-            statsRevealed ? "translate-x-6" : "translate-x-0.5"
+            statsRevealed ? 'translate-x-6' : 'translate-x-0.5'
           }`}
         >
           <div
             className={`relative w-2 h-2 rounded-full transition-all duration-500 ${
               statsRevealed
-                ? "bg-green-500 shadow-lg shadow-green-500/80"
-                : "bg-red-500 shadow-lg shadow-red-500/80"
+                ? 'bg-green-500 shadow-lg shadow-green-500/80'
+                : 'bg-red-500 shadow-lg shadow-red-500/80'
             }`}
           >
             {statsRevealed && (
@@ -144,7 +144,7 @@ export function ProjectorButton({
       </button>
 
       <span className="text-[11px] font-semibold text-white/70">
-        {statsRevealed ? "Projecteur ON" : "Projecteur OFF"}
+        {statsRevealed ? 'Projecteur ON' : 'Projecteur OFF'}
       </span>
     </div>
   );

@@ -1,5 +1,5 @@
-import { SectionHeader, ErrorAlert, StatCard } from "../common";
-import { useDashboardStats } from "../hooks";
+import { SectionHeader, ErrorAlert, StatCard } from '../common';
+import { useDashboardStats } from '../hooks';
 
 export default function DashboardOverview() {
   const { stats, loading, error } = useDashboardStats();

@@ -1,29 +1,29 @@
-import React from "react";
-import { InfoRow, LinkButton } from "../ui";
-import { NAV_ROUTES } from "../../constants/homeConstants";
-import { useTranslation } from "react-i18next";
-import { heroAnimationStyles } from "../sections/heroAnimations";
-import { HeroStats } from "./HeroStats";
+import React from 'react';
+import { InfoRow, LinkButton } from '../ui';
+import { NAV_ROUTES } from '../../constants/homeConstants';
+import { useTranslation } from 'react-i18next';
+import { heroAnimationStyles } from '../sections/heroAnimations';
+import { HeroStats } from './HeroStats';
 
 export function HeroSection({
   title,
   subtitle,
   ctas,
   statsCards,
-  videoSrc = "/video/video4.mp4",
+  videoSrc = '/video/video4.mp4',
 }) {
   const { t } = useTranslation();
 
   const heroCtas = ctas || [
     {
       to: NAV_ROUTES.PROGRAM,
-      label: t("home.hero.cta.program") || "Voir la programmation",
-      variant: "primary",
+      label: t('home.hero.cta.program') || 'Voir la programmation',
+      variant: 'primary',
     },
     {
       to: NAV_ROUTES.ABOUT,
-      label: t("home.hero.cta.about") || "Lire le manifeste",
-      variant: "secondary",
+      label: t('home.hero.cta.about') || 'Lire le manifeste',
+      variant: 'secondary',
     },
   ];
   return (
@@ -52,28 +52,28 @@ export function HeroSection({
         <br />
         <h1
           className="mt-8 max-w-5xl text-5xl font-black leading-[1.1] tracking-tight md:text-7xl lg:text-8xl animate-fadeInUp"
-          style={{ animationDelay: "0.1s" }}
+          style={{ animationDelay: '0.1s' }}
         >
-          {title || t("home.hero.title")}
+          {title || t('home.hero.title')}
         </h1>
 
         <p
           className="mt-7 max-w-2xl text-base leading-8 text-white/85 md:text-lg animate-fadeInUp"
-          style={{ animationDelay: "0.2s" }}
+          style={{ animationDelay: '0.2s' }}
         >
-          {subtitle || t("home.hero.subtitle")}
+          {subtitle || t('home.hero.subtitle')}
         </p>
 
         {/* CTA Buttons */}
         <div
           className="mt-10 flex flex-wrap justify-center gap-4 animate-fadeInUp"
-          style={{ animationDelay: "0.3s" }}
+          style={{ animationDelay: '0.3s' }}
         >
           {heroCtas.map((cta) => (
             <LinkButton
               key={cta.to}
               to={cta.to}
-              variant={cta.variant || "primary"}
+              variant={cta.variant || 'primary'}
             >
               {cta.label}
             </LinkButton>

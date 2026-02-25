@@ -1,5 +1,5 @@
-import React from "react";
-import { FestivalCountdown } from "../components/sections/FestivalCountdown";
+import React from 'react';
+import { FestivalCountdown } from '../components/sections/FestivalCountdown';
 
 export default function TimerTest() {
   return (
@@ -15,4 +15,3 @@ export default function TimerTest() {
     </div>
   );
 }
-

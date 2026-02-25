@@ -1,12 +1,14 @@
 import React from 'react';
 
 const LegalCard = ({ item }) => (
-  <div 
+  <div
     className={`
       relative p-[1.5px] rounded-2xl overflow-hidden transition-transform duration-300 hover:scale-[1.01]
-      ${item.side === 'left' 
-        ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.1)]' 
-        : 'bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.15)]'}
+      ${
+        item.side === 'left'
+          ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.1)]'
+          : 'bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.15)]'
+      }
     `}
   >
     <div className="bg-[#020617]/90 backdrop-blur-md rounded-[14px] p-8 h-full">

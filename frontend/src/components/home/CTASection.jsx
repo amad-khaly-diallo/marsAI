@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { LinkButton } from "../ui";
-import { NAV_ROUTES, MAP_MODES } from "../../constants/homeConstants";
-import { useTranslation } from "react-i18next";
-import { heroAnimationStyles } from "../sections/heroAnimations";
-import MiniMapGTA from "../ui/MiniMapGTA/MiniMapGTA";
+import React, { useState } from 'react';
+import { LinkButton } from '../ui';
+import { NAV_ROUTES, MAP_MODES } from '../../constants/homeConstants';
+import { useTranslation } from 'react-i18next';
+import { heroAnimationStyles } from '../sections/heroAnimations';
+import MiniMapGTA from '../ui/MiniMapGTA/MiniMapGTA';
 
 export function CTASection() {
   const { t } = useTranslation();
@@ -36,8 +36,8 @@ export function CTASection() {
                   onClick={() => setMapMode(MAP_MODES.GTA)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
                     mapMode === MAP_MODES.GTA
-                      ? "bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/50"
-                      : "text-white/60 hover:text-white/90"
+                      ? 'bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/50'
+                      : 'text-white/60 hover:text-white/90'
                   }`}
                   aria-label="Afficher le radar GTA"
                 >
@@ -47,8 +47,8 @@ export function CTASection() {
                   onClick={() => setMapMode(MAP_MODES.REAL)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
                     mapMode === MAP_MODES.REAL
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/50"
-                      : "text-white/60 hover:text-white/90"
+                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/50'
+                      : 'text-white/60 hover:text-white/90'
                   }`}
                   aria-label="Afficher la carte réelle"
                 >
@@ -62,7 +62,7 @@ export function CTASection() {
               <div className="transition-all duration-500 transform animate-fadeIn">
                 <div className="rounded-3xl overflow-hidden shadow-2xl shadow-violet-500/20 border border-violet-500/20 hover:border-violet-500/40 transition-all h-[400px] w-full flex items-center justify-center">
                   <div className="w-full h-full flex items-center justify-center">
-                    <div style={{ width: "100%", height: "100%" }}>
+                    <div style={{ width: '100%', height: '100%' }}>
                       <MiniMapGTA />
                     </div>
                   </div>
@@ -87,7 +87,7 @@ export function CTASection() {
 
             {/* Label */}
             <div className="text-center mt-6 text-xs font-semibold text-white/30 tracking-widest uppercase">
-              {mapMode === MAP_MODES.GTA ? "GTA" : "MAP"}
+              {mapMode === MAP_MODES.GTA ? 'GTA' : 'MAP'}
             </div>
           </div>
         </div>

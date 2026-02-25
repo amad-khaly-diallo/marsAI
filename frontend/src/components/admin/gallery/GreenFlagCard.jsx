@@ -1,5 +1,5 @@
-import { Clock } from "lucide-react";
-import { getYouTubeEmbed } from "../../../utils/youtube";
+import { Clock } from 'lucide-react';
+import { getYouTubeEmbed } from '../../../utils/youtube';
 
 export default function GreenFlagCard({ group, movie, onOpen }) {
   const hasLocalVideo = !!movie.video_url;
@@ -35,12 +35,18 @@ export default function GreenFlagCard({ group, movie, onOpen }) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-2 p-3">
-        <p className="line-clamp-1 text-sm font-semibold text-slate-100">{movie.original_title || "Sans titre"}</p>
-        {typeof movie.rating === "number" && <p className="text-[11px] text-emerald-300">{movie.rating}/10</p>}
-        <p className="line-clamp-2 text-[11px] text-brand-muted">{movie.synopsis_original || ""}</p>
+        <p className="line-clamp-1 text-sm font-semibold text-slate-100">
+          {movie.original_title || 'Sans titre'}
+        </p>
+        {typeof movie.rating === 'number' && (
+          <p className="text-[11px] text-emerald-300">{movie.rating}/10</p>
+        )}
+        <p className="line-clamp-2 text-[11px] text-brand-muted">
+          {movie.synopsis_original || ''}
+        </p>
         <div className="mt-auto pt-2 text-[11px] text-slate-400 flex items-center gap-1">
           <Clock className="w-3.5 h-3.5" />
-          {movie.duration ? `${movie.duration} min` : "—"}
+          {movie.duration ? `${movie.duration} min` : '—'}
         </div>
       </div>
     </button>

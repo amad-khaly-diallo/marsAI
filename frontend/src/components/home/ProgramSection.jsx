@@ -1,8 +1,8 @@
-import React from "react";
-import { ProgramCard } from "./HomeWidgets";
-import { LinkButton } from "../ui";
-import { NAV_ROUTES } from "../../constants/homeConstants";
-import { heroAnimationStyles } from "../sections/heroAnimations";
+import React from 'react';
+import { ProgramCard } from './HomeWidgets';
+import { LinkButton } from '../ui';
+import { NAV_ROUTES } from '../../constants/homeConstants';
+import { heroAnimationStyles } from '../sections/heroAnimations';
 
 export function ProgramSection() {
   return (
@@ -19,7 +19,7 @@ export function ProgramSection() {
           </div>
 
           <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            Trois{" "}
+            Trois{' '}
             <span className="bg-gradient-to-r from-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
               volets
             </span>

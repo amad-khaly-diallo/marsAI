@@ -1,1 +1,1 @@
-export { default as NewslettersManagement } from "./NewslettersManagement";
+export { default as NewslettersManagement } from './NewslettersManagement';
