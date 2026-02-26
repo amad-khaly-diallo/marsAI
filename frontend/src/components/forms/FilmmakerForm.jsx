@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { validateFilmmakerField } from "../../utils/validation";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { validateFilmmakerField } from '../../utils/validation';
 
 export default function FilmmakerForm({ value, onChange, hasError }) {
   const { t } = useTranslation();
@@ -23,22 +23,22 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
   const handle = (field) => (e) =>
     setField(
       field,
-      e.target.type === "checkbox" ? e.target.checked : e.target.value,
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     );
 
   const handleMobile = (e) => {
     const raw = e.target.value;
     // Autoriser uniquement chiffres, espaces et symboles usuels de téléphone
-    const cleaned = raw.replace(/[^0-9+().\s-]/g, "");
-    setField("mobile", cleaned);
+    const cleaned = raw.replace(/[^0-9+().\s-]/g, '');
+    setField('mobile', cleaned);
   };
 
   return (
     <section
       className={[
-        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
-        hasError ? "border-red-500/70" : "border-slate-800/80",
-      ].join(" ")}
+        'rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm',
+        hasError ? 'border-red-500/70' : 'border-slate-800/80',
+      ].join(' ')}
     >
       <h2 className="mb-3 text-sm font-semibold text-slate-100">
         1. Réalisateur / Réalisatrice
@@ -47,8 +47,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
         <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted">Civilité</label>
           <select
-            value={value.civility || ""}
-            onChange={handle("civility")}
+            value={value.civility || ''}
+            onChange={handle('civility')}
             required
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           >
@@ -61,8 +61,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <label className="text-xs text-brand-muted">Prénom</label>
           <input
             type="text"
-            value={value.first_name || ""}
-            onChange={handle("first_name")}
+            value={value.first_name || ''}
+            onChange={handle('first_name')}
             required
             minLength={2}
             maxLength={80}
@@ -76,8 +76,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <label className="text-xs text-brand-muted">Nom</label>
           <input
             type="text"
-            value={value.last_name || ""}
-            onChange={handle("last_name")}
+            value={value.last_name || ''}
+            onChange={handle('last_name')}
             required
             minLength={2}
             maxLength={80}
@@ -91,8 +91,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <label className="text-xs text-brand-muted">Date de naissance</label>
           <input
             type="date"
-            value={value.birth_date || ""}
-            onChange={handle("birth_date")}
+            value={value.birth_date || ''}
+            onChange={handle('birth_date')}
             required
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
@@ -101,8 +101,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <label className="text-xs text-brand-muted">Email</label>
           <input
             type="email"
-            value={value.email || ""}
-            onChange={handle("email")}
+            value={value.email || ''}
+            onChange={handle('email')}
             required
             maxLength={200}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
@@ -115,7 +115,7 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <label className="text-xs text-brand-muted">Mobile</label>
           <input
             type="tel"
-            value={value.mobile || ""}
+            value={value.mobile || ''}
             onChange={handleMobile}
             pattern="[0-9+().\s-]{6,20}"
             maxLength={20}
@@ -129,8 +129,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <label className="text-xs text-brand-muted">Profession</label>
           <input
             type="text"
-            value={value.job || ""}
-            onChange={handle("job")}
+            value={value.job || ''}
+            onChange={handle('job')}
             maxLength={120}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
@@ -141,16 +141,16 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
             <input
               type="text"
               placeholder="Ville"
-              value={value.city || ""}
-              onChange={handle("city")}
+              value={value.city || ''}
+              onChange={handle('city')}
               maxLength={80}
               className="w-1/2 rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
             />
             <input
               type="text"
               placeholder="Pays"
-              value={value.country || ""}
-              onChange={handle("country")}
+              value={value.country || ''}
+              onChange={handle('country')}
               maxLength={80}
               className="w-1/2 rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
             />
@@ -164,8 +164,8 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           </label>
           <input
             type="text"
-            value={value.discovery_source || ""}
-            onChange={handle("discovery_source")}
+            value={value.discovery_source || ''}
+            onChange={handle('discovery_source')}
             maxLength={200}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
@@ -174,7 +174,7 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
           <input
             type="checkbox"
             checked={!!value.newsletter}
-            onChange={handle("newsletter")}
+            onChange={handle('newsletter')}
             className="h-3 w-3 rounded border-slate-600 bg-slate-900 text-brand-primary"
           />
           S&apos;abonner à la newsletter

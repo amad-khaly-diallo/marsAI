@@ -1,1 +1,1 @@
-export { default as AdminsManagement } from "./AdminsManagement";
+export { default as AdminsManagement } from './AdminsManagement';

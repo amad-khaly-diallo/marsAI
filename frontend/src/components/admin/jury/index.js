@@ -1,1 +1,1 @@
-export { default as JuryManagement } from "./JuryManagement";
+export { default as JuryManagement } from './JuryManagement';

@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export default function useDashboardStats() {
-  const [stats, setStats] = useState({ movies: null, filmmakers: null, newsletter: null });
+  const [stats, setStats] = useState({
+    movies: null,
+    filmmakers: null,
+    newsletter: null,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -11,7 +15,7 @@ export default function useDashboardStats() {
       setLoading(true);
       setError(null);
       try {
-        const admin = require("../../../services/admin").default;
+        const admin = require('../../../services/admin').default;
         const [movies, filmmakers, newsletter] = await Promise.all([
           admin.getFilms(),
           admin.getFilmmakers(),
@@ -32,7 +36,9 @@ export default function useDashboardStats() {
       }
     };
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { stats, loading, error };

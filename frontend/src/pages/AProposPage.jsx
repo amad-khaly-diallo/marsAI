@@ -1,7 +1,7 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { SmallLabel, InfoRow, Divider } from "../components/ui";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { SmallLabel, InfoRow, Divider } from '../components/ui';
 
 export default function AProposPage() {
   const { t } = useTranslation();
@@ -14,18 +14,18 @@ export default function AProposPage() {
       <section className="px-6 pt-32 pb-12">
         <div className="mx-auto max-w-6xl">
           <GlassCard className="rounded-[36px] p-8 md:p-10">
-            <SmallLabel>{t("about.badge")}</SmallLabel>
+            <SmallLabel>{t('about.badge')}</SmallLabel>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight md:text-5xl">
-              {t("about.heroTitle.part1")}{" "}
+              {t('about.heroTitle.part1')}{' '}
               <span className="text-white/85">
-                {t("about.heroTitle.highlight")}
+                {t('about.heroTitle.highlight')}
               </span>
-              {t("about.heroTitle.part2")}
+              {t('about.heroTitle.part2')}
             </h1>
 
             <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 md:text-base">
-              {t("about.hero.paragraph")}
+              {t('about.hero.paragraph')}
             </p>
 
             <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -37,12 +37,12 @@ export default function AProposPage() {
             <div className="mt-7 flex flex-wrap gap-3">
               <ActionButton
                 to="/programme"
-                label={t("about.hero.cta.program")}
+                label={t('about.hero.cta.program')}
                 variant="primary"
               />
               <ActionButton
                 to="/contact"
-                label={t("about.hero.cta.contact")}
+                label={t('about.hero.cta.contact')}
                 variant="secondary"
               />
             </div>
@@ -57,17 +57,17 @@ export default function AProposPage() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <GlassCard className="p-7">
               <div className="text-xs font-semibold text-white/60">
-                {t("about.manifesto.label")}
+                {t('about.manifesto.label')}
               </div>
               <h2 className="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">
-                {t("about.manifesto.title.part1")}{" "}
+                {t('about.manifesto.title.part1')}{' '}
                 <span className="text-white/80">
-                  {t("about.manifesto.title.highlight")}
+                  {t('about.manifesto.title.highlight')}
                 </span>
               </h2>
 
               <p className="mt-4 text-sm leading-7 text-white/70">
-                {t("about.manifesto.body")}
+                {t('about.manifesto.body')}
               </p>
 
               <Divider />
@@ -106,24 +106,24 @@ export default function AProposPage() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <GlassCard className="p-7">
               <div className="text-xs font-semibold text-white/60">
-                {t("about.location.label")}
+                {t('about.location.label')}
               </div>
               <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-                {t("about.location.title")}
+                {t('about.location.title')}
               </h3>
               <p className="mt-3 text-sm leading-7 text-white/70">
-                {t("about.location.body")}
+                {t('about.location.body')}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <ActionButton
                   to="/contact"
-                  label={t("about.location.cta.info")}
+                  label={t('about.location.cta.info')}
                   variant="secondary"
                 />
                 <ActionButton
                   to="/programme"
-                  label={t("about.location.cta.program")}
+                  label={t('about.location.cta.program')}
                   variant="text"
                 />
               </div>
@@ -155,24 +155,24 @@ export default function AProposPage() {
         <div className="mx-auto max-w-6xl">
           <GlassCard className="p-8">
             <div className="text-xs font-semibold text-white/60">
-              {t("about.partners.label")}
+              {t('about.partners.label')}
             </div>
             <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-              {t("about.partners.title")}
+              {t('about.partners.title')}
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70">
-              {t("about.partners.body")}
+              {t('about.partners.body')}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
               <ActionButton
                 to="/contact"
-                label={t("about.partners.cta.contact")}
+                label={t('about.partners.cta.contact')}
                 variant="primary"
               />
               <ActionButton
                 to="/programme"
-                label={t("about.partners.cta.program")}
+                label={t('about.partners.cta.program')}
                 variant="secondary"
               />
             </div>
@@ -199,7 +199,7 @@ const CinematicBackground = () => (
   </>
 );
 
-const GlassCard = ({ children, className = "" }) => (
+const GlassCard = ({ children, className = '' }) => (
   <div
     className={`rounded-[32px] border border-white/10 bg-white/[0.05] shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur ${className}`}
   >
@@ -214,15 +214,15 @@ const ContentCard = ({ title, text }) => (
   </div>
 );
 
-const ActionButton = ({ to, label, variant = "primary" }) => {
+const ActionButton = ({ to, label, variant = 'primary' }) => {
   const baseStyles =
-    "rounded-full px-6 py-3 text-sm font-extrabold transition-colors";
+    'rounded-full px-6 py-3 text-sm font-extrabold transition-colors';
 
   const variants = {
-    primary: "bg-white text-black hover:bg-white/90 border border-transparent",
+    primary: 'bg-white text-black hover:bg-white/90 border border-transparent',
     secondary:
-      "border border-white/20 bg-white/10 text-white hover:bg-white/20",
-    text: "text-white/70 hover:text-white px-4",
+      'border border-white/20 bg-white/10 text-white hover:bg-white/20',
+    text: 'text-white/70 hover:text-white px-4',
   };
 
   return (

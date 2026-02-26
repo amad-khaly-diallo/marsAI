@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import api from "../services/api";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import api from '../services/api';
 
 function getYouTubeThumbnail(url) {
   if (!url) return null;
@@ -24,11 +24,11 @@ export default function Gallery() {
         setLoading(true);
         setError(null);
         // /api/movies -> films au statut "selected"
-        const data = await api.get("/movies");
+        const data = await api.get('/movies');
         setMovies(Array.isArray(data) ? data : []);
       } catch (err) {
         setError(
-          err?.message || "Impossible de charger les films sélectionnés."
+          err?.message || 'Impossible de charger les films sélectionnés.',
         );
       } finally {
         setLoading(false);
@@ -92,7 +92,7 @@ export default function Gallery() {
                       {thumb ? (
                         <img
                           src={thumb}
-                          alt={movie.original_title || "Vignette du film"}
+                          alt={movie.original_title || 'Vignette du film'}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                         />
@@ -116,11 +116,11 @@ export default function Gallery() {
                     </div>
                     <div className="px-3 pt-2 pb-3">
                       <h2 className="text-xs md:text-sm font-semibold text-white line-clamp-2 mb-1">
-                        {movie.original_title || "Sans titre"}
+                        {movie.original_title || 'Sans titre'}
                       </h2>
                       <p className="text-[11px] text-white/50 line-clamp-1">
                         {movie.synopsis_original ||
-                          "Court-métrage sélectionné pour le festival."}
+                          'Court-métrage sélectionné pour le festival.'}
                       </p>
                     </div>
                   </Link>
@@ -133,4 +133,3 @@ export default function Gallery() {
     </div>
   );
 }
-

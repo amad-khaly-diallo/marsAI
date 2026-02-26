@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 // useAsync: lightweight helper to run async functions with built-in
 // loading/error state and safe cancellation on unmount.
@@ -20,8 +20,8 @@ export default function useAsync(fn) {
 
   const run = useCallback(
     async (...args) => {
-      if (typeof fn !== "function")
-        throw new Error("useAsync: missing function");
+      if (typeof fn !== 'function')
+        throw new Error('useAsync: missing function');
       setLoading(true);
       setError(null);
       try {

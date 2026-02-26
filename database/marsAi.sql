@@ -702,6 +702,15 @@ ALTER TABLE `winner`
   ADD CONSTRAINT `fk_winner_movie` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`) ON DELETE CASCADE;
 COMMIT;
 
+-- table pour stocker la phase du festival (1 ligne id=1)
+CREATE TABLE IF NOT EXISTS `festival_phase` (
+  `id` INT PRIMARY KEY,
+  `phase` ENUM('phase1','phase2','phase3') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `festival_phase` (`id`, `phase`) VALUES (1,'phase1')
+  ON DUPLICATE KEY UPDATE phase = phase;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

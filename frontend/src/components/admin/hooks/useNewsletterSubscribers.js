@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export default function useNewsletterSubscribers() {
   const [subscribers, setSubscribers] = useState([]);
@@ -11,7 +11,7 @@ export default function useNewsletterSubscribers() {
       setLoading(true);
       setError(null);
       try {
-        const admin = require("../../../services/admin").default;
+        const admin = require('../../../services/admin').default;
         const data = await admin.getNewsletterSubscribers();
         if (!cancelled) setSubscribers(Array.isArray(data) ? data : []);
       } catch (err) {
@@ -21,7 +21,9 @@ export default function useNewsletterSubscribers() {
       }
     };
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { subscribers, loading, error };

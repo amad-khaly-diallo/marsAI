@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export function Divider() {
   return <div className="h-px w-full bg-white/10" />;

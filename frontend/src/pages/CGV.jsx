@@ -1,5 +1,5 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function CGV() {
   const { i18n } = useTranslation();
@@ -12,7 +12,7 @@ export default function CGV() {
       <section className="px-6 pt-32 pb-20">
         <div className="mx-auto max-w-4xl">
           <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-8 md:p-12 shadow-[0_25px_90px_rgba(0,0,0,.18)] backdrop-blur">
-            {currentLang === "fr" ? <CGVFrench /> : <CGVEnglish />}
+            {currentLang === 'fr' ? <CGVFrench /> : <CGVEnglish />}
           </div>
         </div>
       </section>
