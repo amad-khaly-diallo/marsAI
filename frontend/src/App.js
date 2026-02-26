@@ -5,6 +5,7 @@ import Header from './components/layout/Header/Header';
 import Footer from './components/layout/Footer/Footer';
 import { AuthProvider, AdminProvider } from './contexts';
 import ScrollToTop from './components/ui/ScrollToTop';
+import GoogleAnalytics from './components/G-Analytics/GoogleAnalytics';
 
 export default function App() {
   return (
