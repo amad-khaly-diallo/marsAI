@@ -18,6 +18,7 @@ import { HOME_STYLES } from '../constants/homeStyles';
 import { CookieBanner } from '../components/ui/CookieBanner';
 import { heroAnimationStyles } from '../components/sections/heroAnimations';
 import api from '../services/api';
+import { useFestivalPhase } from '../hooks/useFestivalPhase';
 
 /**
  * Page d'accueil – 3 phases :
@@ -28,12 +29,22 @@ import api from '../services/api';
 export default function Home() {
   const [searchParams] = useSearchParams();
   const phaseParam = parseInt(searchParams.get('phase'), 10);
-  const phase = [1, 2, 3].includes(phaseParam) ? phaseParam : 1;
+  const fallback = [1, 2, 3].includes(phaseParam) ? phaseParam : 1;
 
+  const { phase: apiPhase, loading: phaseLoading } = useFestivalPhase();
+
+  // states must be declared unconditionally at top level
   const [phase2Movies, setPhase2Movies] = useState([]);
   const [phase3Winners, setPhase3Winners] = useState([]);
   const [phase3Loading, setPhase3Loading] = useState(false);
 
+  // determine phase after states
+  const phase =
+    !phaseLoading && apiPhase
+      ? Number(apiPhase.replace('phase', ''))
+      : fallback;
+
+  // effects must be declared before any early return so hooks order remains stable
   useEffect(() => {
     if (phase !== 2) return;
     let cancelled = false;
@@ -68,6 +79,14 @@ export default function Home() {
       cancelled = true;
     };
   }, [phase]);
+
+  if (phaseLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white">
+        <p>Chargement phase...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen text-white">
