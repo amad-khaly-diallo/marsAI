@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
-import AIDeclarationForm from "../../components/forms/AIDeclarationForm";
-import StepForm from "./StepForm";
+import { useTranslation } from 'react-i18next';
+import AIDeclarationForm from '../../components/forms/AIDeclarationForm';
+import StepForm from './StepForm';
 
 export default function AIDeclarationStep({
   value,
@@ -16,8 +16,8 @@ export default function AIDeclarationStep({
     <StepForm
       onSubmit={onSubmit}
       onBack={onBack}
-      backLabel={t("participate.backStep", { step: 2 })}
-      submitLabel={t("participate.saveAi")}
+      backLabel={t('participate.backStep', { step: 2 })}
+      submitLabel={t('participate.saveAi')}
       submitting={submitting}
       error={error}
     >

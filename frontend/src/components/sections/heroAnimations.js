@@ -1,6 +1,6 @@
 /**
  * HeroCamera Animations & Styles
- * 
+ *
  * Animations CSS pour le composant HeroCamera
  * À importer ou copier dans votre fichier de styles global
  */
@@ -318,18 +318,18 @@ export const heroAnimationStyles = `
 
 /**
  * Utilisation:
- * 
+ *
  * 1. Copier/coller dans un fichier CSS:
- * 
+ *
  * // styles/heroAnimations.css
  * \`\`\` + contenu ci-dessus
- * 
+ *
  * 2. Importer dans votre composant:
- * 
+ *
  * import './styles/heroAnimations.css';
- * 
+ *
  * 3. Ou injecter dynamiquement:
- * 
+ *
  * if (typeof document !== 'undefined') {
  *   const style = document.createElement('style');
  *   style.textContent = heroAnimationStyles;

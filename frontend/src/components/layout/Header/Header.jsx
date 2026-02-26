@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import HeaderLogo from "./HeaderLogo";
-import HeaderNavLinks from "./HeaderNavLinks";
-import HeaderBurger from "./HeaderBurger";
-import HeaderLanguageSwitcher from "./HeaderLanguageSwitcher";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import HeaderLogo from './HeaderLogo';
+import HeaderNavLinks from './HeaderNavLinks';
+import HeaderBurger from './HeaderBurger';
+import HeaderLanguageSwitcher from './HeaderLanguageSwitcher';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -14,8 +14,8 @@ export default function Header() {
   // Détection du scroll
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Style "Bulle de verre" mis à jour
@@ -52,7 +52,7 @@ export default function Header() {
             to="/participer"
             className="hidden md:flex h-9 items-center justify-center rounded-full bg-brand-primary px-4 text-xs font-bold uppercase tracking-wide text-brand-bg transition-transform hover:scale-105 hover:bg-white"
           >
-            {t("nav.participate", "Participer")}
+            {t('nav.participate', 'Participer')}
           </Link>
 
           {/* Sélecteur de langue */}

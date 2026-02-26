@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 /**
  * Phase 1 – Hero : vidéo de fond, titre, sous-titre, bouton CTA vers le projet (participer).
  */
 export default function Phase1Hero({
-  videoSrc = "/video/video4.mp4",
-  title = "MarsAI",
+  videoSrc = '/video/video4.mp4',
+  title = 'MarsAI',
   subtitle = "Le festival du film court créé à l'IA. Une sélection percutante en 60 secondes.",
-  ctaLabel = "Participer au projet",
-  ctaTo = "/participer",
+  ctaLabel = 'Participer au projet',
+  ctaTo = '/participer',
 }) {
   return (
     <section className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center">
@@ -30,10 +30,16 @@ export default function Phase1Hero({
         <h1 className="max-w-5xl text-5xl font-black leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl animate-fadeInUp">
           {title}
         </h1>
-        <p className="mt-6 max-w-2xl text-base leading-8 text-white/85 md:text-lg animate-fadeInUp" style={{ animationDelay: "0.1s" }}>
+        <p
+          className="mt-6 max-w-2xl text-base leading-8 text-white/85 md:text-lg animate-fadeInUp"
+          style={{ animationDelay: '0.1s' }}
+        >
           {subtitle}
         </p>
-        <div className="mt-10 animate-fadeInUp" style={{ animationDelay: "0.2s" }}>
+        <div
+          className="mt-10 animate-fadeInUp"
+          style={{ animationDelay: '0.2s' }}
+        >
           <Link
             to={ctaTo}
             className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-bold text-black shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/50"

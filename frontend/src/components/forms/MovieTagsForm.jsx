@@ -1,37 +1,37 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function MovieTagsForm({ value, onChange, hasError }) {
   const list = Array.isArray(value) ? value : [];
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [error, setError] = useState(null);
   const { t } = useTranslation();
 
   const addTag = () => {
-    const raw = (input || "").trim();
+    const raw = (input || '').trim();
     if (!raw) return;
 
     if (list.length >= 10) {
-      setError(t("error.tags.max"));
+      setError(t('error.tags.max'));
       return;
     }
 
-    const normalized = raw.startsWith("#") ? raw : `#${raw}`;
+    const normalized = raw.startsWith('#') ? raw : `#${raw}`;
 
     // Autorise lettres/chiffres/_/- sans espace
     if (!/^#[A-Za-z0-9-_]{2,30}$/.test(normalized)) {
-      setError(t("error.tags.pattern"));
+      setError(t('error.tags.pattern'));
       return;
     }
 
     if (list.includes(normalized)) {
-      setInput("");
+      setInput('');
       setError(null);
       return;
     }
 
     onChange([...list, normalized]);
-    setInput("");
+    setInput('');
     setError(null);
   };
 
@@ -41,7 +41,7 @@ export default function MovieTagsForm({ value, onChange, hasError }) {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       addTag();
     }
@@ -50,9 +50,9 @@ export default function MovieTagsForm({ value, onChange, hasError }) {
   return (
     <section
       className={[
-        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
-        hasError ? "border-red-500/70" : "border-slate-800/80",
-      ].join(" ")}
+        'rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm',
+        hasError ? 'border-red-500/70' : 'border-slate-800/80',
+      ].join(' ')}
     >
       <h2 className="mb-3 text-sm font-semibold text-slate-100">
         5. Tags / Hashtags
@@ -60,7 +60,7 @@ export default function MovieTagsForm({ value, onChange, hasError }) {
 
       <p className="mb-3 text-xs text-brand-muted">
         Ajoutez des hashtags pour décrire le film (thématiques, techniques,
-        ambiance, etc.). Exemple : <code>#ai</code>, <code>#animation</code>,{" "}
+        ambiance, etc.). Exemple : <code>#ai</code>, <code>#animation</code>,{' '}
         <code>#marseille</code>.
       </p>
 
@@ -82,11 +82,7 @@ export default function MovieTagsForm({ value, onChange, hasError }) {
         </button>
       </div>
 
-      {error && (
-        <p className="mt-2 text-[11px] text-red-300">
-          {error}
-        </p>
-      )}
+      {error && <p className="mt-2 text-[11px] text-red-300">{error}</p>}
 
       {list.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
@@ -110,4 +106,3 @@ export default function MovieTagsForm({ value, onChange, hasError }) {
     </section>
   );
 }
-

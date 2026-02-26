@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function NewsletterForm() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -15,21 +15,21 @@ export default function NewsletterForm() {
 
     const trimmed = email.trim();
     if (!trimmed) {
-      setError(t("newsletter.error.required"));
+      setError(t('newsletter.error.required'));
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
-      setError(t("newsletter.error.invalid"));
+      setError(t('newsletter.error.invalid'));
       return;
     }
 
     setLoading(true);
     try {
-      const api = require("../../services/api").default;
-      await api.post("/newsletters/subscribe", { email: trimmed });
+      const api = require('../../services/api').default;
+      await api.post('/newsletters/subscribe', { email: trimmed });
 
-      setSuccess(t("newsletter.success"));
-      setEmail("");
+      setSuccess(t('newsletter.success'));
+      setEmail('');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -67,7 +67,7 @@ export default function NewsletterForm() {
           disabled={loading}
           className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? "Inscription..." : "S'inscrire"}
+          {loading ? 'Inscription...' : "S'inscrire"}
         </button>
       </div>
 

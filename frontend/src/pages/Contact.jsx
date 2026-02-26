@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function Contact() {
   const { t } = useTranslation();
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
     newsletter: false,
   });
 
@@ -18,7 +18,7 @@ export default function Contact() {
 
   const handleChange = (field) => (e) => {
     const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+      e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -40,31 +40,31 @@ export default function Contact() {
       !trimmed.subject ||
       !trimmed.message
     ) {
-      setError(t("contact.form.error.required"));
+      setError(t('contact.form.error.required'));
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed.email)) {
-      setError(t("contact.form.error.email"));
+      setError(t('contact.form.error.email'));
       return;
     }
     if (trimmed.message.length < 20) {
-      setError(t("contact.form.error.messageLength"));
+      setError(t('contact.form.error.messageLength'));
       return;
     }
 
     setSubmitting(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 600));
-      setSuccess(t("contact.form.success"));
+      setSuccess(t('contact.form.success'));
       setForm({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
         newsletter: form.newsletter,
       });
     } catch {
-      setError(t("contact.error.generic"));
+      setError(t('contact.error.generic'));
     } finally {
       setSubmitting(false);
     }
@@ -78,41 +78,41 @@ export default function Contact() {
         <div className="mx-auto max-w-4xl">
           <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-8 shadow-[0_25px_90px_rgba(0,0,0,.18)] backdrop-blur">
             <HeaderBadge
-              badgeText={t("contact.badge")}
-              title={t("contact.title")}
-              subtitle={t("contact.subtitle")}
+              badgeText={t('contact.badge')}
+              title={t('contact.title')}
+              subtitle={t('contact.subtitle')}
             />
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 text-sm">
               <div className="grid gap-4 md:grid-cols-2">
                 <InputField
-                  label={t("contact.form.name")}
+                  label={t('contact.form.name')}
                   value={form.name}
-                  onChange={handleChange("name")}
+                  onChange={handleChange('name')}
                   minLength={2}
                   maxLength={120}
                 />
                 <InputField
-                  label={t("contact.form.email")}
+                  label={t('contact.form.email')}
                   value={form.email}
-                  onChange={handleChange("email")}
+                  onChange={handleChange('email')}
                   type="email"
                   maxLength={200}
                 />
               </div>
 
               <InputField
-                label={t("contact.form.subject")}
+                label={t('contact.form.subject')}
                 value={form.subject}
-                onChange={handleChange("subject")}
+                onChange={handleChange('subject')}
                 minLength={3}
                 maxLength={150}
               />
 
               <TextAreaField
-                label={t("contact.form.message")}
+                label={t('contact.form.message')}
                 value={form.message}
-                onChange={handleChange("message")}
+                onChange={handleChange('message')}
                 minLength={20}
                 maxLength={2000}
                 rows={5}
@@ -120,14 +120,14 @@ export default function Contact() {
 
               <div className="flex items-center justify-between gap-3 pt-2">
                 <CheckboxField
-                  label={t("contact.form.newsletter")}
+                  label={t('contact.form.newsletter')}
                   checked={form.newsletter}
-                  onChange={handleChange("newsletter")}
+                  onChange={handleChange('newsletter')}
                 />
 
                 <SubmitButton
                   submitting={submitting}
-                  label={t("contact.form.submit")}
+                  label={t('contact.form.submit')}
                 />
               </div>
 
@@ -163,7 +163,7 @@ const InputField = ({
   label,
   value,
   onChange,
-  type = "text",
+  type = 'text',
   minLength,
   maxLength,
 }) => (
@@ -221,7 +221,7 @@ const SubmitButton = ({ submitting, label }) => (
     disabled={submitting}
     className="inline-flex items-center rounded-full bg-brand-primary px-5 py-2 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
   >
-    {submitting ? "Envoi..." : label}
+    {submitting ? 'Envoi...' : label}
   </button>
 );
 

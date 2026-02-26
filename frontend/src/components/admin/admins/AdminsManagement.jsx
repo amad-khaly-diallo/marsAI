@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { SectionHeader, ErrorAlert, SectionCard } from "../common";
-import { useAdmins } from "../hooks";
-import AdminCreateForm from "./AdminCreateForm";
-import AdminsTable from "./AdminsTable";
+import { useState } from 'react';
+import { SectionHeader, ErrorAlert, SectionCard } from '../common';
+import { useAdmins } from '../hooks';
+import AdminCreateForm from './AdminCreateForm';
+import AdminsTable from './AdminsTable';
 
-const INITIAL_FORM = { first_name: "", last_name: "", email: "", password: "" };
+const INITIAL_FORM = { first_name: '', last_name: '', email: '', password: '' };
 
 export default function AdminsManagement() {
   const { admins, loading, error, refetch } = useAdmins();
@@ -23,7 +23,7 @@ export default function AdminsManagement() {
     setCreateError(null);
     setCreateLoading(true);
     try {
-      const admin = require("../../../services/admin").default;
+      const admin = require('../../../services/admin').default;
       await admin.createAdmin(form);
       setForm(INITIAL_FORM);
       setCreating(false);
@@ -49,7 +49,7 @@ export default function AdminsManagement() {
             onClick={() => setCreating((v) => !v)}
             className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent"
           >
-            {creating ? "Annuler" : "+ Nouvel admin"}
+            {creating ? 'Annuler' : '+ Nouvel admin'}
           </button>
         }
       >

@@ -1,8 +1,8 @@
-import React from "react";
-import { useFestivalCountdown } from "../../hooks/useFestivalCountdown";
+import React from 'react';
+import { useFestivalCountdown } from '../../hooks/useFestivalCountdown';
 
 function formatUnit(value) {
-  return value.toString().padStart(2, "0");
+  return value.toString().padStart(2, '0');
 }
 
 export function FestivalCountdown() {
@@ -34,7 +34,7 @@ export function FestivalCountdown() {
     return null;
   }
 
-  const isEnded = phase === "ended" || remaining.totalSeconds <= 0;
+  const isEnded = phase === 'ended' || remaining.totalSeconds <= 0;
 
   if (isEnded) {
     return (
@@ -59,13 +59,13 @@ export function FestivalCountdown() {
           Compte à rebours — {label}
         </span>
         <span className="text-[11px] text-white/50">
-          Phase actuelle :{" "}
+          Phase actuelle :{' '}
           <span className="font-semibold text-white/80">
-            {phase === "phase1"
-              ? "Soumissions des films"
-              : phase === "phase2"
-              ? "Visionnage & sélection"
-              : "Jour du festival"}
+            {phase === 'phase1'
+              ? 'Soumissions des films'
+              : phase === 'phase2'
+                ? 'Visionnage & sélection'
+                : 'Jour du festival'}
           </span>
         </span>
       </div>
@@ -103,4 +103,3 @@ function Separator() {
     </span>
   );
 }
-

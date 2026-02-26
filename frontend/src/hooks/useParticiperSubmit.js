@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import useSubmission from "./useSubmission";
-import useAsync from "./useAsync";
+import { useEffect } from 'react';
+import useSubmission from './useSubmission';
+import useAsync from './useAsync';
 
 export default function useParticiperSubmit({
   // state pieces & setters from useParticiperState
@@ -47,19 +47,19 @@ export default function useParticiperSubmit({
   const movieOp = useAsync(async (localMovie) => {
     const payload = { ...localMovie, filmmaker_id: filmmakerId };
     // reset progress
-    if (typeof setMovieUploadProgress === "function") setMovieUploadProgress(0);
+    if (typeof setMovieUploadProgress === 'function') setMovieUploadProgress(0);
 
     const data = await submission.submitMovieWithProgress(
       payload,
       movieVideo,
       (pct) => {
-        if (typeof setMovieUploadProgress === "function")
+        if (typeof setMovieUploadProgress === 'function')
           setMovieUploadProgress(pct);
       },
     );
 
     // ensure progress shown as complete briefly
-    if (typeof setMovieUploadProgress === "function")
+    if (typeof setMovieUploadProgress === 'function')
       setMovieUploadProgress(100);
 
     setMovieId(data.movie_id);
@@ -88,18 +88,18 @@ export default function useParticiperSubmit({
     const stillFiles = Array.isArray(assets.stills) ? assets.stills : [];
     if (stillFiles.length > 0 || assets.subtitle) {
       stillFiles.forEach((file) => {
-        if (!file.type.startsWith("image/"))
-          throw new Error(t("error.assets.still.invalidType"));
+        if (!file.type.startsWith('image/'))
+          throw new Error(t('error.assets.still.invalidType'));
       });
       if (assets.subtitle) {
-        const name = assets.subtitle.name || "";
-        if (!name.toLowerCase().endsWith(".srt"))
-          throw new Error(t("error.assets.subtitle.invalidType"));
+        const name = assets.subtitle.name || '';
+        if (!name.toLowerCase().endsWith('.srt'))
+          throw new Error(t('error.assets.subtitle.invalidType'));
       }
     }
 
     // reset progress
-    if (typeof setAssetsUploadProgress === "function")
+    if (typeof setAssetsUploadProgress === 'function')
       setAssetsUploadProgress(0);
 
     const requests = [];
@@ -110,7 +110,7 @@ export default function useParticiperSubmit({
           stillFiles,
           assets.subtitle,
           (pct) => {
-            if (typeof setAssetsUploadProgress === "function")
+            if (typeof setAssetsUploadProgress === 'function')
               setAssetsUploadProgress(pct);
           },
         ),
@@ -125,7 +125,7 @@ export default function useParticiperSubmit({
     if (requests.length > 0) await Promise.all(requests);
 
     // ensure progress shown as complete briefly
-    if (typeof setAssetsUploadProgress === "function")
+    if (typeof setAssetsUploadProgress === 'function')
       setAssetsUploadProgress(100);
 
     setAssetsTagsSaved(true);
@@ -143,7 +143,7 @@ export default function useParticiperSubmit({
         (currentStep === 3 && aiOp.loading) ||
         (currentStep === 4 && assetsOp.loading) ||
         (currentStep === 5 && collabOp.loading)
-      )
+      ),
     );
   }, [
     filmmakerOp.loading,
@@ -197,16 +197,16 @@ export default function useParticiperSubmit({
     const hasYouTube =
       localMovie.youtube_url && localMovie.youtube_url.trim().length > 0;
     if (!movieVideo && !hasYouTube) {
-      return setError(t("error.movie.video.required"));
+      return setError(t('error.movie.video.required'));
     }
 
     if (movieVideo) {
-      if (!movieVideo.type || !movieVideo.type.startsWith("video/")) {
-        return setError(t("error.movie.video.invalidType"));
+      if (!movieVideo.type || !movieVideo.type.startsWith('video/')) {
+        return setError(t('error.movie.video.invalidType'));
       }
       const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
       if (movieVideo.size > MAX_BYTES) {
-        return setError(t("error.movie.video.tooLarge"));
+        return setError(t('error.movie.video.tooLarge'));
       }
     }
 
@@ -240,7 +240,7 @@ export default function useParticiperSubmit({
     try {
       await collabOp.run();
     } catch (err) {
-      setError(t("error.collaborators.saveFailed"));
+      setError(t('error.collaborators.saveFailed'));
     }
   };
 

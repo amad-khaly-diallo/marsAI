@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import api from "../services/api";
+import { useEffect, useState, useRef } from 'react';
+import api from '../services/api';
 
 /**
  * Hook pour récupérer la phase actuelle du festival
@@ -31,7 +31,7 @@ export function useFestivalCountdown(pollIntervalMs = 60000) {
   useEffect(() => {
     const syncFromServer = async () => {
       try {
-        const data = await api.get("/festival-phase");
+        const data = await api.get('/festival-phase');
 
         const serverNow = new Date(data.serverTime);
         const target = new Date(data.target);
@@ -55,7 +55,7 @@ export function useFestivalCountdown(pollIntervalMs = 60000) {
           loading: false,
           error:
             prev.error ||
-            "Impossible de récupérer le compte à rebours du festival.",
+            'Impossible de récupérer le compte à rebours du festival.',
         }));
       }
     };
@@ -108,4 +108,3 @@ export function useFestivalCountdown(pollIntervalMs = 60000) {
 
   return state;
 }
-
