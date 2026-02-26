@@ -11,6 +11,7 @@ export default function App() {
     <AuthProvider>
       <AdminProvider>
         <Router>
+          <GoogleAnalytics />
           <ScrollToTop />
 
           <div className="flex min-h-screen flex-col">
