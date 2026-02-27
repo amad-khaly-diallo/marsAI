@@ -1,24 +1,24 @@
-import api from "../services/api";
+import api from '../services/api';
 
 export default function useSubmission() {
   const createFilmmaker = async (payload) => {
-    return await api.post("/filmmakers", payload);
+    return await api.post('/filmmakers', payload);
   };
 
   const submitMovie = async (payload, videoFile) => {
     const formData = new FormData();
-    formData.append("payload", JSON.stringify(payload));
-    if (videoFile) formData.append("video", videoFile);
-    return await api.postForm("/movies/submit", formData);
+    formData.append('payload', JSON.stringify(payload));
+    if (videoFile) formData.append('video', videoFile);
+    return await api.postForm('/movies/submit', formData);
   };
 
   // version with progress callback (onProgress receives 0-100)
   const submitMovieWithProgress = async (payload, videoFile, onProgress) => {
     const formData = new FormData();
-    formData.append("payload", JSON.stringify(payload));
-    if (videoFile) formData.append("video", videoFile);
+    formData.append('payload', JSON.stringify(payload));
+    if (videoFile) formData.append('video', videoFile);
     return await api.postFormWithProgress(
-      "/movies/submit",
+      '/movies/submit',
       formData,
       onProgress,
     );
@@ -34,8 +34,8 @@ export default function useSubmission() {
 
   const uploadAssets = async (movieId, stillFiles = [], subtitle = null) => {
     const formData = new FormData();
-    stillFiles.forEach((f) => formData.append("stills", f));
-    if (subtitle) formData.append("subtitle", subtitle);
+    stillFiles.forEach((f) => formData.append('stills', f));
+    if (subtitle) formData.append('subtitle', subtitle);
     return await api.postForm(`/movies/${movieId}/assets`, formData);
   };
 
@@ -46,8 +46,8 @@ export default function useSubmission() {
     onProgress,
   ) => {
     const formData = new FormData();
-    stillFiles.forEach((f) => formData.append("stills", f));
-    if (subtitle) formData.append("subtitle", subtitle);
+    stillFiles.forEach((f) => formData.append('stills', f));
+    if (subtitle) formData.append('subtitle', subtitle);
     return await api.postFormWithProgress(
       `/movies/${movieId}/assets`,
       formData,

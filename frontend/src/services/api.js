@@ -4,14 +4,14 @@
 // - parses JSON safely and throws a normalized Error on non-2xx
 
 async function request(path, options = {}) {
-  const normalizedPath = path.startsWith("/api")
+  const normalizedPath = path.startsWith('/api')
     ? path
-    : `/api${path.startsWith("/") ? "" : "/"}${path}`;
-  const { body, formData, headers = {}, method = "GET", ...rest } = options;
+    : `/api${path.startsWith('/') ? '' : '/'}${path}`;
+  const { body, formData, headers = {}, method = 'GET', ...rest } = options;
 
   const init = {
     method,
-    credentials: "include",
+    credentials: 'include',
     ...rest,
   };
 
@@ -19,7 +19,7 @@ async function request(path, options = {}) {
     init.body = formData;
     // don't set content-type for FormData — browser sets the multipart boundary
   } else if (body !== undefined) {
-    init.headers = { "Content-Type": "application/json", ...headers };
+    init.headers = { 'Content-Type': 'application/json', ...headers };
     init.body = JSON.stringify(body);
   } else if (Object.keys(headers).length) {
     init.headers = { ...headers };
@@ -27,7 +27,7 @@ async function request(path, options = {}) {
 
   const res = await fetch(normalizedPath, init);
 
-  const text = await res.text().catch(() => "");
+  const text = await res.text().catch(() => '');
   let data = null;
   try {
     data = text ? JSON.parse(text) : null;
@@ -39,7 +39,7 @@ async function request(path, options = {}) {
     const err = new Error(
       (data && (data.error || data.message)) ||
         res.statusText ||
-        "Request failed",
+        'Request failed',
     );
 
     err.status = res.status;
@@ -53,28 +53,28 @@ async function request(path, options = {}) {
 // Définition de l'objet API principal
 const api = {
   request,
-  get: (path, opts) => request(path, { method: "GET", ...opts }),
-  post: (path, body, opts) => request(path, { method: "POST", body, ...opts }),
-  put: (path, body, opts) => request(path, { method: "PUT", body, ...opts }),
+  get: (path, opts) => request(path, { method: 'GET', ...opts }),
+  post: (path, body, opts) => request(path, { method: 'POST', body, ...opts }),
+  put: (path, body, opts) => request(path, { method: 'PUT', body, ...opts }),
   patch: (path, body, opts) =>
-    request(path, { method: "PATCH", body, ...opts }),
+    request(path, { method: 'PATCH', body, ...opts }),
   patch: (path, body, opts) =>
-    request(path, { method: "PATCH", body, ...opts }),
-  del: (path, opts) => request(path, { method: "DELETE", ...opts }),
+    request(path, { method: 'PATCH', body, ...opts }),
+  del: (path, opts) => request(path, { method: 'DELETE', ...opts }),
   postForm: (path, formData, opts) =>
-    request(path, { method: "POST", formData, ...opts }),
+    request(path, { method: 'POST', formData, ...opts }),
   // POST with upload progress callback (uses XMLHttpRequest because fetch has no upload progress)
   postFormWithProgress: (path, formData, onProgress, opts = {}) => {
     return new Promise((resolve, reject) => {
-      const normalizedPath = path.startsWith("/api")
+      const normalizedPath = path.startsWith('/api')
         ? path
-        : `/api${path.startsWith("/") ? "" : "/"}${path}`;
+        : `/api${path.startsWith('/') ? '' : '/'}${path}`;
 
       const xhr = new XMLHttpRequest();
-      xhr.open("POST", normalizedPath, true);
+      xhr.open('POST', normalizedPath, true);
       xhr.withCredentials = true;
 
-      if (xhr.upload && typeof onProgress === "function") {
+      if (xhr.upload && typeof onProgress === 'function') {
         xhr.upload.onprogress = (e) => {
           if (!e.lengthComputable) return;
           const pct = Math.round((e.loaded / e.total) * 100);
@@ -86,9 +86,9 @@ const api = {
         };
       }
 
-      xhr.onerror = () => reject(new Error("Network error"));
+      xhr.onerror = () => reject(new Error('Network error'));
       xhr.onload = () => {
-        const text = xhr.responseText || "";
+        const text = xhr.responseText || '';
         let data = null;
         try {
           data = text ? JSON.parse(text) : null;
@@ -101,7 +101,7 @@ const api = {
           const err = new Error(
             (data && (data.error || data.message)) ||
               xhr.statusText ||
-              "Request failed",
+              'Request failed',
           );
           err.status = xhr.status;
           err.body = data;

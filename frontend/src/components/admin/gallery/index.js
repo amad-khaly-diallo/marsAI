@@ -1,1 +1,1 @@
-export { default as GreenFlagGallery } from "./GreenFlagGallery";
+export { default as GreenFlagGallery } from './GreenFlagGallery';

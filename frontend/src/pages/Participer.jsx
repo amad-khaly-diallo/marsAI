@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import SubmissionStepper from "../components/participer/SubmissionStepper";
-import FilmmakerStep from "../components/participer/FilmmakerStep";
-import MovieStep from "../components/participer/MovieStep";
-import AIDeclarationStep from "../components/participer/AIDeclarationStep";
-import AssetsTagsStep from "../components/participer/AssetsTagsStep";
-import CollaboratorsStep from "../components/participer/CollaboratorsStep";
-import useParticiper from "../hooks/useParticiper";
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import SubmissionStepper from '../components/participer/SubmissionStepper';
+import FilmmakerStep from '../components/participer/FilmmakerStep';
+import MovieStep from '../components/participer/MovieStep';
+import AIDeclarationStep from '../components/participer/AIDeclarationStep';
+import AssetsTagsStep from '../components/participer/AssetsTagsStep';
+import CollaboratorsStep from '../components/participer/CollaboratorsStep';
+import useParticiper from '../hooks/useParticiper';
 
 export default function Participer() {
   const { t } = useTranslation();
@@ -51,7 +51,7 @@ export default function Participer() {
   useEffect(() => {
     if (!finished) return;
     const timer = setTimeout(() => {
-      navigate("/");
+      navigate('/');
     }, 4000);
     return () => clearTimeout(timer);
   }, [finished, navigate]);
@@ -60,15 +60,15 @@ export default function Participer() {
     <div className="mx-auto max-w-5xl px-4 pt-32 pb-20">
       <header className="mb-4 space-y-2">
         <p className="inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand-primary-soft">
-          {t("participate.badge")}
+          {t('participate.badge')}
         </p>
 
         <h1 className="text-2xl font-semibold text-slate-50 md:text-3xl">
-          {t("participate.title")}
+          {t('participate.title')}
         </h1>
 
         <p className="max-w-2xl text-sm text-brand-muted">
-          {t("participate.subtitle")}
+          {t('participate.subtitle')}
         </p>
       </header>
 
@@ -184,17 +184,17 @@ export default function Participer() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
           <div className="w-full max-w-md rounded-xl border border-emerald-500/60 bg-slate-950/90 px-6 py-5 text-sm shadow-soft-lg">
             <h2 className="mb-2 text-base font-semibold text-emerald-300">
-              {t("participate.successTitle")}
+              {t('participate.successTitle')}
             </h2>
             <p className="mb-4 text-sm text-emerald-100">
-              {t("participate.successMessage")}
+              {t('participate.successMessage')}
             </p>
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={() => navigate('/')}
               className="inline-flex items-center justify-center rounded-full bg-emerald-400 px-5 py-2 text-sm font-semibold text-slate-900 shadow-soft-md hover:bg-emerald-300"
             >
-              {t("participate.goHome")}
+              {t('participate.goHome')}
             </button>
           </div>
         </div>

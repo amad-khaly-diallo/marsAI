@@ -1,10 +1,16 @@
-import { useState } from "react";
-import { SectionHeader, ErrorAlert, SectionCard } from "../common";
-import { useJury } from "../hooks";
-import JuryCreateForm from "./JuryCreateForm";
-import JuryTable from "./JuryTable";
+import { useState } from 'react';
+import { SectionHeader, ErrorAlert, SectionCard } from '../common';
+import { useJury } from '../hooks';
+import JuryCreateForm from './JuryCreateForm';
+import JuryTable from './JuryTable';
 
-const INITIAL_FORM = { first_name: "", last_name: "", role: "", bio: "", photo_url: "" };
+const INITIAL_FORM = {
+  first_name: '',
+  last_name: '',
+  role: '',
+  bio: '',
+  photo_url: '',
+};
 
 export default function JuryManagement() {
   const { members, loading, error, setMembers, refetch } = useJury();
@@ -24,7 +30,7 @@ export default function JuryManagement() {
     setCreateError(null);
     setCreateLoading(true);
     try {
-      const admin = require("../../../services/admin").default;
+      const admin = require('../../../services/admin').default;
       await admin.createJuryMember(form);
       setForm(INITIAL_FORM);
       setCreating(false);
@@ -37,10 +43,10 @@ export default function JuryManagement() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer ce membre du jury ?")) return;
+    if (!window.confirm('Supprimer ce membre du jury ?')) return;
     setDeletingId(id);
     try {
-      const admin = require("../../../services/admin").default;
+      const admin = require('../../../services/admin').default;
       await admin.deleteJuryMember(id);
       setMembers((prev) => prev.filter((m) => m.id !== id));
     } catch (err) {
@@ -64,7 +70,7 @@ export default function JuryManagement() {
             onClick={() => setCreating((v) => !v)}
             className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent"
           >
-            {creating ? "Annuler" : "+ Ajouter un juré"}
+            {creating ? 'Annuler' : '+ Ajouter un juré'}
           </button>
         }
       >
@@ -78,7 +84,12 @@ export default function JuryManagement() {
           onCancel={() => setCreating(false)}
           isOpen={creating}
         />
-        <JuryTable members={members} loading={loading} deletingId={deletingId} onDelete={handleDelete} />
+        <JuryTable
+          members={members}
+          loading={loading}
+          deletingId={deletingId}
+          onDelete={handleDelete}
+        />
       </SectionCard>
     </div>
   );

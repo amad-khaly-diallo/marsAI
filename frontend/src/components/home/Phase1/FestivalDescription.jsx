@@ -9,7 +9,7 @@ import {
   Projector,
   Trophy,
   Music,
-} from "lucide-react";
+} from 'lucide-react';
 
 /**
  * Phase 1 – Description du festival (cahier des charges partenaires).
@@ -19,7 +19,7 @@ import {
 const formatSelection = [
   {
     icon: MessageCircle,
-    text: "Appel à projet de 2 mois",
+    text: 'Appel à projet de 2 mois',
   },
   {
     icon: Monitor,
@@ -27,58 +27,61 @@ const formatSelection = [
   },
   {
     icon: Radio,
-    text: "Diffusion en ligne des œuvres (web et réseaux sociaux)",
+    text: 'Diffusion en ligne des œuvres (web et réseaux sociaux)',
   },
   {
     icon: Clapperboard,
-    text: "Diffusion en salles de cinéma et festivals de films",
+    text: 'Diffusion en salles de cinéma et festivals de films',
   },
 ];
 
 const lieu = {
-  name: "La Plateforme",
-  exName: "ex Dock des Suds",
+  name: 'La Plateforme',
+  exName: 'ex Dock des Suds',
   points: [
     "4000 m² d'espaces dans le centre de Marseille, pour accueillir l'événement",
-    "2 espaces pour Mars.A.I : La salle des Sucres (conférences et remise des prix) • La salle Plaza (accueil, animation, restauration)",
-    "Espace entièrement modulable",
+    '2 espaces pour Mars.A.I : La salle des Sucres (conférences et remise des prix) • La salle Plaza (accueil, animation, restauration)',
+    'Espace entièrement modulable',
   ],
 };
 
 const conferences = {
-  title: "Deux journées de conférences gratuites",
-  subtitle: "De débats engagés, de confrontations d'idées, d'interrogations stimulantes.",
+  title: 'Deux journées de conférences gratuites',
+  subtitle:
+    "De débats engagés, de confrontations d'idées, d'interrogations stimulantes.",
   publics: [
-    "Professionnels des Industries Culturelles et Créatives",
-    "Étudiants",
-    "Grand public",
+    'Professionnels des Industries Culturelles et Créatives',
+    'Étudiants',
+    'Grand public',
   ],
 };
 
 const aussi = [
   {
     icon: GraduationCap,
-    title: "Des Workshops",
-    detail: "Animés par des experts de l'IA générative. Thématiques : scénario, création et post-production.",
+    title: 'Des Workshops',
+    detail:
+      "Animés par des experts de l'IA générative. Thématiques : scénario, création et post-production.",
   },
   {
     icon: Projector,
-    title: "Des Projections",
-    detail: "Des films en compétition et hors-compétition.",
+    title: 'Des Projections',
+    detail: 'Des films en compétition et hors-compétition.',
   },
   {
     icon: Trophy,
-    title: "Une remise des prix",
-    detail: "En présence d'un jury prestigieux, incluant des cinéastes, acteurs et créateurs de contenu renommés.",
+    title: 'Une remise des prix',
+    detail:
+      "En présence d'un jury prestigieux, incluant des cinéastes, acteurs et créateurs de contenu renommés.",
   },
 ];
 
 const marsAINight = {
-  title: "marsAI Night",
-  tagline: "Fête Électro mêlant IA et futurs souhaitables",
-  type: "Grande cérémonie de clôture",
-  date: "Samedi 13 Juin",
-  time: "à partir de 19h",
+  title: 'marsAI Night',
+  tagline: 'Fête Électro mêlant IA et futurs souhaitables',
+  type: 'Grande cérémonie de clôture',
+  date: 'Samedi 13 Juin',
+  time: 'à partir de 19h',
 };
 
 export default function FestivalDescription() {
@@ -92,11 +95,14 @@ export default function FestivalDescription() {
               Présentation
             </span>
           </div>
-          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">Le festival</h2>
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
+            Le festival
+          </h2>
           <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-2xl">
-            MarsAI réunit créateurs et public autour du film court généré ou co-créé avec l'IA. Première édition à
-            Marseille en 2026 à La Plateforme — un rendez-vous unique pour découvrir et récompenser la création
-            audiovisuelle assistée par l'intelligence artificielle.
+            MarsAI réunit créateurs et public autour du film court généré ou
+            co-créé avec l'IA. Première édition à Marseille en 2026 à La
+            Plateforme — un rendez-vous unique pour découvrir et récompenser la
+            création audiovisuelle assistée par l'intelligence artificielle.
           </p>
         </div>
 
@@ -109,11 +115,16 @@ export default function FestivalDescription() {
             {formatSelection.map((item) => {
               const Icon = item.icon;
               return (
-                <li key={item.text} className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+                <li
+                  key={item.text}
+                  className="flex items-start gap-4 rounded-xl border border-white/10 bg-white/5 p-4"
+                >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-primary/20 text-brand-primary">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <p className="text-slate-200 text-sm md:text-base pt-1.5">{item.text}</p>
+                  <p className="text-slate-200 text-sm md:text-base pt-1.5">
+                    {item.text}
+                  </p>
                 </li>
               );
             })}
@@ -126,7 +137,8 @@ export default function FestivalDescription() {
             Le lieu
           </h3>
           <p className="text-brand-primary font-semibold text-lg md:text-xl">
-            {lieu.name} <span className="text-slate-400 font-normal">({lieu.exName})</span>
+            {lieu.name}{' '}
+            <span className="text-slate-400 font-normal">({lieu.exName})</span>
           </p>
           <ul className="mt-4 space-y-2 text-slate-300 text-sm md:text-base">
             {lieu.points.map((point, i) => (
@@ -144,7 +156,8 @@ export default function FestivalDescription() {
             Deux journées de conférences gratuites
           </h3>
           <p className="text-slate-400 italic text-sm md:text-base mb-6">
-            De débats engagés, de confrontations d'idées, d'interrogations stimulantes.
+            De débats engagés, de confrontations d'idées, d'interrogations
+            stimulantes.
           </p>
           <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mb-3">
             Publics ciblés
@@ -163,7 +176,9 @@ export default function FestivalDescription() {
 
         {/* Mais aussi */}
         <div>
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-6">… Mais aussi</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-white mb-6">
+            … Mais aussi
+          </h3>
           <div className="grid gap-4 sm:grid-cols-3">
             {aussi.map((item) => {
               const Icon = item.icon;
@@ -175,8 +190,12 @@ export default function FestivalDescription() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-primary/20 text-brand-primary mb-3">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h4 className="font-semibold text-white mb-1">{item.title}</h4>
-                  <p className="text-sm text-slate-400 leading-snug">{item.detail}</p>
+                  <h4 className="font-semibold text-white mb-1">
+                    {item.title}
+                  </h4>
+                  <p className="text-sm text-slate-400 leading-snug">
+                    {item.detail}
+                  </p>
                 </div>
               );
             })}
@@ -188,8 +207,12 @@ export default function FestivalDescription() {
           <p className="text-[11px] font-semibold uppercase tracking-widest text-brand-primary mb-2">
             … Et enfin !
           </p>
-          <h3 className="text-2xl md:text-4xl font-black text-white mb-2">{marsAINight.title}</h3>
-          <p className="text-slate-300 text-sm md:text-base mb-1">{marsAINight.tagline}</p>
+          <h3 className="text-2xl md:text-4xl font-black text-white mb-2">
+            {marsAINight.title}
+          </h3>
+          <p className="text-slate-300 text-sm md:text-base mb-1">
+            {marsAINight.tagline}
+          </p>
           <p className="text-white font-semibold mb-3">{marsAINight.type}</p>
           <p className="text-brand-primary font-bold text-lg">
             {marsAINight.date} — {marsAINight.time}

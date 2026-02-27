@@ -3,7 +3,7 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
 
   const updateRow = (index, field, newValue) => {
     const next = list.map((row, i) =>
-      i === index ? { ...row, [field]: newValue } : row
+      i === index ? { ...row, [field]: newValue } : row,
     );
     onChange(next);
   };
@@ -11,7 +11,7 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
   const addRow = () => {
     onChange([
       ...list,
-      { civility: "", first_name: "", last_name: "", role: "", email: "" },
+      { civility: '', first_name: '', last_name: '', role: '', email: '' },
     ]);
   };
 
@@ -22,9 +22,9 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
   return (
     <section
       className={[
-        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
-        hasError ? "border-red-500/70" : "border-slate-800/80",
-      ].join(" ")}
+        'rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm',
+        hasError ? 'border-red-500/70' : 'border-slate-800/80',
+      ].join(' ')}
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="text-sm font-semibold text-slate-100">
@@ -41,8 +41,8 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
 
       {list.length === 0 && (
         <p className="text-xs text-brand-muted">
-          Ajoutez les autres personnes ayant contribué à l&apos;œuvre (producteurs,
-          co-réalisateurs, compositeurs, etc.).
+          Ajoutez les autres personnes ayant contribué à l&apos;œuvre
+          (producteurs, co-réalisateurs, compositeurs, etc.).
         </p>
       )}
 
@@ -53,8 +53,8 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
             className="grid gap-2 rounded-md border border-slate-800/80 bg-slate-950/40 p-3 md:grid-cols-5"
           >
             <select
-              value={collab.civility || ""}
-              onChange={(e) => updateRow(index, "civility", e.target.value)}
+              value={collab.civility || ''}
+              onChange={(e) => updateRow(index, 'civility', e.target.value)}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             >
               <option value="">Civ.</option>
@@ -64,24 +64,24 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
             <input
               type="text"
               placeholder="Prénom"
-              value={collab.first_name || ""}
-              onChange={(e) => updateRow(index, "first_name", e.target.value)}
+              value={collab.first_name || ''}
+              onChange={(e) => updateRow(index, 'first_name', e.target.value)}
               maxLength={80}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             />
             <input
               type="text"
               placeholder="Nom"
-              value={collab.last_name || ""}
-              onChange={(e) => updateRow(index, "last_name", e.target.value)}
+              value={collab.last_name || ''}
+              onChange={(e) => updateRow(index, 'last_name', e.target.value)}
               maxLength={80}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             />
             <input
               type="text"
               placeholder="Rôle (ex : Producteur)"
-              value={collab.role || ""}
-              onChange={(e) => updateRow(index, "role", e.target.value)}
+              value={collab.role || ''}
+              onChange={(e) => updateRow(index, 'role', e.target.value)}
               maxLength={120}
               className="rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
             />
@@ -89,8 +89,8 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
               <input
                 type="email"
                 placeholder="Email"
-                value={collab.email || ""}
-                onChange={(e) => updateRow(index, "email", e.target.value)}
+                value={collab.email || ''}
+                onChange={(e) => updateRow(index, 'email', e.target.value)}
                 maxLength={200}
                 className="flex-1 rounded-md border border-slate-700 bg-slate-900/60 px-2 py-2 text-xs text-slate-100"
               />
@@ -108,4 +108,3 @@ export default function CollaboratorsForm({ value, onChange, hasError }) {
     </section>
   );
 }
-

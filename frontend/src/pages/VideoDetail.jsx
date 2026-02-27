@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getMovieById } from "../services/api";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getMovieById } from '../services/api';
 
 export default function VideoDetail() {
   const { id } = useParams();
@@ -16,7 +16,7 @@ export default function VideoDetail() {
         const data = await getMovieById(id);
         setMovie(data);
       } catch (error) {
-        console.error("Erreur chargement film:", error);
+        console.error('Erreur chargement film:', error);
       } finally {
         setLoading(false);
       }
@@ -30,10 +30,10 @@ export default function VideoDetail() {
     if (!movie) return null;
 
     // Cas 1 : lien YouTube
-    const isYoutube = 
+    const isYoutube =
       movie.youtube_url &&
-      (movie.youtube_url.includes("youtube") ||
-        movie.youtube_url.includes("youtu.be"));
+      (movie.youtube_url.includes('youtube') ||
+        movie.youtube_url.includes('youtu.be'));
 
     // Cas 2 : fichier vidéo hébergé sur le backend
     const hasFileOnDisk = !!movie.video_url;
@@ -48,7 +48,7 @@ export default function VideoDetail() {
         <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-violet-600 opacity-20 blur-2xl transition duration-1000 group-hover:opacity-30"></div>
 
         <div className="relative w-full h-full bg-black z-10">
-          { hasFileOnDisk && fileSrc ? (
+          {hasFileOnDisk && fileSrc ? (
             <video
               controls
               className="w-full h-full object-cover"
@@ -57,7 +57,7 @@ export default function VideoDetail() {
           ) : isYoutube ? (
             <iframe
               className="w-full h-full object-cover"
-              src={movie.youtube_url.replace("watch?v=", "embed/")}
+              src={movie.youtube_url.replace('watch?v=', 'embed/')}
               title={movie.original_title}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -116,48 +116,47 @@ export default function VideoDetail() {
           <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 relative z-10">
             <div
               className="w-12 h-[2px] bg-blue-500 mb-8 opacity-0 animate-fadeInLeft"
-              style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
+              style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
             ></div>
 
             <h1
               className="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4 opacity-0 animate-fadeInUp"
-              style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
+              style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
             >
               {movie.original_title}
             </h1>
 
             <div
               className="flex items-center gap-3 text-lg font-medium text-gray-400 mb-8 opacity-0 animate-fadeInUp"
-              style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+              style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}
             >
               <span className="text-blue-500">DIR.</span>
               <span className="text-white tracking-widest uppercase">
                 {movie.filmmaker
                   ? `${movie.filmmaker.first_name} ${movie.filmmaker.last_name}`
-                  : "Artiste Inconnu"}
+                  : 'Artiste Inconnu'}
               </span>
             </div>
 
             <p
               className="text-lg leading-relaxed text-gray-300 max-w-lg mb-12 opacity-0 animate-fadeInUp"
-              style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
+              style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
             >
               {movie.synopsis_original ||
-                "Aucune description disponible pour cette œuvre."}
+                'Aucune description disponible pour cette œuvre.'}
             </p>
-
           </div>
 
           {/* COLONNE DROITE */}
           <div
             className="lg:col-span-7 order-1 lg:order-2 opacity-0 animate-fadeIn"
-            style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
+            style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
           >
             {renderVideo()}
 
             <div className="flex justify-between items-center mt-6 text-xs font-mono text-gray-600 uppercase tracking-widest border-t border-gray-900 pt-4">
               <div>MARSAI FESTIVAL • 2026</div>
-              <div>ID: #{String(id).padStart(3, "0")}</div>
+              <div>ID: #{String(id).padStart(3, '0')}</div>
             </div>
           </div>
         </div>

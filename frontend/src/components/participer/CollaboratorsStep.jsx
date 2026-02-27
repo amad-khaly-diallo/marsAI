@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
-import CollaboratorsForm from "../../components/forms/CollaboratorsForm";
-import StepForm from "./StepForm";
+import { useTranslation } from 'react-i18next';
+import CollaboratorsForm from '../../components/forms/CollaboratorsForm';
+import StepForm from './StepForm';
 
 export default function CollaboratorsStep({
   value,
@@ -16,8 +16,8 @@ export default function CollaboratorsStep({
     <StepForm
       onSubmit={onSubmit}
       onBack={onBack}
-      backLabel={t("participate.backStep", { step: 4 })}
-      submitLabel={t("participate.finalize")}
+      backLabel={t('participate.backStep', { step: 4 })}
+      submitLabel={t('participate.finalize')}
       submitting={submitting}
       error={error}
     >

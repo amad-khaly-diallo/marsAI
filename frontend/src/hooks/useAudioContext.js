@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef } from 'react';
 
 /**
  * Hook personnalisé pour gérer le son de caméra et l'AudioContext
@@ -8,7 +8,7 @@ export function useAudioContext() {
   const audioCtxRef = useRef(null);
 
   const playCameraSound = () => {
-    if (typeof window === "undefined") {
+    if (typeof window === 'undefined') {
       return;
     }
 
@@ -20,13 +20,17 @@ export function useAudioContext() {
     const ctx = audioCtxRef.current ?? new AudioContext();
     audioCtxRef.current = ctx;
 
-    if (ctx.state === "suspended") {
+    if (ctx.state === 'suspended') {
       ctx.resume();
     }
 
     const now = ctx.currentTime;
     const duration = 0.08;
-    const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+    const buffer = ctx.createBuffer(
+      1,
+      ctx.sampleRate * duration,
+      ctx.sampleRate,
+    );
     const data = buffer.getChannelData(0);
 
     // Générer du bruit blanc avec décadence
