@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { heroAnimationStyles } from "../../sections/heroAnimations";
+import React, { useState, useEffect } from 'react';
+import { heroAnimationStyles } from '../../sections/heroAnimations';
 
 export const HomePhase2 = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [filter, setFilter] = useState("all"); // all, approved, selected
+  const [filter, setFilter] = useState('all'); // all, approved, selected
 
   useEffect(() => {
     fetchMovies();
@@ -15,14 +15,14 @@ export const HomePhase2 = () => {
   const fetchMovies = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/movies");
+      const response = await fetch('/api/movies');
       if (!response.ok) {
-        throw new Error("Erreur réseau");
+        throw new Error('Erreur réseau');
       }
       const data = await response.json();
       setMovies(data);
     } catch (err) {
-      setError("Erreur lors du chargement des films");
+      setError('Erreur lors du chargement des films');
       console.error(err);
     } finally {
       setLoading(false);
@@ -30,8 +30,8 @@ export const HomePhase2 = () => {
   };
 
   const filteredMovies = movies.filter((movie) => {
-    if (filter === "all")
-      return movie.status === "approved" || movie.status === "selected";
+    if (filter === 'all')
+      return movie.status === 'approved' || movie.status === 'selected';
     return movie.status === filter;
   });
 
@@ -103,41 +103,41 @@ export const HomePhase2 = () => {
           {/* Filters */}
           <div className="flex flex-wrap gap-3">
             <button
-              onClick={() => setFilter("all")}
+              onClick={() => setFilter('all')}
               className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-                filter === "all"
-                  ? "bg-white text-black"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
+                filter === 'all'
+                  ? 'bg-white text-black'
+                  : 'bg-white/10 text-white/80 hover:bg-white/20'
               }`}
             >
               Tous (
               {
                 movies.filter(
-                  (m) => m.status === "approved" || m.status === "selected",
+                  (m) => m.status === 'approved' || m.status === 'selected',
                 ).length
               }
               )
             </button>
             <button
-              onClick={() => setFilter("approved")}
+              onClick={() => setFilter('approved')}
               className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-                filter === "approved"
-                  ? "bg-violet-500 text-white"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
+                filter === 'approved'
+                  ? 'bg-violet-500 text-white'
+                  : 'bg-white/10 text-white/80 hover:bg-white/20'
               }`}
             >
-              Approuvés ({movies.filter((m) => m.status === "approved").length})
+              Approuvés ({movies.filter((m) => m.status === 'approved').length})
             </button>
             <button
-              onClick={() => setFilter("selected")}
+              onClick={() => setFilter('selected')}
               className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-                filter === "selected"
-                  ? "bg-fuchsia-500 text-white"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
+                filter === 'selected'
+                  ? 'bg-fuchsia-500 text-white'
+                  : 'bg-white/10 text-white/80 hover:bg-white/20'
               }`}
             >
               Sélectionnés (
-              {movies.filter((m) => m.status === "selected").length})
+              {movies.filter((m) => m.status === 'selected').length})
             </button>
           </div>
         </div>
@@ -195,13 +195,13 @@ export const HomePhase2 = () => {
 // Movie Card Component
 const MovieCard = ({ movie, onClick }) => {
   const statusColors = {
-    approved: "bg-violet-500/20 text-violet-400 border-violet-500/30",
-    selected: "bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30",
+    approved: 'bg-violet-500/20 text-violet-400 border-violet-500/30',
+    selected: 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30',
   };
 
   const statusLabels = {
-    approved: "Approuvé",
-    selected: "Sélectionné",
+    approved: 'Approuvé',
+    selected: 'Sélectionné',
   };
 
   return (
@@ -308,9 +308,9 @@ const MovieCard = ({ movie, onClick }) => {
 // Movie Modal Component
 const MovieModal = ({ movie, onClose }) => {
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     };
   }, []);
 
@@ -370,7 +370,7 @@ const MovieModal = ({ movie, onClose }) => {
               </h2>
               {movie.filmmaker_name && (
                 <p className="text-white/70">
-                  Réalisé par{" "}
+                  Réalisé par{' '}
                   <span className="font-semibold text-white">
                     {movie.filmmaker_name}
                   </span>

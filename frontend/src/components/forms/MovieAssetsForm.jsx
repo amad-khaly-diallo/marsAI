@@ -22,18 +22,18 @@ export default function MovieAssetsForm({ value, onChange, hasError }) {
   return (
     <section
       className={[
-        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
-        hasError ? "border-red-500/70" : "border-slate-800/80",
-      ].join(" ")}
+        'rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm',
+        hasError ? 'border-red-500/70' : 'border-slate-800/80',
+      ].join(' ')}
     >
       <h2 className="mb-3 text-sm font-semibold text-slate-100">
         4. Assets (captures &amp; sous-titres)
       </h2>
 
       <p className="mb-3 text-xs text-brand-muted">
-        Uploadez jusqu&apos;à 3 captures d&apos;écran (fichiers image) et un fichier de
-        sous-titres optionnel au format <code>.srt</code>. Ces fichiers seront
-        stockés côté serveur avec votre film.
+        Uploadez jusqu&apos;à 3 captures d&apos;écran (fichiers image) et un
+        fichier de sous-titres optionnel au format <code>.srt</code>. Ces
+        fichiers seront stockés côté serveur avec votre film.
       </p>
 
       <div className="grid gap-3 md:grid-cols-2">
@@ -75,4 +75,3 @@ export default function MovieAssetsForm({ value, onChange, hasError }) {
     </section>
   );
 }
-

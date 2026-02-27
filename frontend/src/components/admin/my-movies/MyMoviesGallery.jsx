@@ -1,12 +1,12 @@
-import { useEffect, useState, useMemo } from "react";
-import MyMoviesGrid from "./MyMoviesGrid";
-import MyMovieModal from "./MyMovieModal";
+import { useEffect, useState, useMemo } from 'react';
+import MyMoviesGrid from './MyMoviesGrid';
+import MyMovieModal from './MyMovieModal';
 
 export default function MyMoviesGallery() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [flagFilter, setFlagFilter] = useState("");
+  const [flagFilter, setFlagFilter] = useState('');
   const [activeIndex, setActiveIndex] = useState(null);
   const [savingReviewId, setSavingReviewId] = useState(null);
   const [savingFlagId, setSavingFlagId] = useState(null);
@@ -15,9 +15,12 @@ export default function MyMoviesGallery() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/films", { method: "GET", credentials: "include" });
+      const res = await fetch('/api/admin/films', {
+        method: 'GET',
+        credentials: 'include',
+      });
       const data = await res.json().catch(() => []);
-      if (!res.ok) throw new Error(data.error || "Erreur de chargement.");
+      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
       setMovies(data || []);
     } catch (err) {
       setError(err.message);
@@ -32,26 +35,42 @@ export default function MyMoviesGallery() {
 
   const displayMovies = useMemo(() => {
     if (!flagFilter) return movies;
-    if (flagFilter === "unseen") return movies.filter((m) => !m.my_flag);
+    if (flagFilter === 'unseen') return movies.filter((m) => !m.my_flag);
     return movies.filter((m) => m.my_flag === flagFilter);
   }, [movies, flagFilter]);
 
   const handleSaveReview = async (id, payload) => {
-    if (payload.rating !== null && (Number.isNaN(payload.rating) || payload.rating < 1 || payload.rating > 10)) {
-      setError("La note doit être un nombre entre 1 et 10.");
+    if (
+      payload.rating !== null &&
+      (Number.isNaN(payload.rating) ||
+        payload.rating < 1 ||
+        payload.rating > 10)
+    ) {
+      setError('La note doit être un nombre entre 1 et 10.');
       return;
     }
     setSavingReviewId(id);
     try {
       const res = await fetch(`/api/admin/films/${id}/review`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || data.message || "Impossible d'enregistrer votre note/commentaire.");
-      setMovies((prev) => prev.map((m) => (m.id === id ? { ...m, my_rating: payload.rating, my_comment: payload.comment } : m)));
+      if (!res.ok)
+        throw new Error(
+          data.error ||
+            data.message ||
+            "Impossible d'enregistrer votre note/commentaire.",
+        );
+      setMovies((prev) =>
+        prev.map((m) =>
+          m.id === id
+            ? { ...m, my_rating: payload.rating, my_comment: payload.comment }
+            : m,
+        ),
+      );
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,14 +82,21 @@ export default function MyMoviesGallery() {
     setSavingFlagId(id);
     try {
       const res = await fetch(`/api/admin/films/${id}/flag`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ flag }),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || data.message || "Impossible de mettre à jour votre flag personnel.");
-      setMovies((prev) => prev.map((m) => (m.id === id ? { ...m, my_flag: flag } : m)));
+      if (!res.ok)
+        throw new Error(
+          data.error ||
+            data.message ||
+            'Impossible de mettre à jour votre flag personnel.',
+        );
+      setMovies((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, my_flag: flag } : m)),
+      );
     } catch (err) {
       setError(err.message);
     } finally {
@@ -79,7 +105,11 @@ export default function MyMoviesGallery() {
   };
 
   const currentMovie =
-    activeIndex !== null && activeIndex >= 0 && activeIndex < displayMovies.length ? displayMovies[activeIndex] : null;
+    activeIndex !== null &&
+    activeIndex >= 0 &&
+    activeIndex < displayMovies.length
+      ? displayMovies[activeIndex]
+      : null;
 
   const goNext = () => {
     if (!displayMovies.length) return;
@@ -102,14 +132,23 @@ export default function MyMoviesGallery() {
   return (
     <div className="space-y-4 relative">
       <header className="space-y-1">
-        <h2 className="text-lg font-semibold text-slate-50">Mes vidéos assignées</h2>
-        <p className="text-sm text-brand-muted">Visionnez les films qui vous sont assignés, prenez une décision et laissez éventuellement une note et un commentaire privés.</p>
+        <h2 className="text-lg font-semibold text-slate-50">
+          Mes vidéos assignées
+        </h2>
+        <p className="text-sm text-brand-muted">
+          Visionnez les films qui vous sont assignés, prenez une décision et
+          laissez éventuellement une note et un commentaire privés.
+        </p>
       </header>
       <div className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-sm">
         <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">Mes vidéos</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">
+            Mes vidéos
+          </p>
           <div className="flex items-center gap-2">
-            <label className="text-[11px] font-medium text-brand-muted">Filtre:</label>
+            <label className="text-[11px] font-medium text-brand-muted">
+              Filtre:
+            </label>
             <select
               value={flagFilter}
               onChange={(e) => setFlagFilter(e.target.value)}
@@ -123,9 +162,22 @@ export default function MyMoviesGallery() {
             </select>
           </div>
         </div>
-        {error && <p className="mb-3 rounded-md border border-red-500/60 bg-red-950/40 px-3 py-2 text-xs text-red-200">{error}</p>}
-        {loading && <div className="text-center py-8 text-sm text-brand-muted">Chargement...</div>}
-        {!loading && <MyMoviesGrid movies={displayMovies} onSelect={(index) => setActiveIndex(index)} />}
+        {error && (
+          <p className="mb-3 rounded-md border border-red-500/60 bg-red-950/40 px-3 py-2 text-xs text-red-200">
+            {error}
+          </p>
+        )}
+        {loading && (
+          <div className="text-center py-8 text-sm text-brand-muted">
+            Chargement...
+          </div>
+        )}
+        {!loading && (
+          <MyMoviesGrid
+            movies={displayMovies}
+            onSelect={(index) => setActiveIndex(index)}
+          />
+        )}
       </div>
       <MyMovieModal
         movie={currentMovie}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 export default function useParticiperState() {
   const [form, setForm] = useState({
@@ -14,34 +14,34 @@ export default function useParticiperState() {
   const setFilmmaker = (next) =>
     setForm((prev) => ({
       ...prev,
-      filmmaker: typeof next === "function" ? next(prev.filmmaker) : next,
+      filmmaker: typeof next === 'function' ? next(prev.filmmaker) : next,
     }));
   const setMovie = (next) =>
     setForm((prev) => ({
       ...prev,
-      movie: typeof next === "function" ? next(prev.movie) : next,
+      movie: typeof next === 'function' ? next(prev.movie) : next,
     }));
   const setAiDeclaration = (next) =>
     setForm((prev) => ({
       ...prev,
       aiDeclaration:
-        typeof next === "function" ? next(prev.aiDeclaration) : next,
+        typeof next === 'function' ? next(prev.aiDeclaration) : next,
     }));
   const setCollaborators = (next) =>
     setForm((prev) => ({
       ...prev,
       collaborators:
-        typeof next === "function" ? next(prev.collaborators) : next,
+        typeof next === 'function' ? next(prev.collaborators) : next,
     }));
   const setAssets = (next) =>
     setForm((prev) => ({
       ...prev,
-      assets: typeof next === "function" ? next(prev.assets) : next,
+      assets: typeof next === 'function' ? next(prev.assets) : next,
     }));
   const setTags = (next) =>
     setForm((prev) => ({
       ...prev,
-      tags: typeof next === "function" ? next(prev.tags) : next,
+      tags: typeof next === 'function' ? next(prev.tags) : next,
     }));
 
   // expose individual values for consumers
@@ -62,7 +62,7 @@ export default function useParticiperState() {
   const [assetsUploadProgress, setAssetsUploadProgress] = useState(0);
 
   // draft persistence
-  const DRAFT_KEY = "participer:draft_v1";
+  const DRAFT_KEY = 'participer:draft_v1';
   const [hasDraft, setHasDraft] = useState(false);
 
   // clear step error when user navigates between steps
@@ -92,9 +92,9 @@ export default function useParticiperState() {
 
       // support legacy shapes where the payload might be nested under `form` or `data`
       const source =
-        d?.form && typeof d.form === "object"
+        d?.form && typeof d.form === 'object'
           ? d.form
-          : d?.data && typeof d.data === "object"
+          : d?.data && typeof d.data === 'object'
             ? d.data
             : d;
 
@@ -117,7 +117,7 @@ export default function useParticiperState() {
           : prev.assets,
       }));
 
-      if (typeof source.currentStep === "number")
+      if (typeof source.currentStep === 'number')
         setCurrentStep(source.currentStep);
       if (source.filmmakerId) setFilmmakerId(source.filmmakerId);
       if (source.movieId) setMovieId(source.movieId);
@@ -138,7 +138,7 @@ export default function useParticiperState() {
     } catch (err) {
       // if parse fails, keep the draft flag so user can try clearing it
       // eslint-disable-next-line no-console
-      console.warn("Failed to load draft (parse error)", err);
+      console.warn('Failed to load draft (parse error)', err);
       return false;
     }
   };
@@ -150,7 +150,7 @@ export default function useParticiperState() {
     if (!hasDraft) return;
 
     const isEmptyObject = (o) =>
-      !o || (typeof o === "object" && Object.keys(o).length === 0);
+      !o || (typeof o === 'object' && Object.keys(o).length === 0);
     const isFormEmpty =
       isEmptyObject(form.filmmaker) &&
       isEmptyObject(form.movie) &&
@@ -247,8 +247,8 @@ export default function useParticiperState() {
     const onStorage = (e) => {
       if (e.key === DRAFT_KEY) setHasDraft(!!e.newValue);
     };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
 
   const finished =

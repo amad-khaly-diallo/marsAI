@@ -1,5 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
-import { X, Clock, ChevronLeft, ChevronRight } from "lucide-react";
+import { useMemo, useState, useEffect } from 'react';
+import { X, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -23,8 +23,8 @@ export default function MyMovieModal({
   onUpdateFlag,
   savingFlag,
 }) {
-  const [localRating, setLocalRating] = useState(movie?.my_rating ?? "");
-  const [localComment, setLocalComment] = useState(movie?.my_comment ?? "");
+  const [localRating, setLocalRating] = useState(movie?.my_rating ?? '');
+  const [localComment, setLocalComment] = useState(movie?.my_comment ?? '');
 
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
   const hasLocalVideo = !!movie?.video_url;
@@ -34,8 +34,8 @@ export default function MyMovieModal({
 
   useEffect(() => {
     if (!movie) return;
-    setLocalRating(movie.my_rating ?? "");
-    setLocalComment(movie.my_comment ?? "");
+    setLocalRating(movie.my_rating ?? '');
+    setLocalComment(movie.my_comment ?? '');
   }, [movie]);
 
   if (!isOpen || !movie) return null;
@@ -43,7 +43,7 @@ export default function MyMovieModal({
   const handleSaveReview = () => {
     onSaveReview(movie.id, {
       rating:
-        localRating !== "" && localRating !== null ? Number(localRating) : null,
+        localRating !== '' && localRating !== null ? Number(localRating) : null,
       comment: localComment || null,
     });
   };
@@ -55,12 +55,12 @@ export default function MyMovieModal({
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="text-lg font-semibold text-slate-50">
-              {movie.original_title || "Sans titre"}
+              {movie.original_title || 'Sans titre'}
             </h3>
             <p className="text-xs text-brand-muted">
               {movie.filmmaker
                 ? `${movie.filmmaker.first_name} ${movie.filmmaker.last_name}`
-                : "—"}
+                : '—'}
             </p>
           </div>
           <button
@@ -104,7 +104,7 @@ export default function MyMovieModal({
             <div className="flex items-center justify-between gap-3">
               <span className="flex items-center gap-1.5 text-xs text-brand-muted">
                 <Clock className="w-3.5 h-3.5 shrink-0" />
-                {movie.duration ? `${movie.duration} min` : "Durée inconnue"}
+                {movie.duration ? `${movie.duration} min` : 'Durée inconnue'}
               </span>
             </div>
 
@@ -114,14 +114,14 @@ export default function MyMovieModal({
                 Synopsis
               </p>
               <p className="text-xs text-slate-200 line-clamp-5">
-                {movie.synopsis_original || "Pas de synopsis disponible."}
+                {movie.synopsis_original || 'Pas de synopsis disponible.'}
               </p>
             </div>
 
             {/* Note + commentaire + flags personnels */}
             <div className="mt-2 space-y-2 border-t border-slate-800 pt-3">
               <p className="text-[11px] text-brand-muted">
-                Votre note et commentaire{" "}
+                Votre note et commentaire{' '}
                 <span className="font-semibold text-slate-100">(privés)</span>.
               </p>
               <div className="flex items-center gap-2">
@@ -144,14 +144,14 @@ export default function MyMovieModal({
                 placeholder="Votre commentaire (optionnel, visible uniquement par vous)..."
               />
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {["green", "yellow", "red"].map((flag) => {
+                {['green', 'yellow', 'red'].map((flag) => {
                   const isActive = movie.my_flag === flag;
                   const baseColor =
-                    flag === "green"
-                      ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/40"
-                      : flag === "yellow"
-                        ? "bg-amber-500/10 text-amber-300 border-amber-500/40"
-                        : "bg-red-500/10 text-red-300 border-red-500/40";
+                    flag === 'green'
+                      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
+                      : flag === 'yellow'
+                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/40'
+                        : 'bg-red-500/10 text-red-300 border-red-500/40';
 
                   return (
                     <button
@@ -169,14 +169,14 @@ export default function MyMovieModal({
                       className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold transition-colors ${
                         isActive
                           ? `${baseColor}`
-                          : "bg-slate-900/60 text-slate-300 border-slate-700 hover:bg-slate-800/80"
+                          : 'bg-slate-900/60 text-slate-300 border-slate-700 hover:bg-slate-800/80'
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
-                      {flag === "green"
-                        ? "Green"
-                        : flag === "yellow"
-                          ? "Yellow"
-                          : "Red"}
+                      {flag === 'green'
+                        ? 'Green'
+                        : flag === 'yellow'
+                          ? 'Yellow'
+                          : 'Red'}
                     </button>
                   );
                 })}
@@ -188,8 +188,8 @@ export default function MyMovieModal({
                 className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {savingReview === movie.id
-                  ? "Enregistrement..."
-                  : "Enregistrer mon avis"}
+                  ? 'Enregistrement...'
+                  : 'Enregistrer mon avis'}
               </button>
             </div>
           </div>

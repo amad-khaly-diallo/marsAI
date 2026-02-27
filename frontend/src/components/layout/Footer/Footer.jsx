@@ -1,5 +1,5 @@
-import FooterMainLinks from "./FooterMainLinks";
-import FooterLegalLinks from "./FooterLegalLinks";
+import FooterMainLinks from './FooterMainLinks';
+import FooterLegalLinks from './FooterLegalLinks';
 
 export default function Footer() {
   return (

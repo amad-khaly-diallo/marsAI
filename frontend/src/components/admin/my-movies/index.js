@@ -1,1 +1,1 @@
-export { default as MyMoviesGallery } from "./MyMoviesGallery";
+export { default as MyMoviesGallery } from './MyMoviesGallery';
