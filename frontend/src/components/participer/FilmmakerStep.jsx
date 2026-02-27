@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
-import FilmmakerForm from "../../components/forms/FilmmakerForm";
-import StepForm from "./StepForm";
+import { useTranslation } from 'react-i18next';
+import FilmmakerForm from '../../components/forms/FilmmakerForm';
+import StepForm from './StepForm';
 
 export default function FilmmakerStep({
   value,
@@ -14,7 +14,7 @@ export default function FilmmakerStep({
   return (
     <StepForm
       onSubmit={onSubmit}
-      submitLabel={t("participate.saveFilmmaker")}
+      submitLabel={t('participate.saveFilmmaker')}
       submitting={submitting}
       error={error}
     >

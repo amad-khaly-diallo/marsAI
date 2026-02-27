@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
-import MovieAssetsForm from "../../components/forms/MovieAssetsForm";
-import MovieTagsForm from "../../components/forms/MovieTagsForm";
-import StepForm from "./StepForm";
+import { useTranslation } from 'react-i18next';
+import MovieAssetsForm from '../../components/forms/MovieAssetsForm';
+import MovieTagsForm from '../../components/forms/MovieTagsForm';
+import StepForm from './StepForm';
 
 export default function AssetsTagsStep({
   assets,
@@ -20,8 +20,8 @@ export default function AssetsTagsStep({
     <StepForm
       onSubmit={onSubmit}
       onBack={onBack}
-      backLabel={t("participate.backStep", { step: 3 })}
-      submitLabel={t("participate.saveAssetsTags")}
+      backLabel={t('participate.backStep', { step: 3 })}
+      submitLabel={t('participate.saveAssetsTags')}
       submitting={submitting}
       error={error}
     >

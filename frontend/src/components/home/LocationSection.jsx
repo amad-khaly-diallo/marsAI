@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import MiniMapGTA from "../ui/MiniMapGTA/MiniMapGTA";
-import { LinkButton } from "../ui";
-import { NAV_ROUTES, MAP_MODES } from "../../constants/homeConstants";
-import { useTranslation } from "react-i18next";
-import { heroAnimationStyles } from "../sections/heroAnimations";
+import React, { useState } from 'react';
+import MiniMapGTA from '../ui/MiniMapGTA/MiniMapGTA';
+import { LinkButton } from '../ui';
+import { NAV_ROUTES, MAP_MODES } from '../../constants/homeConstants';
+import { useTranslation } from 'react-i18next';
+import { heroAnimationStyles } from '../sections/heroAnimations';
 
 export function LocationSection() {
   const { t } = useTranslation();
@@ -18,10 +18,10 @@ export function LocationSection() {
           <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-7 shadow-[0_18px_60px_rgba(0,0,0,.16)] backdrop-blur animate-fadeIn">
             <div className="text-xs font-semibold text-white/60">Lieu</div>
             <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-              {t("home.location.title")}
+              {t('home.location.title')}
             </h3>
             <p className="mt-3 text-sm leading-7 text-white/70">
-              {t("home.location.desc")}
+              {t('home.location.desc')}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
@@ -43,8 +43,8 @@ export function LocationSection() {
                   onClick={() => setMapMode(MAP_MODES.GTA)}
                   className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
                     mapMode === MAP_MODES.GTA
-                      ? "bg-violet-500 text-white"
-                      : "text-white/60 hover:text-white"
+                      ? 'bg-violet-500 text-white'
+                      : 'text-white/60 hover:text-white'
                   }`}
                   aria-label="Afficher le radar GTA"
                 >
@@ -54,8 +54,8 @@ export function LocationSection() {
                   onClick={() => setMapMode(MAP_MODES.REAL)}
                   className={`px-3 py-1 text-xs font-bold rounded-full transition-all ${
                     mapMode === MAP_MODES.REAL
-                      ? "bg-violet-500 text-white"
-                      : "text-white/60 hover:text-white"
+                      ? 'bg-violet-500 text-white'
+                      : 'text-white/60 hover:text-white'
                   }`}
                   aria-label="Afficher la carte réelle"
                 >
@@ -88,8 +88,8 @@ export function LocationSection() {
               {/* Label */}
               <div className="absolute -bottom-6 lg:-bottom-8 left-1/2 -translate-x-1/2 text-xs text-white/50 font-semibold">
                 {mapMode === MAP_MODES.GTA
-                  ? "Radar GTA-style"
-                  : "Carte réelle Marseille"}
+                  ? 'Radar GTA-style'
+                  : 'Carte réelle Marseille'}
               </div>
             </div>
           </div>

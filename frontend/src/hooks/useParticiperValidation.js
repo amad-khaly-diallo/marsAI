@@ -1,10 +1,10 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import {
   validateFilmmaker as vFilmmaker,
   validateMovie as vMovie,
   validateAiDeclaration as vAiDeclaration,
   validateCollaborators as vCollaborators,
-} from "../utils/validation";
+} from '../utils/validation';
 
 export default function useParticiperValidation() {
   const { t } = useTranslation();

@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { useAdmin } from "../../contexts";
+import { useState } from 'react';
+import { useAdmin } from '../../contexts';
 
 export default function AdminLayout({ children, currentAdmin }) {
   const { logout } = useAdmin();
   const role = currentAdmin?.role;
-  const isSuperAdmin = role === "super_admin";
+  const isSuperAdmin = role === 'super_admin';
 
   const allSections = [
-    { id: "dashboard", label: "Dashboard" },
-    { id: "admins", label: "Admins" },
-    { id: "jury", label: "Jury" },
-    { id: "partners", label: "Partenaires" },
-    { id: "newsletters", label: "Newsletters" },
-    { id: "all-videos", label: "Galerie des vidéos" },
-    { id: "videos-distribution", label: "Répartition vidéos" },
-    { id: "movies", label: "Films (sélection & gagnants)" },
-    { id: "my-movies", label: "Mes vidéos" }, // vue personnelle pour un admin simple
+    { id: 'dashboard', label: 'Dashboard' },
+    { id: 'admins', label: 'Admins' },
+    { id: 'jury', label: 'Jury' },
+    { id: 'partners', label: 'Partenaires' },
+    { id: 'newsletters', label: 'Newsletters' },
+    { id: 'all-videos', label: 'Galerie des vidéos' },
+    { id: 'videos-distribution', label: 'Répartition vidéos' },
+    { id: 'movies', label: 'Films (sélection & gagnants)' },
+    { id: 'my-movies', label: 'Mes vidéos' }, // vue personnelle pour un admin simple
   ];
 
   let allowedIds;
@@ -23,14 +23,14 @@ export default function AdminLayout({ children, currentAdmin }) {
     // Super admin : toutes les sections SAUF la vue "Mes vidéos"
     allowedIds = allSections
       .map((s) => s.id)
-      .filter((id) => id !== "my-movies");
+      .filter((id) => id !== 'my-movies');
   } else {
-    allowedIds = ["my-movies"];
+    allowedIds = ['my-movies'];
   }
   const baseSections = allSections.filter((s) => allowedIds.includes(s.id));
   const sections = [...baseSections];
 
-  const initialSection = role === "admin" ? "my-movies" : "dashboard";
+  const initialSection = role === 'admin' ? 'my-movies' : 'dashboard';
   const [activeSection, setActiveSection] = useState(initialSection);
 
   return (
@@ -60,11 +60,11 @@ export default function AdminLayout({ children, currentAdmin }) {
               type="button"
               onClick={() => setActiveSection(section.id)}
               className={[
-                "rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors",
+                'rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors',
                 activeSection === section.id
-                  ? "bg-brand-primary text-slate-900"
-                  : "bg-slate-900/80 text-brand-muted hover:text-slate-100",
-              ].join(" ")}
+                  ? 'bg-brand-primary text-slate-900'
+                  : 'bg-slate-900/80 text-brand-muted hover:text-slate-100',
+              ].join(' ')}
             >
               {section.label}
             </button>
@@ -73,7 +73,7 @@ export default function AdminLayout({ children, currentAdmin }) {
       </div>
 
       {/* Sidebar desktop */}
-      <aside >
+      <aside>
         <div className="hidden w-60 flex-shrink-0 flex-col gap-4 rounded-lg border border-brand-border/50 bg-brand-surface/80 p-4 shadow-soft-md md:flex">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-brand-muted">
@@ -89,10 +89,11 @@ export default function AdminLayout({ children, currentAdmin }) {
                 key={section.id}
                 type="button"
                 onClick={() => setActiveSection(section.id)}
-                className={`flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium transition-colors ${activeSection === section.id
-                    ? "bg-brand-primary/10 text-brand-primary-soft"
-                    : "text-brand-muted hover:bg-slate-900/60 hover:text-slate-100"
-                  }`}
+                className={`flex items-center justify-between rounded-md px-3 py-2 text-xs font-medium transition-colors ${
+                  activeSection === section.id
+                    ? 'bg-brand-primary/10 text-brand-primary-soft'
+                    : 'text-brand-muted hover:bg-slate-900/60 hover:text-slate-100'
+                }`}
               >
                 <span>{section.label}</span>
               </button>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from 'react';
 
 export default function useGreenFlagFavorites() {
   const [groups, setGroups] = useState([]);
@@ -9,7 +9,7 @@ export default function useGreenFlagFavorites() {
     setLoading(true);
     setError(null);
     try {
-      const admin = require("../../../services/admin").default;
+      const admin = require('../../../services/admin').default;
       const data = await admin.getGreenFlagFavorites();
       setGroups(Array.isArray(data) ? data : []);
     } catch (err) {

@@ -1,8 +1,8 @@
-import api from "./api";
+import api from './api';
 
 export async function checkAuth() {
   try {
-    await api.get("/admins");
+    await api.get('/admins');
     return true;
   } catch (err) {
     return false;
@@ -10,20 +10,20 @@ export async function checkAuth() {
 }
 
 export async function getAdmins() {
-  return await api.get("/admins");
+  return await api.get('/admins');
 }
 
 export async function createAdmin(payload) {
-  return await api.post("/admins/auth/signup", payload);
+  return await api.post('/admins/auth/signup', payload);
 }
 
 export async function getFilms(params = {}) {
   const qs = new URLSearchParams(params).toString();
-  return await api.get(`/admin/films${qs ? `?${qs}` : ""}`);
+  return await api.get(`/admin/films${qs ? `?${qs}` : ''}`);
 }
 
 export async function getGreenFlagFavorites() {
-  return await api.get("/admin/films/green-flags");
+  return await api.get('/admin/films/green-flags');
 }
 
 export async function updateFilmStatus(id, status) {
@@ -35,16 +35,15 @@ export async function deleteFilm(id) {
 }
 
 export async function getFilmmakers() {
-  return await api.get("/filmmakers");
+  return await api.get('/filmmakers');
 }
-
 
 // Jury
 export async function getJury() {
-  return await api.get("/jury");
+  return await api.get('/jury');
 }
 export async function createJuryMember(payload) {
-  return await api.post("/jury", payload);
+  return await api.post('/jury', payload);
 }
 export async function deleteJuryMember(id) {
   return await api.del(`/jury/${id}`);
@@ -52,10 +51,10 @@ export async function deleteJuryMember(id) {
 
 // Partners
 export async function getPartners() {
-  return await api.get("/partners");
+  return await api.get('/partners');
 }
 export async function createPartner(payload) {
-  return await api.post("/partners", payload);
+  return await api.post('/partners', payload);
 }
 export async function deletePartner(id) {
   return await api.del(`/partners/${id}`);
@@ -63,10 +62,10 @@ export async function deletePartner(id) {
 
 // Newsletters
 export async function getNewsletterSubscribers() {
-  return await api.get("/newsletters/subscribers");
+  return await api.get('/newsletters/subscribers');
 }
 export async function sendNewsletter(payload) {
-  return await api.post("/newsletters/send", payload);
+  return await api.post('/newsletters/send', payload);
 }
 
 // expose a default object for easy imports

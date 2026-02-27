@@ -1,1 +1,1 @@
-export { default as VideosDistribution } from "./VideosDistribution";
+export { default as VideosDistribution } from './VideosDistribution';
