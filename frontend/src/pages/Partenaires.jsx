@@ -31,7 +31,7 @@ const Partners = () => {
       {/* Section Bannière - Inchangée */}
       <div className="relative w-full h-[400px] md:h-[550px] overflow-hidden pt-[120px]">
         <div 
-          className="absolute inset-0 z-0 bg-center bg-no-repeat transition-all duration-1000 blur-[2px]"
+          className="absolute inset-0 z-0 bg-center bg-no-repeat transition-all duration-1000 blur-[1px]"
           style={{ backgroundImage: `url(${banner01})`, backgroundSize: 'contain' }}
         ></div>
         <div className="absolute inset-0 bg-black/20 z-1"></div>
@@ -39,7 +39,7 @@ const Partners = () => {
           <h1 className="text-3xl md:text-4xl font-extrabold mb-3 uppercase tracking-tighter" style={{ textShadow: '0 0 20px rgba(30, 58, 138, 0.8), 0 0 40px rgba(59, 130, 246, 0.5)' }}>
             {t("partners.title", "Nos Partenaires")}
           </h1>
-          <div className="h-1 w-20 bg-orange-500 rounded-full mb-5 shadow-[0_0_15px_rgba(249,115,22,0.5)]"></div>
+          <div className="h-1 w-20 bg-gradient-to-r from-[#FF0080] to-[#2933D3] rounded-full mb-5 shadow-[0_0_15px_rgba(249,115,22,0.5)]"></div>
           <p className="text-white text-base md:text-xl font-medium max-w-xl leading-relaxed drop-shadow-lg">
             {t("partners.subtitle", "Ils soutiennent l'innovation et la créativité.")}
           </p>
@@ -47,10 +47,10 @@ const Partners = () => {
       </div>
 
       {/* Section Avantages */}
-      <div className="max-w-6xl mx-auto px-6 -mt-10 mb-16 relative z-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[#0a0b2e]/80 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
-            <div className="text-[#FF0080] mb-4 text-2xl font-bold">01. Branding</div>
+      <div className="max-w-6xl mx-auto px-6 -mt-10 mb-16 relative z-20 ">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
+          <div className="bg-gradient-to-r from-[#FF0080] to-[#2933D3] hover:from-[#e60073] hover:to-[#1e27a3]  border  p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="text-white mb-4 text-2xl font-bold">01. Branding</div>
             <p className="text-gray-300 text-sm leading-relaxed">{t("partners.benefit1", "Exposition maximale de votre logo sur nos supports digitaux.")}</p>
           </div>
           <div className="bg-[#0a0b2e]/80 backdrop-blur-md border border-white/10 p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
