@@ -1,1 +1,1 @@
-export { default as PartnersManagement } from "./PartnersManagement";
+export { default as PartnersManagement } from './PartnersManagement';

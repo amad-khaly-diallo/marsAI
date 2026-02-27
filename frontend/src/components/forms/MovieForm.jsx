@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function MovieForm({
   value,
@@ -12,17 +12,17 @@ export default function MovieForm({
     onChange({ ...value, [field]: e.target.value });
 
   const handleDuration = (e) => {
-    let val = e.target.value.replace(",", ".");
+    let val = e.target.value.replace(',', '.');
     // Autoriser uniquement chiffres et point
-    val = val.replace(/[^0-9.]/g, "");
-    if (val === "") {
-      onChange({ ...value, duration: "" });
+    val = val.replace(/[^0-9.]/g, '');
+    if (val === '') {
+      onChange({ ...value, duration: '' });
       return;
     }
 
     const num = parseFloat(val);
     if (!Number.isFinite(num)) {
-      onChange({ ...value, duration: "" });
+      onChange({ ...value, duration: '' });
       return;
     }
 
@@ -34,9 +34,9 @@ export default function MovieForm({
   return (
     <section
       className={[
-        "rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm",
-        hasError ? "border-red-500/70" : "border-slate-800/80",
-      ].join(" ")}
+        'rounded-lg border bg-brand-surface/80 p-4 shadow-soft-sm',
+        hasError ? 'border-red-500/70' : 'border-slate-800/80',
+      ].join(' ')}
     >
       <h2 className="mb-3 text-sm font-semibold text-slate-100">
         2. Film soumis
@@ -46,8 +46,8 @@ export default function MovieForm({
           <label className="text-xs text-brand-muted">Titre original</label>
           <input
             type="text"
-            value={value.original_title || ""}
-            onChange={handle("original_title")}
+            value={value.original_title || ''}
+            onChange={handle('original_title')}
             required
             minLength={2}
             maxLength={150}
@@ -58,8 +58,8 @@ export default function MovieForm({
           <label className="text-xs text-brand-muted">Titre anglais</label>
           <input
             type="text"
-            value={value.english_title || ""}
-            onChange={handle("english_title")}
+            value={value.english_title || ''}
+            onChange={handle('english_title')}
             required
             minLength={2}
             maxLength={150}
@@ -70,8 +70,8 @@ export default function MovieForm({
           <label className="text-xs text-brand-muted">Langue principale</label>
           <input
             type="text"
-            value={value.language || ""}
-            onChange={handle("language")}
+            value={value.language || ''}
+            onChange={handle('language')}
             maxLength={80}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
@@ -84,8 +84,8 @@ export default function MovieForm({
           </label>
           <textarea
             rows={3}
-            value={value.synopsis_original || ""}
-            onChange={handle("synopsis_original")}
+            value={value.synopsis_original || ''}
+            onChange={handle('synopsis_original')}
             maxLength={1000}
             className="resize-none rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
@@ -94,8 +94,8 @@ export default function MovieForm({
           <label className="text-xs text-brand-muted">Synopsis (anglais)</label>
           <textarea
             rows={3}
-            value={value.synopsis_english || ""}
-            onChange={handle("synopsis_english")}
+            value={value.synopsis_english || ''}
+            onChange={handle('synopsis_english')}
             maxLength={1000}
             className="resize-none rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />
@@ -116,7 +116,7 @@ export default function MovieForm({
             className="block w-full text-xs text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-brand-accent"
           />
           <p className="mt-1 text-[11px] text-brand-muted">
-            {t("participate.videoHint")}
+            {t('participate.videoHint')}
           </p>
         </div>
         <div className="flex flex-col gap-1">
@@ -125,8 +125,8 @@ export default function MovieForm({
           </label>
           <input
             type="url"
-            value={value.youtube_url || ""}
-            onChange={handle("youtube_url")}
+            value={value.youtube_url || ''}
+            onChange={handle('youtube_url')}
             maxLength={255}
             className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
           />

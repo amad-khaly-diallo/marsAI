@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
-import MovieForm from "../../components/forms/MovieForm";
-import StepForm from "./StepForm";
+import { useTranslation } from 'react-i18next';
+import MovieForm from '../../components/forms/MovieForm';
+import StepForm from './StepForm';
 
 export default function MovieStep({
   value,
@@ -17,8 +17,8 @@ export default function MovieStep({
     <StepForm
       onSubmit={onSubmit}
       onBack={onBack}
-      backLabel={t("participate.backStep", { step: 1 })}
-      submitLabel={t("participate.saveMovie")}
+      backLabel={t('participate.backStep', { step: 1 })}
+      submitLabel={t('participate.saveMovie')}
       submitting={submitting}
       error={error}
     >

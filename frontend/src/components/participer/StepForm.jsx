@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import SubmitButton from "../ui/SubmitButton";
+import React, { useEffect, useRef } from 'react';
+import SubmitButton from '../ui/SubmitButton';
 
 export default function StepForm({
   children,
@@ -9,11 +9,11 @@ export default function StepForm({
   submitLabel,
   submitting,
   error,
-  className = "",
+  className = '',
 }) {
   const formRef = useRef(null);
   useEffect(() => {
-    const el = formRef.current?.querySelector("input,select,textarea,button");
+    const el = formRef.current?.querySelector('input,select,textarea,button');
     if (el) el.focus();
   }, []);
 
