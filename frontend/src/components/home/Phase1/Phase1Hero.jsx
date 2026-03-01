@@ -27,7 +27,7 @@ export default function Phase1Hero({
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
 
       <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center">
-        <h1 className="max-w-5xl text-5xl font-black leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl animate-fadeInUp">
+        <h1 className="mt-8 max-w-xl text-3xl font-serif font-semibold italic leading-[1.1] tracking-tight text-brand-white md:text-4xl lg:text-5xl animate-fadeInUp">
           {title}
         </h1>
         <p
@@ -37,7 +37,7 @@ export default function Phase1Hero({
           {subtitle}
         </p>
         <div
-          className="mt-10 animate-fadeInUp"
+          className="mt-10 flex flex-wrap justify-center gap-4 animate-fadeInUp"
           style={{ animationDelay: '0.2s' }}
         >
           <Link
@@ -46,9 +46,12 @@ export default function Phase1Hero({
           >
             {ctaLabel}
           </Link>
-        </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs font-semibold text-white/60 animate-bounce">
-          ↓ Découvrir
+          <Link
+            to="/newsletter"
+            className="inline-flex h-8 items-center justify-center rounded-full bg-brand-bg border border-black/80 px-4 text-xs font-light tracking-widest text-black transition-all duration-200 hover:bg-brand-surface hover:border-black"
+          >
+            Newsletter
+          </Link>
         </div>
       </div>
     </section>

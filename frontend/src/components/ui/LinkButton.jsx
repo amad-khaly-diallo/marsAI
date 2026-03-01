@@ -8,10 +8,11 @@ export default function LinkButton({
   children,
 }) {
   const baseClasses =
-    'rounded-full px-6 py-3 text-sm font-extrabold transition';
+    'rounded-full px-4 text-xs font-semibold transition h-8 inline-flex items-center justify-center';
   const variants = {
-    primary: 'bg-white text-black hover:bg-white/90',
-    secondary: 'border border-white/20 bg-white/10 hover:bg-white/20',
+    primary: 'bg-brand-primary text-white hover:bg-brand-accent',
+    secondary:
+      'border border-white/20 bg-white/10 hover:bg-white/20 text-white',
     tertiary: 'text-white/70 hover:text-white',
   };
 
