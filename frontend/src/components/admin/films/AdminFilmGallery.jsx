@@ -33,7 +33,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
     [movies],
   );
   const currentMovie =
-    activeIndex != null &&
+    activeIndex !== null &&
     hasMovies &&
     activeIndex >= 0 &&
     activeIndex < movies.length
@@ -75,7 +75,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
   const goNext = () => {
     if (!hasMovies) return;
     setActiveIndex((prev) => {
-      if (prev == null) return 0;
+      if (prev === null) return 0;
       const next = prev + 1;
       return next >= movies.length ? prev : next;
     });
@@ -84,7 +84,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
   const goPrev = () => {
     if (!hasMovies) return;
     setActiveIndex((prev) => {
-      if (prev == null) return 0;
+      if (prev === null) return 0;
       const next = prev - 1;
       return next < 0 ? prev : next;
     });

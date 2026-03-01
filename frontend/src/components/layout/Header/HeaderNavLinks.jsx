@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../../../contexts';
+import { useTheme } from '../../../contexts/ThemeContext';
 
 const links = [
   { to: '/', labelKey: 'nav.home', defaultLabel: 'Accueil' },
@@ -17,18 +18,19 @@ export default function HeaderNavLinks({
 }) {
   const { t } = useTranslation();
   const { isAuthenticated: isAdmin, checking } = useAdmin();
+  const { theme } = useTheme();
   const showAdminLink = !checking && isAdmin;
 
   const base =
-    'text-sm font-medium tracking-wide transition-colors duration-200';
+    'text-sm font-medium tracking-wide transition-colors duration-300';
+
+  const linkColor =
+    theme === 'light'
+      ? 'text-white/80 hover:text-white'
+      : 'text-black/80 hover:text-black';
 
   const active = ({ isActive }) =>
-    [
-      base,
-      isActive
-        ? 'text-brand-primary font-semibold'
-        : 'text-slate-200 hover:text-white',
-    ].join(' ');
+    [base, isActive ? 'text-brand-primary font-semibold' : linkColor].join(' ');
 
   if (orientation === 'vertical') {
     return (
@@ -38,7 +40,7 @@ export default function HeaderNavLinks({
             key={link.to}
             to={link.to}
             className={({ isActive }) =>
-              `text-lg font-medium transition-colors ${isActive ? 'text-brand-primary' : 'text-slate-200'}`
+              `text-lg font-medium transition-colors ${isActive ? 'text-brand-primary' : 'text-black'}`
             }
             onClick={onNavigate}
           >
@@ -49,7 +51,7 @@ export default function HeaderNavLinks({
           <NavLink
             to="/admin"
             className={({ isActive }) =>
-              `text-lg font-medium transition-colors ${isActive ? 'text-brand-primary' : 'text-slate-200'}`
+              `text-lg font-medium transition-colors ${isActive ? 'text-brand-primary' : 'text-black'}`
             }
             onClick={onNavigate}
           >

@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Sun, Moon } from 'lucide-react';
 import HeaderLogo from './HeaderLogo';
 import HeaderNavLinks from './HeaderNavLinks';
 import HeaderBurger from './HeaderBurger';
 import HeaderLanguageSwitcher from './HeaderLanguageSwitcher';
+import { useTheme } from '../../../contexts';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   // Détection du scroll
   useEffect(() => {
@@ -18,14 +21,13 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Style "Bulle de verre" mis à jour
-  // On remplace 'bg-brand-surface/60' par 'bg-white/[0.05]' pour imiter le style des sections
+  // Header totalement transparent dans les deux thèmes
   const glassBubbleClass = `
-    pointer-events-auto flex items-center gap-2 
-    rounded-full border border-white/10 bg-white/[0.05] 
-    backdrop-blur-md shadow-lg transition-all duration-300
-    hover:bg-white/10 hover:border-white/20 hover:shadow-xl
+    pointer-events-auto flex items-center gap-2
+    rounded-full bg-transparent
+    transition-all duration-300
   `;
+  const textColor = theme === 'light' ? 'text-white' : 'text-black';
 
   return (
     <>
@@ -57,6 +59,23 @@ export default function Header() {
 
           {/* Sélecteur de langue */}
           <HeaderLanguageSwitcher />
+
+          {/* Bouton Thème clair/sombre */}
+          <button
+            onClick={toggleTheme}
+            aria-label={
+              theme === 'dark'
+                ? 'Activer le thème clair'
+                : 'Activer le thème sombre'
+            }
+            className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:text-brand-primary ${textColor}`}
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4" />
+            ) : (
+              <Moon className="w-4 h-4" />
+            )}
+          </button>
 
           {/* Burger (Mobile) */}
           <div className="flex md:hidden">

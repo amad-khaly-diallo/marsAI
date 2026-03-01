@@ -18,6 +18,18 @@
   --radius-md: 12px;
 }
 
+/* Thème sombre */
+.dark {
+  --color-bg: 15 12 25; /* #0F0C19 - fond nuit profond */
+  --color-surface: 24 20 38; /* #181426 - surface sombre */
+  --color-primary: 218 84 24; /* #DA5418 - orange soleil */
+  --color-primary-soft: 240 138 72; /* #F08A48 - orange doux */
+  --color-accent: 250 110 40; /* #FA6E28 - accent */
+  --color-border: 55 48 75; /* #37304B - bordure sombre */
+  --color-muted: 165 158 180; /* #A59EB4 - texte secondaire */
+  --color-white: 238 232 220; /* #EEE8DC - texte principal clair */
+}
+
 body {
   @apply bg-brand-bg text-brand-white font-sans antialiased;
 }
@@ -28,14 +40,33 @@ a {
 
 /* FICHIER: frontend/src/index.css (ajoute en bas) */
 @layer utilities {
-  .bg-white\/6 { background-color: rgb(255 255 255 / 0.06); }
-  .bg-white\/7 { background-color: rgb(255 255 255 / 0.07); }
-  .bg-white\/8 { background-color: rgb(255 255 255 / 0.08); }
+  .bg-white\/6 {
+    background-color: rgb(255 255 255 / 0.06);
+  }
+  .bg-white\/7 {
+    background-color: rgb(255 255 255 / 0.07);
+  }
+  .bg-white\/8 {
+    background-color: rgb(255 255 255 / 0.08);
+  }
 
   .bg-animated-veil {
-    background: radial-gradient(1200px 500px at 20% 10%, rgba(0,224,255,.09), transparent 60%),
-                radial-gradient(1200px 500px at 80% 30%, rgba(155,92,255,.08), transparent 60%),
-                radial-gradient(900px 600px at 50% 90%, rgba(109,140,255,.08), transparent 62%);
+    background:
+      radial-gradient(
+        1200px 500px at 20% 10%,
+        rgba(0, 224, 255, 0.09),
+        transparent 60%
+      ),
+      radial-gradient(
+        1200px 500px at 80% 30%,
+        rgba(155, 92, 255, 0.08),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 600px at 50% 90%,
+        rgba(109, 140, 255, 0.08),
+        transparent 62%
+      );
     animation: veilShift 10s ease-in-out infinite alternate;
   }
 
@@ -59,24 +90,49 @@ a {
   }
 
   @keyframes gradientX {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   @keyframes glowPulse {
-    0%, 100% { transform: scale(1); opacity: .45; }
-    50% { transform: scale(1.03); opacity: .7; }
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 0.45;
+    }
+    50% {
+      transform: scale(1.03);
+      opacity: 0.7;
+    }
   }
 
   @keyframes float {
-    0% { transform: translate3d(0, 0, 0); }
-    50% { transform: translate3d(0, -18px, 0); }
-    100% { transform: translate3d(0, 0, 0); }
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -18px, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
   }
 
   @keyframes veilShift {
-    0% { filter: saturate(1) hue-rotate(0deg); opacity: .55; }
-    100% { filter: saturate(1.25) hue-rotate(12deg); opacity: .75; }
+    0% {
+      filter: saturate(1) hue-rotate(0deg);
+      opacity: 0.55;
+    }
+    100% {
+      filter: saturate(1.25) hue-rotate(12deg);
+      opacity: 0.75;
+    }
   }
 }
