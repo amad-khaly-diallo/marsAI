@@ -181,7 +181,7 @@ export default function MyMoviesGallery() {
       </div>
       <MyMovieModal
         movie={currentMovie}
-        isOpen={currentMovie != null}
+        isOpen={currentMovie !== null}
         onClose={() => setActiveIndex(null)}
         onNext={goNext}
         onPrev={goPrev}
