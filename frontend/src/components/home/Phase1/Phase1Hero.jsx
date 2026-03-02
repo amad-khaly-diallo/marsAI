@@ -11,7 +11,7 @@ export default function Phase1Hero({
   ctaTo = '/participer',
 }) {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+    <section className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center p-14 text-center">
       <video
         className="absolute inset-0 h-full w-full object-cover brightness-110 contrast-110 saturate-115"
         src={videoSrc}
@@ -23,7 +23,7 @@ export default function Phase1Hero({
         fetchPriority="high"
         aria-label="Vidéo de présentation du festival"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80 "/>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
 
       <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center">
