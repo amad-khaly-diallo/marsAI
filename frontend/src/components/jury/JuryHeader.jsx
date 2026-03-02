@@ -1,6 +1,6 @@
 import React from 'react';
 
-const JuryHeader = () => {
+const JuryHeader = ({ pageData }) => {
   return (
     <>
       <header className="text-center mt-28 md:mt-20 mb-12 z-10 relative px-4 flex flex-col items-center animate-[fadeIn_1s_each-out]">

@@ -37,6 +37,12 @@ export const partnerPage = defineType({
       description: 'Texte descriptif pour expliquer la relation avec les partenaires.',
     }),
     defineField({
+      name: 'ctaTitle',
+      title: 'Titre de la section appel à l’action',
+      type: 'localizedString',
+      description: 'Titre affiché au-dessus du bloc d’appel à l’action (ex: “Devenir partenaire ?”).',
+    }),
+    defineField({
       name: 'ctaText',
       title: 'Texte du bouton / appel à l’action',
       type: 'localizedString',

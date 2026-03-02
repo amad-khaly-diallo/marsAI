@@ -38,3 +38,13 @@ export const getPartnerPage = async () => {
   const data = await client.fetch(`*[_type == "partnerPage"][0]`)
   return data
 }
+
+export const getAboutPage = async () => {
+  const data = await client.fetch(`*[_type == "aboutPage"][0]`)
+  return data
+}
+
+export const getJuryPage = async () => {
+  const data = await client.fetch(`*[_type == "juryPage"][0]`)
+  return data
+}
