@@ -240,6 +240,135 @@ export const homePhase1 = defineType({
       title: 'Sous-titre – Newsletter',
       type: 'localizedString',
     }),
+
+    // Chronologie – Phase1Chronology
+    defineField({
+      name: 'chronologyBadge',
+      title: 'Badge – Chronologie',
+      type: 'localizedString',
+      description: 'Ex: "Chronologie".',
+    }),
+    defineField({
+      name: 'chronologyTitle',
+      title: 'Titre – Chronologie',
+      type: 'localizedString',
+      description: 'Ex: "Planning des événements".',
+    }),
+    defineField({
+      name: 'chronologyAnnualTitle',
+      title: 'Titre – Planning annuel',
+      type: 'localizedString',
+      description: 'Ex: "Planning potentiel — de février à juin".',
+    }),
+    defineField({
+      name: 'chronologyAnnualItems',
+      title: 'Éléments – Planning annuel',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'chronologyAnnualItem',
+          type: 'object',
+          title: 'Événement annuel',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'localizedString',
+            }),
+            defineField({
+              name: 'months',
+              title: 'Mois',
+              type: 'localizedString',
+            }),
+            defineField({
+              name: 'weeks',
+              title: 'Semaines',
+              type: 'string',
+              description: 'Ex: "S1 à S9".',
+            }),
+            defineField({
+              name: 'detail',
+              title: 'Détail',
+              type: 'localizedString',
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'chronologyProgramTitle',
+      title: 'Titre – Programme du festival',
+      type: 'localizedString',
+      description: 'Ex: "Programme du festival — Vendredi & Samedi".',
+    }),
+    defineField({
+      name: 'chronologyFridayTitle',
+      title: 'Titre – Vendredi',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'chronologyFridaySlots',
+      title: 'Créneaux – Vendredi',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'chronologyFridaySlot',
+          type: 'object',
+          title: 'Créneau vendredi',
+          fields: [
+            defineField({
+              name: 'time',
+              title: 'Heure',
+              type: 'string',
+            }),
+            defineField({
+              name: 'title',
+              title: 'Titre',
+              type: 'localizedString',
+            }),
+            defineField({
+              name: 'description',
+              title: 'Description',
+              type: 'localizedString',
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'chronologySaturdayTitle',
+      title: 'Titre – Samedi',
+      type: 'localizedString',
+    }),
+    defineField({
+      name: 'chronologySaturdaySlots',
+      title: 'Créneaux – Samedi',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'chronologySaturdaySlot',
+          type: 'object',
+          title: 'Créneau samedi',
+          fields: [
+            defineField({
+              name: 'time',
+              title: 'Heure',
+              type: 'string',
+            }),
+            defineField({
+              name: 'title',
+              title: 'Titre',
+              type: 'localizedString',
+            }),
+            defineField({
+              name: 'description',
+              title: 'Description',
+              type: 'localizedString',
+            }),
+          ],
+        }),
+      ],
+    }),
   ],
 })
 

@@ -211,45 +211,6 @@ export const aboutPage = defineType({
       title: 'Adresse sous la carte',
       type: 'localizedString',
     }),
-
-    // PARTENAIRES
-    defineField({
-      name: 'partnersLabel',
-      title: 'Badge – partenaires',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'partnersTitle',
-      title: 'Titre – partenaires',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'partnersBody',
-      title: 'Texte – partenaires',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'partnersCtaContactLabel',
-      title: 'CTA – Nous contacter (label)',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'partnersCtaContactLink',
-      title: 'CTA – Nous contacter (lien)',
-      type: 'string',
-      description: 'Ex: /contact',
-    }),
-    defineField({
-      name: 'partnersCtaProgramLabel',
-      title: 'CTA – Voir la programmation (label)',
-      type: 'localizedString',
-    }),
-    defineField({
-      name: 'partnersCtaProgramLink',
-      title: 'CTA – Voir la programmation (lien)',
-      type: 'string',
-      description: 'Ex: /programme',
-    }),
   ],
 })
 

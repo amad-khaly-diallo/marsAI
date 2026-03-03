@@ -14,7 +14,7 @@ const Jury = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(null);
   const scrollRef = useRef(null);
-  const [pageData, setPageData] = useState([]);
+  const [pageData, setPageData] = useState(null);
 
   useEffect(() => {
     const fetchPageData = async () => {
