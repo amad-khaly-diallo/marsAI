@@ -47,9 +47,9 @@ export default function Phase1Hero({
             {ctaLabel}
           </Link>
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs font-semibold text-white/60 animate-bounce">
+        {/* <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs font-semibold text-white/60 animate-bounce">
           ↓ Découvrir
-        </div>
+        </div> */}
       </div>
     </section>
   );
