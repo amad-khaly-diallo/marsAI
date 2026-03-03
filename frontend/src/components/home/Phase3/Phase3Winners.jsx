@@ -21,7 +21,7 @@ function mapWinnerToFilm(m) {
     title: m.original_title || m.english_title || 'Sans titre',
     director,
     year: 2026,
-    duration: m.duration != null ? `${m.duration} min` : '',
+    duration: m.duration !== null ? `${m.duration} min` : '',
     image: getYouTubeThumbnail(m.youtube_url) || PLACEHOLDER_IMAGE,
     synopsis: m.synopsis_original || m.synopsis_english || '',
     juryQuote: '',
@@ -88,7 +88,7 @@ export default function Phase3Winners({
   loading = false,
 }) {
   const dataSource = useMemo(() => {
-    if (winnersFromApi != null && Array.isArray(winnersFromApi)) {
+    if (winnersFromApi !== null && Array.isArray(winnersFromApi)) {
       return winnersFromApi.map(mapWinnerToFilm);
     }
     return winnersData;

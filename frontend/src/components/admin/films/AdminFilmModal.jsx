@@ -48,7 +48,7 @@ export default function AdminFilmModal({
     if (!movie) return;
     // Pré-remplir avec les valeurs existantes ou un rang suggéré.
     setWinnerRanking(
-      movie.winner_ranking != null
+      movie.winner_ranking !== null
         ? String(movie.winner_ranking)
         : winnersCount + 1,
     );
