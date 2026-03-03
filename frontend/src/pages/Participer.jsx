@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import SubmissionStepper from '../components/participer/SubmissionStepper';
@@ -8,9 +8,23 @@ import AIDeclarationStep from '../components/participer/AIDeclarationStep';
 import AssetsTagsStep from '../components/participer/AssetsTagsStep';
 import CollaboratorsStep from '../components/participer/CollaboratorsStep';
 import useParticiper from '../hooks/useParticiper';
+import { getParticiperPage } from '../services/query';
+import { getLocalized } from '../utils/sanity';
 
 export default function Participer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [pageData, setPageData] = useState([]);
+
+  useEffect(() => {
+    const fetchPageData = async () => {
+      const data = await getParticiperPage();
+      setPageData(data);
+    };
+    fetchPageData();
+  }, []);
+
+
+
   const navigate = useNavigate();
 
   const {
@@ -60,15 +74,15 @@ export default function Participer() {
     <div className="mx-auto max-w-5xl px-4 pt-32 pb-20">
       <header className="mb-4 space-y-2">
         <p className="inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand-primary-soft">
-          {t('participate.badge')}
+          {getLocalized(pageData?.tag, i18n)}
         </p>
 
         <h1 className="text-2xl font-semibold text-slate-50 md:text-3xl">
-          {t('participate.title')}
+          {getLocalized(pageData?.title, i18n)}
         </h1>
 
         <p className="max-w-2xl text-sm text-brand-muted">
-          {t('participate.subtitle')}
+          {getLocalized(pageData?.description, i18n)}
         </p>
       </header>
 
