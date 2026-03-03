@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PageBackground } from '../components/home';
 import {
   Phase1Hero,
@@ -12,6 +13,8 @@ import {
   CTASection,
   HeroCamera,
   StatsSection as ProjectorStatsSection,
+  ManifestoSection,
+  ProgramSection,
 } from '../components/home/Phase2';
 import { Phase3Winners } from '../components/home/Phase3';
 import { HOME_STYLES } from '../constants/homeStyles';
@@ -19,7 +22,8 @@ import { CookieBanner } from '../components/ui/CookieBanner';
 import { heroAnimationStyles } from '../components/sections/heroAnimations';
 import api from '../services/api';
 import { useFestivalPhase } from '../hooks/useFestivalPhase';
-import { getHomePhase1 } from '../services/query';
+import { getHomePhase1, getHomePhase2, getHomePhase3 } from '../services/query';
+import { getLocalized } from '../utils/sanity';
 
 /**
  * Page d'accueil – 3 phases :
@@ -28,19 +32,30 @@ import { getHomePhase1 } from '../services/query';
  * Phase 3 : Grand Prix / Palmarès (winners)
  */
 export default function Home() {
+  const { i18n } = useTranslation();
   const [phase1, setPhase1] = useState(null);
+  const [phase2, setPhase2] = useState(null);
+  const [phase3, setPhase3] = useState(null);
 
   useEffect(() => {
-    const fetchPhase1 = async () => {
+    const fetchPhases = async () => {
       try {
-        const data = await getHomePhase1();
-        setPhase1(data);
-        console.log('Données phase 1 chargées :', data);
+        const [data1, data2, data3] = await Promise.all([
+          getHomePhase1(),
+          getHomePhase2(),
+          getHomePhase3(),
+        ]);
+        setPhase1(data1);
+        setPhase2(data2);
+        setPhase3(data3);
+        // console.log('Données phase 1 :', data1);
+        // console.log('Données phase 2 :', data2);
+        // console.log('Données phase 3 :', data3);
       } catch (error) {
-        console.error('Erreur lors du chargement de phase 1:', error);
+        console.error('Erreur lors du chargement des phases home:', error);
       }
     };
-    fetchPhase1();
+    fetchPhases();
   }, []);
 
   const [searchParams] = useSearchParams();
@@ -76,6 +91,30 @@ export default function Home() {
       cancelled = true;
     };
   }, [phase]);
+
+  const phase1Title =
+    getLocalized(phase1?.heroTitle, i18n) ||
+    'Un festival pour raconter fort, en une minute.';
+  const phase1Subtitle =
+    getLocalized(phase1?.heroSubtitle, i18n) ||
+    "1 minute pour créer. 1 minute pour choquer. 1 minute pour marquer.";
+  const phase1CtaLabel =
+    getLocalized(phase1?.heroCtaLabel, i18n) || 'Participer au projet';
+  const phase1CtaLink = phase1?.heroCtaLink || '/participer';
+
+  const phase2Title =
+    getLocalized(phase2?.heroTitle, i18n) || 'Un festival AI, en une minute.';
+  const phase2Subtitle =
+    getLocalized(phase2?.heroSubtitle, i18n) ||
+    "Un second souffle pour le festival : plus de films, plus de participants, plus d'ambition. Découvrez les chiffres clés du festival et rejoignez l'aventure !";
+  const phase2CtaLabel =
+    getLocalized(phase2?.heroCtaLabel, i18n) || 'Découvrir les films';
+  const phase2CtaLink = phase2?.heroCtaLink || '/catalogue';
+
+  const phase3Prix =
+    getLocalized(phase3?.prix, i18n) || 'Grand Prix';
+  const phase3Title =
+    getLocalized(phase3?.title, i18n) || 'MarsAI';
 
   useEffect(() => {
     if (phase !== 3) return;
@@ -113,15 +152,36 @@ export default function Home() {
         <>
           <Phase1Hero
             videoSrc="/video/video4.mp4"
-            title="Un festival pour raconter fort, en une minute."
-            subtitle="1 minute pour créer. 1 minute pour choquer. 1 minute pour marquer."
-            ctaLabel="Participer au projet"
-            ctaTo="/participer"
+            title={phase1Title}
+            subtitle={phase1Subtitle}
+            ctaLabel={phase1CtaLabel}
+            ctaTo={phase1CtaLink}
           />
-          <FestivalDescription />
-          <Phase1Chronology />
-          <Phase1Map />
-          <NewsletterSection />
+          <FestivalDescription phase1={phase1} />
+          <Phase1Chronology phase1={phase1} />
+          <Phase1Map
+            badge={getLocalized(phase1?.mapBadge, i18n) || 'Lieu du festival'}
+            title={getLocalized(phase1?.mapTitle, i18n) || 'Où nous trouver'}
+            subtitle={
+              getLocalized(phase1?.mapSubtitle, i18n) ||
+              'La Plateforme (ex Dock des Suds) — 4000 m² au centre de Marseille.'
+            }
+            captionGta={
+              getLocalized(phase1?.mapCaptionGta, i18n) || 'Vue style radar'
+            }
+            captionReal={
+              getLocalized(phase1?.mapCaptionReal, i18n) || 'Marseille, France'
+            }
+          />
+          <NewsletterSection
+            title={
+              getLocalized(phase1?.newsletterTitle, i18n) || 'Restez informé'
+            }
+            subtitle={
+              getLocalized(phase1?.newsletterSubtitle, i18n) ||
+              "Inscrivez-vous pour recevoir les infos du festival : programmation, appels à films et événements."
+            }
+          />
         </>
       )}
       {/* ——— Phase 2 : Camera, stats, manifeste, CTA ——— */}
@@ -129,13 +189,13 @@ export default function Home() {
         <>
           <Phase1Hero
             videoSrc="/video/video4.mp4"
-            title="Un festival AI, en une minute."
-            subtitle="Un second souffle pour le festival : plus de films, plus de participants, plus d'ambition. Découvrez les chiffres clés du festival et rejoignez l'aventure !"
-            ctaLabel="Découvrir les films"
-            ctaTo="/catalogue"
+            title={phase2Title}
+            subtitle={phase2Subtitle}
+            ctaLabel={phase2CtaLabel}
+            ctaTo={phase2CtaLink}
           />
           <HeroCamera moviesFromApi={phase2Movies} />
-          <ProjectorStatsSection />
+          <ProjectorStatsSection phase2={phase2} />
           <CTASection />
         </>
       )}
@@ -146,6 +206,8 @@ export default function Home() {
           <Phase3Winners
             winnersFromApi={phase3Winners}
             loading={phase3Loading}
+            grandPrixLabel={phase3Prix}
+            festivalTitle={phase3Title}
           />
         </>
       )}
