@@ -8,6 +8,7 @@ import {contactPage} from './contactPage'
 import {partnerPage} from './partnerPage'
 import { cataloguePage } from './cataloguePage'
 import { participerPage } from './participerPage'
+import { juryPage } from './juryPage'
 
 export const schemaTypes = [
   localizedString,
@@ -20,4 +21,5 @@ export const schemaTypes = [
   partnerPage,
   cataloguePage,
   participerPage,
+  juryPage
 ]
