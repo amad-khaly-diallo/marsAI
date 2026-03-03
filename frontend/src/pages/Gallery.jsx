@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../services/api';
+import { getCataloguePage } from '../services/query';
+import { getLocalized } from '../utils/sanity';
 
 function getYouTubeThumbnail(url) {
   if (!url) return null;
@@ -17,6 +20,8 @@ export default function Gallery() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [pageData, setPageData] = useState(null);
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -38,6 +43,20 @@ export default function Gallery() {
     fetchMovies();
   }, []);
 
+  useEffect(() => {
+    const fetchPageData = async () => {
+      try {
+        const data = await getCataloguePage();
+        setPageData(data);
+        // console.log('Catalogue page data:', data);
+      } catch (err) {
+        console.error('Erreur chargement page catalogue:', err);
+      }
+    };
+
+    fetchPageData();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#070819] text-white">
       <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
@@ -46,11 +65,12 @@ export default function Gallery() {
             MarsAI Festival
           </p>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight mb-2">
-            Galerie des films sélectionnés
+            {getLocalized(pageData?.title, i18n) ||
+              'Galerie des films sélectionnés'}
           </h1>
           <p className="text-sm md:text-base text-white/70 max-w-2xl mx-auto">
-            Parcourez les courts-métrages sélectionnés pour le festival. Touchez
-            une vignette pour ouvrir la vidéo.
+            {getLocalized(pageData?.description, i18n) ||
+              'Parcourez les courts-métrages sélectionnés pour le festival. Touchez une vignette pour ouvrir la vidéo.'}
           </p>
         </header>
 

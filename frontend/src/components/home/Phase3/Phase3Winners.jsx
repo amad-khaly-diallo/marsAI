@@ -86,6 +86,8 @@ function DetailCard({ film }) {
 export default function Phase3Winners({
   winnersFromApi = null,
   loading = false,
+  grandPrixLabel = 'Grand Prix',
+  festivalTitle = 'MarsAI',
 }) {
   const dataSource = useMemo(() => {
     if (winnersFromApi !== null && Array.isArray(winnersFromApi)) {
@@ -125,10 +127,10 @@ export default function Phase3Winners({
       >
         <div className="text-center px-4">
           <h2 className="text-xl md:text-2xl font-bold text-brand-primary uppercase tracking-wider mb-2">
-            Grand Prix
+            {grandPrixLabel}
           </h2>
           <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
-            MarsAI
+            {festivalTitle}
           </h1>
           <p className="text-slate-400">Aucun gagnant pour le moment.</p>
         </div>
@@ -143,7 +145,7 @@ export default function Phase3Winners({
     >
       <div className="pt-8 pb-6 text-center px-4">
         <h2 className="text-xl md:text-2xl font-bold text-brand-primary uppercase tracking-[0.3em] mb-2 drop-shadow-lg">
-          Grand Prix
+          {grandPrixLabel}
         </h2>
         <div className="inline-block relative">
           <span className="text-2xl md:text-3xl font-light text-slate-400 tracking-widest border-white/10 py-1 px-8">
@@ -151,7 +153,7 @@ export default function Phase3Winners({
           </span>
         </div>
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-4 uppercase tracking-tighter leading-none">
-          MarsAI
+          {festivalTitle}
         </h1>
       </div>
 
