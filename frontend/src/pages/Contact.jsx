@@ -1,8 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { getContactPage } from '../services/query';
+
 
 export default function Contact() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [pageData, setPageData] = useState([]);
+
+  useEffect(() => {
+    const fetchPageData = async () => {
+      const data = await getContactPage();
+      setPageData(data);
+    };
+    fetchPageData();
+  }, []);
+
+  const getLocalized = (field) => {
+    if (!field) return null;
+    const lang = (i18n.language || 'fr').startsWith('en') ? 'en' : 'fr';
+    return field[lang] || field.fr || field.en || null;
+  };
 
   const [form, setForm] = useState({
     name: '',
@@ -78,9 +95,9 @@ export default function Contact() {
         <div className="mx-auto max-w-4xl">
           <div className="rounded-[32px] border border-white/10 bg-white/[0.05] p-8 shadow-[0_25px_90px_rgba(0,0,0,.18)] backdrop-blur">
             <HeaderBadge
-              badgeText={t('contact.badge')}
-              title={t('contact.title')}
-              subtitle={t('contact.subtitle')}
+              badgeText={getLocalized(pageData?.formulaireTag)}
+              title={getLocalized(pageData?.title)}
+              subtitle={getLocalized(pageData?.description)}
             />
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-4 text-sm">
