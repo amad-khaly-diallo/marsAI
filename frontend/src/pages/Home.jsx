@@ -19,6 +19,7 @@ import { CookieBanner } from '../components/ui/CookieBanner';
 import { heroAnimationStyles } from '../components/sections/heroAnimations';
 import api from '../services/api';
 import { useFestivalPhase } from '../hooks/useFestivalPhase';
+import { getHomePhase1 } from '../services/query';
 
 /**
  * Page d'accueil – 3 phases :
@@ -27,6 +28,21 @@ import { useFestivalPhase } from '../hooks/useFestivalPhase';
  * Phase 3 : Grand Prix / Palmarès (winners)
  */
 export default function Home() {
+  const [phase1, setPhase1] = useState(null);
+
+  useEffect(() => {
+    const fetchPhase1 = async () => {
+      try {
+        const data = await getHomePhase1();
+        setPhase1(data);
+        console.log('Données phase 1 chargées :', data);
+      } catch (error) {
+        console.error('Erreur lors du chargement de phase 1:', error);
+      }
+    };
+    fetchPhase1();
+  }, []);
+
   const [searchParams] = useSearchParams();
   const phaseParam = parseInt(searchParams.get('phase'), 10);
   const fallback = [1, 2, 3].includes(phaseParam) ? phaseParam : 1;

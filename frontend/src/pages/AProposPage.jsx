@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SmallLabel, InfoRow, Divider } from '../components/ui';
+import { getAboutPage } from '../services/query';
 
 export default function AProposPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [pageData, setPageData] = useState(null);
+
+  const getLocalized = (field) => {
+    if (!field) return null;
+    const lang = (i18n.language || 'fr').startsWith('en') ? 'en' : 'fr';
+    return field[lang] || field.fr || field.en || null;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAboutPage();
+        setPageData(data);
+        // console.log('About page data:', data);
+      } catch (error) {
+        console.error('Erreur chargement page À propos:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="relative min-h-screen text-white">
@@ -14,35 +35,66 @@ export default function AProposPage() {
       <section className="px-6 pt-32 pb-12">
         <div className="mx-auto max-w-6xl">
           <GlassCard className="rounded-[36px] p-8 md:p-10">
-            <SmallLabel>{t('about.badge')}</SmallLabel>
+            <SmallLabel>
+              {getLocalized(pageData?.heroBadge) || t('about.badge')}
+            </SmallLabel>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight md:text-5xl">
-              {t('about.heroTitle.part1')}{' '}
+              {getLocalized(pageData?.heroTitlePart1) ||
+                t('about.heroTitle.part1')}{' '}
               <span className="text-white/85">
-                {t('about.heroTitle.highlight')}
+                {getLocalized(pageData?.heroTitleHighlight) ||
+                  t('about.heroTitle.highlight')}
               </span>
-              {t('about.heroTitle.part2')}
+              {getLocalized(pageData?.heroTitlePart2) ||
+                t('about.heroTitle.part2')}
             </h1>
 
             <p className="mt-4 max-w-3xl text-sm leading-7 text-white/70 md:text-base">
-              {t('about.hero.paragraph')}
+              {getLocalized(pageData?.heroParagraph) ||
+                t('about.hero.paragraph')}
             </p>
 
             <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <InfoRow label="Format" value="≈ 60 sec" />
-              <InfoRow label="Accès" value="Ouvert" />
-              <InfoRow label="Ville" value="Marseille" />
+              <InfoRow
+                label={
+                  getLocalized(pageData?.heroInfoFormatLabel) || 'Format'
+                }
+                value={
+                  getLocalized(pageData?.heroInfoFormatValue) || '≈ 60 sec'
+                }
+              />
+              <InfoRow
+                label={
+                  getLocalized(pageData?.heroInfoAccessLabel) || 'Accès'
+                }
+                value={
+                  getLocalized(pageData?.heroInfoAccessValue) || 'Ouvert'
+                }
+              />
+              <InfoRow
+                label={getLocalized(pageData?.heroInfoCityLabel) || 'Ville'}
+                value={
+                  getLocalized(pageData?.heroInfoCityValue) || 'Marseille'
+                }
+              />
             </div>
 
             <div className="mt-7 flex flex-wrap gap-3">
               <ActionButton
-                to="/programme"
-                label={t('about.hero.cta.program')}
+                  to={pageData?.heroCtaProgramLink || '/programme'}
+                  label={
+                    getLocalized(pageData?.heroCtaProgramLabel) ||
+                    t('about.hero.cta.program')
+                  }
                 variant="primary"
               />
               <ActionButton
-                to="/contact"
-                label={t('about.hero.cta.contact')}
+                  to={pageData?.heroCtaContactLink || '/contact'}
+                  label={
+                    getLocalized(pageData?.heroCtaContactLabel) ||
+                    t('about.hero.cta.contact')
+                  }
                 variant="secondary"
               />
             </div>
@@ -57,44 +109,44 @@ export default function AProposPage() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <GlassCard className="p-7">
               <div className="text-xs font-semibold text-white/60">
-                {t('about.manifesto.label')}
+                {getLocalized(pageData?.manifestoLabel) ||
+                  t('about.manifesto.label')}
               </div>
               <h2 className="mt-2 text-2xl font-extrabold tracking-tight md:text-3xl">
-                {t('about.manifesto.title.part1')}{' '}
+                {getLocalized(pageData?.manifestoTitlePart1) ||
+                  t('about.manifesto.title.part1')}{' '}
                 <span className="text-white/80">
-                  {t('about.manifesto.title.highlight')}
+                  {getLocalized(pageData?.manifestoTitleHighlight) ||
+                    t('about.manifesto.title.highlight')}
                 </span>
               </h2>
 
               <p className="mt-4 text-sm leading-7 text-white/70">
-                {t('about.manifesto.body')}
+                {getLocalized(pageData?.manifestoBody) ||
+                  t('about.manifesto.body')}
               </p>
 
               <Divider />
 
               <div className="mt-5 grid gap-3">
-                <InfoRow
-                  label="Ce qu’on regarde"
-                  value="Direction / Récit / Image / Son"
-                />
-                <InfoRow label="Durée" value="1 minute" />
-                <InfoRow label="Esprit" value="Ciné • Éditorial • Moderne" />
+                {(pageData?.manifestoInfoRows || []).map((row, index) => (
+                  <InfoRow
+                    key={row._key || index}
+                    label={getLocalized(row?.label)}
+                    value={getLocalized(row?.value)}
+                  />
+                ))}
               </div>
             </GlassCard>
 
             <div className="grid gap-6">
-              <ContentCard
-                title="Pour qui ?"
-                text="Professionnels, étudiants, passionnés. L’événement est pensé pour être accueillant, lisible, et ouvert."
-              />
-              <ContentCard
-                title="Sur place"
-                text="Projections, talks et ateliers. Une programmation courte mais complète : regarder, comprendre, expérimenter."
-              />
-              <ContentCard
-                title="Ambition"
-                text="Créer un rendez-vous culturel à Marseille, avec une identité forte et une expérience simple, bien produite."
-              />
+              {(pageData?.manifestoCards || []).map((card, index) => (
+                <ContentCard
+                  key={card._key || index}
+                  title={getLocalized(card?.title)}
+                  text={getLocalized(card?.text)}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -106,24 +158,33 @@ export default function AProposPage() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <GlassCard className="p-7">
               <div className="text-xs font-semibold text-white/60">
-                {t('about.location.label')}
+                {getLocalized(pageData?.locationLabel) ||
+                  t('about.location.label')}
               </div>
               <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-                {t('about.location.title')}
+                {getLocalized(pageData?.locationTitle) ||
+                  t('about.location.title')}
               </h3>
               <p className="mt-3 text-sm leading-7 text-white/70">
-                {t('about.location.body')}
+                {getLocalized(pageData?.locationBody) ||
+                  t('about.location.body')}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <ActionButton
-                  to="/contact"
-                  label={t('about.location.cta.info')}
+                  to={pageData?.locationCtaInfoLink || '/contact'}
+                  label={
+                    getLocalized(pageData?.locationCtaInfoLabel) ||
+                    t('about.location.cta.info')
+                  }
                   variant="secondary"
                 />
                 <ActionButton
-                  to="/programme"
-                  label={t('about.location.cta.program')}
+                  to={pageData?.locationCtaProgramLink || '/programme'}
+                  label={
+                    getLocalized(pageData?.locationCtaProgramLabel) ||
+                    t('about.location.cta.program')
+                  }
                   variant="text"
                 />
               </div>
@@ -140,9 +201,12 @@ export default function AProposPage() {
                 />
               </div>
               <div className="px-4 py-4">
-                <div className="text-sm font-extrabold">Marseille</div>
+                <div className="text-sm font-extrabold">
+                  {getLocalized(pageData?.locationMapTitle) || 'Marseille'}
+                </div>
                 <div className="mt-1 text-sm text-white/65">
-                  La Plateforme, 8 Rue d'Hozier, 13002 Marseille
+                  {getLocalized(pageData?.locationMapAddress) ||
+                    "La Plateforme, 8 Rue d'Hozier, 13002 Marseille"}
                 </div>
               </div>
             </GlassCard>
@@ -150,35 +214,6 @@ export default function AProposPage() {
         </div>
       </section>
 
-      {/* PARTENAIRES */}
-      <section id="partenaires" className="px-6 pb-24">
-        <div className="mx-auto max-w-6xl">
-          <GlassCard className="p-8">
-            <div className="text-xs font-semibold text-white/60">
-              {t('about.partners.label')}
-            </div>
-            <h3 className="mt-2 text-2xl font-extrabold tracking-tight">
-              {t('about.partners.title')}
-            </h3>
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-white/70">
-              {t('about.partners.body')}
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <ActionButton
-                to="/contact"
-                label={t('about.partners.cta.contact')}
-                variant="primary"
-              />
-              <ActionButton
-                to="/programme"
-                label={t('about.partners.cta.program')}
-                variant="secondary"
-              />
-            </div>
-          </GlassCard>
-        </div>
-      </section>
     </div>
   );
 }
