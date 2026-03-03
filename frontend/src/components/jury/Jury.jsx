@@ -5,6 +5,8 @@ import JuryAvatar from './JuryAvatar';
 import JuryHeader from './JuryHeader';
 import styles from './Jury.module.css';
 import backgroundImage from '../../assets/images/bn05.png';
+import { getJuryPage } from '../../services/query';
+import { getLocalized } from '../../utils/sanity';
 
 const Jury = () => {
   const [juryMembers, setJuryMembers] = useState([]);
@@ -12,6 +14,15 @@ const Jury = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(null);
   const scrollRef = useRef(null);
+  const [pageData, setPageData] = useState([]);
+
+  useEffect(() => {
+    const fetchPageData = async () => {
+      const data = await getJuryPage();
+      setPageData(data);
+    };
+    fetchPageData();
+  }, []);
 
   const radius = 250;
   const imagesContext = useMemo(
@@ -69,7 +80,7 @@ const Jury = () => {
         />
         <div className="absolute inset-0 bg-[#070819]/50"></div>
       </div>
-      <JuryHeader />
+      <JuryHeader pageData={pageData} />
 
       {/* Section mobile */}
       <nav
