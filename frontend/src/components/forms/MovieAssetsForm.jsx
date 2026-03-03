@@ -1,12 +1,23 @@
+import { uploadImage } from '../../services/uploadService';
+
 export default function MovieAssetsForm({ value, onChange, hasError }) {
   const data = value || {};
 
-  const handleStillsChange = (e) => {
+  const handleStillsChange = async (e) => {
     const files = Array.from(e.target.files || []).slice(0, 3);
-    onChange({
-      ...data,
-      stills: files,
-    });
+    try {
+      const uploadPromises = files.map((f) => uploadImage(f));
+      const results = await Promise.all(uploadPromises);
+      onChange({
+        ...data,
+        stills: results.map((r) => r.url),
+        stillsKeys: results.map((r) => r.key),
+      });
+    } catch (err) {
+      console.error('[MovieAssetsForm] uploadImage error:', err.message);
+      // Fallback : stocker les fichiers bruts
+      onChange({ ...data, stills: files });
+    }
   };
 
   const handleSubtitleChange = (e) => {
