@@ -109,7 +109,8 @@ export default function MovieForm({
           </label>
           <input
             type="file"
-            accept="video/mp4,video/webm,video/quicktime,video/*"
+            accept="video/mp4"
+            maxFileSize={300 * 1024 * 1024} //
             required={videoRequired}
             onChange={async (e) => {
               const file = e.target.files?.[0] || null;
