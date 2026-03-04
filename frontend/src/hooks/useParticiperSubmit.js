@@ -204,7 +204,7 @@ export default function useParticiperSubmit({
       if (!movieVideo.type || !movieVideo.type.startsWith('video/')) {
         return setError(t('error.movie.video.invalidType'));
       }
-      const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
+      const MAX_BYTES = 300 * 1024 * 1024; // 300 MB
       if (movieVideo.size > MAX_BYTES) {
         return setError(t('error.movie.video.tooLarge'));
       }
