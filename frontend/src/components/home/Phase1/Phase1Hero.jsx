@@ -11,7 +11,7 @@ export default function Phase1Hero({
   ctaTo = '/participer',
 }) {
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+    <section className="relative  w-full overflow-hidden flex flex-col items-center justify-center min-h-[30vh] md:min-h-screen">
       <video
         className="absolute inset-0 h-full w-full object-cover brightness-110 contrast-110 saturate-115"
         src={videoSrc}
@@ -26,8 +26,8 @@ export default function Phase1Hero({
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80 "/>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
 
-      <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center p-16">
-        <h1 className="max-w-5xl text-5xl font-black leading-[1.1] tracking-tight text-white md:text-7xl lg:text-8xl animate-fadeInUp ">
+      <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center pt-6 md:pt-4">
+        <h1 className="max-w-5xl text-4xl font-black leading-[1.1] tracking-tight text-white md:text-7xl lg:text-7xl animate-fadeInUp ">
           {title}
         </h1>
         <p
@@ -42,8 +42,7 @@ export default function Phase1Hero({
         >
           <Link
             to={ctaTo}
-            className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-bold text-black shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/50"
-          >
+            className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3.5 text-sm font-bold text-black shadow-lg transition hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/50">
             {ctaLabel}
           </Link>
         </div>
