@@ -117,7 +117,7 @@
   "error.movie.duration.range": "Please provide a duration in minutes between 0 and 1.",
   "error.movie.youtube.invalid": "The YouTube link is not a valid URL.",
   "error.movie.video.required": "Please provide a video file or a YouTube link.",
-  "error.movie.video.invalidType": "The video file must be a valid video format (mp4, webm, mov...).",
+  "error.movie.video.invalidType": "The video file must be a valid video format (mp4)",
   "error.movie.video.tooLarge": "Video file is too large (max 300 MB).",
   "participate.videoHint": "Max 300 MB. Accepted formats: mp4",
   "participate.draftFound": "A draft of your submission was found.",

@@ -100,7 +100,7 @@
   "error.movie.duration.range": "Merci de renseigner une durée en minutes comprise entre 0 et 1.",
   "error.movie.youtube.invalid": "Le lien YouTube n'est pas une URL valide.",
   "error.movie.video.required": "Merci d'ajouter un fichier vidéo ou un lien YouTube.",
-  "error.movie.video.invalidType": "Le fichier vidéo doit être un format vidéo valide (mp4, webm, mov...).",
+  "error.movie.video.invalidType": "Le fichier vidéo doit être un format vidéo valide (mp4).",
   "error.movie.video.tooLarge": "Le fichier vidéo est trop volumineux (max 300 MB).",
   "participate.videoHint": "Max 300 MB. Formats acceptés : mp4",
   "participate.draftFound": "Une version brouillon de votre soumission est disponible.",

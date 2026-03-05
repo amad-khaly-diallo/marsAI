@@ -201,9 +201,16 @@ export default function useParticiperSubmit({
     }
 
     if (movieVideo) {
-      if (!movieVideo.type || !movieVideo.type.startsWith('video/')) {
+      // Autoriser uniquement des fichiers vidéo MP4
+      const mime = movieVideo.type || '';
+      const name = (movieVideo.name || '').toLowerCase();
+      const isMp4Mime = mime === 'video/mp4';
+      const isMp4Ext = name.endsWith('.mp4');
+
+      if (!isMp4Mime && !isMp4Ext) {
         return setError(t('error.movie.video.invalidType'));
       }
+
       const MAX_BYTES = 300 * 1024 * 1024; // 300 MB
       if (movieVideo.size > MAX_BYTES) {
         return setError(t('error.movie.video.tooLarge'));
