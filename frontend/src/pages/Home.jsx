@@ -24,6 +24,7 @@ import api from '../services/api';
 import { useFestivalPhase } from '../hooks/useFestivalPhase';
 import { getHomePhase1, getHomePhase2, getHomePhase3 } from '../services/query';
 import { getLocalized } from '../utils/sanity';
+import { FestivalCountdown } from '../components/sections/FestivalCountdown';
 
 /**
  * Page d'accueil – 3 phases :
@@ -156,6 +157,7 @@ export default function Home() {
             subtitle={phase1Subtitle}
             ctaLabel={phase1CtaLabel}
             ctaTo={phase1CtaLink}
+            timer={<FestivalCountdown />}
           />
           <FestivalDescription phase1={phase1} />
           <Phase1Chronology phase1={phase1} />
@@ -193,6 +195,7 @@ export default function Home() {
             subtitle={phase2Subtitle}
             ctaLabel={phase2CtaLabel}
             ctaTo={phase2CtaLink}
+            timer={<FestivalCountdown />}
           />
           <HeroCamera moviesFromApi={phase2Movies} />
           <ProjectorStatsSection phase2={phase2} />

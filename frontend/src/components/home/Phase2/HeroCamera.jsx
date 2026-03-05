@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 // Import des animations globales pour HeroCamera
 import { heroAnimationStyles } from '../../sections/heroAnimations';
 import { getYouTubeThumbnail, getYouTubeEmbed } from '../../../utils/youtube';
+import { resolveMediaUrl } from '../../../utils/media';
 
 // Import des images SD
 import sdScifi from '../../../assets/images/sd_scifi.png';
@@ -85,6 +86,9 @@ const DEMO_MOVIES = [
     video: '/video/video4.mp4',
   },
 ];
+
+const MAX_VISIBLE_MOVIES = 8;
+const GRID_COLUMNS = 4;
 
 const GENRES = [
   {
@@ -315,6 +319,16 @@ export default function HeroCamera({ moviesFromApi }) {
     return moviesFromApi.map(normalizeApiMovie);
   }, [moviesFromApi]);
 
+  // Quand la TV est allumée par défaut, choisir automatiquement un genre
+  // une fois que les films API sont disponibles (ou tomber sur le 1er genre démo).
+  useEffect(() => {
+    if (!cameraOn) return;
+    if (selectedGenre) return;
+    setSelectedGenre(
+      normalizedApiMovies.length > 0 ? { name: 'Tous' } : GENRES[0],
+    );
+  }, [cameraOn, selectedGenre, normalizedApiMovies]);
+
   const getGenreMovies = () => {
     if (normalizedApiMovies.length > 0) return normalizedApiMovies;
     if (!selectedGenre) return [];
@@ -370,43 +384,32 @@ export default function HeroCamera({ moviesFromApi }) {
     }
   };
 
-  const colsForMovies = (count) => (count <= 4 ? 2 : count <= 6 ? 3 : 4);
-
   const navigateUp = () => {
     const movies = getGenreMovies();
     if (movies.length === 0) return;
-    const cols = colsForMovies(movies.length);
-    const nextIndex = selectedFilmIndex - cols;
+    const nextIndex = selectedFilmIndex - GRID_COLUMNS;
     if (nextIndex >= 0) setSelectedFilmIndex(nextIndex);
   };
 
   const navigateDown = () => {
     const movies = getGenreMovies();
     if (movies.length === 0) return;
-    const cols = colsForMovies(movies.length);
-    const nextIndex = selectedFilmIndex + cols;
+    const nextIndex = selectedFilmIndex + GRID_COLUMNS;
     if (nextIndex < movies.length) setSelectedFilmIndex(nextIndex);
   };
 
   const navigateLeft = () => {
     const movies = getGenreMovies();
     if (movies.length === 0) return;
-    const cols = colsForMovies(movies.length);
-    if (selectedFilmIndex % cols !== 0) {
-      setSelectedFilmIndex(selectedFilmIndex - 1);
-    }
+    const prev = selectedFilmIndex - 1;
+    if (prev >= 0) setSelectedFilmIndex(prev);
   };
 
   const navigateRight = () => {
     const movies = getGenreMovies();
     if (movies.length === 0) return;
-    const cols = colsForMovies(movies.length);
-    if (
-      (selectedFilmIndex + 1) % cols !== 0 &&
-      selectedFilmIndex + 1 < movies.length
-    ) {
-      setSelectedFilmIndex(selectedFilmIndex + 1);
-    }
+    const next = selectedFilmIndex + 1;
+    if (next < movies.length) setSelectedFilmIndex(next);
   };
 
   const playFilm = () => {
@@ -417,7 +420,19 @@ export default function HeroCamera({ moviesFromApi }) {
   const closeMovie = () => setSelectedMovie(null);
 
   const movies = getGenreMovies();
-  const currentMovie = movies[selectedFilmIndex];
+  const totalMovies = movies.length;
+  const currentMovie =
+    totalMovies && selectedFilmIndex >= 0 && selectedFilmIndex < totalMovies
+      ? movies[selectedFilmIndex]
+      : null;
+  const currentPage =
+    totalMovies > 0
+      ? Math.floor(selectedFilmIndex / MAX_VISIBLE_MOVIES)
+      : 0;
+  const totalPages =
+    totalMovies > 0
+      ? Math.ceil(totalMovies / MAX_VISIBLE_MOVIES)
+      : 0;
 
   return (
     <div className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-12">
@@ -431,7 +446,8 @@ export default function HeroCamera({ moviesFromApi }) {
               className="relative"
               style={{
                 width: 'clamp(720px, 70vw, 1000px)',
-                height: 'clamp(420px, 45vw, 600px)',
+                // Hauteur augmentée pour laisser respirer 2 lignes de films
+                height: 'clamp(520px, 55vw, 720px)',
               }}
             >
               <div
@@ -547,7 +563,7 @@ export default function HeroCamera({ moviesFromApi }) {
                         {selectedMovie.video_url ? (
                           <video
                             className="w-full h-full bg-black"
-                            src={`http://localhost:5000/${selectedMovie.video_url}`}
+                            src={resolveMediaUrl(selectedMovie.video_url)}
                             controls
                             autoPlay
                           />
@@ -596,63 +612,75 @@ export default function HeroCamera({ moviesFromApi }) {
                         </div>
 
                         {(() => {
-                          const count = movies.length;
-                          const cols =
-                            count === 3
-                              ? 3
-                              : count <= 4
-                                ? 2
-                                : count <= 6
-                                  ? 3
-                                  : 4;
-                          const cardSize =
-                            count <= 4
-                              ? { width: '200px', height: '280px' }
-                              : count <= 6
-                                ? { width: '185px', height: '255px' }
-                                : { width: '170px', height: '235px' };
+                          const visibleCount = Math.min(
+                            totalMovies,
+                            MAX_VISIBLE_MOVIES,
+                          );
+                          if (!visibleCount) return null;
+
+                          const cols = Math.min(GRID_COLUMNS, visibleCount);
+                          const cardSize = { width: '190px', height: '260px' };
+
+                          const pageStart =
+                            currentPage * MAX_VISIBLE_MOVIES;
+                          const pageEnd = Math.min(
+                            pageStart + MAX_VISIBLE_MOVIES,
+                            totalMovies,
+                          );
+                          const pageMovies = movies.slice(pageStart, pageEnd);
 
                           return (
-                            <div
-                              className="grid gap-5 place-items-start w-full"
-                              style={{
-                                gridTemplateColumns: `repeat(${cols}, ${cardSize.width})`,
-                                justifyContent: 'start',
-                              }}
-                            >
-                              {movies.map((movie, idx) => {
-                                const isSelected = idx === selectedFilmIndex;
-                                return (
-                                  <div
-                                    key={movie.id}
-                                    className={`relative rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:scale-105 ${
-                                      isSelected
-                                        ? 'border-cyan-400 shadow-cyan-400/60'
-                                        : 'border-cyan-400/20 opacity-80'
-                                    }`}
-                                    style={{
-                                      width: cardSize.width,
-                                      height: cardSize.height,
-                                    }}
-                                    onClick={() => setSelectedFilmIndex(idx)}
-                                    onDoubleClick={() => {
-                                      setSelectedFilmIndex(idx);
-                                      setSelectedMovie(movie);
-                                    }}
-                                  >
-                                    <img
-                                      src={movie.thumbnail}
-                                      alt={movie.title}
-                                      className="w-full h-full object-cover"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                                    <div className="absolute bottom-2 left-2 right-2 text-sm font-bold text-white truncate">
-                                      {movie.title}
+                            <>
+                              <div
+                                className="grid gap-5 place-items-start w-full"
+                                style={{
+                                  gridTemplateColumns: `repeat(${cols}, ${cardSize.width})`,
+                                  justifyContent: 'start',
+                                }}
+                              >
+                                {pageMovies.map((movie, idx) => {
+                                  const globalIndex = pageStart + idx;
+                                  const isSelected =
+                                    globalIndex === selectedFilmIndex;
+                                  return (
+                                    <div
+                                      key={movie.id}
+                                      className={`relative rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:scale-105 ${
+                                        isSelected
+                                          ? 'border-cyan-400 shadow-cyan-400/60'
+                                          : 'border-cyan-400/20 opacity-80'
+                                      }`}
+                                      style={{
+                                        width: cardSize.width,
+                                        height: cardSize.height,
+                                      }}
+                                      onClick={() =>
+                                        setSelectedFilmIndex(globalIndex)
+                                      }
+                                      onDoubleClick={() => {
+                                        setSelectedFilmIndex(globalIndex);
+                                        setSelectedMovie(movie);
+                                      }}
+                                    >
+                                      <img
+                                        src={movie.thumbnail}
+                                        alt={movie.title}
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                                      <div className="absolute bottom-2 left-2 right-2 text-sm font-bold text-white truncate">
+                                        {movie.title}
+                                      </div>
                                     </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
+                                  );
+                                })}
+                              </div>
+                              {totalPages > 1 && (
+                                <div className="mt-3 text-xs text-cyan-200 text-right">
+                                  Page {currentPage + 1} / {totalPages}
+                                </div>
+                              )}
+                            </>
                           );
                         })()}
 
@@ -697,9 +725,9 @@ export default function HeroCamera({ moviesFromApi }) {
                 <button
                   onClick={toggleCamera}
                   className={`w-full py-2 px-3 rounded-lg font-bold text-sm transition-all text-white ${
-                    cameraOn
-                      ? 'bg-gradient-to-br from-red-600 to-red-700 shadow-[0_0_16px_rgba(239,68,68,0.3)]'
-                      : 'bg-gradient-to-br from-green-600 to-green-700 shadow-[0_0_16px_rgba(34,197,94,0.3)]'
+                    !cameraOn
+                      ? 'bg-gradient-to-br from-green-600 to-green-700 shadow-[0_0_16px_rgba(34,197,94,0.3)]'
+                      : 'bg-gradient-to-br from-red-600 to-red-700 shadow-[0_0_16px_rgba(239,68,68,0.3)]'
                   }`}
                 >
                   ⏻ {cameraOn ? 'OFF' : 'ON'}

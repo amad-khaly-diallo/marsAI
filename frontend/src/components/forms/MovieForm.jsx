@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { uploadVideo } from '../../services/uploadService';
 
 export default function MovieForm({
   value,
@@ -112,17 +111,10 @@ export default function MovieForm({
             accept="video/mp4"
             maxFileSize={300 * 1024 * 1024} //
             required={videoRequired}
-            onChange={async (e) => {
+            onChange={(e) => {
               const file = e.target.files?.[0] || null;
               if (!file) return;
-              try {
-                const result = await uploadVideo(file);
-                onVideoChange && onVideoChange(result.url);
-              } catch (err) {
-                console.error('[MovieForm] uploadVideo error:', err.message);
-                // Fallback : transmettre le fichier brut pour traitement local
-                onVideoChange && onVideoChange(file);
-              }
+              onVideoChange && onVideoChange(file);
             }}
             className="block w-full text-xs text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-brand-accent"
           />

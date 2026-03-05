@@ -1,6 +1,5 @@
 const express = require('express');
 const multer = require('multer');
-const fs = require('fs');
 const path = require('path');
 const MovieController = require('../Controllers/MovieController');
 const FilmSubmissionController = require('../Controllers/FilmSubmissionController');
@@ -14,26 +13,9 @@ const upload = multer({
   },
 });
 
-// Storage pour les assets (captures & sous-titres)
-const assetsStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, '..', 'uploads', 'assets');
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || '';
-    const base = path
-      .basename(file.originalname, ext)
-      .replace(/\s+/g, '_')
-      .toLowerCase();
-    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, `${base}-${unique}${ext}`);
-  },
-});
-
+// Storage mémoire pour les assets (captures & sous-titres) avant upload vers S3
 const uploadAssets = multer({
-  storage: assetsStorage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 50 * 1024 * 1024, // 50 Mo par fichier, largement suffisant pour images + .srt
   },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
+import { resolveMediaUrl } from '../../../utils/media';
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -26,7 +27,7 @@ export default function MyMoviesGrid({ movies, onSelect }) {
       {movies.map((movie, index) => {
         const hasLocalVideo = !!movie.video_url;
         const localSrc = hasLocalVideo
-          ? `http://localhost:5000/${movie.video_url}`
+          ? resolveMediaUrl(movie.video_url)
           : null;
         const embedUrl = getYouTubeEmbed(movie.youtube_url);
         return (

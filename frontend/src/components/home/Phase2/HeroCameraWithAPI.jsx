@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { heroAnimationStyles } from '../../sections/heroAnimations';
+import { resolveMediaUrl } from '../../../utils/media';
 
 export function HeroCameraWithAPI() {
   const [selectedGenreIdx, setSelectedGenreIdx] = useState(0);
   const [isInserting, setIsInserting] = useState(false);
-  const [isCameraOn, setIsCameraOn] = useState(false);
+  const [isCameraOn, setIsCameraOn] = useState(true);
   const [hologramVisible, setHologramVisible] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [rotation, setRotation] = useState(0);
@@ -138,7 +139,11 @@ export function HeroCameraWithAPI() {
           className="fixed inset-0 bg-black/80 flex items-center justify-center"
           onClick={() => setSelectedMovie(null)}
         >
-          <video src={selectedMovie.video_url} controls autoPlay />
+          <video
+            src={resolveMediaUrl(selectedMovie.video_url)}
+            controls
+            autoPlay
+          />
         </div>
       )}
     </section>

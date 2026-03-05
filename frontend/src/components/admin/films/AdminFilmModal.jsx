@@ -8,6 +8,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { STATUS_LABELS } from '../../../constants/status';
+import { resolveMediaUrl } from '../../../utils/media';
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -36,9 +37,7 @@ export default function AdminFilmModal({
 }) {
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
   const hasLocalVideo = !!movie?.video_url;
-  const localSrc = hasLocalVideo
-    ? `http://localhost:5000/${movie.video_url}`
-    : null;
+  const localSrc = hasLocalVideo ? resolveMediaUrl(movie.video_url) : null;
 
   const [winnerFormOpen, setWinnerFormOpen] = useState(false);
   const [winnerRanking, setWinnerRanking] = useState('');

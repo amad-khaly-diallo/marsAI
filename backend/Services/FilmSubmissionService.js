@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const { withTransaction, query } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
 const { uploadVideo, getVideoStatus } = require('./youtube.service');
@@ -9,30 +7,7 @@ const {
   sendUploadFailureEmail,
 } = require('./mail.service');
 const MovieService = require('./MovieService');
-
-const VIDEOS_DIR = path.join(process.cwd(), 'uploads', 'videos');
-
-function getExtension(mimetype) {
-  const map = { 'video/mp4': '.mp4'};
-  return map[mimetype] || '.mp4';
-}
-
-/**
- * Enregistre la vidéo sur disque et retourne le chemin relatif (ex: uploads/videos/xxx.mp4).
- */
-function saveVideoToDisk(videoFile) {
-  if (!videoFile || !videoFile.buffer) {
-    throw new HttpError(400, 'Invalid video file');
-  }
-  if (!fs.existsSync(VIDEOS_DIR)) {
-    fs.mkdirSync(VIDEOS_DIR, { recursive: true });
-  }
-  const ext = getExtension(videoFile.mimetype);
-  const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
-  const filePath = path.join(VIDEOS_DIR, filename);
-  fs.writeFileSync(filePath, videoFile.buffer);
-  return path.join('uploads', 'videos', filename);
-}
+const s3Service = require('./s3Service');
 
 function validateMoviePayload(movie) {
   const required = ['original_title', 'english_title', 'duration', 'filmmaker_id'];
@@ -51,18 +26,20 @@ async function verifyFilmmakerExists(filmmakerId) {
 }
 
 /**
- * Upload vers YouTube en arrière-plan (fichier déjà enregistré sur disque).
+ * Upload vers YouTube en arrière-plan (à partir du buffer déjà reçu).
  * Succès : met à jour youtube_url et envoie un email avec le lien.
  * Échec : envoie un email pour informer (pas de rollback, la vidéo reste enregistrée).
  */
-async function doYoutubeUploadAndNotify(movieId, videoFilePath, mimetype, movie, filmmaker) {
-  const absolutePath = path.isAbsolute(videoFilePath)
-    ? videoFilePath
-    : path.join(process.cwd(), videoFilePath);
-
-  if (!fs.existsSync(absolutePath)) {
+async function doYoutubeUploadAndNotify(
+  movieId,
+  buffer,
+  mimetype,
+  movie,
+  filmmaker,
+) {
+  if (!buffer) {
     // eslint-disable-next-line no-console
-    console.error('Fichier vidéo introuvable pour upload YouTube:', absolutePath);
+    console.error('Buffer vidéo manquant pour upload YouTube');
     try {
       await sendUploadFailureEmail({
         to: filmmaker.email,
@@ -77,7 +54,6 @@ async function doYoutubeUploadAndNotify(movieId, videoFilePath, mimetype, movie,
   }
 
   try {
-    const buffer = fs.readFileSync(absolutePath);
     const youtubeId = await uploadVideo(buffer, mimetype, {
       title: movie.original_title || movie.english_title,
       description: movie.synopsis_original || movie.synopsis_english || '',
@@ -194,8 +170,9 @@ async function submit({ movie, videoFile }) {
 
   try {
     if (hasUpload) {
-      // ——— Flux upload : enregistrer la vidéo, insérer avec video_url, mail confirmation, puis YouTube en arrière-plan ———
-      const videoRelativePath = saveVideoToDisk(videoFile);
+      // ——— Flux upload : envoyer la vidéo vers S3, insérer avec l'URL publique, mail confirmation, puis YouTube en arrière-plan ———
+      const { url: videoUrl } = await s3Service.uploadFile(videoFile, 'videos');
+      const youtubeBuffer = Buffer.from(videoFile.buffer);
 
       const result = await withTransaction(async (trx) => {
         const movieInsert = await trx.query(
@@ -210,14 +187,14 @@ async function submit({ movie, videoFile }) {
             language: movie.language ?? null,
             synopsis_original: movie.synopsis_original ?? null,
             synopsis_english: movie.synopsis_english ?? null,
-            video_url: videoRelativePath,
+            video_url: videoUrl,
             filmmaker_id: movie.filmmaker_id,
           }
         );
         const movieId = movieInsert.insertId;
         return {
           movie_id: movieId,
-          video_url: videoRelativePath,
+          video_url: videoUrl,
           status: 'in_process',
         };
       });
@@ -231,7 +208,7 @@ async function submit({ movie, videoFile }) {
       setImmediate(() => {
         doYoutubeUploadAndNotify(
           result.movie_id,
-          videoRelativePath,
+          youtubeBuffer,
           videoFile.mimetype,
           movie,
           filmmaker
