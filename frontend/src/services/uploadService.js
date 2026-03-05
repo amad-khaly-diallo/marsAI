@@ -1,4 +1,12 @@
-const API_BASE = process.env.REACT_APP_API_URL || '';
+const RAW_API_BASE = process.env.REACT_APP_API_URL || '';
+// Normalise pour éviter les doublons de "/api" (ex: "http://host/api" + "/api/...").
+// Résultat attendu :
+// - REACT_APP_API_URL = "http://localhost:5000"     -> API_BASE = "http://localhost:5000"
+// - REACT_APP_API_URL = "http://localhost:5000/"    -> API_BASE = "http://localhost:5000"
+// - REACT_APP_API_URL = "http://localhost:5000/api" -> API_BASE = "http://localhost:5000"
+const API_BASE = RAW_API_BASE
+  ? RAW_API_BASE.replace(/\/+$/, '').replace(/\/api$/, '')
+  : '';
 
 /**
  * Upload une vidéo vers S3 via l'API backend.

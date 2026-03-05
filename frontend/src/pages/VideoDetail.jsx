@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovieById } from '../services/api';
+import { resolveMediaUrl } from '../utils/media';
 
 export default function VideoDetail() {
   const { id } = useParams();
@@ -35,11 +36,9 @@ export default function VideoDetail() {
       (movie.youtube_url.includes('youtube') ||
         movie.youtube_url.includes('youtu.be'));
 
-    // Cas 2 : fichier vidéo hébergé sur le backend
+    // Cas 2 : fichier vidéo hébergé (backend historique ou S3)
     const hasFileOnDisk = !!movie.video_url;
-    const fileSrc = hasFileOnDisk
-      ? `http://localhost:5000/${movie.video_url}`
-      : null;
+    const fileSrc = hasFileOnDisk ? resolveMediaUrl(movie.video_url) : null;
 
     // Wrapper avec effet de lueur (Glow)
     return (

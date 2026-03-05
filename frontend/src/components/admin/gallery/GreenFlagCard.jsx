@@ -1,11 +1,10 @@
 import { Clock } from 'lucide-react';
 import { getYouTubeEmbed } from '../../../utils/youtube';
+import { resolveMediaUrl } from '../../../utils/media';
 
 export default function GreenFlagCard({ group, movie, onOpen }) {
   const hasLocalVideo = !!movie.video_url;
-  const localSrc = hasLocalVideo
-    ? `http://localhost:5000/${movie.video_url}`
-    : null;
+  const localSrc = hasLocalVideo ? resolveMediaUrl(movie.video_url) : null;
   const embedUrl = getYouTubeEmbed(movie.youtube_url);
   return (
     <button

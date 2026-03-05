@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { X, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { resolveMediaUrl } from '../../../utils/media';
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -28,9 +29,7 @@ export default function MyMovieModal({
 
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
   const hasLocalVideo = !!movie?.video_url;
-  const localSrc = hasLocalVideo
-    ? `http://localhost:5000/${movie.video_url}`
-    : null;
+  const localSrc = hasLocalVideo ? resolveMediaUrl(movie.video_url) : null;
 
   useEffect(() => {
     if (!movie) return;

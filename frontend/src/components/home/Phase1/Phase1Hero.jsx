@@ -9,6 +9,7 @@ export default function Phase1Hero({
   subtitle = "Le festival du film court créé à l'IA. Une sélection percutante en 60 secondes.",
   ctaLabel = 'Participer au projet',
   ctaTo = '/participer',
+  timer = null,
 }) {
   return (
     <section className="relative  w-full overflow-hidden flex flex-col items-center justify-center min-h-[30vh] md:min-h-screen">
@@ -36,6 +37,16 @@ export default function Phase1Hero({
         >
           {subtitle}
         </p>
+
+        {timer && (
+          <div
+            className="mt-6 flex justify-center animate-fadeInUp"
+            style={{ animationDelay: '0.15s' }}
+          >
+            {timer}
+          </div>
+        )}
+
         <div
           className="mt-10 animate-fadeInUp"
           style={{ animationDelay: '0.2s' }}
