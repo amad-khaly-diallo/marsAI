@@ -12,6 +12,7 @@ export default function AdminLayout({ children, currentAdmin }) {
     { id: 'jury', label: 'Jury' },
     { id: 'partners', label: 'Partenaires' },
     { id: 'newsletters', label: 'Newsletters' },
+    { id: 'videos', label: 'Vidéos' },
     { id: 'all-videos', label: 'Galerie des vidéos' },
     { id: 'videos-distribution', label: 'Répartition vidéos' },
     { id: 'movies', label: 'Films (sélection & gagnants)' },

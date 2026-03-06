@@ -45,7 +45,7 @@ export default function GreenFlagCard({ group, movie, onOpen }) {
         </p>
         <div className="mt-auto pt-2 text-[11px] text-slate-400 flex items-center gap-1">
           <Clock className="w-3.5 h-3.5" />
-          {movie.duration ? `${movie.duration} min` : '—'}
+          {movie.duration ? `${movie.duration} sec` : '—'}
         </div>
       </div>
     </button>
