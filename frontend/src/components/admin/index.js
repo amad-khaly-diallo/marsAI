@@ -7,6 +7,7 @@ export { NewslettersManagement } from './newsletters';
 export { AdminLogin } from './auth';
 export { GreenFlagGallery } from './gallery';
 export { VideosDistribution } from './distribution';
+export { VideosGallery } from './videos';
 
 // Films (super admin) et Mes vidéos (admin)
 export { MoviesManagement } from './films';

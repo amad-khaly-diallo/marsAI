@@ -99,7 +99,7 @@ export default function MyMoviesGrid({ movies, onSelect }) {
               <div className="mt-auto flex items-center justify-between pt-2 text-[11px] text-slate-400 border-t border-slate-800/70">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5 shrink-0" />
-                  {movie.duration ? `${movie.duration} min` : 'Durée ?'}
+                  {movie.duration ? `${movie.duration} sec` : 'Durée ?'}
                 </span>
                 {typeof movie.my_rating === 'number' && (
                   <span className="text-brand-primary font-semibold">
