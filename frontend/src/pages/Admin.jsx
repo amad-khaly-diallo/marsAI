@@ -10,6 +10,7 @@ import {
   GreenFlagGallery,
   VideosDistribution,
   MyMoviesGallery,
+  VideosGallery,
 } from '../components/admin';
 import { useAdmin } from '../contexts';
 
@@ -30,6 +31,8 @@ function AdminContent() {
         return <PartnersManagement />;
       case 'newsletters':
         return <NewslettersManagement />;
+      case 'videos':
+        return <VideosGallery />;
       case 'all-videos':
         return <GreenFlagGallery />;
       case 'videos-distribution':
