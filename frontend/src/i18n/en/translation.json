@@ -144,5 +144,8 @@
   "newsletter.error.generic": "Unable to save the email address.",
   "newsletter.success": "Thanks, your email has been subscribed to the newsletter.",
 
-  "contact.error.generic": "An error occurred. Please try again."
+  "contact.error.generic": "An error occurred. Please try again.",
+
+  "cookies.accept": "Accept",
+  "cookies.decline": "Decline"
 }
