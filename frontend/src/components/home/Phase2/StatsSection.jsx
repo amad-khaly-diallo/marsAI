@@ -250,12 +250,56 @@ export function StatsSection({ phase2 }) {
   const [statsFlash, setStatsFlash] = React.useState(false);
   const [selectedGenreIndex, setSelectedGenreIndex] = React.useState(0);
   const [isRotating, setIsRotating] = React.useState(false);
+  const [manuallyTurnedOff, setManuallyTurnedOff] = React.useState(false);
+  const sectionRef = React.useRef(null);
   const playCameraSound = useAudioContext();
+
+  // Effet pour allumer/éteindre automatiquement la caméra au scroll
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !manuallyTurnedOff && !statsRevealed) {
+            // Allumer la caméra quand la section devient visible
+            setStatsRevealed(true);
+            playCameraSound();
+            setStatsFlash(true);
+            window.setTimeout(() => setStatsFlash(false), 1200);
+          } else if (!entry.isIntersecting && statsRevealed && !manuallyTurnedOff) {
+            // Éteindre la caméra quand on scroll vers le haut (section non visible)
+            setStatsRevealed(false);
+          }
+        });
+      },
+      {
+        threshold: 0.3, // S'active quand 30% de la section est visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [statsRevealed, manuallyTurnedOff, playCameraSound]);
 
   const handleStatsReveal = () => {
     const nextState = !statsRevealed;
     setStatsRevealed(nextState);
-    if (nextState) playCameraSound();
+    
+    if (nextState) {
+      // Si on allume, réinitialiser le flag manuel
+      setManuallyTurnedOff(false);
+      playCameraSound();
+    } else {
+      // Si on éteint, marquer comme éteint manuellement
+      setManuallyTurnedOff(true);
+    }
+    
     setStatsFlash(true);
     window.setTimeout(() => setStatsFlash(false), 1200);
   };
@@ -275,7 +319,7 @@ export function StatsSection({ phase2 }) {
     t('home.stats.desc');
 
   return (
-    <section className="px-4 pb-12">
+    <section ref={sectionRef} className="px-4 pb-12">
       <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         {/* Header */}
