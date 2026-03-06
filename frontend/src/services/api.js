@@ -129,9 +129,17 @@ const api = {
  * @returns {Promise<Object>} - L'objet film avec ses relations
  */
 export const getMovieById = async (id) => {
-  // Utilise le wrapper 'api.get' défini ci-dessus
-  // La route correspond à : backend/Routes/movies.js -> router.get('/:id', ...)
+  // Vue "simple" utilisée dans certains écrans
   return api.get(`/movies/${id}`);
+};
+
+/**
+ * Récupère les détails complets d'un film (film + assets + collaborateurs + tags + IA)
+ * @param {string|number} id
+ * @returns {Promise<{ movie: Object, assets: Object[], collaborators: Object[], tags: Object[], ai_declaration: Object|null }>}
+ */
+export const getMovieFullById = async (id) => {
+  return api.get(`/movies/${id}/full`);
 };
 
 // Export par défaut pour l'utilisation générique (import api from ...)

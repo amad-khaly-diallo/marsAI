@@ -31,8 +31,11 @@ router.get('/', MovieController.list);
 router.get('/winners', MovieController.listWinners);
 router.post('/', MovieController.create);
 
-// GET /api/movies/:id - Détails d'un film
+// GET /api/movies/:id - Détails d'un film (vue "simple" catalogue)
 router.get('/:id', MovieController.get);
+
+// GET /api/movies/:id/full - Détails complets (film + assets + tags + collaborateurs + IA)
+router.get('/:id/full', MovieController.getFull);
 
 // ============================================
 // Routes nested (ressources liées)

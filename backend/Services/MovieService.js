@@ -82,6 +82,24 @@ async function getById(id) {
   return mapMovie(row);
 }
 
+async function getFullById(id) {
+  const movie = await getById(id);
+  const [assets, collaborators, tags, aiDeclaration] = await Promise.all([
+    listAssets(id),
+    listCollaborators(id),
+    listTags(id),
+    getAiDeclaration(id),
+  ]);
+
+  return {
+    movie,
+    assets,
+    collaborators,
+    tags,
+    ai_declaration: aiDeclaration,
+  };
+}
+
 async function remove(id) {
   await getById(id);
   await query("DELETE FROM movie WHERE id = :id", { id });
@@ -273,6 +291,7 @@ async function setYoutubeUrl(movieId, url) {
 module.exports = {
   list,
   getById,
+  getFullById,
   remove,
   setVideoUrl,
   setYoutubeUrl,
