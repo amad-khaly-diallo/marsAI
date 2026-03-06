@@ -37,10 +37,10 @@ router.patch(
 // PATCH /api/admin/films/:id/review
 router.patch('/:id/review', AdminFilmController.updateReview);
 
-// PATCH /api/admin/films/:id/flag - uniquement ADMIN (flag personnel)
+// PATCH /api/admin/films/:id/flag - ADMIN et SUPER_ADMIN (flag personnel)
 router.patch(
   '/:id/flag',
-  authorize(['admin']),
+  authorize(['admin', 'super_admin']),
   AdminFilmController.updateFlag
 );
 
