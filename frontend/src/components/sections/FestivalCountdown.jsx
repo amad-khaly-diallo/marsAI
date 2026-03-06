@@ -78,9 +78,15 @@ export function FestivalCountdown() {
         <Separator />
         <TimeBlock label={t('countdown.unit_hours')} value={remaining.hours} />
         <Separator />
-        <TimeBlock label={t('countdown.unit_minutes')} value={remaining.minutes} />
+        <TimeBlock
+          label={t('countdown.unit_minutes')}
+          value={remaining.minutes}
+        />
         <Separator />
-        <TimeBlock label={t('countdown.unit_seconds')} value={remaining.seconds} />
+        <TimeBlock
+          label={t('countdown.unit_seconds')}
+          value={remaining.seconds}
+        />
       </div>
     </div>
   );
