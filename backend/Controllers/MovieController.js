@@ -19,6 +19,12 @@ exports.get = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+exports.getFull = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
+  const data = await MovieService.getFullById(id);
+  res.json(data);
+});
+
 
 exports.create = asyncHandler(async (req, res) => {
   const data = await MovieService.create(req.body || {});
