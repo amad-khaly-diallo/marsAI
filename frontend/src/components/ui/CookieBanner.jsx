@@ -39,9 +39,8 @@ export const CookieBanner = () => {
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl bg-black/80 backdrop-blur-md text-white p-6 z-[9999] flex flex-col md:flex-row justify-between items-center border border-white/10 rounded-2xl shadow-2xl">
       <div className="mb-4 md:mb-0 md:mr-8 text-center md:text-left">
         <p className="text-sm md:text-base font-light tracking-wide">
-          <span className="font-bold text-violet-400">MarsIA</span> utilise des
-          cookies pour optimiser votre expérience sur le festival. En
-          continuant, vous acceptez notre politique de confidentialité.
+          <span className="font-bold text-violet-400">MarsIA</span>{' '}
+          {t('cookies.description')}
         </p>
       </div>
       <div className="flex gap-3 shrink-0">
