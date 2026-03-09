@@ -73,7 +73,9 @@ router.put(
   async (req, res, next) => {
     try {
       const { phase } = req.body;
-      const newPhase = await setCurrentPhase(phase);
+      const newPhase = await setCurrentPhase(phase, {
+        enforceBusinessRules: true,
+      });
       res.json({ phase: newPhase });
     } catch (err) {
       next(err);
