@@ -6,7 +6,20 @@ const router = express.Router();
 
 // Routes réservées au super_admin pour la gestion des comptes admins
 router.get('/', authenticate, authorize(['super_admin']), AdminController.list);
+
+// Profil courant (admin ou super_admin)
 router.get('/me', authenticate, AdminController.me);
+router.patch(
+  '/me/profile',
+  authenticate,
+  AdminController.updateMeProfile,
+);
+router.patch(
+  '/me/password',
+  authenticate,
+  AdminController.changePassword,
+);
+
 router.get('/:id', authenticate, authorize(['super_admin']), AdminController.get);
 router.post('/auth/signup', authenticate, authorize(['super_admin']), AdminController.create);
 router.post('/auth/login', AdminController.logAdmin);
