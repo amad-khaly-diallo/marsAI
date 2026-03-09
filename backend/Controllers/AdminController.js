@@ -41,7 +41,8 @@ exports.logAdmin = asyncHandler(async (req, res) => {
   res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 1000, // 1h
+    // Durée max de session côté serveur (72h). L'inactivité (1h) est gérée côté frontend.
+    maxAge: 72 * 60 * 60 * 1000,
     sameSite: 'lax',
   });
 
