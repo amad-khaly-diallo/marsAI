@@ -56,13 +56,7 @@ export const CookieBanner = () => {
           {t('cookies.decline')}
         </button>
         <button
-          onClick={refuse}
-          className="bg-gray-700/50 hover:bg-gray-600/60 hover:scale-105 transition-all text-white px-8 py-2 rounded-full font-semibold text-sm uppercase tracking-widest border border-white/20"
-        >
-          Refuser
-        </button>
-        <button
-          onClick={accept}
+          onClick={handleAccept}
           className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:scale-105 transition-transform text-white px-8 py-2 rounded-full font-bold text-sm uppercase tracking-widest"
         >
           {t('cookies.accept')}
