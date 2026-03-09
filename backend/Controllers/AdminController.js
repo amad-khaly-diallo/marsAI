@@ -7,6 +7,18 @@ exports.me = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+exports.updateMeProfile = asyncHandler(async (req, res) => {
+  const id = req.user?.id;
+  const data = await AdminService.updateProfile(id, req.body || {});
+  res.json(data);
+});
+
+exports.changePassword = asyncHandler(async (req, res) => {
+  const id = req.user?.id;
+  await AdminService.changePassword(id, req.body || {});
+  res.status(204).send();
+});
+
 exports.list = asyncHandler(async (req, res) => {
   const data = await AdminService.list();
   res.json(data);

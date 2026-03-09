@@ -3,6 +3,7 @@ import { SectionHeader, ErrorAlert, SectionCard } from '../common';
 import { usePartners } from '../hooks';
 import PartnerCreateForm from './PartnerCreateForm';
 import PartnersTable from './PartnersTable';
+import { uploadImage } from '../../../services/uploadService';
 
 const INITIAL_FORM = {
   name: '',
@@ -17,7 +18,10 @@ export default function PartnersManagement() {
   const [createLoading, setCreateLoading] = useState(false);
   const [createError, setCreateError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(INITIAL_FORM);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [logoUploadError, setLogoUploadError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,15 +34,47 @@ export default function PartnersManagement() {
     setCreateLoading(true);
     try {
       const admin = require('../../../services/admin').default;
-      await admin.createPartner(form);
+      if (editingId) {
+        await admin.updatePartner(editingId, form);
+      } else {
+        await admin.createPartner(form);
+      }
       setForm(INITIAL_FORM);
       setCreating(false);
+      setEditingId(null);
       refetch();
     } catch (err) {
       setCreateError(err.message);
     } finally {
       setCreateLoading(false);
     }
+  };
+
+  const handleLogoFileChange = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    setLogoUploadError(null);
+    setLogoUploading(true);
+    try {
+      const res = await uploadImage(file);
+      setForm((prev) => ({ ...prev, logo_url: res.url || res.Location || '' }));
+    } catch (err) {
+      setLogoUploadError(err.message || 'Erreur upload logo');
+    } finally {
+      setLogoUploading(false);
+    }
+  };
+
+  const handleEdit = (partner) => {
+    setCreateError(null);
+    setEditingId(partner.id);
+    setForm({
+      name: partner.name || '',
+      website_url: partner.website_url || '',
+      logo_url: partner.logo_url || '',
+      description: partner.description || '',
+    });
+    setCreating(true);
   };
 
   const handleDelete = async (id) => {
@@ -82,12 +118,16 @@ export default function PartnersManagement() {
           error={createError}
           onCancel={() => setCreating(false)}
           isOpen={creating}
+          onLogoFileChange={handleLogoFileChange}
+          logoUploading={logoUploading}
+          logoUploadError={logoUploadError}
         />
         <PartnersTable
           partners={partners}
           loading={loading}
           deletingId={deletingId}
           onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       </SectionCard>
     </div>

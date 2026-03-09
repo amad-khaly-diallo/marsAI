@@ -11,6 +11,7 @@ import {
   VideosDistribution,
   MyMoviesGallery,
   VideosGallery,
+  AdminProfile,
 } from '../components/admin';
 import { useAdmin } from '../contexts';
 
@@ -37,6 +38,8 @@ function AdminContent() {
         return <GreenFlagGallery />;
       case 'videos-distribution':
         return <VideosDistribution currentAdmin={admin} />;
+      case 'profile':
+        return <AdminProfile />;
       case 'dashboard':
       default:
         return <DashboardOverview />;

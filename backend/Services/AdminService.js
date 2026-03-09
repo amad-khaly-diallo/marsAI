@@ -10,7 +10,6 @@ function mapAdmin(row) {
     first_name: row.first_name,
     last_name: row.last_name,
     email: row.email,
-    password: row.password,
     role: row.role,
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -96,6 +95,61 @@ async function update(id, payload) {
   return getById(id);
 }
 
+async function updateProfile(id, payload) {
+  // Met à jour uniquement les infos de base (pas le rôle, pas le mot de passe)
+  const admin = await getById(id);
+
+  const next = {
+    first_name: payload.first_name ?? admin.first_name,
+    last_name: payload.last_name ?? admin.last_name,
+    email: payload.email ?? admin.email,
+  };
+
+  try {
+    await query(
+      `UPDATE admins SET
+        first_name = :first_name,
+        last_name = :last_name,
+        email = :email
+       WHERE id = :id`,
+      {
+        id,
+        first_name: next.first_name,
+        last_name: next.last_name,
+        email: next.email,
+      },
+    );
+  } catch (err) {
+    if (err && err.code === 'ER_DUP_ENTRY') {
+      throw new HttpError(409, 'Email already exists');
+    }
+    throw err;
+  }
+
+  return getById(id);
+}
+
+async function changePassword(id, { current_password, new_password }) {
+  if (!current_password || !new_password) {
+    throw new HttpError(400, 'Missing current_password or new_password');
+  }
+
+  const rows = await query('SELECT * FROM admins WHERE id = :id', { id });
+  const row = rows[0];
+  if (!row) throw new HttpError(404, 'Admin not found');
+
+  await verifyPassword(current_password, row.password);
+
+  const hashed = await hashPassword(new_password);
+
+  await query(
+    'UPDATE admins SET password = :password WHERE id = :id',
+    { password: hashed, id },
+  );
+
+  return { id, success: true };
+}
+
 async function remove(id) {
   // Ensure exists
   await getById(id);
@@ -108,6 +162,8 @@ module.exports = {
   getById,
   create,
   update,
+  updateProfile,
+  changePassword,
   logAdmin,
   remove,
 };
