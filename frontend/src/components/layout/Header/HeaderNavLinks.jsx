@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../../../contexts';
 
 const links = [
-  { to: '/', labelKey: 'nav.home', defaultLabel: 'Accueil' },
   { to: '/a-propos', labelKey: 'nav.about', defaultLabel: 'À Propos' },
   { to: '/contact', labelKey: 'nav.contact', defaultLabel: 'Contact' },
   { to: '/jury', labelKey: 'nav.jury', defaultLabel: 'Jury' },
