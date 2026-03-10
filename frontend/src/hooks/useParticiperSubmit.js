@@ -155,7 +155,8 @@ export default function useParticiperSubmit({
     setSubmitting,
   ]);
 
-  // propagate async errors to shared `error` state (only when an op reports an error)
+  // propagate async errors à l'état partagé `error`
+  // et s'assurer que `submitting` est bien relâché pour permettre un nouvel essai.
   useEffect(() => {
     const opError =
       filmmakerOp.error ||
@@ -163,7 +164,10 @@ export default function useParticiperSubmit({
       aiOp.error ||
       collabOp.error ||
       assetsOp.error;
-    if (opError) setError(opError.message || String(opError));
+    if (opError) {
+      setError(opError.message || String(opError));
+      setSubmitting(false);
+    }
   }, [
     filmmakerOp.error,
     movieOp.error,
@@ -171,6 +175,7 @@ export default function useParticiperSubmit({
     collabOp.error,
     assetsOp.error,
     setError,
+    setSubmitting,
   ]);
 
   // --- public handlers (validate synchronously, then delegate to useAsync.run) ---

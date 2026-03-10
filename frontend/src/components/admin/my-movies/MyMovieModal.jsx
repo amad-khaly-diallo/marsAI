@@ -103,7 +103,7 @@ export default function MyMovieModal({
             <div className="flex items-center justify-between gap-3">
               <span className="flex items-center gap-1.5 text-xs text-brand-muted">
                 <Clock className="w-3.5 h-3.5 shrink-0" />
-                {movie.duration ? `${movie.duration} min` : 'Durée inconnue'}
+                {movie.duration ? `${movie.duration} sec` : 'Durée inconnue'}
               </span>
             </div>
 
@@ -142,44 +142,46 @@ export default function MyMovieModal({
                 className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
                 placeholder="Votre commentaire (optionnel, visible uniquement par vous)..."
               />
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {['green', 'yellow', 'red'].map((flag) => {
-                  const isActive = movie.my_flag === flag;
-                  const baseColor =
-                    flag === 'green'
-                      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-                      : flag === 'yellow'
-                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/40'
-                        : 'bg-red-500/10 text-red-300 border-red-500/40';
-
-                  return (
-                    <button
-                      key={flag}
-                      type="button"
-                      onClick={() =>
-                        savingReview // on évite de spammer pendant un save de review
-                          ? null
-                          : onUpdateFlag(
-                              movie.id,
-                              movie.my_flag === flag ? null : flag,
-                            )
-                      }
-                      disabled={savingReview === movie.id}
-                      className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold transition-colors ${
-                        isActive
-                          ? `${baseColor}`
-                          : 'bg-slate-900/60 text-slate-300 border-slate-700 hover:bg-slate-800/80'
-                      } disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      {flag === 'green'
-                        ? 'Green'
+              {typeof onUpdateFlag === 'function' && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {['green', 'yellow', 'red'].map((flag) => {
+                    const isActive = movie.my_flag === flag;
+                    const baseColor =
+                      flag === 'green'
+                        ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
                         : flag === 'yellow'
-                          ? 'Yellow'
-                          : 'Red'}
-                    </button>
-                  );
-                })}
-              </div>
+                          ? 'bg-amber-500/10 text-amber-300 border-amber-500/40'
+                          : 'bg-red-500/10 text-red-300 border-red-500/40';
+
+                    return (
+                      <button
+                        key={flag}
+                        type="button"
+                        onClick={() =>
+                          savingReview // on évite de spammer pendant un save de review
+                            ? null
+                            : onUpdateFlag(
+                                movie.id,
+                                movie.my_flag === flag ? null : flag,
+                              )
+                        }
+                        disabled={savingReview === movie.id}
+                        className={`rounded-full border px-2.5 py-0.5 text-[10px] font-semibold transition-colors ${
+                          isActive
+                            ? `${baseColor}`
+                            : 'bg-slate-900/60 text-slate-300 border-slate-700 hover:bg-slate-800/80'
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        {flag === 'green'
+                          ? 'Green'
+                          : flag === 'yellow'
+                            ? 'Yellow'
+                            : 'Red'}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               <button
                 type="button"
                 onClick={handleSaveReview}

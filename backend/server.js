@@ -8,6 +8,7 @@ const notFound = require("./Middlewares/notFound");
 const errorHandler = require("./Middlewares/errorHandler");
 const { checkDatabaseConnection } = require("./Config/db");
 const oauth = require("./Routes/oauth");
+const { startYoutubeStatusWorker } = require("./Jobs/youtubeStatusWorker");
 
 const app = express();
 
@@ -40,6 +41,8 @@ app.use(errorHandler);
 (async () => {
   try {
     await checkDatabaseConnection();
+    // Démarre les jobs de fond (ex: vérification différée YouTube)
+    startYoutubeStatusWorker();
     app.listen(env.PORT, () => {
       console.log(`Backend MarsAI démarré sur http://localhost:${env.PORT}`);
     });
