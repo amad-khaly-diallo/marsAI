@@ -8,6 +8,9 @@ export default function JuryCreateForm({
   error,
   onCancel,
   isOpen,
+  onPhotoFileChange,
+  photoUploading,
+  photoUploadError,
 }) {
   if (!isOpen) return null;
   return (
@@ -35,6 +38,30 @@ export default function JuryCreateForm({
         value={form.role}
         onChange={onChange}
       />
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-medium text-brand-muted">
+          Photo (upload)
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={onPhotoFileChange}
+          className="text-[11px] text-slate-200"
+        />
+        {photoUploading && (
+          <p className="text-[11px] text-brand-muted">
+            Upload de la photo en cours...
+          </p>
+        )}
+        {photoUploadError && (
+          <p className="text-[11px] text-red-300">{photoUploadError}</p>
+        )}
+        {form.photo_url && !photoUploading && (
+          <p className="text-[11px] text-emerald-300 truncate">
+            Photo enregistrée : {form.photo_url}
+          </p>
+        )}
+      </div>
       <FormField
         label="URL de la photo (optionnel)"
         type="url"

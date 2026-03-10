@@ -5,32 +5,18 @@ const {
   getCurrentPhase,
   setCurrentPhase,
 } = require('../Services/FestivalPhaseService');
+const {
+  getPhaseConfig,
+  getAllPhaseConfigs,
+  upsertPhaseConfig,
+} = require('../Services/FestivalPhaseConfigService');
 const { authenticate, authorize } = require('../Middlewares/authMiddleware');
 
-// Configuration simple des dates de fin de phases pour le compte à rebours.
-// Les dates sont en UTC ISO 8601.
-// Tu pourras les déplacer dans un fichier de config ou des variables d'env plus tard.
-const PHASE_CONFIG = {
-  phase1: {
-    label: 'Soumissions des films',
-    // Exemple : fin de la phase 1
-    endsAt: '2026-03-31T23:59:59Z',
-  },
-  phase2: {
-    label: 'Visionnage & sélection',
-    // Exemple : fin de la phase 2
-    endsAt: '2026-04-30T23:59:59Z',
-  },
-  phase3: {
-    label: 'Jour du festival',
-    // Exemple : jour J du festival
-    endsAt: '2026-05-15T20:00:00Z',
-  },
-};
-
-function buildCountdownPayload(phase) {
+async function buildCountdownPayload(phase) {
   const now = new Date();
-  const config = PHASE_CONFIG[phase] || {
+  const config = await getPhaseConfig(phase).catch(() => null);
+
+  const safeConfig = config || {
     label: 'Phase du festival',
     endsAt: null,
   };
@@ -38,8 +24,8 @@ function buildCountdownPayload(phase) {
   let target = null;
   let remaining = null;
 
-  if (config.endsAt) {
-    target = new Date(config.endsAt);
+  if (safeConfig.endsAt) {
+    target = new Date(safeConfig.endsAt);
     const diffMs = Math.max(0, target.getTime() - now.getTime());
     const totalSeconds = Math.floor(diffMs / 1000);
 
@@ -61,7 +47,7 @@ function buildCountdownPayload(phase) {
 
   return {
     phase,
-    label: config.label,
+    label: safeConfig.label,
     serverTime: now.toISOString(),
     target: target ? target.toISOString() : null,
     remaining,
@@ -72,7 +58,7 @@ function buildCountdownPayload(phase) {
 router.get('/', async (req, res, next) => {
   try {
     const phase = await getCurrentPhase();
-    const payload = buildCountdownPayload(phase);
+    const payload = await buildCountdownPayload(phase);
     res.json(payload);
   } catch (err) {
     next(err);
@@ -87,8 +73,41 @@ router.put(
   async (req, res, next) => {
     try {
       const { phase } = req.body;
-      const newPhase = await setCurrentPhase(phase);
+      const newPhase = await setCurrentPhase(phase, {
+        enforceBusinessRules: true,
+      });
       res.json({ phase: newPhase });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// Récupération de la configuration de toutes les phases (super_admin)
+router.get(
+  '/config',
+  authenticate,
+  authorize(['super_admin']),
+  async (req, res, next) => {
+    try {
+      const configs = await getAllPhaseConfigs();
+      res.json(configs);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+// Mise à jour de la configuration d'une phase (super_admin)
+router.put(
+  '/config',
+  authenticate,
+  authorize(['super_admin']),
+  async (req, res, next) => {
+    try {
+      const { phase, label, endsAt } = req.body;
+      const updated = await upsertPhaseConfig({ phase, label, endsAt });
+      res.json(updated);
     } catch (err) {
       next(err);
     }

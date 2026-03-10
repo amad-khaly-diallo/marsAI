@@ -5,11 +5,13 @@ import HeaderLogo from './HeaderLogo';
 import HeaderNavLinks from './HeaderNavLinks';
 import HeaderBurger from './HeaderBurger';
 import HeaderLanguageSwitcher from './HeaderLanguageSwitcher';
+import { useFestivalPhase } from '../../../hooks/useFestivalPhase';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
+  const { phase } = useFestivalPhase();
 
   // Détection du scroll
   useEffect(() => {
@@ -48,12 +50,14 @@ export default function Header() {
         {/* --- BULLE 3 (DROITE) : ACTIONS --- */}
         <div className={`${glassBubbleClass} px-2 py-2 pl-3 gap-3`}>
           {/* Bouton Participer (Desktop) */}
-          <Link
-            to="/participer"
-            className="hidden md:flex h-9 items-center justify-center rounded-full bg-brand-primary px-4 text-xs font-bold uppercase tracking-wide text-brand-bg transition-transform hover:scale-105 hover:bg-white"
-          >
-            {t('nav.participate', 'Participer')}
-          </Link>
+          {(phase === 'phase1' || !phase) && (
+            <Link
+              to="/participer"
+              className="hidden md:flex h-9 items-center justify-center rounded-full bg-brand-primary px-4 text-xs font-bold uppercase tracking-wide text-brand-bg transition-transform hover:scale-105 hover:bg-white"
+            >
+              {t('nav.participate', 'Participer')}
+            </Link>
+          )}
 
           {/* Sélecteur de langue */}
           <HeaderLanguageSwitcher />

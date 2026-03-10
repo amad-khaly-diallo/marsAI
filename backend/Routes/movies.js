@@ -3,6 +3,9 @@ const multer = require('multer');
 const path = require('path');
 const MovieController = require('../Controllers/MovieController');
 const FilmSubmissionController = require('../Controllers/FilmSubmissionController');
+const {
+  allowPhases,
+} = require('../Middlewares/festivalPhaseAccess');
 
 const router = express.Router();
 
@@ -23,11 +26,19 @@ const uploadAssets = multer({
 
 
 // POST /api/movies/submit - Soumission publique (crée uniquement movie)
-router.post('/submit', upload.single('video'), FilmSubmissionController.submit);
+// Autorisée uniquement en phase1 (soumissions ouvertes)
+router.post(
+  '/submit',
+  allowPhases(['phase1']),
+  upload.single('video'),
+  FilmSubmissionController.submit,
+);
 
 // GET /api/movies - Liste tous les films sélectionnés (catalogue)
-router.get('/', MovieController.list);
+// Accès uniquement en phase2 (visionnage & sélection)
+router.get('/', allowPhases(['phase2']), MovieController.list);
 // GET /api/movies/winners - Liste des films gagnants
+// Accessible à partir de la phase2 (phase2 + phase3)
 router.get('/winners', MovieController.listWinners);
 router.post('/', MovieController.create);
 

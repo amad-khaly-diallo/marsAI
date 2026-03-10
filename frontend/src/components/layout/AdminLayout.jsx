@@ -17,6 +17,7 @@ export default function AdminLayout({ children, currentAdmin }) {
     { id: 'videos-distribution', label: 'Répartition vidéos' },
     { id: 'movies', label: 'Films (sélection & gagnants)' },
     { id: 'my-movies', label: 'Mes vidéos' }, // vue personnelle pour un admin simple
+    { id: 'profile', label: 'Profil' },
   ];
 
   let allowedIds;
@@ -26,7 +27,8 @@ export default function AdminLayout({ children, currentAdmin }) {
       .map((s) => s.id)
       .filter((id) => id !== 'my-movies');
   } else {
-    allowedIds = ['my-movies'];
+    // Admin simple : ses vidéos + son profil
+    allowedIds = ['my-movies', 'profile'];
   }
   const baseSections = allSections.filter((s) => allowedIds.includes(s.id));
   const sections = [...baseSections];

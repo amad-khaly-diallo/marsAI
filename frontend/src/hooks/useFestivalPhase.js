@@ -35,19 +35,23 @@ export function useFestivalPhase() {
         body: JSON.stringify({ phase: newPhase }),
       });
       if (!res.ok) {
-        let msg = `HTTP ${res.status}`;
+        let userMessage = 'Impossible de modifier la phase du festival ( il faut entre 40 et 50 films pour la phase 2 ).';
         try {
           const errData = await res.json();
-          if (errData?.message) msg += ` - ${errData.message}`;
-        } catch {}
-        throw new Error(msg);
+          if (errData?.message) {
+            userMessage = errData.message;
+          }
+        } catch {
+          // ignore parse errors, fallback message
+        }
+        throw new Error(userMessage);
       }
       const data = await res.json();
       setPhase(data.phase);
       return data.phase;
     } catch (err) {
       console.error('Erreur mise à jour phase', err);
-      setError(err.message || 'Impossible de modifier la phase');
+      setError(err.message || 'Impossible de modifier la phase du festival ( il faut entre 40 et 50 films pour la phase 2 ).');
       throw err;
     }
   }, []);
