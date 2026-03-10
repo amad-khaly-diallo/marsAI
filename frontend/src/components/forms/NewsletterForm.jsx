@@ -44,12 +44,9 @@ export default function NewsletterForm() {
     >
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-white/60">
-          Newsletter
+          {t('newsletter.title')}
         </p>
-        <p className="mt-1 text-xs text-white/70">
-          Recevoir les infos sur la programmation, les appels à films et les
-          événements autour du festival.
-        </p>
+        <p className="mt-1 text-xs text-white/70">{t('newsletter.subtitle')}</p>
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
@@ -57,7 +54,7 @@ export default function NewsletterForm() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="votre@email"
+          placeholder={t('newsletter.placeholder')}
           required
           maxLength={200}
           className="w-full flex-1 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/70"
@@ -67,7 +64,7 @@ export default function NewsletterForm() {
           disabled={loading}
           className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {loading ? 'Inscription...' : "S'inscrire"}
+          {loading ? t('newsletter.loading') : t('newsletter.button')}
         </button>
       </div>
 

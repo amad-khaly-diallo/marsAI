@@ -15,6 +15,8 @@ i18n
   .init({
     resources,
     fallbackLng: 'fr',
+    keySeparator: false,
+    nsSeparator: false,
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
       caches: ['localStorage'],
