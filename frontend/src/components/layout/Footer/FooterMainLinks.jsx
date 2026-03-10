@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function FooterMainLinks() {
+  const { t } = useTranslation();
   return (
     <div className="space-y-5">
       <div>
@@ -8,8 +10,7 @@ export default function FooterMainLinks() {
           marsAI
         </p>
         <p className="mt-2 max-w-sm text-sm leading-relaxed text-gray-400">
-          Le premier festival mondial dédié aux courts-métrages générés par
-          l&apos;intelligence artificielle.
+          {t('footer.description')}
         </p>
       </div>
 
@@ -18,19 +19,19 @@ export default function FooterMainLinks() {
           to="/"
           className="text-slate-400 transition-colors duration-300 hover:text-blue-400"
         >
-          Accueil
+          {t('nav.home')}
         </Link>
         <Link
           to="/participer"
           className="text-slate-400 transition-colors duration-300 hover:text-blue-400"
         >
-          Participer
+          {t('nav.participate')}
         </Link>
         <Link
           to="/partenaires"
           className="text-slate-400 transition-colors duration-300 hover:text-blue-400"
         >
-          Partenaires
+          {t('nav.partners')}
         </Link>
       </nav>
     </div>

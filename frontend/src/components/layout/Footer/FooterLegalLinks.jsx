@@ -1,31 +1,33 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function FooterLegalLinks() {
+  const { t } = useTranslation();
   return (
     <div className="grid gap-6 text-sm text-gray-400 sm:grid-cols-2 md:text-right">
       <div className="space-y-3">
         <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-          Légal
+          {t('footer.legal_section')}
         </p>
         <div className="flex flex-col gap-2">
           <Link
             to="/cgv"
             className="transition-colors duration-300 hover:text-blue-400"
           >
-            Conditions générales de vente
+            {t('footer.cgv')}
           </Link>
           <Link
             to="/cgu"
             className="transition-colors duration-300 hover:text-blue-400"
           >
-            Conditions générales d&apos;utilisation
+            {t('footer.cgu')}
           </Link>
         </div>
       </div>
 
       <div className="space-y-3">
         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-          Contact & réseaux
+          {t('footer.contact_section')}
         </p>
         <div className="flex flex-col gap-2">
           <a

@@ -1,6 +1,7 @@
 const path = require('path');
 const MovieService = require('../Services/MovieService');
 const { asyncHandler, HttpError } = require('../Utils/http');
+const s3Service = require('../Services/s3Service');
 
 exports.list = asyncHandler(async (req, res) => {
   const data = await MovieService.list();
@@ -15,6 +16,12 @@ exports.listWinners = asyncHandler(async (req, res) => {
 exports.get = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
   const data = await MovieService.getById(id);
+  res.json(data);
+});
+
+exports.getFull = asyncHandler(async (req, res) => {
+  const id = Number(req.params.id);
+  const data = await MovieService.getFullById(id);
   res.json(data);
 });
 
@@ -55,33 +62,32 @@ exports.addAssets = asyncHandler(async (req, res) => {
 
   const payloads = [];
 
-  stillFiles.forEach((file) => {
-    const relPath = path
-      .relative(path.join(__dirname, '..'), file.path)
-      .replace(/\\/g, '/');
-    const ext = (path.extname(file.filename) || '').replace('.', '').toLowerCase() || null;
+  // Upload des captures vers S3
+  for (const file of stillFiles) {
+    const { url } = await s3Service.uploadFile(file, 'assets/stills');
+    const ext =
+      (path.extname(file.originalname) || '').replace('.', '').toLowerCase() ||
+      null;
 
     payloads.push({
       asset_type: 'still',
-      file_path: relPath,
+      file_path: url,
       file_format: ext,
     });
-  });
+  }
 
   if (subtitleFiles[0]) {
     const file = subtitleFiles[0];
-    const ext = (path.extname(file.filename) || '').toLowerCase();
+    const ext = (path.extname(file.originalname) || '').toLowerCase();
     if (ext !== '.srt') {
       throw new HttpError(400, 'Subtitle file must be .srt');
     }
 
-    const relPath = path
-      .relative(path.join(__dirname, '..'), file.path)
-      .replace(/\\/g, '/');
+    const { url } = await s3Service.uploadFile(file, 'assets/subtitles');
 
     payloads.push({
       asset_type: 'subtitle',
-      file_path: relPath,
+      file_path: url,
       file_format: 'srt',
     });
   }

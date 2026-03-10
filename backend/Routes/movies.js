@@ -1,39 +1,24 @@
 const express = require('express');
 const multer = require('multer');
-const fs = require('fs');
 const path = require('path');
 const MovieController = require('../Controllers/MovieController');
 const FilmSubmissionController = require('../Controllers/FilmSubmissionController');
+const {
+  allowPhases,
+} = require('../Middlewares/festivalPhaseAccess');
 
 const router = express.Router();
 
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 1024 * 1024 * 1024,
+    fileSize: 300 * 1024 * 1024, // 300 Mo
   },
 });
 
-// Storage pour les assets (captures & sous-titres)
-const assetsStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = path.join(__dirname, '..', 'uploads', 'assets');
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || '';
-    const base = path
-      .basename(file.originalname, ext)
-      .replace(/\s+/g, '_')
-      .toLowerCase();
-    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, `${base}-${unique}${ext}`);
-  },
-});
-
+// Storage mémoire pour les assets (captures & sous-titres) avant upload vers S3
 const uploadAssets = multer({
-  storage: assetsStorage,
+  storage: multer.memoryStorage(),
   limits: {
     fileSize: 50 * 1024 * 1024, // 50 Mo par fichier, largement suffisant pour images + .srt
   },
@@ -41,16 +26,27 @@ const uploadAssets = multer({
 
 
 // POST /api/movies/submit - Soumission publique (crée uniquement movie)
-router.post('/submit', upload.single('video'), FilmSubmissionController.submit);
+// Autorisée uniquement en phase1 (soumissions ouvertes)
+router.post(
+  '/submit',
+  allowPhases(['phase1']),
+  upload.single('video'),
+  FilmSubmissionController.submit,
+);
 
 // GET /api/movies - Liste tous les films sélectionnés (catalogue)
-router.get('/', MovieController.list);
+// Accès uniquement en phase2 (visionnage & sélection)
+router.get('/', allowPhases(['phase2']), MovieController.list);
 // GET /api/movies/winners - Liste des films gagnants
+// Accessible à partir de la phase2 (phase2 + phase3)
 router.get('/winners', MovieController.listWinners);
 router.post('/', MovieController.create);
 
-// GET /api/movies/:id - Détails d'un film
+// GET /api/movies/:id - Détails d'un film (vue "simple" catalogue)
 router.get('/:id', MovieController.get);
+
+// GET /api/movies/:id/full - Détails complets (film + assets + tags + collaborateurs + IA)
+router.get('/:id/full', MovieController.getFull);
 
 // ============================================
 // Routes nested (ressources liées)

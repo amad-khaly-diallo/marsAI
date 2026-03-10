@@ -3,6 +3,7 @@ import { ProjectorButton } from './ProjectorButton';
 import { StatsPanel } from './StatsPanel';
 import { useAudioContext } from '../../../hooks/useAudioContext';
 import { useTranslation } from 'react-i18next';
+import { getLocalized } from '../../../utils/sanity';
 import { heroAnimationStyles } from '../../sections/heroAnimations';
 
 // Jeux de données locaux (spécifiques au projecteur)
@@ -243,18 +244,62 @@ const FILM_GENRES = [
   },
 ];
 
-export function StatsSection() {
-  const { t } = useTranslation();
+export function StatsSection({ phase2 }) {
+  const { t, i18n } = useTranslation();
   const [statsRevealed, setStatsRevealed] = React.useState(false);
   const [statsFlash, setStatsFlash] = React.useState(false);
   const [selectedGenreIndex, setSelectedGenreIndex] = React.useState(0);
   const [isRotating, setIsRotating] = React.useState(false);
+  const [manuallyTurnedOff, setManuallyTurnedOff] = React.useState(false);
+  const sectionRef = React.useRef(null);
   const playCameraSound = useAudioContext();
+
+  // Effet pour allumer/éteindre automatiquement la caméra au scroll
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !manuallyTurnedOff && !statsRevealed) {
+            // Allumer la caméra quand la section devient visible
+            setStatsRevealed(true);
+            playCameraSound();
+            setStatsFlash(true);
+            window.setTimeout(() => setStatsFlash(false), 1200);
+          } else if (!entry.isIntersecting && statsRevealed && !manuallyTurnedOff) {
+            // Éteindre la caméra quand on scroll vers le haut (section non visible)
+            setStatsRevealed(false);
+          }
+        });
+      },
+      {
+        threshold: 0.3, // S'active quand 30% de la section est visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [statsRevealed, manuallyTurnedOff, playCameraSound]);
 
   const handleStatsReveal = () => {
     const nextState = !statsRevealed;
     setStatsRevealed(nextState);
-    if (nextState) playCameraSound();
+    
+    if (nextState) {
+      // Si on allume, réinitialiser le flag manuel
+      setManuallyTurnedOff(false);
+      playCameraSound();
+    } else {
+      // Si on éteint, marquer comme éteint manuellement
+      setManuallyTurnedOff(true);
+    }
+    
     setStatsFlash(true);
     window.setTimeout(() => setStatsFlash(false), 1200);
   };
@@ -265,8 +310,16 @@ export function StatsSection() {
   const filteredStats = currentGenre.stats;
   const filteredAnalytics = currentGenre.analytics;
 
+  const badgeLabel = phase2?.projectionsBadge || 'Résultats & Projections';
+  const title =
+    getLocalized(phase2?.projectionsTitle, i18n) ||
+    t('home.stats.title');
+  const description =
+    getLocalized(phase2?.projectionsSubtitle, i18n) ||
+    t('home.stats.desc');
+
   return (
-    <section className="px-4 pb-12">
+    <section ref={sectionRef} className="px-4 pb-12">
       <style>{heroAnimationStyles}</style>
       <div className="mx-auto max-w-6xl">
         {/* Header */}
@@ -274,14 +327,14 @@ export function StatsSection() {
           <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
             <span className="text-xs font-semibold text-white/80">
-              Résultats & Projections
+              {badgeLabel}
             </span>
           </div>
           <h2 className="mt-3 text-2xl font-extrabold tracking-tight md:text-3xl">
-            {t('home.stats.title')}
+            {title}
           </h2>
           <p className="mt-2 max-w-2xl text-xs leading-5 text-white/70">
-            {t('home.stats.desc')}
+            {description}
           </p>
         </div>
 

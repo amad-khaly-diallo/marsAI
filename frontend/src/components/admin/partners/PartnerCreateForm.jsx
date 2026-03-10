@@ -8,6 +8,9 @@ export default function PartnerCreateForm({
   error,
   onCancel,
   isOpen,
+  onLogoFileChange,
+  logoUploading,
+  logoUploadError,
 }) {
   if (!isOpen) return null;
   return (
@@ -29,6 +32,30 @@ export default function PartnerCreateForm({
         value={form.website_url}
         onChange={onChange}
       />
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-medium text-brand-muted">
+          Logo (upload)
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={onLogoFileChange}
+          className="text-[11px] text-slate-200"
+        />
+        {logoUploading && (
+          <p className="text-[11px] text-brand-muted">
+            Upload du logo en cours...
+          </p>
+        )}
+        {logoUploadError && (
+          <p className="text-[11px] text-red-300">{logoUploadError}</p>
+        )}
+        {form.logo_url && !logoUploading && (
+          <p className="text-[11px] text-emerald-300 truncate">
+            Logo enregistré : {form.logo_url}
+          </p>
+        )}
+      </div>
       <FormField
         label="URL du logo (optionnel)"
         type="url"

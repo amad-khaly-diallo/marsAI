@@ -108,11 +108,14 @@ export default function MovieForm({
           </label>
           <input
             type="file"
-            accept="video/mp4,video/webm,video/quicktime,video/*"
+            accept="video/mp4"
+            maxFileSize={300 * 1024 * 1024} //
             required={videoRequired}
-            onChange={(e) =>
-              onVideoChange && onVideoChange(e.target.files?.[0] || null)
-            }
+            onChange={(e) => {
+              const file = e.target.files?.[0] || null;
+              if (!file) return;
+              onVideoChange && onVideoChange(file);
+            }}
             className="block w-full text-xs text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-brand-accent"
           />
           <p className="mt-1 text-[11px] text-brand-muted">
