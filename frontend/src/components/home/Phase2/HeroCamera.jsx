@@ -11,6 +11,20 @@ import sdAction from '../../../assets/images/sd_action.png';
 import sdDrama from '../../../assets/images/sd_drama.png';
 import sdComedy from '../../../assets/images/sd_comedy.png';
 
+// Hook pour détecter le mode mobile
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  return isMobile;
+};
+
 // Données des films
 const DEMO_MOVIES = [
   {
@@ -301,6 +315,7 @@ function normalizeApiMovie(m) {
 }
 
 export default function HeroCamera({ moviesFromApi }) {
+  const isMobile = useIsMobile();
   const [cameraOn, setCameraOn] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [selectedFilmIndex, setSelectedFilmIndex] = useState(0);
@@ -343,6 +358,18 @@ export default function HeroCamera({ moviesFromApi }) {
       setSelectedMovie(null);
     }
   }, [cameraOn]);
+
+  useEffect(() => {
+    if (!isMobile || cameraOn) return;
+
+    setCameraOn(true);
+    setSelectedGenre(normalizedApiMovies.length > 0 ? { name: 'Tous' } : GENRES[0]);
+    setSelectedFilmIndex(0);
+    setSelectedMovie(null);
+    setPowerOnAnim(false);
+    setIsBooting(false);
+    setShowClap(false);
+  }, [isMobile, cameraOn, normalizedApiMovies]);
 
   const toggleCamera = () => {
     setCameraOn((p) => {
@@ -438,18 +465,245 @@ export default function HeroCamera({ moviesFromApi }) {
     <div className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-12">
       <style>{heroStyles + heroAnimationStyles}</style>
 
-      <div className="relative flex items-center justify-center">
-        <div className="relative flex items-center gap-0 flex-wrap justify-center">
-          {/* TV */}
-          <div className="relative">
-            <div
-              className="relative"
-              style={{
-                width: 'clamp(720px, 70vw, 1000px)',
-                // Hauteur augmentée pour laisser respirer 2 lignes de films
-                height: 'clamp(520px, 55vw, 720px)',
-              }}
-            >
+      <div className="relative flex flex-col items-center justify-center w-full px-3">
+        <div className={`relative flex gap-0 flex-wrap justify-center w-full ${isMobile ? 'flex-col items-center' : 'items-center'}`}>
+          {/* TV Desktop / iPhone Mobile */}
+          <div className={`relative ${isMobile ? 'w-full flex justify-center' : ''}`}>
+            {isMobile ? (
+              /* iPhone pour mobile */
+              <div
+                className="relative mx-auto"
+                style={{
+                  width: 'clamp(280px, 84vw, 370px)',
+                  height: 'clamp(560px, 118vw, 760px)',
+                }}
+              >
+                <div
+                  className="absolute inset-0 rounded-[56px] bg-gradient-to-b from-slate-300 via-slate-400 to-slate-600 border-[10px] border-slate-500"
+                  style={{
+                    boxShadow:
+                      '0 20px 45px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.55), inset 0 0 0 5px rgba(0,0,0,0.12)',
+                  }}
+                >
+                  {/* iPhone classique: écouteur + caméra */}
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
+                    <div className="h-1.5 w-16 rounded-full bg-slate-700/80 border border-white/20" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-slate-800 border border-white/20" />
+                  </div>
+
+                  {/* Écran iPhone */}
+                  <div
+                    className="relative mx-auto mt-8 h-[calc(100%-5.4rem)] w-[calc(100%-1.4rem)] rounded-[42px] overflow-hidden bg-black"
+                    style={{ boxShadow: 'inset 0 0 30px rgba(0,0,0,0.95)' }}
+                  >
+                    <div className="absolute inset-0 pointer-events-none">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/8 via-transparent to-transparent" />
+                    </div>
+                    {cameraOn && powerOnAnim && (
+                      <div className="absolute inset-0 pointer-events-none z-20">
+                        <div
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 bg-white/90"
+                          style={{ animation: 'expand 0.55s ease-out forwards' }}
+                        />
+                        <div className="absolute inset-0 bg-white/5 animate-pulse" />
+                      </div>
+                    )}
+                    {!cameraOn && (
+                      <div className="relative w-full h-full bg-gradient-to-br from-gray-900/60 to-black flex items-center justify-center">
+                        <div className="text-gray-700/30 text-4xl font-bold">
+                          MARS.AI
+                        </div>
+                      </div>
+                    )}
+                    
+                    {cameraOn && isBooting && (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-black px-4">
+                        {showClap ? (
+                          <div className="relative w-32 h-24 scale-75">
+                            <div className="absolute -inset-2 rounded-2xl bg-cyan-500/10 blur-xl" />
+                            <div
+                              className="absolute left-1/2 top-0 h-7 w-32 -translate-x-1/2 rounded-t-xl bg-gradient-to-r from-slate-200 to-slate-400 origin-bottom animate-clap"
+                              style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.45)' }}
+                            >
+                              <div className="absolute inset-0 rounded-t-xl clap-stripes" />
+                            </div>
+                            <div className="absolute left-1/2 top-5 h-2 w-10 -translate-x-1/2 rounded-full bg-black/70" />
+                            <div
+                              className="absolute inset-0 rounded-xl border border-white/15 bg-gradient-to-br from-slate-800 via-slate-900 to-black"
+                              style={{ boxShadow: 'inset 0 0 20px rgba(0,0,0,0.7)' }}
+                            >
+                              <div className="absolute inset-0 rounded-xl clap-grid" />
+                              <div className="absolute top-2 left-3 text-[9px] font-bold text-white/80 tracking-widest">
+                                MARS.AI
+                              </div>
+                              <div className="absolute bottom-2 left-3 text-[8px] text-white/55">
+                                TAKE 01
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="text-4xl font-black text-white/10 tracking-[0.3em] select-none">
+                              MARS.AI
+                            </div>
+                            <div className="mt-3 h-1 w-40 rounded-full bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 opacity-70" />
+                            <div className="mt-4 text-xs text-white/40">
+                              Démarrage…
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                    
+                    {cameraOn && !isBooting && selectedMovie && (
+                      <div className="w-full h-full flex flex-col p-4 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex-1 min-w-0 mr-2">
+                            <h3 className="text-lg font-bold text-white truncate">
+                              {selectedMovie.title}
+                            </h3>
+                            <p className="text-xs text-cyan-400/70 truncate">
+                              {selectedMovie.filmmaker} • {selectedMovie.duration}s
+                            </p>
+                          </div>
+                          <button
+                            onClick={closeMovie}
+                            className="flex-shrink-0 px-3 py-1.5 rounded-lg bg-white/10 text-white text-xs hover:bg-white/20"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30 min-h-0">
+                          {selectedMovie.video_url ? (
+                            <video
+                              className="w-full h-full bg-black object-contain"
+                              src={resolveMediaUrl(selectedMovie.video_url)}
+                              controls
+                              autoPlay
+                            />
+                          ) : selectedMovie.youtube_url ? (
+                            <iframe
+                              src={getYouTubeEmbed(selectedMovie.youtube_url) + '?autoplay=1'}
+                              className="w-full h-full bg-black"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={selectedMovie.title}
+                            />
+                          ) : (
+                            <video
+                              className="w-full h-full bg-black object-contain"
+                              src={selectedMovie.video}
+                              controls
+                              autoPlay
+                            />
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {cameraOn && !isBooting && selectedGenre && !selectedMovie && (
+                      <div className="w-full h-full flex flex-col p-4 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628] overflow-y-auto">
+                        <div className="flex items-center justify-between mb-3 flex-shrink-0">
+                          <div>
+                            <h2 className="text-xl font-bold text-white">MarsAI</h2>
+                            <p className="text-[10px] text-cyan-400/60">Festival IA</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs text-gray-400">Sélection</p>
+                          </div>
+                        </div>
+                        
+                        {(() => {
+                          const visibleCount = Math.min(totalMovies, MAX_VISIBLE_MOVIES);
+                          if (!visibleCount) return null;
+                          
+                          const pageStart = currentPage * MAX_VISIBLE_MOVIES;
+                          const pageEnd = Math.min(pageStart + MAX_VISIBLE_MOVIES, totalMovies);
+                          const pageMovies = movies.slice(pageStart, pageEnd);
+                          
+                          return (
+                            <>
+                              <div className="grid grid-cols-2 gap-3 mb-3">
+                                {pageMovies.map((movie, idx) => {
+                                  const globalIndex = pageStart + idx;
+                                  const isSelected = globalIndex === selectedFilmIndex;
+                                  return (
+                                    <div
+                                      key={movie.id}
+                                      className={`relative rounded-lg overflow-hidden border-2 transition-all cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 ${
+                                        isSelected
+                                          ? 'border-cyan-400 shadow-lg shadow-cyan-400/40'
+                                          : 'border-cyan-400/20 opacity-80'
+                                      }`}
+                                      style={{ aspectRatio: '2/3' }}
+                                      role="button"
+                                      tabIndex={0}
+                                      aria-label={`Sélectionner ${movie.title}`}
+                                      onClick={() => setSelectedFilmIndex(globalIndex)}
+                                      onDoubleClick={() => {
+                                        setSelectedFilmIndex(globalIndex);
+                                        setSelectedMovie(movie);
+                                      }}
+                                      onKeyDown={(event) => {
+                                        if (event.key === 'Enter' || event.key === ' ') {
+                                          event.preventDefault();
+                                          setSelectedFilmIndex(globalIndex);
+                                        }
+                                      }}
+                                    >
+                                      <img
+                                        src={movie.thumbnail}
+                                        alt={movie.title}
+                                        className="w-full h-full object-cover"
+                                      />
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                                      <div className="absolute bottom-1 left-1 right-1 text-[10px] font-bold text-white truncate">
+                                        {movie.title}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                              {totalPages > 1 && (
+                                <div className="text-[10px] text-cyan-200 text-center flex-shrink-0">
+                                  Page {currentPage + 1} / {totalPages}
+                                </div>
+                              )}
+                              <div className="mt-3 text-center flex-shrink-0">
+                                <button
+                                  onClick={playFilm}
+                                  className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm active:scale-95"
+                                >
+                                  ▶ Lancer
+                                </button>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Bouton Home iPhone classique */}
+                  <button
+                    type="button"
+                    aria-label="Bouton principal iPhone"
+                    className="absolute bottom-2 left-1/2 z-30 h-10 w-10 -translate-x-1/2 rounded-full border border-white/40 bg-slate-100/90 shadow-inner shadow-black/20"
+                    onClick={() => setSelectedMovie(null)}
+                  >
+                    <span className="sr-only">Accueil</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* TV pour desktop */
+              <div
+                className="relative"
+                style={{
+                  width: 'clamp(720px, 70vw, 1000px)',
+                  height: 'clamp(520px, 55vw, 720px)',
+                }}
+              >
               <div
                 className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-900 via-black to-slate-950"
                 style={{
@@ -697,11 +951,12 @@ export default function HeroCamera({ moviesFromApi }) {
                 </div>
               </div>
             </div>
+            )}
           </div>
 
-          {/* Télécommande */}
+          {/* Télécommande - Cachée sur mobile car les controls sont directement sur l'iPhone */}
           <div
-            className="relative"
+            className={`relative ${isMobile ? 'hidden' : 'block'}`}
             style={{
               width: 'clamp(180px, 20vw, 240px)',
               height: 'clamp(420px, 45vw, 600px)',
@@ -828,6 +1083,80 @@ export default function HeroCamera({ moviesFromApi }) {
             </div>
           </div>
         </div>
+        
+        {/* Contrôles mobiles pour iPhone */}
+        {isMobile && (
+          <div className="mt-6 flex flex-col gap-4 items-center w-full max-w-sm mx-auto px-4">
+            <p className="text-[11px] text-white/70 text-center rounded-lg border border-white/10 bg-white/5 px-3 py-2">
+              Interface tactile iPhone active · Touchez une affiche puis LIRE
+            </p>
+            
+            {cameraOn && normalizedApiMovies.length === 0 && (
+              <div className="w-full" role="group" aria-label="Choix du genre de films">
+                <p className="text-xs text-gray-300 uppercase mb-2 text-center tracking-wider">
+                  Genres de films
+                </p>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    onClick={() => setSelectedGenre(GENRES[0])}
+                    aria-pressed={selectedGenre?.name === 'Tous'}
+                    aria-label="Genre Tous"
+                    className={`min-h-11 py-2 px-2 rounded-lg text-xs font-semibold transition-all flex flex-col items-center justify-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-300/80 ${
+                      selectedGenre?.name === 'Tous'
+                        ? 'bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white shadow-[0_0_16px_rgba(168,85,247,0.4)]'
+                        : 'bg-gray-800/50 text-gray-300'
+                    }`}
+                  >
+                    <span className="text-lg">{GENRES[0].icon}</span>
+                    <span className="text-[10px]">Tous</span>
+                  </button>
+                  {GENRES.slice(1).map((genre) => (
+                    <button
+                      key={genre.name}
+                      onClick={() => setSelectedGenre(genre)}
+                      aria-pressed={selectedGenre?.name === genre.name}
+                      aria-label={`Genre ${genre.name}`}
+                      className={`min-h-11 py-2 px-2 rounded-lg text-xs font-semibold transition-all flex flex-col items-center justify-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 ${
+                        selectedGenre?.name === genre.name
+                          ? 'bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-[0_0_16px_rgba(34,211,238,0.4)]'
+                          : 'bg-gray-800/50 text-gray-300'
+                      }`}
+                    >
+                      <span className="text-lg">{genre.icon}</span>
+                      <span className="text-[10px]">{genre.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {cameraOn && selectedGenre && !selectedMovie && (
+              <div className="w-full flex items-center justify-center gap-3">
+                <button
+                  onClick={prevFilm}
+                  aria-label="Film précédent"
+                  className="min-h-11 min-w-11 p-3 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80"
+                >
+                  ◀
+                </button>
+                <button
+                  onClick={playFilm}
+                  aria-label="Lire le film sélectionné"
+                  className="min-h-11 px-6 py-3 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white font-bold shadow-[0_0_16px_rgba(34,197,94,0.4)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-300/80"
+                >
+                  ▶ LIRE
+                </button>
+                <button
+                  onClick={nextFilm}
+                  aria-label="Film suivant"
+                  className="min-h-11 min-w-11 p-3 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 text-white shadow-lg active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80"
+                >
+                  ▶
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
