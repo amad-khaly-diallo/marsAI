@@ -11,11 +11,26 @@ import {
   VideosDistribution,
   MyMoviesGallery,
   VideosGallery,
+  AdminProfile,
 } from '../components/admin';
 import { useAdmin } from '../contexts';
+import { useAdminIdleLogout } from '../hooks/useAdminIdleLogout';
 
 function AdminContent() {
-  const { admin, checking, isAuthenticated, error, reload } = useAdmin();
+  const { admin, checking, isAuthenticated, error, reload, logout } = useAdmin();
+
+  // Déconnexion automatique après 1h sans activité dans l'espace admin
+  useAdminIdleLogout({
+    timeoutMs: 60 * 60 * 1000,
+    onIdle: () => {
+      // On appelle le logout global et on peut afficher un message si besoin
+      // (alert simple côté client pour le moment)
+      alert(
+        "Vous avez été déconnecté de l'espace admin après 1h sans activité.",
+      );
+      logout();
+    },
+  });
 
   const renderSection = (section) => {
     switch (section) {
@@ -37,6 +52,8 @@ function AdminContent() {
         return <GreenFlagGallery />;
       case 'videos-distribution':
         return <VideosDistribution currentAdmin={admin} />;
+      case 'profile':
+        return <AdminProfile />;
       case 'dashboard':
       default:
         return <DashboardOverview />;

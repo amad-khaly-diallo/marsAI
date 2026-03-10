@@ -7,6 +7,18 @@ exports.me = asyncHandler(async (req, res) => {
   res.json(data);
 });
 
+exports.updateMeProfile = asyncHandler(async (req, res) => {
+  const id = req.user?.id;
+  const data = await AdminService.updateProfile(id, req.body || {});
+  res.json(data);
+});
+
+exports.changePassword = asyncHandler(async (req, res) => {
+  const id = req.user?.id;
+  await AdminService.changePassword(id, req.body || {});
+  res.status(204).send();
+});
+
 exports.list = asyncHandler(async (req, res) => {
   const data = await AdminService.list();
   res.json(data);
@@ -29,7 +41,8 @@ exports.logAdmin = asyncHandler(async (req, res) => {
   res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 60 * 60 * 1000, // 1h
+    // Durée max de session côté serveur (72h). L'inactivité (1h) est gérée côté frontend.
+    maxAge: 72 * 60 * 60 * 1000,
     sameSite: 'lax',
   });
 
