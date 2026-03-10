@@ -28,14 +28,30 @@ async function list({ status, statuses, search, currentUser }) {
   const whereClause = where.length ? `WHERE ${where.join(' AND ')}` : '';
 
   const isBasicAdmin = currentUser && currentUser.role === 'admin';
+  const hasUser =
+    currentUser &&
+    (currentUser.role === 'admin' || currentUser.role === 'super_admin');
 
-  let joinCurrentAdmin = '';
+  const joins = [];
+
   if (isBasicAdmin) {
     // L'admin simple ne voit que les films qui lui sont assignés
-    joinCurrentAdmin =
-      'INNER JOIN admin_movie_assignment ama ON ama.movie_id = m.id AND ama.admin_id = :current_admin_id';
+    joins.push(
+      'INNER JOIN admin_movie_assignment ama ON ama.movie_id = m.id AND ama.admin_id = :current_admin_id',
+    );
     params.current_admin_id = currentUser.id;
   }
+
+  if (hasUser) {
+    if (!params.current_admin_id) {
+      params.current_admin_id = currentUser.id;
+    }
+    joins.push(
+      'LEFT JOIN admin_movie_assignment self_ama ON self_ama.movie_id = m.id AND self_ama.admin_id = :current_admin_id',
+    );
+  }
+
+  const joinCurrentAdmin = joins.join('\n     ');
 
   const rows = await query(
     `SELECT
@@ -48,8 +64,8 @@ async function list({ status, statuses, search, currentUser }) {
         w.ranking AS winner_ranking,
         w.category AS winner_category,
         ${
-          isBasicAdmin
-            ? 'ama.rating AS my_rating, ama.comment AS my_comment, ama.flag AS my_flag'
+          hasUser
+            ? 'self_ama.rating AS my_rating, self_ama.comment AS my_comment, self_ama.flag AS my_flag'
             : 'NULL AS my_rating, NULL AS my_comment, NULL AS my_flag'
         }
      FROM movie m
@@ -75,6 +91,7 @@ async function list({ status, statuses, search, currentUser }) {
     synopsis_original: row.synopsis_original,
     synopsis_english: row.synopsis_english,
     youtube_url: row.youtube_url,
+    video_url: row.video_url,
     status: row.status,
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
@@ -98,12 +115,14 @@ async function list({ status, statuses, search, currentUser }) {
 async function getById(id, currentUser) {
   const params = { id };
 
-  const isBasicAdmin = currentUser && currentUser.role === 'admin';
+  const hasUser =
+    currentUser &&
+    (currentUser.role === 'admin' || currentUser.role === 'super_admin');
 
   let joinCurrentAdmin = '';
-  if (isBasicAdmin) {
+  if (hasUser) {
     joinCurrentAdmin =
-      'LEFT JOIN admin_movie_assignment ama ON ama.movie_id = m.id AND ama.admin_id = :current_admin_id';
+      'LEFT JOIN admin_movie_assignment self_ama ON self_ama.movie_id = m.id AND self_ama.admin_id = :current_admin_id';
     params.current_admin_id = currentUser.id;
   }
 
@@ -117,8 +136,8 @@ async function getById(id, currentUser) {
         w.ranking AS winner_ranking,
         w.category AS winner_category,
         ${
-          isBasicAdmin
-            ? 'ama.rating AS my_rating, ama.comment AS my_comment, ama.flag AS my_flag'
+          hasUser
+            ? 'self_ama.rating AS my_rating, self_ama.comment AS my_comment, self_ama.flag AS my_flag'
             : 'NULL AS my_rating, NULL AS my_comment, NULL AS my_flag'
         }
      FROM movie m
@@ -141,6 +160,7 @@ async function getById(id, currentUser) {
     synopsis_original: row.synopsis_original,
     synopsis_english: row.synopsis_english,
     youtube_url: row.youtube_url,
+    video_url: row.video_url,
     status: row.status,
     decision_reason: row.decision_reason,
     decision_at: row.decision_at,
@@ -314,8 +334,8 @@ async function updateFlag(movieId, { flag }, currentUser) {
     throw new HttpError(401, 'User not authenticated');
   }
 
-  if (currentUser.role !== 'admin') {
-    throw new HttpError(403, 'Only basic admins can manage flags');
+  if (currentUser.role !== 'admin' && currentUser.role !== 'super_admin') {
+    throw new HttpError(403, 'Only admins can manage flags');
   }
 
   const adminId = currentUser.id;
@@ -332,14 +352,15 @@ async function updateFlag(movieId, { flag }, currentUser) {
   }
 
   await query(
-    `UPDATE admin_movie_assignment
-     SET flag = :flag
-     WHERE admin_id = :admin_id AND movie_id = :movie_id`,
+    `INSERT INTO admin_movie_assignment (admin_id, movie_id, flag)
+     VALUES (:admin_id, :movie_id, :flag)
+     ON DUPLICATE KEY UPDATE
+       flag = VALUES(flag)`,
     {
       flag: normalizedFlag,
       admin_id: adminId,
       movie_id: movieId,
-    }
+    },
   );
 
   return {
@@ -363,6 +384,7 @@ async function listGreenFlaggedByAdmin() {
        m.language,
        m.synopsis_original,
        m.synopsis_english,
+       m.video_url,
        m.youtube_url,
        m.status,
        f.id AS filmmaker_id,
@@ -402,6 +424,7 @@ async function listGreenFlaggedByAdmin() {
       language: row.language,
       synopsis_original: row.synopsis_original,
       synopsis_english: row.synopsis_english,
+      video_url: row.video_url,
       youtube_url: row.youtube_url,
       status: row.status,
       rating: typeof row.rating === 'number' ? row.rating : null,

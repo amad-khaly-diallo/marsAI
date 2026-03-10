@@ -5,11 +5,14 @@ import { MAP_MODES } from '../../../constants/homeConstants';
 
 /**
  * Phase 1 – Carte : lieu du festival (Marseille).
- * Bascule GTA / Carte réelle (OpenStreetMap).
+ * Texte configurable via homePhase1 (map*).
  */
 export default function Phase1Map({
+  badge = 'Lieu du festival',
   title = 'Où nous trouver',
   subtitle = 'La Plateforme (ex Dock des Suds) — 4000 m² au centre de Marseille.',
+  captionGta = 'Vue style radar',
+  captionReal = 'Marseille, France',
   mapHeight = '380px',
 }) {
   const [mapMode, setMapMode] = useState(MAP_MODES.REAL);
@@ -22,7 +25,7 @@ export default function Phase1Map({
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 mb-2">
               <MapPin className="h-4 w-4 text-brand-primary" />
               <span className="text-[11px] font-semibold uppercase tracking-wider text-white/70">
-                Lieu du festival
+                {badge}
               </span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white">
@@ -79,7 +82,7 @@ export default function Phase1Map({
           )}
         </div>
         <p className="mt-3 text-center text-[11px] text-slate-500 uppercase tracking-wider">
-          {mapMode === MAP_MODES.GTA ? 'Vue style radar' : 'Marseille, France'}
+          {mapMode === MAP_MODES.GTA ? captionGta : captionReal}
         </p>
       </div>
     </section>

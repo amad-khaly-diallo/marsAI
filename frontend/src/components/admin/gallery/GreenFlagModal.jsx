@@ -1,4 +1,5 @@
 import { getYouTubeEmbed } from '../../../utils/youtube';
+import { resolveMediaUrl } from '../../../utils/media';
 
 export default function GreenFlagModal({
   favorite,
@@ -10,9 +11,7 @@ export default function GreenFlagModal({
   const { movie, admin } = favorite;
   const embedUrl = getYouTubeEmbed(movie?.youtube_url);
   const hasLocalVideo = !!movie?.video_url;
-  const localSrc = hasLocalVideo
-    ? `http://localhost:5000/${movie.video_url}`
-    : null;
+  const localSrc = hasLocalVideo ? resolveMediaUrl(movie.video_url) : null;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/75 px-3">

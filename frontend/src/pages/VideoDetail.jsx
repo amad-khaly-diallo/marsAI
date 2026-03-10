@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMovieById } from '../services/api';
+import { getMovieFullById } from '../services/api';
+import { resolveMediaUrl } from '../utils/media';
 
 export default function VideoDetail() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const [assets, setAssets] = useState([]);
+  const [collaborators, setCollaborators] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [aiDeclaration, setAiDeclaration] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -13,8 +18,14 @@ export default function VideoDetail() {
         setLoading(true);
         // Simulation d'un délai réseau pour l'effet (optionnel)
         // await new Promise(r => setTimeout(r, 800));
-        const data = await getMovieById(id);
-        setMovie(data);
+        const data = await getMovieFullById(id);
+        setMovie(data.movie);
+        setAssets(Array.isArray(data.assets) ? data.assets : []);
+        setCollaborators(
+          Array.isArray(data.collaborators) ? data.collaborators : [],
+        );
+        setTags(Array.isArray(data.tags) ? data.tags : []);
+        setAiDeclaration(data.ai_declaration || null);
       } catch (error) {
         console.error('Erreur chargement film:', error);
       } finally {
@@ -35,11 +46,9 @@ export default function VideoDetail() {
       (movie.youtube_url.includes('youtube') ||
         movie.youtube_url.includes('youtu.be'));
 
-    // Cas 2 : fichier vidéo hébergé sur le backend
+    // Cas 2 : fichier vidéo hébergé (backend historique ou S3)
     const hasFileOnDisk = !!movie.video_url;
-    const fileSrc = hasFileOnDisk
-      ? `http://localhost:5000/${movie.video_url}`
-      : null;
+    const fileSrc = hasFileOnDisk ? resolveMediaUrl(movie.video_url) : null;
 
     // Wrapper avec effet de lueur (Glow)
     return (
@@ -111,9 +120,9 @@ export default function VideoDetail() {
   return (
     <div className="min-h-screen bg-black text-white selection:bg-blue-500/30 font-sans overflow-x-hidden">
       <div className="max-w-[1600px] mx-auto px-6 py-24 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* COLONNE GAUCHE */}
-          <div className="lg:col-span-5 flex flex-col justify-center order-2 lg:order-1 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+          {/* COLONNE GAUCHE : infos film + relations */}
+          <div className="lg:col-span-5 flex flex-col order-2 lg:order-1 relative z-10">
             <div
               className="w-12 h-[2px] bg-blue-500 mb-8 opacity-0 animate-fadeInLeft"
               style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
@@ -139,12 +148,142 @@ export default function VideoDetail() {
             </div>
 
             <p
-              className="text-lg leading-relaxed text-gray-300 max-w-lg mb-12 opacity-0 animate-fadeInUp"
+              className="text-lg leading-relaxed text-gray-300 max-w-lg mb-6 opacity-0 animate-fadeInUp"
               style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
             >
               {movie.synopsis_original ||
                 'Aucune description disponible pour cette œuvre.'}
             </p>
+
+            {/* Tags */}
+            {tags.length > 0 && (
+              <div className="mb-6 opacity-0 animate-fadeInUp"
+                   style={{ animationDelay: '0.45s', animationFillMode: 'forwards' }}>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                  Tags
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-gray-100 border border-white/10"
+                    >
+                      {tag.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Collaborateurs */}
+            {collaborators.length > 0 && (
+              <div className="mb-6 opacity-0 animate-fadeInUp"
+                   style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                  Collaborateurs
+                </h2>
+                <ul className="space-y-1 text-sm text-gray-200">
+                  {collaborators.map((c) => (
+                    <li key={c.id}>
+                      <span className="font-semibold">
+                        {c.first_name} {c.last_name}
+                      </span>
+                      {c.role ? ` — ${c.role}` : ''}
+                      {c.email ? (
+                        <span className="text-gray-400"> ({c.email})</span>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Déclaration IA */}
+            {aiDeclaration && (
+              <div className="mb-6 opacity-0 animate-fadeInUp"
+                   style={{ animationDelay: '0.55s', animationFillMode: 'forwards' }}>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                  Déclaration IA
+                </h2>
+                <dl className="space-y-1 text-sm text-gray-200">
+                  <div>
+                    <dt className="text-gray-400 text-xs uppercase">
+                      Type d’œuvre
+                    </dt>
+                    <dd>{aiDeclaration.artwork_type}</dd>
+                  </div>
+                  {aiDeclaration.tech_stack && (
+                    <div>
+                      <dt className="text-gray-400 text-xs uppercase">
+                        Stack technique
+                      </dt>
+                      <dd>{aiDeclaration.tech_stack}</dd>
+                    </div>
+                  )}
+                  {aiDeclaration.methodology && (
+                    <div>
+                      <dt className="text-gray-400 text-xs uppercase">
+                        Méthodologie
+                      </dt>
+                      <dd>{aiDeclaration.methodology}</dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            )}
+
+            {/* Assets */}
+            {assets.length > 0 && (
+              <div className="mb-6 opacity-0 animate-fadeInUp"
+                   style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                  Assets
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {assets.map((asset) => {
+                    const isImage = asset.asset_type === 'still';
+                    const isSubtitle = asset.asset_type === 'subtitle';
+                    return (
+                      <div
+                        key={asset.id}
+                        className="rounded-lg border border-white/10 bg-white/5 p-2 text-xs text-gray-100 max-w-[180px]"
+                      >
+                        <div className="font-semibold mb-1 capitalize">
+                          {asset.asset_type}
+                        </div>
+                        {isImage && (
+                          <img
+                            src={asset.file_path}
+                            alt={`${movie.original_title} still`}
+                            className="w-full h-auto rounded mb-1"
+                          />
+                        )}
+                        {isSubtitle && (
+                          <a
+                            href={asset.file_path}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline text-blue-300"
+                          >
+                            Télécharger les sous-titres
+                          </a>
+                        )}
+                        {!isImage && !isSubtitle && (
+                          <a
+                            href={asset.file_path}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline text-blue-300"
+                          >
+                            Ouvrir l’asset
+                          </a>
+                        )}
+                      </div>
+                  );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* COLONNE DROITE */}

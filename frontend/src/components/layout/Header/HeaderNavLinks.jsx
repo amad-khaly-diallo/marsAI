@@ -1,23 +1,31 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../../../contexts';
+import { useFestivalPhase } from '../../../hooks/useFestivalPhase';
 
 const links = [
-  { to: '/', labelKey: 'nav.home', defaultLabel: 'Accueil' },
-  { to: '/a-propos', labelKey: 'nav.about', defaultLabel: 'À Propos' },
+  { to: '/catalogue', labelKey: 'nav.catalogue', defaultLabel: 'Catalogue' },
   { to: '/contact', labelKey: 'nav.contact', defaultLabel: 'Contact' },
   { to: '/jury', labelKey: 'nav.jury', defaultLabel: 'Jury' },
   { to: '/partenaires', labelKey: 'nav.partners', defaultLabel: 'Partenaires' },
-  { to: '/catalogue', labelKey: 'nav.catalogue', defaultLabel: 'Catalogue' },
+  { to: '/a-propos', labelKey: 'nav.about', defaultLabel: 'À Propos' },
 ];
+
+const CMS_URL = process.env.REACT_APP_CMS_URL || 'http://localhost:3333/admin';
 
 export default function HeaderNavLinks({
   orientation = 'horizontal',
   onNavigate,
 }) {
   const { t } = useTranslation();
-  const { isAuthenticated: isAdmin, checking } = useAdmin();
+  const { isAuthenticated: isAdmin, checking, admin, role } = useAdmin();
+   const { phase } = useFestivalPhase();
   const showAdminLink = !checking && isAdmin;
+  const isSuperAdmin =
+    !checking &&
+    isAdmin &&
+    ((role && role === 'super_admin') ||
+      (admin && admin.role === 'super_admin'));
 
   const base =
     'text-sm font-medium tracking-wide transition-colors duration-200';
@@ -30,10 +38,24 @@ export default function HeaderNavLinks({
         : 'text-slate-200 hover:text-white',
     ].join(' ');
 
+  const filteredLinks = links.filter((link) => {
+    if (link.to === '/jury' || link.to === '/catalogue') {
+      // Pas de jury/catalogue en phase1
+      if (phase === 'phase1') return false;
+    }
+    if (link.to === '/catalogue') {
+      // Pas de catalogue en phase3
+      if (phase === 'phase3') return false;
+    }
+    return true;
+  });
+
+  const canShowParticiperButton = phase === 'phase1' || !phase;
+
   if (orientation === 'vertical') {
     return (
       <div className="flex flex-col gap-4 text-center">
-        {links.map((link) => (
+        {filteredLinks.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
@@ -56,20 +78,24 @@ export default function HeaderNavLinks({
             {t('nav.admin', 'Admin')}
           </NavLink>
         )}
-        <NavLink
-          to="/participer"
-          className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-brand-primary px-4 py-3 text-sm font-bold text-slate-900 shadow-soft-sm uppercase"
-          onClick={onNavigate}
-        >
-          {t('nav.participate', 'Participer')}
-        </NavLink>
+        {isSuperAdmin && CMS_URL && (
+          <a
+            href={CMS_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="text-lg font-medium transition-colors text-slate-200 hover:text-brand-primary"
+            onClick={onNavigate}
+          >
+            {t('nav.cms', 'CMS')}
+          </a>
+        )}
       </div>
     );
   }
 
   return (
     <div className="flex items-center gap-6">
-      {links.map((link) => (
+      {filteredLinks.map((link) => (
         <NavLink key={link.to} to={link.to} className={active}>
           {t(link.labelKey, link.defaultLabel)}
         </NavLink>
@@ -79,6 +105,17 @@ export default function HeaderNavLinks({
           {t('nav.admin', 'Admin')}
         </NavLink>
       )}
+      {isSuperAdmin && CMS_URL && (
+        <a
+          href={CMS_URL}
+          target="_blank"
+          rel="noreferrer"
+          className={`${base} text-slate-200 hover:text-white`}
+        >
+          {t('nav.cms', 'CMS')}
+        </a>
+      )}
+
     </div>
   );
 }

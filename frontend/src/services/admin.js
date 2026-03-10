@@ -45,6 +45,9 @@ export async function getJury() {
 export async function createJuryMember(payload) {
   return await api.post('/jury', payload);
 }
+export async function updateJuryMember(id, payload) {
+  return await api.put(`/jury/${id}`, payload);
+}
 export async function deleteJuryMember(id) {
   return await api.del(`/jury/${id}`);
 }
@@ -55,6 +58,9 @@ export async function getPartners() {
 }
 export async function createPartner(payload) {
   return await api.post('/partners', payload);
+}
+export async function updatePartner(id, payload) {
+  return await api.put(`/partners/${id}`, payload);
 }
 export async function deletePartner(id) {
   return await api.del(`/partners/${id}`);
@@ -80,10 +86,17 @@ export default {
   getFilmmakers,
   getJury,
   createJuryMember,
+  updateJuryMember,
   deleteJuryMember,
   getPartners,
   createPartner,
+  updatePartner,
   deletePartner,
   getNewsletterSubscribers,
   sendNewsletter,
+  // profile
+  updateCurrentAdminProfile: (payload) =>
+    api.patch('/admins/me/profile', payload),
+  changeCurrentAdminPassword: (payload) =>
+    api.patch('/admins/me/password', payload),
 };

@@ -3,6 +3,7 @@ import { SectionHeader, ErrorAlert, SectionCard } from '../common';
 import { useJury } from '../hooks';
 import JuryCreateForm from './JuryCreateForm';
 import JuryTable from './JuryTable';
+import { uploadImage } from '../../../services/uploadService';
 
 const INITIAL_FORM = {
   first_name: '',
@@ -18,7 +19,10 @@ export default function JuryManagement() {
   const [createLoading, setCreateLoading] = useState(false);
   const [createError, setCreateError] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(INITIAL_FORM);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoUploadError, setPhotoUploadError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,15 +35,48 @@ export default function JuryManagement() {
     setCreateLoading(true);
     try {
       const admin = require('../../../services/admin').default;
-      await admin.createJuryMember(form);
+      if (editingId) {
+        await admin.updateJuryMember(editingId, form);
+      } else {
+        await admin.createJuryMember(form);
+      }
       setForm(INITIAL_FORM);
       setCreating(false);
+      setEditingId(null);
       refetch();
     } catch (err) {
       setCreateError(err.message);
     } finally {
       setCreateLoading(false);
     }
+  };
+
+  const handlePhotoFileChange = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    setPhotoUploadError(null);
+    setPhotoUploading(true);
+    try {
+      const res = await uploadImage(file);
+      setForm((prev) => ({ ...prev, photo_url: res.url || res.Location || '' }));
+    } catch (err) {
+      setPhotoUploadError(err.message || 'Erreur upload image');
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
+
+  const handleEdit = (member) => {
+    setCreateError(null);
+    setEditingId(member.id);
+    setForm({
+      first_name: member.first_name || '',
+      last_name: member.last_name || '',
+      role: member.role || '',
+      bio: member.bio || '',
+      photo_url: member.photo_url || '',
+    });
+    setCreating(true);
   };
 
   const handleDelete = async (id) => {
@@ -83,12 +120,16 @@ export default function JuryManagement() {
           error={createError}
           onCancel={() => setCreating(false)}
           isOpen={creating}
+          onPhotoFileChange={handlePhotoFileChange}
+          photoUploading={photoUploading}
+          photoUploadError={photoUploadError}
         />
         <JuryTable
           members={members}
           loading={loading}
           deletingId={deletingId}
           onDelete={handleDelete}
+          onEdit={handleEdit}
         />
       </SectionCard>
     </div>

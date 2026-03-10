@@ -155,7 +155,8 @@ export default function useParticiperSubmit({
     setSubmitting,
   ]);
 
-  // propagate async errors to shared `error` state (only when an op reports an error)
+  // propagate async errors à l'état partagé `error`
+  // et s'assurer que `submitting` est bien relâché pour permettre un nouvel essai.
   useEffect(() => {
     const opError =
       filmmakerOp.error ||
@@ -163,7 +164,10 @@ export default function useParticiperSubmit({
       aiOp.error ||
       collabOp.error ||
       assetsOp.error;
-    if (opError) setError(opError.message || String(opError));
+    if (opError) {
+      setError(opError.message || String(opError));
+      setSubmitting(false);
+    }
   }, [
     filmmakerOp.error,
     movieOp.error,
@@ -171,6 +175,7 @@ export default function useParticiperSubmit({
     collabOp.error,
     assetsOp.error,
     setError,
+    setSubmitting,
   ]);
 
   // --- public handlers (validate synchronously, then delegate to useAsync.run) ---
@@ -201,10 +206,17 @@ export default function useParticiperSubmit({
     }
 
     if (movieVideo) {
-      if (!movieVideo.type || !movieVideo.type.startsWith('video/')) {
+      // Autoriser uniquement des fichiers vidéo MP4
+      const mime = movieVideo.type || '';
+      const name = (movieVideo.name || '').toLowerCase();
+      const isMp4Mime = mime === 'video/mp4';
+      const isMp4Ext = name.endsWith('.mp4');
+
+      if (!isMp4Mime && !isMp4Ext) {
         return setError(t('error.movie.video.invalidType'));
       }
-      const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
+
+      const MAX_BYTES = 300 * 1024 * 1024; // 300 MB
       if (movieVideo.size > MAX_BYTES) {
         return setError(t('error.movie.video.tooLarge'));
       }

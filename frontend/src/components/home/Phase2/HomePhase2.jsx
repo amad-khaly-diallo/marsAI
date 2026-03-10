@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { heroAnimationStyles } from '../../sections/heroAnimations';
+import { resolveMediaUrl } from '../../../utils/media';
 
 export const HomePhase2 = () => {
   const [movies, setMovies] = useState([]);
@@ -350,7 +351,7 @@ const MovieModal = ({ movie, onClose }) => {
               className="w-full h-full"
               controls
               autoPlay
-              src={movie.video_url}
+              src={resolveMediaUrl(movie.video_url)}
             >
               Votre navigateur ne supporte pas la lecture de vidéos.
             </video>
