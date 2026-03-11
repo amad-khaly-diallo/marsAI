@@ -18,43 +18,43 @@ export default function CGU() {
     {
       id: 1,
       side: 'left',
-      title: '01. OBJET DU SERVICE',
-      desc: 'Le Festival marsAI est un concours de courts-métrages de 60 secondes maximum, générés par Intelligence Artificielle. La plateforme permet la soumission et la diffusion de ces œuvres.',
+      title: t('cgu.sections.service.title'),
+      desc: t('cgu.sections.service.desc'),
       icon: <FileText className="text-pink-500" size={50} />,
     },
     {
       id: 2,
       side: 'right',
-      title: '02. PROPRIÉTÉ INTELLECTUELLE',
-      desc: 'Le Festival marsAI est un concours de courts-métrages de 60 secondes maximum, générés par Intelligence Artificielle. La plateforme permet la soumission et la diffusion de ces œuvres.',
+      title: t('cgu.sections.ip.title'),
+      desc: t('cgu.sections.ip.desc'),
       icon: <Copyright className="text-blue-400" size={50} />,
     },
     {
       id: 3,
       side: 'left',
-      title: '03. ACCÈS ET INSCRIPTION',
-      desc: "L'inscription est gratuite et ouverte aux créateurs du monde entier (+120 pays). Un compte 'Réalisateur' est obligatoire pour soumettre un film et suivre son statut de validation.",
+      title: t('cgu.sections.access.title'),
+      desc: t('cgu.sections.access.desc'),
       icon: <UserPlus className="text-pink-500" size={50} />,
     },
     {
       id: 4,
       side: 'right',
-      title: '04. ÉTHIQUE ET RESPONSABILITÉ',
-      desc: "L'usage de l'IA doit être responsable. Tout contenu haineux, discriminatoire ou portant atteinte à la dignité humaine (deepfakes non consentis) est strictement interdit.",
+      title: t('cgu.sections.ethics.title'),
+      desc: t('cgu.sections.ethics.desc'),
       icon: <BrainCircuit className="text-blue-400" size={50} />,
     },
     {
       id: 5,
       side: 'left',
-      title: '05. PROTECTION DES DONNÉES',
-      desc: "Conformément au RGPD, vos données personnelles sont collectées uniquement pour la gestion du concours. Vous disposez d'un droit d'accès et de suppression via votre tableau de bord.",
+      title: t('cgu.sections.data.title'),
+      desc: t('cgu.sections.data.desc'),
       icon: <ShieldCheck className="text-pink-500" size={50} />,
     },
     {
       id: 6,
       side: 'right',
-      title: '06. CONTACT ET SUPPORT',
-      desc: 'Pour toute question juridique ou technique, contactez notre équipe à support@mars-ai.com. Nous répondons sous 48h aux demandes des participants.',
+      title: t('cgu.sections.contact.title'),
+      desc: t('cgu.sections.contact.desc'),
       icon: <MessageCircle className="text-blue-400" size={50} />,
     },
   ];
@@ -79,7 +79,7 @@ export default function CGU() {
           <div className="flex justify-center items-center mb-4 gap-2 md:gap-4 relative z-10">
             <div className="h-[1px] md:h-[2px] w-8 md:w-12 bg-blue-500/50"></div>
             <span className="text-[10px] md:text-[15px] tracking-[0.3em] md:tracking-[0.5em] text-blue-400 uppercase font-bold">
-              Protocoles Juridiques
+              {t('cgu.badge')}
             </span>
             <div className="h-[1px] md:h-[2px] w-8 md:w-12 bg-pink-500/50"></div>
           </div>
@@ -95,8 +95,7 @@ export default function CGU() {
           </h1>
 
           <p className="relative z-10 mt-4 md:mt-6 text-white uppercase tracking-[0.15em] md:tracking-[0.3em] text-[10px] sm:text-xs md:text-sm leading-relaxed">
-            Conditions Générales d'Utilisation{' '}
-            <span className="mx-1 md:mx-2 text-white">//</span>
+            {t('cgu.title')} <span className="mx-1 md:mx-2 text-white">//</span>
             <span className="text-white font-mono">2026</span>
           </p>
         </header>
@@ -137,7 +136,7 @@ export default function CGU() {
         {/* Footer Info */}
         <div className="mt-24 text-center relative z-10 px-4">
           <p className="text-[12px] md:text-[15px] text-slate-600 uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 font-mono leading-loose">
-            MarsAI x Mobile Film Festival x La Plateforme
+            {t('cgu.footer')}
           </p>
         </div>
       </div>

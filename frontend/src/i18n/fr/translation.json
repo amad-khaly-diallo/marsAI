@@ -198,19 +198,34 @@
   "countdown.cta": "Soumettre mon film",
   "countdown.cta_closed": "Voir les films",
 
-  "language.french": "Français",
-  "language.english": "Anglais",
-  "language.spanish": "Espagnol",
-  "language.german": "Allemand",
-  "language.italian": "Italien",
-  "language.portuguese": "Portugais",
-  "language.arabic": "Arabe",
-  "language.russian": "Russe",
-  "language.chinese": "Chinois",
-  "language.japanese": "Japonais",
-  "language.korean": "Coréen",
-  "language.hindi": "Hindi",
-  "language.turkish": "Turc",
-  "language.dutch": "Néerlandais",
-  "language.polish": "Polonais"
+  "cgu.badge": "Protocoles Juridiques",
+  "cgu.title": "Conditions Générales d'Utilisation",
+  "cgu.footer": "MarsAI x Mobile Film Festival x La Plateforme",
+
+  "cgu.sections.service.title": "01. OBJET DU SERVICE",
+  "cgu.sections.service.desc": "Le Festival marsAI est un concours de courts-métrages de 60 secondes maximum, générés par Intelligence Artificielle. La plateforme permet la soumission et la diffusion de ces œuvres.",
+
+  "cgu.sections.ip.title": "02. PROPRIÉTÉ INTELLECTUELLE",
+  "cgu.sections.ip.desc": "Le Festival marsAI est un concours de courts-métrages de 60 secondes maximum, générés par Intelligence Artificielle. La plateforme permet la soumission et la diffusion de ces œuvres.",
+
+  "cgu.sections.access.title": "03. ACCÈS ET INSCRIPTION",
+  "cgu.sections.access.desc": "L'inscription est gratuite et ouverte aux créateurs du monde entier (+120 pays). Un compte 'Réalisateur' est obligatoire pour soumettre un film et suivre son statut de validation.",
+
+  "cgu.sections.ethics.title": "04. ÉTHIQUE ET RESPONSABILITÉ",
+  "cgu.sections.ethics.desc": "L'usage de l'IA doit être responsable. Tout contenu haineux, discriminatoire ou portant atteinte à la dignité humaine (deepfakes non consentis) est strictement interdit.",
+
+  "cgu.sections.data.title": "05. PROTECTION DES DONNÉES",
+  "cgu.sections.data.desc": "Conformément au RGPD, vos données personnelles sont collectées uniquement pour la gestion du concours. Vous disposez d'un droit d'accès et de suppression via votre tableau de bord.",
+
+  "cgu.sections.contact.title": "06. CONTACT ET SUPPORT",
+  "cgu.sections.contact.desc": "Pour toute question juridique ou technique, contactez notre équipe à support@mars-ai.com. Nous répondons sous 48h aux demandes des participants.",
+
+  "phase3.loading": "Chargement du palmarès...",
+  "phase3.noWinners": "Aucun gagnant pour le moment.",
+  "phase3.juryOpinion": "L'avis du Jury",
+  "phase3.watchFilm": "Voir le film",
+  "phase3.noSynopsis": "Aucun synopsis.",
+  "phase3.exploreCategories": "Explorer les catégories",
+  "phase3.grandPrix": "Grand Prix",
+  "phase3.festivalTitle": "MarsAI"
 }

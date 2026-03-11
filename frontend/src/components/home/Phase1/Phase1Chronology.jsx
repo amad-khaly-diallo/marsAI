@@ -2,15 +2,12 @@ import { Calendar, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getLocalized } from '../../../utils/sanity';
 
-
 export default function Phase1Chronology({ phase1 }) {
   const { i18n } = useTranslation();
 
-  const badge =
-    getLocalized(phase1?.chronologyBadge, i18n) || 'Chronologie';
+  const badge = getLocalized(phase1?.chronologyBadge, i18n) || 'Chronologie';
   const title =
-    getLocalized(phase1?.chronologyTitle, i18n) ||
-    'Planning des événements';
+    getLocalized(phase1?.chronologyTitle, i18n) || 'Planning des événements';
 
   const annualTitle =
     getLocalized(phase1?.chronologyAnnualTitle, i18n) ||
@@ -65,9 +62,11 @@ export default function Phase1Chronology({ phase1 }) {
                   <span className="text-xs opacity-90">
                     • {getLocalized(item?.months, i18n)}
                   </span>
-                  <span className="text-[11px] opacity-75">
-                    ( {getLocalized(item?.weeks, i18n)} ) •
-                  </span>
+                  {item?.weeks && (
+                    <span className="text-[11px] opacity-75">
+                      ({getLocalized(item.weeks, i18n) || String(item.weeks)})
+                    </span>
+                  )}
                 </div>
                 {item?.detail && (
                   <p className="text-sm opacity-90 mt-2">
@@ -94,7 +93,7 @@ export default function Phase1Chronology({ phase1 }) {
               {fridaySlots.map((slot, i) => (
                 <li key={slot._key || i} className="flex gap-3 text-sm">
                   <span className="shrink-0 w-24 font-mono text-amber-200/90">
-                    {slot.time}
+                    {getLocalized(slot?.time, i18n) || String(slot.time ?? '')}
                   </span>
                   <div>
                     <span className="font-semibold text-white">
@@ -121,7 +120,7 @@ export default function Phase1Chronology({ phase1 }) {
               {saturdaySlots.map((slot, i) => (
                 <li key={slot._key || i} className="flex gap-3 text-sm">
                   <span className="shrink-0 w-28 font-mono text-violet-200/90">
-                    {slot.time}
+                    {getLocalized(slot?.time, i18n) || String(slot.time ?? '')}
                   </span>
                   <div>
                     <span className="font-semibold text-white">
