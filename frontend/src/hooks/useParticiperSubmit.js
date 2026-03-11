@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import useSubmission from './useSubmission';
 import useAsync from './useAsync';
+import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';   
 
 export default function useParticiperSubmit({
   // state pieces & setters from useParticiperState
@@ -40,6 +41,12 @@ export default function useParticiperSubmit({
   const filmmakerOp = useAsync(async (filmmakerLocal) => {
     const data = await submission.createFilmmaker(filmmakerLocal);
     setFilmmakerId(data.id);
+
+    // Déclenchez l'événement de l'étape 1 ainsi que le nom du pays (pour la carte du monde de 120 pays)
+    trackEvent('step_1_filmmaker', {
+      country_origin: filmmakerLocal.country 
+    });
+
     setCurrentStep(2);
     return data;
   });
@@ -63,6 +70,9 @@ export default function useParticiperSubmit({
       setMovieUploadProgress(100);
 
     setMovieId(data.movie_id);
+
+    trackEvent('step_2_movie');
+
     setCurrentStep(3);
     return data;
   });
@@ -70,18 +80,28 @@ export default function useParticiperSubmit({
   const aiOp = useAsync(async (payload) => {
     await submission.saveAiDeclaration(movieId, payload);
     setAiSaved(true);
+
+    const aiToolsUsed = payload.tools ? payload.tools.join(', ') : 'Non spécifié';
+
+    // Déclenchement de l'événement de l'étape 3 avec les noms des outils d'IA
+    trackEvent('step_3_ai', {
+      ai_tool: aiToolsUsed
+    })
+
     setCurrentStep(4);
   });
 
   const collabOp = useAsync(async () => {
     if (!collaborators.length) {
       setCollaboratorsSaved(true);
+      trackEvent('film_submission_complete');
       return;
     }
     await Promise.all(
       collaborators.map((c) => submission.addCollaborator(movieId, c)),
     );
     setCollaboratorsSaved(true);
+    trackEvent('film_submission_complete');
   });
 
   const assetsOp = useAsync(async () => {
@@ -136,6 +156,8 @@ export default function useParticiperSubmit({
       setAssetsUploadProgress(100);
 
     setAssetsTagsSaved(true);
+    trackEvent('step_4_assets');
+
     setCurrentStep(5);
   });
 

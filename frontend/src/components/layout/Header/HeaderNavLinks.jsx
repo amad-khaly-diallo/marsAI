@@ -11,7 +11,8 @@ const links = [
   { to: '/a-propos', labelKey: 'nav.about', defaultLabel: 'À Propos' },
 ];
 
-const CMS_URL = process.env.REACT_APP_CMS_URL || 'http://localhost:3333/admin';
+const CMS_URL =
+  process.env.REACT_APP_CMS_URL || 'https://cms-codex.sanity.studio/';
 
 export default function HeaderNavLinks({
   orientation = 'horizontal',
@@ -19,7 +20,7 @@ export default function HeaderNavLinks({
 }) {
   const { t } = useTranslation();
   const { isAuthenticated: isAdmin, checking, admin, role } = useAdmin();
-   const { phase } = useFestivalPhase();
+  const { phase } = useFestivalPhase();
   const showAdminLink = !checking && isAdmin;
   const isSuperAdmin =
     !checking &&
@@ -115,7 +116,6 @@ export default function HeaderNavLinks({
           {t('nav.cms', 'CMS')}
         </a>
       )}
-
     </div>
   );
 }

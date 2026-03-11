@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { trackEvent } from '../../G-Analytics/GoogleAnalytics';
 
 const LANGS = [
   { code: 'fr', label: 'FR' },
@@ -12,6 +13,7 @@ export default function HeaderLanguageSwitcher() {
   const changeLang = (code) => {
     if (code === current) return;
     i18n.changeLanguage(code);
+    trackEvent('language_changed', { selected_language: code });
   };
 
   return (
