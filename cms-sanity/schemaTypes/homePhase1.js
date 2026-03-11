@@ -283,8 +283,8 @@ export const homePhase1 = defineType({
             defineField({
               name: 'weeks',
               title: 'Semaines',
-              type: 'string',
-              description: 'Ex: "S1 à S9".',
+              type: 'localizedString',
+              description: 'Ex: "S1 à S9" (fr) / "S1 to S9" (en).',
             }),
             defineField({
               name: 'detail',

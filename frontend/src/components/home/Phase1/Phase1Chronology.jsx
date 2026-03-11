@@ -66,7 +66,7 @@ export default function Phase1Chronology({ phase1 }) {
                     • {getLocalized(item?.months, i18n)}
                   </span>
                   <span className="text-[11px] opacity-75">
-                    ({item.weeks})
+                    ( {getLocalized(item?.weeks, i18n)} ) •
                   </span>
                 </div>
                 {item?.detail && (
