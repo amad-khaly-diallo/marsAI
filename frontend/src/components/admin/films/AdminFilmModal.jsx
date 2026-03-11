@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
+import { trackEvent } from '../../G-Analytics/GoogleAnalytics';
 import {
   X,
   Clock,
@@ -239,12 +240,18 @@ export default function AdminFilmModal({
                     <button
                       type="button"
                       disabled={isToggling || !winnerCategory || !winnerRanking}
-                      onClick={() =>
+                      onClick={() =>{
+                        // -----------------------------------
+                        trackEvent('admin_winner_marked', { 
+                        movie_title: movie.original_title, 
+                         category: winnerCategory 
+                         });
+                        // -----------------------------------
                         onToggleWinner(movie, {
                           ranking: winnerRanking,
                           category: winnerCategory,
                         })
-                      }
+                      }}
                       className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       {isToggling
