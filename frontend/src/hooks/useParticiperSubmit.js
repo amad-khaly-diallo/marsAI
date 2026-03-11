@@ -105,16 +105,23 @@ export default function useParticiperSubmit({
   });
 
   const assetsOp = useAsync(async () => {
-    const stillFiles = Array.isArray(assets.stills) ? assets.stills : [];
+    const rawStills = Array.isArray(assets.stills) ? assets.stills : [];
+    // On ne garde que les vrais File (avec propriété type) pour l'upload backend.
+    const stillFiles = rawStills.filter(
+      (item) => item && typeof item === 'object' && typeof item.type === 'string',
+    );
+
     if (stillFiles.length > 0 || assets.subtitle) {
       stillFiles.forEach((file) => {
-        if (!file.type.startsWith('image/'))
+        if (!file.type || !file.type.startsWith('image/')) {
           throw new Error(t('error.assets.still.invalidType'));
+        }
       });
       if (assets.subtitle) {
         const name = assets.subtitle.name || '';
-        if (!name.toLowerCase().endsWith('.srt'))
+        if (!name.toLowerCase().endsWith('.srt')) {
           throw new Error(t('error.assets.subtitle.invalidType'));
+        }
       }
     }
 
