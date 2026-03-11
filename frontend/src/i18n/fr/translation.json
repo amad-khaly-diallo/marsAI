@@ -196,5 +196,21 @@
   "countdown.minute": "Minute",
   "countdown.second": "Seconde",
   "countdown.cta": "Soumettre mon film",
-  "countdown.cta_closed": "Voir les films"
+  "countdown.cta_closed": "Voir les films",
+
+  "language.french": "Français",
+  "language.english": "Anglais",
+  "language.spanish": "Espagnol",
+  "language.german": "Allemand",
+  "language.italian": "Italien",
+  "language.portuguese": "Portugais",
+  "language.arabic": "Arabe",
+  "language.russian": "Russe",
+  "language.chinese": "Chinois",
+  "language.japanese": "Japonais",
+  "language.korean": "Coréen",
+  "language.hindi": "Hindi",
+  "language.turkish": "Turc",
+  "language.dutch": "Néerlandais",
+  "language.polish": "Polonais"
 }

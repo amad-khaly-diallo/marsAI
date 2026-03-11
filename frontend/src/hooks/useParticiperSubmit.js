@@ -189,12 +189,16 @@ export default function useParticiperSubmit({
   const handleSubmitFilmmaker = async (filmmakerLocal) => {
     setError(null);
     const validationError = validateFilmmaker(filmmakerLocal || filmmaker);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     try {
       await filmmakerOp.run(filmmakerLocal || filmmaker);
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
@@ -202,13 +206,17 @@ export default function useParticiperSubmit({
     if (!filmmakerId) return;
     setError(null);
     const validationError = validateMovie(movieLocal || movie);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     const localMovie = movieLocal || movie;
 
     const hasYouTube =
       localMovie.youtube_url && localMovie.youtube_url.trim().length > 0;
     if (!movieVideo && !hasYouTube) {
+      setSubmitting(false);
       return setError(t('error.movie.video.required'));
     }
 
@@ -220,11 +228,13 @@ export default function useParticiperSubmit({
       const isMp4Ext = name.endsWith('.mp4');
 
       if (!isMp4Mime && !isMp4Ext) {
+        setSubmitting(false);
         return setError(t('error.movie.video.invalidType'));
       }
 
       const MAX_BYTES = 300 * 1024 * 1024; // 300 MB
       if (movieVideo.size > MAX_BYTES) {
+        setSubmitting(false);
         return setError(t('error.movie.video.tooLarge'));
       }
     }
@@ -233,6 +243,7 @@ export default function useParticiperSubmit({
       await movieOp.run(localMovie);
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
@@ -241,12 +252,16 @@ export default function useParticiperSubmit({
     setError(null);
     const payload = aiLocal || aiDeclaration;
     const validationError = validateAiDeclaration(payload);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     try {
       await aiOp.run(payload);
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
@@ -254,12 +269,16 @@ export default function useParticiperSubmit({
     if (!movieId) return;
     setError(null);
     const validationError = validateCollaborators(collaborators);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     try {
       await collabOp.run();
     } catch (err) {
       setError(t('error.collaborators.saveFailed'));
+      setSubmitting(false);
     }
   };
 
@@ -271,6 +290,7 @@ export default function useParticiperSubmit({
       await assetsOp.run();
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
