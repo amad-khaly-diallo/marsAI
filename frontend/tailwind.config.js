@@ -16,6 +16,8 @@ module.exports = {
         "brand-border": "rgb(var(--color-border) / <alpha-value>)",
         "brand-muted": "rgb(var(--color-muted) / <alpha-value>)",
         "brand-white": "rgb(var(--color-white) / <alpha-value>)",
+        "festival-gold": "#C6A55C",
+        "festival-gold-light": "#DFC88A",
       },
       boxShadow: {
         "soft-xl": "0 24px 60px rgba(15, 23, 42, 0.55)",
