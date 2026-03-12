@@ -1,14 +1,18 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Play, Star, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { getYouTubeThumbnail } from '../../../utils/youtube';
 import { winnersData } from './winnersData';
 
 const PLACEHOLDER_IMAGE =
   'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80';
 
-/** Transforme un gagnant API (movie + winner) en format affichage Phase3 */
-function mapWinnerToFilm(m) {
+/**
+ * Transforme un gagnant API (movie + winner) en format affichage Phase3.
+ * Reçoit les textes traduits en paramètre pour rester une fonction pure.
+ */
+function mapWinnerToFilm(m, { defaultCategory, defaultTitle }) {
   const director =
     m.filmmaker && typeof m.filmmaker === 'object'
       ? [m.filmmaker.first_name, m.filmmaker.last_name]
@@ -17,8 +21,8 @@ function mapWinnerToFilm(m) {
       : '—';
   return {
     id: m.id,
-    category: m.winner_category || 'Grand Prix',
-    title: m.original_title || m.english_title || 'Sans titre',
+    category: m.winner_category || defaultCategory,
+    title: m.original_title || m.english_title || defaultTitle,
     director,
     year: 2026,
     duration: m.duration !== null ? `${m.duration} min` : '',
@@ -31,6 +35,8 @@ function mapWinnerToFilm(m) {
 }
 
 function DetailCard({ film }) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-10 shadow-2xl h-full flex flex-col justify-between">
       <div className="flex flex-col md:flex-row gap-8 justify-between items-start text-left">
@@ -47,20 +53,20 @@ function DetailCard({ film }) {
             </span>
           </div>
           <p className="text-sm md:text-base text-slate-300 leading-relaxed mb-6 line-clamp-3 md:line-clamp-4">
-            {film.synopsis || 'Aucun synopsis.'}
+            {film.synopsis || t('phase3.noSynopsis')}
           </p>
           {(film.movieId || film.id) && (
             <Link
               to={`/watch/${film.movieId ?? film.id}`}
               className="inline-flex items-center gap-2 w-full md:w-auto justify-center bg-brand-white hover:bg-white text-slate-900 px-6 py-3 rounded-full font-bold transition-colors shadow-[0_0_20px_rgba(255,200,0,0.2)] text-sm"
             >
-              <Play className="w-4 h-4 fill-current" /> Voir le film
+              <Play className="w-4 h-4 fill-current" /> {t('phase3.watchFilm')}
             </Link>
           )}
         </div>
         <div className="w-full md:w-1/3 bg-white/5 rounded-xl p-4 border border-white/5 hidden lg:block">
           <h3 className="text-brand-white font-bold uppercase text-xs tracking-widest mb-2">
-            L'avis du Jury
+            {t('phase3.juryOpinion')}
           </h3>
           <p className="italic text-slate-300 font-light text-sm mb-3 line-clamp-4">
             {film.juryQuote ? `"${film.juryQuote}"` : '—'}
@@ -89,12 +95,19 @@ export default function Phase3Winners({
   grandPrixLabel = 'Grand Prix',
   festivalTitle = 'MarsAI',
 }) {
+  const { t } = useTranslation();
+
   const dataSource = useMemo(() => {
     if (winnersFromApi !== null && Array.isArray(winnersFromApi)) {
-      return winnersFromApi.map(mapWinnerToFilm);
+      return winnersFromApi.map((m) =>
+        mapWinnerToFilm(m, {
+          defaultCategory: t('phase3.grandPrix'),
+          defaultTitle: t('phase3.untitled'),
+        }),
+      );
     }
     return winnersData;
-  }, [winnersFromApi]);
+  }, [winnersFromApi, t]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const dataLength = dataSource.length;
@@ -113,7 +126,7 @@ export default function Phase3Winners({
       >
         <div className="text-center">
           <div className="mx-auto h-12 w-12 rounded-full border-2 border-brand-primary border-t-transparent animate-spin mb-4" />
-          <p className="text-brand-muted">Chargement du palmarès...</p>
+          <p className="text-brand-muted">{t('phase3.loading')}</p>
         </div>
       </section>
     );
@@ -132,7 +145,7 @@ export default function Phase3Winners({
           <h1 className="text-4xl md:text-6xl font-black text-white mb-6">
             {festivalTitle}
           </h1>
-          <p className="text-slate-400">Aucun gagnant pour le moment.</p>
+          <p className="text-slate-400">{t('phase3.noWinners')}</p>
         </div>
       </section>
     );
@@ -236,7 +249,7 @@ export default function Phase3Winners({
       <section className="max-w-4xl mx-auto px-4 text-center relative z-40 mt-12">
         <div className="flex flex-col items-center mb-8 text-slate-500">
           <span className="text-xs font-bold uppercase tracking-widest mb-2 opacity-60">
-            Explorer les catégories
+            {t('phase3.exploreCategories')}
           </span>
           <ChevronDown className="w-5 h-5 animate-bounce" />
         </div>
