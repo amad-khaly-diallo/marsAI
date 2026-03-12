@@ -25,17 +25,13 @@ async function verifyFilmmakerExists(filmmakerId) {
   return rows[0];
 }
 
-/**
- * Upload vers YouTube en arrière-plan (à partir du buffer déjà reçu).
- * Succès : met à jour youtube_url et envoie un email avec le lien.
- * Échec : envoie un email pour informer (pas de rollback, la vidéo reste enregistrée).
- */
 async function doYoutubeUploadAndNotify(
   movieId,
   buffer,
   mimetype,
   movie,
   filmmaker,
+  videoUrl,
 ) {
   if (!buffer) {
     // eslint-disable-next-line no-console
@@ -62,11 +58,13 @@ async function doYoutubeUploadAndNotify(
 
     await MovieService.setYoutubeUrl(movieId, youtubeUrl);
 
+    // On enregistre bien l'URL YouTube en base, mais dans l'email
+    // on envoie uniquement l'URL publique S3 (hébergement vidéo).
     await sendYouTubeUploadSuccessEmail({
       to: filmmaker.email,
       filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
       movieTitle: movie.original_title,
-      youtubeUrl,
+      videoUrl,
     });
   } catch (err) {
     try {
@@ -143,7 +141,8 @@ async function submit({ movie, videoFile }) {
           youtubeBuffer,
           videoFile.mimetype,
           movie,
-          filmmaker
+          filmmaker,
+          videoUrl,
         ).catch(() => {});
       });
 

@@ -13,7 +13,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1000.0",
+    "@aws-sdk/client-s3": "^3.1005.0",
     "@aws-sdk/lib-storage": "^3.1000.0",
     "@ffprobe-installer/ffprobe": "^1.0.0",
     "bcrypt": "^6.0.0",
