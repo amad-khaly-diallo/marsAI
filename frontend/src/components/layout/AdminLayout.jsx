@@ -37,7 +37,7 @@ export default function AdminLayout({ children, currentAdmin }) {
   const [activeSection, setActiveSection] = useState(initialSection);
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 md:flex-row md:gap-6 md:py-8">
+    <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-6 pt-24 md:flex-row md:gap-6 md:pb-8 md:pt-28">
       <div className="rounded-lg border border-brand-border/50 bg-brand-surface/80 p-3 shadow-soft-md md:hidden">
         <div className="mb-3 flex items-center justify-between gap-2">
           <div>

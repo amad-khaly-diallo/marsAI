@@ -9,6 +9,7 @@ const juryRoutes = require("./jury");
 const authRoutes = require("./auth");
 const partnerRoutes = require("./partners");
 const newsletterRoutes = require("./newsletters");
+const contactRoutes = require("./contact");
 const festivalPhaseRoutes = require("./festivalPhase");
 const uploadRoutes = require("./upload"); // Upload S3 Scaleway
 const cookieParser = require("cookie-parser");
@@ -33,6 +34,7 @@ router.use("/auth", authRoutes);
 router.use("/jury", juryRoutes); // Jury public + admin CRUD
 router.use("/partners", partnerRoutes); // Partenaires public + admin CRUD
 router.use("/newsletters", newsletterRoutes); // Gestion des newsletters par les admins
+router.use("/contact", contactRoutes); // Formulaire de contact public
 router.use("/festival-phase", festivalPhaseRoutes); // Phase du festival + timer
 router.use("/", uploadRoutes); // Upload S3 : /api/upload/video, /api/upload/image, etc.
 

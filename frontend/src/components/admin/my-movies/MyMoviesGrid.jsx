@@ -30,6 +30,25 @@ export default function MyMoviesGrid({ movies, onSelect }) {
           ? resolveMediaUrl(movie.video_url)
           : null;
         const embedUrl = getYouTubeEmbed(movie.youtube_url);
+        const flagConfig =
+          movie.my_flag === 'green'
+            ? {
+                label: 'Green flag',
+                className:
+                  'bg-emerald-500/10 text-emerald-300 border-emerald-500/40',
+              }
+            : movie.my_flag === 'yellow'
+              ? {
+                  label: 'Yellow flag',
+                  className:
+                    'bg-amber-500/10 text-amber-300 border-amber-500/40',
+                }
+              : movie.my_flag === 'red'
+                ? {
+                    label: 'Red flag',
+                    className: 'bg-red-500/10 text-red-300 border-red-500/40',
+                  }
+                : null;
         return (
           <button
             key={movie.id}
@@ -71,25 +90,13 @@ export default function MyMoviesGrid({ movies, onSelect }) {
                       : '—'}
                   </p>
                 </div>
-                <span
-                  className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold border ${
-                    movie.my_flag === 'green'
-                      ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/40'
-                      : movie.my_flag === 'yellow'
-                        ? 'bg-amber-500/10 text-amber-300 border-amber-500/40'
-                        : movie.my_flag === 'red'
-                          ? 'bg-red-500/10 text-red-300 border-red-500/40'
-                          : 'bg-slate-900/80 text-brand-muted border-slate-700'
-                  }`}
-                >
-                  {movie.my_flag === 'green'
-                    ? 'Green flag'
-                    : movie.my_flag === 'yellow'
-                      ? 'Yellow flag'
-                      : movie.my_flag === 'red'
-                        ? 'Red flag'
-                        : 'Non visionné'}
-                </span>
+                {flagConfig && (
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold border ${flagConfig.className}`}
+                  >
+                    {flagConfig.label}
+                  </span>
+                )}
               </div>
 
               <p className="line-clamp-2 text-[11px] text-brand-muted">
