@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getContactPage } from '../services/query';
 
-
 export default function Contact() {
   const { t, i18n } = useTranslation();
   const [pageData, setPageData] = useState([]);
@@ -31,7 +30,7 @@ export default function Contact() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (field) => (e) => {
     const value =
@@ -71,17 +70,32 @@ export default function Contact() {
 
     setSubmitting(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
-      setSuccess(t('contact.form.success'));
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...trimmed,
+          newsletter: form.newsletter,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(
+          data.error || data.message || t('contact.error.generic'),
+        );
+      }
+
+      setSuccess(true);
       setForm({
         name: '',
         email: '',
         subject: '',
         message: '',
-        newsletter: form.newsletter,
+        newsletter: false,
       });
-    } catch {
-      setError(t('contact.error.generic'));
+    } catch (err) {
+      setError(err.message || t('contact.error.generic'));
     } finally {
       setSubmitting(false);
     }
@@ -243,7 +257,11 @@ const SubmitButton = ({ submitting, label }) => (
 );
 
 const StatusMessage = ({ error, success }) => {
+  const { t } = useTranslation();
+
   if (error) return <p className="text-[11px] text-red-300">{error}</p>;
-  if (success) return <p className="text-[11px] text-emerald-300">{success}</p>;
+  if (success) {
+    return <p className="text-[11px] text-emerald-300">{t('contact.form.success')}</p>;
+  }
   return null;
 };
