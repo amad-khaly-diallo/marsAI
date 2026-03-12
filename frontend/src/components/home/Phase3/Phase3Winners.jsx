@@ -177,7 +177,9 @@ export default function Phase3Winners({
       >
         <div className="text-center">
           <div className="mx-auto h-14 w-14 rounded-full border-2 border-[#C6A55C] border-t-transparent animate-spin mb-6" />
-          <p className="text-white/40 text-sm tracking-wider">{t('phase3.loading')}</p>
+          <p className="text-white/40 text-sm tracking-wider">
+            {t('phase3.loading')}
+          </p>
         </div>
       </section>
     );
