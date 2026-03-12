@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import useSubmission from './useSubmission';
 import useAsync from './useAsync';
+import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';   
 
 export default function useParticiperSubmit({
   // state pieces & setters from useParticiperState
@@ -40,6 +41,12 @@ export default function useParticiperSubmit({
   const filmmakerOp = useAsync(async (filmmakerLocal) => {
     const data = await submission.createFilmmaker(filmmakerLocal);
     setFilmmakerId(data.id);
+
+    // Déclenchez l'événement de l'étape 1 ainsi que le nom du pays (pour la carte du monde de 120 pays)
+    trackEvent('step_1_filmmaker', {
+      country_origin: filmmakerLocal.country 
+    });
+
     setCurrentStep(2);
     return data;
   });
@@ -63,6 +70,9 @@ export default function useParticiperSubmit({
       setMovieUploadProgress(100);
 
     setMovieId(data.movie_id);
+
+    trackEvent('step_2_movie');
+
     setCurrentStep(3);
     return data;
   });
@@ -70,18 +80,28 @@ export default function useParticiperSubmit({
   const aiOp = useAsync(async (payload) => {
     await submission.saveAiDeclaration(movieId, payload);
     setAiSaved(true);
+
+    const aiToolsUsed = payload.tools ? payload.tools.join(', ') : 'Non spécifié';
+
+    // Déclenchement de l'événement de l'étape 3 avec les noms des outils d'IA
+    trackEvent('step_3_ai', {
+      ai_tool: aiToolsUsed
+    })
+
     setCurrentStep(4);
   });
 
   const collabOp = useAsync(async () => {
     if (!collaborators.length) {
       setCollaboratorsSaved(true);
+      trackEvent('film_submission_complete');
       return;
     }
     await Promise.all(
       collaborators.map((c) => submission.addCollaborator(movieId, c)),
     );
     setCollaboratorsSaved(true);
+    trackEvent('film_submission_complete');
   });
 
   const assetsOp = useAsync(async () => {
@@ -136,6 +156,8 @@ export default function useParticiperSubmit({
       setAssetsUploadProgress(100);
 
     setAssetsTagsSaved(true);
+    trackEvent('step_4_assets');
+
     setCurrentStep(5);
   });
 
@@ -189,12 +211,16 @@ export default function useParticiperSubmit({
   const handleSubmitFilmmaker = async (filmmakerLocal) => {
     setError(null);
     const validationError = validateFilmmaker(filmmakerLocal || filmmaker);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     try {
       await filmmakerOp.run(filmmakerLocal || filmmaker);
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
@@ -202,13 +228,17 @@ export default function useParticiperSubmit({
     if (!filmmakerId) return;
     setError(null);
     const validationError = validateMovie(movieLocal || movie);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     const localMovie = movieLocal || movie;
 
     const hasYouTube =
       localMovie.youtube_url && localMovie.youtube_url.trim().length > 0;
     if (!movieVideo && !hasYouTube) {
+      setSubmitting(false);
       return setError(t('error.movie.video.required'));
     }
 
@@ -220,11 +250,13 @@ export default function useParticiperSubmit({
       const isMp4Ext = name.endsWith('.mp4');
 
       if (!isMp4Mime && !isMp4Ext) {
+        setSubmitting(false);
         return setError(t('error.movie.video.invalidType'));
       }
 
       const MAX_BYTES = 300 * 1024 * 1024; // 300 MB
       if (movieVideo.size > MAX_BYTES) {
+        setSubmitting(false);
         return setError(t('error.movie.video.tooLarge'));
       }
     }
@@ -233,6 +265,7 @@ export default function useParticiperSubmit({
       await movieOp.run(localMovie);
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
@@ -241,12 +274,16 @@ export default function useParticiperSubmit({
     setError(null);
     const payload = aiLocal || aiDeclaration;
     const validationError = validateAiDeclaration(payload);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     try {
       await aiOp.run(payload);
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 
@@ -254,12 +291,16 @@ export default function useParticiperSubmit({
     if (!movieId) return;
     setError(null);
     const validationError = validateCollaborators(collaborators);
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setSubmitting(false);
+      return setError(validationError);
+    }
 
     try {
       await collabOp.run();
     } catch (err) {
       setError(t('error.collaborators.saveFailed'));
+      setSubmitting(false);
     }
   };
 
@@ -271,6 +312,7 @@ export default function useParticiperSubmit({
       await assetsOp.run();
     } catch (err) {
       setError(err.message || String(err));
+      setSubmitting(false);
     }
   };
 

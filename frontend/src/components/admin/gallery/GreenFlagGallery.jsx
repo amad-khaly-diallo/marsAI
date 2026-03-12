@@ -4,6 +4,7 @@ import { SectionHeader, ErrorAlert } from '../common';
 import { useGreenFlagFavorites } from '../hooks';
 import GreenFlagModal from './GreenFlagModal';
 import GreenFlagCard from './GreenFlagCard';
+import { trackEvent } from '../../G-Analytics/GoogleAnalytics';
 
 const PAGE_SIZE = 9;
 
@@ -49,6 +50,7 @@ export default function GreenFlagGallery() {
     setSelectingId(movieId);
     try {
       await admin.updateFilmStatus(movieId, 'selected');
+      trackEvent('jury_selection_added', { movie_title: activeFavorite.movie.original_title });
       setGroups((prev) =>
         prev.map((g) => ({
           ...g,

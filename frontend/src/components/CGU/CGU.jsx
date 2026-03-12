@@ -1,12 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import BannerBg from '../../assets/images/bn03.png';
-import { legalData } from './legalData';
+import { getLegalData } from './legalData';
 import LegalCard from './LegalCard';
 import LegalHeader from './LegalHeader';
 
 export default function CGU() {
   const { t } = useTranslation();
+  const legalData = getLegalData(t);
 
   return (
     <div className="relative w-full min-h-screen bg-[#020617] text-slate-200 py-20 px-6 font-sans overflow-hidden">
@@ -34,7 +35,7 @@ export default function CGU() {
         {/* Footer Info */}
         <div className="mt-24 text-center relative z-10 px-4">
           <p className="text-[12px] md:text-[15px] text-slate-600 uppercase tracking-[0.2em] md:tracking-[0.5em] mb-4 font-mono leading-loose">
-            MarsAI x Mobile Film Festival x La Plateforme
+            {t('cgu.footer')}
           </p>
         </div>
       </div>
