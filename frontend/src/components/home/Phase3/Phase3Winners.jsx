@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Play, Star, ChevronLeft, ChevronRight, Award } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -163,11 +163,19 @@ export default function Phase3Winners({
   }, [winnersFromApi, t]);
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const dataLength = dataSource.length;
   const selectedFilm = dataSource[activeIndex];
 
   const goPrev = () => setActiveIndex((i) => (i - 1 + dataLength) % dataLength);
-  const goNext = () => setActiveIndex((i) => (i + 1) % dataLength);
+  const goNext = useCallback(() => setActiveIndex((i) => (i + 1) % dataLength), [dataLength]);
+
+  /* ── Auto-scroll every 4 s, pause on hover ── */
+  useEffect(() => {
+    if (isPaused || dataLength <= 1) return;
+    const interval = setInterval(() => goNext(), 4000);
+    return () => clearInterval(interval);
+  }, [isPaused, dataLength, goNext]);
 
   if (loading) {
     return (
@@ -256,7 +264,11 @@ export default function Phase3Winners({
       </motion.div>
 
       {/* ── Winner Spotlight ── */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 mb-14">
+      <div
+        className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 mb-14"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         <AnimatePresence mode="wait">
           {selectedFilm && (
             <WinnerSpotlight key={selectedFilm.id} film={selectedFilm} />
@@ -266,7 +278,11 @@ export default function Phase3Winners({
 
       {/* ── Navigation ── */}
       {dataLength > 1 && (
-        <div className="relative z-10 flex items-center justify-center gap-5 mb-20 px-4">
+        <div
+          className="relative z-10 flex items-center justify-center gap-5 mb-12 px-4"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           <button
             onClick={goPrev}
             className="group flex items-center justify-center w-11 h-11 rounded-full border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.06] hover:border-white/15 transition-all duration-300"
@@ -306,17 +322,17 @@ export default function Phase3Winners({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 max-w-5xl mx-auto px-4 md:px-8"
+        className="relative z-10 max-w-3xl mx-auto px-4 md:px-8"
       >
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <span className="block h-px flex-1 max-w-[60px] bg-white/[0.08]" />
-          <span className="text-[10px] md:text-[11px] font-semibold text-white/25 uppercase tracking-[0.3em]">
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <span className="block h-px flex-1 max-w-[40px] bg-white/[0.08]" />
+          <span className="text-[9px] md:text-[10px] font-semibold text-white/25 uppercase tracking-[0.3em]">
             {t('phase3.exploreCategories')}
           </span>
-          <span className="block h-px flex-1 max-w-[60px] bg-white/[0.08]" />
+          <span className="block h-px flex-1 max-w-[40px] bg-white/[0.08]" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
           {dataSource.map((item, idx) => (
             <button
               key={item.id}
@@ -327,7 +343,7 @@ export default function Phase3Winners({
                   : 'border-white/[0.05] hover:border-white/[0.1]'
               }`}
             >
-              <div className="relative h-24 md:h-28 overflow-hidden">
+              <div className="relative h-16 md:h-20 overflow-hidden">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -340,9 +356,9 @@ export default function Phase3Winners({
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a16] via-[#0a0a16]/50 to-transparent" />
               </div>
 
-              <div className="relative px-3 py-3 bg-[#0a0a16]/80 text-center">
+              <div className="relative px-2 py-2 bg-[#0a0a16]/80 text-center">
                 <span
-                  className={`text-[10px] md:text-[11px] font-bold uppercase tracking-[0.12em] transition-colors duration-300 ${
+                  className={`text-[9px] md:text-[10px] font-bold uppercase tracking-[0.12em] transition-colors duration-300 ${
                     activeIndex === idx
                       ? 'text-[#C6A55C]'
                       : 'text-white/30 group-hover:text-white/60'
