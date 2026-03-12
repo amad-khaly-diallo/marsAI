@@ -265,7 +265,11 @@ export function StatsSection({ phase2 }) {
             playCameraSound();
             setStatsFlash(true);
             window.setTimeout(() => setStatsFlash(false), 1200);
-          } else if (!entry.isIntersecting && statsRevealed && !manuallyTurnedOff) {
+          } else if (
+            !entry.isIntersecting &&
+            statsRevealed &&
+            !manuallyTurnedOff
+          ) {
             // Éteindre la caméra quand on scroll vers le haut (section non visible)
             setStatsRevealed(false);
           }
@@ -273,7 +277,7 @@ export function StatsSection({ phase2 }) {
       },
       {
         threshold: 0.3, // S'active quand 30% de la section est visible
-      }
+      },
     );
 
     if (sectionRef.current) {
@@ -290,7 +294,7 @@ export function StatsSection({ phase2 }) {
   const handleStatsReveal = () => {
     const nextState = !statsRevealed;
     setStatsRevealed(nextState);
-    
+
     if (nextState) {
       // Si on allume, réinitialiser le flag manuel
       setManuallyTurnedOff(false);
@@ -299,7 +303,7 @@ export function StatsSection({ phase2 }) {
       // Si on éteint, marquer comme éteint manuellement
       setManuallyTurnedOff(true);
     }
-    
+
     setStatsFlash(true);
     window.setTimeout(() => setStatsFlash(false), 1200);
   };
@@ -310,13 +314,12 @@ export function StatsSection({ phase2 }) {
   const filteredStats = currentGenre.stats;
   const filteredAnalytics = currentGenre.analytics;
 
-  const badgeLabel = phase2?.projectionsBadge || 'Résultats & Projections';
+  const badgeLabel =
+    getLocalized(phase2?.projectionsBadge, i18n) || 'Résultats & Projections';
   const title =
-    getLocalized(phase2?.projectionsTitle, i18n) ||
-    t('home.stats.title');
+    getLocalized(phase2?.projectionsTitle, i18n) || t('home.stats.title');
   const description =
-    getLocalized(phase2?.projectionsSubtitle, i18n) ||
-    t('home.stats.desc');
+    getLocalized(phase2?.projectionsSubtitle, i18n) || t('home.stats.desc');
 
   return (
     <section ref={sectionRef} className="px-4 pb-12">

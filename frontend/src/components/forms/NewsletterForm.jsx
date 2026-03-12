@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { trackEvent } from '../G-Analytics/GoogleAnalytics';
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState('');
@@ -30,8 +31,10 @@ export default function NewsletterForm() {
 
       setSuccess(t('newsletter.success'));
       setEmail('');
+      trackEvent('newsletter_signup', { status: 'success' });
     } catch (err) {
       setError(err.message);
+      trackEvent('newsletter_signup', { status: 'failure' });
     } finally {
       setLoading(false);
     }

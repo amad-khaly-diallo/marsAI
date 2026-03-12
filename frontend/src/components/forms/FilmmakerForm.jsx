@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { validateFilmmakerField } from '../../utils/validation';
 
 export default function FilmmakerForm({ value, onChange, hasError }) {
   const { t } = useTranslation();
   const [errors, setErrors] = useState({});
-   const [countries, setCountries] = useState([]);
-   const [cities, setCities] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [countryQuery, setCountryQuery] = useState('');
+  const [cityQuery, setCityQuery] = useState('');
 
   const validateField = (field, v) => {
     const key = validateFilmmakerField(field, v);
@@ -96,6 +98,19 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
     };
     fetchCities();
   }, [value?.country]);
+
+  // Options filtrées côté client pour l'autocomplétion pays / ville
+  const filteredCountries = useMemo(() => {
+    if (!countryQuery) return countries;
+    const q = countryQuery.toLowerCase();
+    return countries.filter((c) => c.name.toLowerCase().includes(q));
+  }, [countries, countryQuery]);
+
+  const filteredCities = useMemo(() => {
+    if (!cityQuery) return cities;
+    const q = cityQuery.toLowerCase();
+    return cities.filter((c) => c.toLowerCase().includes(q));
+  }, [cities, cityQuery]);
 
   return (
     <section
@@ -202,56 +217,76 @@ export default function FilmmakerForm({ value, onChange, hasError }) {
         <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted"> Pays / Ville </label>
           <div className="flex gap-2">
-            {/* Pays */}
-            {countries.length > 0 ? (
-              <select
-                value={value.country || ''}
-                onChange={handle('country')}
-                className="w-1/2 rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
-              >
-                <option value="">Sélectionner un pays</option>
-                {countries.map((c) => (
-                  <option key={c.code} value={c.name}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
+            {/* Pays (saisie libre + suggestions) */}
+            <div className="relative w-1/2">
               <input
                 type="text"
                 placeholder="Pays"
                 value={value.country || ''}
-                onChange={handle('country')}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setField('country', v);
+                  setCountryQuery(v);
+                }}
+                onFocus={(e) => setCountryQuery(e.target.value || '')}
                 maxLength={80}
-                className="w-1/2 rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
+                autoComplete="off"
+                className="w-full rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
               />
-            )}
+              {filteredCountries.length > 0 && countryQuery && (
+                <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-md border border-slate-700 bg-slate-900 text-xs text-slate-100 shadow-lg">
+                  {filteredCountries.map((c) => (
+                    <li
+                      key={c.code}
+                      className="cursor-pointer px-3 py-1 hover:bg-slate-800"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setField('country', c.name);
+                        setCountryQuery('');
+                      }}
+                    >
+                      {c.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-            {/* Ville */}
-            {cities.length > 0 && value.country ? (
-              <select
-                value={value.city || ''}
-                onChange={handle('city')}
-                className="w-1/2 rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
-              >
-                <option value="">Sélectionner une ville</option>
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            ) : (
+            {/* Ville (saisie libre + suggestions) */}
+            <div className="relative w-1/2">
               <input
                 type="text"
                 placeholder="Ville"
                 value={value.city || ''}
-                onChange={handle('city')}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setField('city', v);
+                  setCityQuery(v);
+                }}
+                onFocus={(e) => setCityQuery(e.target.value || '')}
                 maxLength={80}
-                className="w-1/2 rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
+                autoComplete="off"
                 disabled={!value.country}
+                className="w-full rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
               />
-            )}
+              {filteredCities.length > 0 && value.country && cityQuery && (
+                <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-md border border-slate-700 bg-slate-900 text-xs text-slate-100 shadow-lg">
+                  {filteredCities.map((city) => (
+                    <li
+                      key={city}
+                      className="cursor-pointer px-3 py-1 hover:bg-slate-800"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setField('city', city);
+                        setCityQuery('');
+                      }}
+                    >
+                      {city}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>

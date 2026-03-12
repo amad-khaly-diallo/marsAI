@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function MovieForm({
@@ -8,6 +9,43 @@ export default function MovieForm({
   videoRequired = false,
 }) {
   const { t } = useTranslation();
+  const [languageQuery, setLanguageQuery] = useState('');
+  const [languageFocused, setLanguageFocused] = useState(false);
+
+  // Liste de langues "connues" pour suggérer.
+  // On utilise des clés stables + i18n pour afficher le nom
+  // en français / anglais, sans caractères non latins.
+  const LANGUAGE_KEYS = useMemo(
+    () => [
+      'language.french',
+      'language.english',
+      'language.spanish',
+      'language.german',
+      'language.italian',
+      'language.portuguese',
+      'language.arabic',
+      'language.russian',
+      'language.chinese',
+      'language.japanese',
+      'language.korean',
+      'language.hindi',
+      'language.turkish',
+      'language.dutch',
+      'language.polish',
+    ],
+    [],
+  );
+
+  const filteredLanguages = useMemo(() => {
+    // On affiche et on filtre sur le label traduit
+    const all = LANGUAGE_KEYS.map((key) => ({
+      key,
+      label: t(key),
+    }));
+    if (!languageQuery) return all;
+    const q = languageQuery.toLowerCase();
+    return all.filter((l) => l.label.toLowerCase().includes(q));
+  }, [LANGUAGE_KEYS, languageQuery, t]);
   const handle = (field) => (e) =>
     onChange({ ...value, [field]: e.target.value });
 
@@ -68,13 +106,46 @@ export default function MovieForm({
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted">Langue principale</label>
-          <input
-            type="text"
-            value={value.language || ''}
-            onChange={handle('language')}
-            maxLength={80}
-            className="rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
-          />
+          <div className="relative">
+            <input
+              type="text"
+              value={value.language || ''}
+              placeholder="Ex. Français, English…"
+              onChange={(e) => {
+                const v = e.target.value;
+                onChange({ ...value, language: v });
+                setLanguageQuery(v);
+              }}
+              onFocus={(e) => {
+                setLanguageFocused(true);
+                setLanguageQuery(e.target.value || '');
+              }}
+              onBlur={() => {
+                // petit délai pour laisser le temps de cliquer sur une suggestion
+                setTimeout(() => setLanguageFocused(false), 100);
+              }}
+              maxLength={80}
+              autoComplete="off"
+              className="w-full rounded-md border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-slate-100"
+            />
+            {filteredLanguages.length > 0 && languageFocused && (
+              <ul className="absolute z-10 mt-1 max-h-40 w-full overflow-y-auto rounded-md border border-slate-700 bg-slate-900 text-xs text-slate-100 shadow-lg">
+                {filteredLanguages.map(({ key, label }) => (
+                  <li
+                    key={key}
+                    className="cursor-pointer px-3 py-1 hover:bg-slate-800"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      onChange({ ...value, language: label });
+                      setLanguageQuery('');
+                    }}
+                  >
+                    {label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
       <div className="mt-3 grid gap-3 md:grid-cols-2">
