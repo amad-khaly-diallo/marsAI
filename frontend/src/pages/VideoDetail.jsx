@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getMovieFullById } from '../services/api';
 import { resolveMediaUrl } from '../utils/media';
 
 export default function VideoDetail() {
   const { id } = useParams();
+  const { t, i18n } = useTranslation();
   const [movie, setMovie] = useState(null);
   const [assets, setAssets] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
@@ -35,10 +37,36 @@ export default function VideoDetail() {
     fetchMovie();
   }, [id]);
 
+  const isEnglish = useMemo(
+    () => (i18n.language || 'fr').toLowerCase().startsWith('en'),
+    [i18n.language],
+  );
+
+  const displayTitle = useMemo(() => {
+    if (!movie) return '';
+    if (isEnglish && movie.english_title) return movie.english_title;
+    return movie.original_title;
+  }, [movie, isEnglish]);
+
+  const displaySynopsis = useMemo(() => {
+    if (!movie) return '';
+    if (isEnglish && movie.synopsis_english) return movie.synopsis_english;
+    return (
+      movie.synopsis_original ||
+      (isEnglish
+        ? t('videoDetail.noSynopsis_en')
+        : t('videoDetail.noSynopsis_fr'))
+    );
+  }, [movie, isEnglish, t]);
+
   // --- RENDERERS ---
 
   const renderVideo = () => {
     if (!movie) return null;
+
+    // Sous-titres SRT éventuels parmi les assets
+    const subtitleAsset = assets.find((a) => a.asset_type === 'subtitle');
+    const subtitleSrc = subtitleAsset ? resolveMediaUrl(subtitleAsset.file_path) : null;
 
     // Cas 1 : lien YouTube
     const isYoutube =
@@ -62,7 +90,17 @@ export default function VideoDetail() {
               controls
               className="w-full h-full object-cover"
               src={fileSrc}
-            />
+            >
+              {subtitleSrc && (
+                <track
+                  kind="subtitles"
+                  src={subtitleSrc}
+                  srcLang={isEnglish ? 'en' : 'fr'}
+                  label={isEnglish ? 'Subtitles' : 'Sous-titres'}
+                  default
+                />
+              )}
+            </video>
           ) : isYoutube ? (
             <iframe
               className="w-full h-full object-cover"
@@ -74,7 +112,7 @@ export default function VideoDetail() {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-sm text-gray-300">
-              Vidéo non disponible
+              {t('videoDetail.videoUnavailable')}
             </div>
           )}
         </div>
@@ -109,9 +147,7 @@ export default function VideoDetail() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white">
         <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-gray-400">
-          Ce court-métrage semble s'être perdu dans l'espace.
-        </p>
+        <p className="text-gray-400">{t('videoDetail.notFound')}</p>
       </div>
     );
   }
@@ -132,18 +168,18 @@ export default function VideoDetail() {
               className="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.9] mb-4 opacity-0 animate-fadeInUp"
               style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
             >
-              {movie.original_title}
+              {displayTitle}
             </h1>
 
             <div
               className="flex items-center gap-3 text-lg font-medium text-gray-400 mb-8 opacity-0 animate-fadeInUp"
               style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}
             >
-              <span className="text-blue-500">DIR.</span>
+              <span className="text-blue-500">{t('videoDetail.dirLabel')}</span>
               <span className="text-white tracking-widest uppercase">
                 {movie.filmmaker
                   ? `${movie.filmmaker.first_name} ${movie.filmmaker.last_name}`
-                  : 'Artiste Inconnu'}
+                  : t('videoDetail.unknownArtist')}
               </span>
             </div>
 
@@ -151,8 +187,7 @@ export default function VideoDetail() {
               className="text-lg leading-relaxed text-gray-300 max-w-lg mb-6 opacity-0 animate-fadeInUp"
               style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
             >
-              {movie.synopsis_original ||
-                'Aucune description disponible pour cette œuvre.'}
+              {displaySynopsis}
             </p>
 
             {/* Tags */}
@@ -160,7 +195,7 @@ export default function VideoDetail() {
               <div className="mb-6 opacity-0 animate-fadeInUp"
                    style={{ animationDelay: '0.45s', animationFillMode: 'forwards' }}>
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
-                  Tags
+                  {t('videoDetail.tags')}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
@@ -180,7 +215,7 @@ export default function VideoDetail() {
               <div className="mb-6 opacity-0 animate-fadeInUp"
                    style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
-                  Collaborateurs
+                  {t('videoDetail.collaborators')}
                 </h2>
                 <ul className="space-y-1 text-sm text-gray-200">
                   {collaborators.map((c) => (
@@ -203,19 +238,19 @@ export default function VideoDetail() {
               <div className="mb-6 opacity-0 animate-fadeInUp"
                    style={{ animationDelay: '0.55s', animationFillMode: 'forwards' }}>
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
-                  Déclaration IA
+                  {t('videoDetail.aiDeclaration')}
                 </h2>
                 <dl className="space-y-1 text-sm text-gray-200">
                   <div>
                     <dt className="text-gray-400 text-xs uppercase">
-                      Type d’œuvre
+                      {t('videoDetail.ai.artworkType')}
                     </dt>
                     <dd>{aiDeclaration.artwork_type}</dd>
                   </div>
                   {aiDeclaration.tech_stack && (
                     <div>
                       <dt className="text-gray-400 text-xs uppercase">
-                        Stack technique
+                        {t('videoDetail.ai.techStack')}
                       </dt>
                       <dd>{aiDeclaration.tech_stack}</dd>
                     </div>
@@ -223,7 +258,7 @@ export default function VideoDetail() {
                   {aiDeclaration.methodology && (
                     <div>
                       <dt className="text-gray-400 text-xs uppercase">
-                        Méthodologie
+                        {t('videoDetail.ai.methodology')}
                       </dt>
                       <dd>{aiDeclaration.methodology}</dd>
                     </div>
@@ -237,7 +272,7 @@ export default function VideoDetail() {
               <div className="mb-6 opacity-0 animate-fadeInUp"
                    style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
-                  Assets
+                  {t('videoDetail.assets')}
                 </h2>
                 <div className="flex flex-wrap gap-3">
                   {assets.map((asset) => {
@@ -265,7 +300,7 @@ export default function VideoDetail() {
                             rel="noreferrer"
                             className="underline text-blue-300"
                           >
-                            Télécharger les sous-titres
+                            {t('videoDetail.assets.downloadSubtitles')}
                           </a>
                         )}
                         {!isImage && !isSubtitle && (
@@ -275,7 +310,7 @@ export default function VideoDetail() {
                             rel="noreferrer"
                             className="underline text-blue-300"
                           >
-                            Ouvrir l’asset
+                            {t('videoDetail.assets.openAsset')}
                           </a>
                         )}
                       </div>

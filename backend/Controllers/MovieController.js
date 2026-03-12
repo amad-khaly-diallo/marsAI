@@ -22,6 +22,13 @@ exports.get = asyncHandler(async (req, res) => {
 exports.getFull = asyncHandler(async (req, res) => {
   const id = Number(req.params.id);
   const data = await MovieService.getFullById(id);
+
+  // Pour l'affichage public (page /watch/:id), on ne doit exposer
+  // que les films sélectionnés. Les autres renvoient une 404.
+  if (!data.movie || data.movie.status !== 'selected') {
+    throw new HttpError(404, 'Movie not found');
+  }
+
   res.json(data);
 });
 

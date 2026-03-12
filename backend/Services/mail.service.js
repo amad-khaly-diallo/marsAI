@@ -63,14 +63,14 @@ async function sendSubmissionConfirmation({ to, filmmakerName, movieTitle }) {
   await sendMail({ to, subject, text });
 }
 
-async function sendYouTubeUploadSuccessEmail({ to, filmmakerName, movieTitle, youtubeUrl }) {
-  const subject = 'marsAI – Votre vidéo est en ligne sur YouTube';
+async function sendYouTubeUploadSuccessEmail({ to, filmmakerName, movieTitle, videoUrl }) {
+  const subject = 'marsAI – Votre vidéo à ete aprouvée';
   const text = [
     `Bonjour ${filmmakerName || ''}`.trim(),
     '',
-    `Votre film "${movieTitle}" a été mis en ligne sur YouTube avec succès.`,
+    `Votre film "${movieTitle}" a été aprouvé par le comité du festival.`,
     '',
-    `Lien : ${youtubeUrl || ''}`,
+    `Lien : ${videoUrl || ''}`,
     '',
     'L’équipe marsAI',
   ].join('\n');
@@ -79,12 +79,14 @@ async function sendYouTubeUploadSuccessEmail({ to, filmmakerName, movieTitle, yo
 }
 
 async function sendUploadFailureEmail({ to, filmmakerName, movieTitle }) {
-  const subject = 'marsAI – Échec de l’upload YouTube';
+  const subject = 'marsAI – Échec de l’upload de votre film';
   const text = [
     `Bonjour ${filmmakerName || ''}`.trim(),
     '',
-    `L’upload vers YouTube de votre film "${movieTitle}" n’a pas abouti.`,
-    'Votre vidéo est bien enregistrée côté festival ; vous serez informé(e) en cas de nouvel envoi vers YouTube.',
+    `L’upload de votre film "${movieTitle}" n’a pas abouti.`,
+    'Votre film ne respecte pas les conditions du festival. En effet, il ne respecte pas les genres autorisés ou les autres conditions du festival.',
+    '',
+    'Veuillez corriger les erreurs et réessayer.',
     '',
     'L’équipe marsAI',
   ].join('\n');
