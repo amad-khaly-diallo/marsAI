@@ -168,7 +168,10 @@ export default function Phase3Winners({
   const selectedFilm = dataSource[activeIndex];
 
   const goPrev = () => setActiveIndex((i) => (i - 1 + dataLength) % dataLength);
-  const goNext = useCallback(() => setActiveIndex((i) => (i + 1) % dataLength), [dataLength]);
+  const goNext = useCallback(
+    () => setActiveIndex((i) => (i + 1) % dataLength),
+    [dataLength],
+  );
 
   /* ── Auto-scroll every 4 s, pause on hover ── */
   useEffect(() => {
