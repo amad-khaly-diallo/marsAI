@@ -27,7 +27,7 @@ export default function Phase1Hero({
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80 "/>
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
 
-      <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center pt-6 md:pt-4">
+      <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center pt-20 md:pt-16">
         <h1 className="max-w-5xl text-4xl font-black leading-[1.1] tracking-tight text-white md:text-7xl lg:text-7xl animate-fadeInUp ">
           {title}
         </h1>
@@ -48,7 +48,7 @@ export default function Phase1Hero({
         )}
 
         <div
-          className="mt-10 animate-fadeInUp"
+          className="mt-10 animate-fadeInUp pb-10"
           style={{ animationDelay: '0.2s' }}
         >
           <Link

@@ -73,7 +73,7 @@ const Partners = () => {
         ></div>
         <div className="absolute inset-0 bg-black/20 z-1"></div>
         <div
-          className={`relative z-10 flex flex-col items-center justify-center h-full text-center px-6 pb-32 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+          className={`relative z-10 flex flex-col items-center justify-center h-full text-center px-6 pb-44 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
         >
           <h1
             className="text-3xl md:text-7xl font-extrabold mb-1 uppercase tracking-tighter"
@@ -94,11 +94,11 @@ const Partners = () => {
       {/* Section Avantages */}
       <div className="max-w-6xl mx-auto px-6 -mt-10 mb-16 relative z-20 ">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
-          <div className="bg-gradient-to-r from-[#0138c4] to-[#FF0080] hover:from-[#e60073] hover:to-[#1e27a3]  border  p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+          <div className="bg-gradient-to-r from-[#021649] to-[#4b0227] hover:from-[#4a0126] hover:to-[#01053a]  border  p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
             <div className="text-white mb-4 text-2xl font-bold">Branding</div>
             <p className="text-white text-sm leading-relaxed">{t("partners.benefit1", "Exposition maximale de votre logo sur nos supports digitaux.")}</p>
           </div>
-          <div className="border bg-gradient-to-r from-[#FF0080] to-[#2933D3] hover:from-[#e60073] hover:to-[#1e27a3] p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+          <div className="border bg-gradient-to-r from-[#021649] to-[#4b0227] hover:from-[#4a0126] hover:to-[#01053a] p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
             <div className="text-white mb-4 text-2xl font-bold">
               Networking
             </div>
@@ -109,7 +109,7 @@ const Partners = () => {
               )}
             </p>
           </div>
-          <div className="border bg-gradient-to-r from-[#FF0080] to-[#2933D3] hover:from-[#e60073] hover:to-[#1e27a3] p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
+          <div className="border bg-gradient-to-r from-[#021649] to-[#4b0227] hover:from-[#4a0126] hover:to-[#01053a] p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
             <div className="text-white mb-4 text-2xl font-bold">
               Innovation
             </div>
