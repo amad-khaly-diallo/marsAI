@@ -29,7 +29,7 @@ async function submitContactForm(payload = {}) {
     throw new HttpError(400, "Message is too short");
   }
 
-  const contactRecipient = process.env.CONTACT_EMAIL;
+  const contactRecipient = process.env.MAIL_FROM;
   if (!contactRecipient) {
     throw new HttpError(500, "Contact recipient is not configured");
   }
