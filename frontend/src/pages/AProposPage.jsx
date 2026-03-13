@@ -82,14 +82,6 @@ export default function AProposPage() {
 
             <div className="mt-7 flex flex-wrap gap-3">
               <ActionButton
-                  to={pageData?.heroCtaProgramLink || '/programme'}
-                  label={
-                    getLocalized(pageData?.heroCtaProgramLabel) ||
-                    t('about.hero.cta.program')
-                  }
-                variant="primary"
-              />
-              <ActionButton
                   to={pageData?.heroCtaContactLink || '/contact'}
                   label={
                     getLocalized(pageData?.heroCtaContactLabel) ||
@@ -178,14 +170,6 @@ export default function AProposPage() {
                     t('about.location.cta.info')
                   }
                   variant="secondary"
-                />
-                <ActionButton
-                  to={pageData?.locationCtaProgramLink || '/programme'}
-                  label={
-                    getLocalized(pageData?.locationCtaProgramLabel) ||
-                    t('about.location.cta.program')
-                  }
-                  variant="text"
                 />
               </div>
             </GlassCard>
