@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronLeft } from 'lucide-react';
 import { useAdmin } from '../../contexts';
 
 export default function AdminLayout({ children, currentAdmin }) {
@@ -112,7 +113,19 @@ export default function AdminLayout({ children, currentAdmin }) {
         </div>
       </aside>
 
-      <main className="flex-1">{children(activeSection)}</main>
+      <main className="flex-1">
+        {activeSection !== initialSection && (
+          <button
+            type="button"
+            onClick={() => setActiveSection(initialSection)}
+            className="mb-4 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-brand-muted hover:text-slate-100 hover:bg-slate-900/60 border border-transparent hover:border-slate-700/60 transition-colors"
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
+            Retour
+          </button>
+        )}
+        {children(activeSection)}
+      </main>
     </div>
   );
 }
