@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import banner01 from '../assets/images/banner.jpg';
 import { getPartnerPage } from '../services/query';
+import api from '../services/api';
 
 const Partners = () => {
   const { t, i18n } = useTranslation();
@@ -35,11 +36,7 @@ const Partners = () => {
   useEffect(() => {
     const fetchPartners = async () => {
       try {
-        const response = await fetch('/api/partners');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await api.get('/partners');
         setPartners(data);
       } catch (error) {
         console.error('Erreur chargement partenaires:', error);

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SectionHeader, ErrorAlert, SectionCard } from '../common';
+import api from '../../../services/api';
 
 export default function VideosDistribution({ currentAdmin }) {
   const [minReviewers, setMinReviewers] = useState(2);
@@ -13,20 +14,10 @@ export default function VideosDistribution({ currentAdmin }) {
     setError(null);
     setResult(null);
     try {
-      const res = await fetch('/api/admin/films/distribute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ minReviewers: Number(minReviewers) || 2 }),
+      const data = await api.post('/admin/films/distribute', {
+        minReviewers: Number(minReviewers) || 2,
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok)
-        throw new Error(
-          data.error ||
-            data.message ||
-            'Impossible de lancer la répartition automatique.',
-        );
-      setResult(data);
+      setResult(data || null);
     } catch (err) {
       setError(err.message);
     } finally {

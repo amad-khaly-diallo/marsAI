@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getContactPage } from '../services/query';
+import api from '../services/api';
 
 export default function Contact() {
   const { t, i18n } = useTranslation();
@@ -70,21 +71,10 @@ export default function Contact() {
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...trimmed,
-          newsletter: form.newsletter,
-        }),
+      await api.post('/contact', {
+        ...trimmed,
+        newsletter: form.newsletter,
       });
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(
-          data.error || data.message || t('contact.error.generic'),
-        );
-      }
 
       setSuccess(true);
       setForm({

@@ -7,6 +7,7 @@ import styles from './Jury.module.css';
 import backgroundImage from '../../assets/images/bn05.png';
 import { getJuryPage } from '../../services/query';
 import { getLocalized } from '../../utils/sanity';
+import api from '../../services/api';
 
 const Jury = () => {
   const [juryMembers, setJuryMembers] = useState([]);
@@ -41,8 +42,8 @@ const Jury = () => {
   };
 
   useEffect(() => {
-    fetch('/api/jury')
-      .then((res) => res.json())
+    api
+      .get('/jury')
       .then((data) => {
         setJuryMembers(data);
         setLoading(false);

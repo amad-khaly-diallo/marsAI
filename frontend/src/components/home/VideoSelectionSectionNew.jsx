@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAudioContext } from '../../hooks/useAudioContext';
 import { heroAnimationStyles } from '../sections/heroAnimations';
+import api from '../../services/api';
 
 // Import des images
 import imgTout from '../../assets/images/tout.png';
@@ -35,13 +36,7 @@ export default function VideoSelectionSection() {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch('/api/movies');
-      if (!response.ok) {
-        setMovies([]);
-        setLoading(false);
-        return;
-      }
-      const data = await response.json().catch(() => []);
+      const data = await api.get('/movies');
       setMovies(Array.isArray(data) ? data : []);
     } catch (err) {
       setMovies([]);

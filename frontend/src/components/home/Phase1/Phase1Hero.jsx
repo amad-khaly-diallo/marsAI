@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 
+
 /**
  * Phase 1 – Hero : vidéo de fond, titre, sous-titre, bouton CTA vers le projet (participer).
  */
 export default function Phase1Hero({
-  videoSrc = '/video/video4.mp4',
+  videoSrc = `${process.env.PUBLIC_URL || ''}/video/video4.mp4`,
   title = 'MarsAI',
   subtitle = "Le festival du film court créé à l'IA. Une sélection percutante en 60 secondes.",
   ctaLabel = 'Participer au projet',

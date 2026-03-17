@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import MyMoviesGrid from './MyMoviesGrid';
 import MyMovieModal from './MyMovieModal';
+import api from '../../../services/api';
 
 export default function MyMoviesGallery() {
   const [movies, setMovies] = useState([]);
@@ -15,12 +16,7 @@ export default function MyMoviesGallery() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/admin/films', {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const data = await res.json().catch(() => []);
-      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
+      const data = await api.get('/admin/films');
       setMovies(data || []);
     } catch (err) {
       setError(err.message);
@@ -51,19 +47,7 @@ export default function MyMoviesGallery() {
     }
     setSavingReviewId(id);
     try {
-      const res = await fetch(`/api/admin/films/${id}/review`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok)
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Impossible d'enregistrer votre note/commentaire.",
-        );
+      await api.patch(`/admin/films/${id}/review`, payload);
       setMovies((prev) =>
         prev.map((m) =>
           m.id === id
@@ -81,19 +65,7 @@ export default function MyMoviesGallery() {
   const handleUpdateFlag = async (id, flag) => {
     setSavingFlagId(id);
     try {
-      const res = await fetch(`/api/admin/films/${id}/flag`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ flag }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok)
-        throw new Error(
-          data.error ||
-            data.message ||
-            'Impossible de mettre à jour votre flag personnel.',
-        );
+      await api.patch(`/admin/films/${id}/flag`, { flag });
       setMovies((prev) =>
         prev.map((m) => (m.id === id ? { ...m, my_flag: flag } : m)),
       );

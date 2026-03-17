@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import api from '../services/api';
 
 export function useAdminAuth() {
   const [checking, setChecking] = useState(true);
@@ -11,20 +12,19 @@ export function useAdminAuth() {
     setError(null);
 
     try {
-      const res = await fetch('/api/admins/me', {
-        method: 'GET',
-        credentials: 'include',
-      });
-
-      if (res.ok) {
-        const data = await res.json().catch(() => null);
-        setAdmin(data || null);
-        setIsAuthenticated(true);
-      } else if (res.status === 401 || res.status === 403) {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
         setAdmin(null);
         setIsAuthenticated(false);
+        return;
+      }
+
+      const data = await api.get('/admins/me');
+      if (data) {
+        setAdmin(data);
+        setIsAuthenticated(true);
       } else {
-        setError("Impossible de vérifier l'authentification admin.");
+        setAdmin(null);
         setIsAuthenticated(false);
       }
     } catch (err) {
@@ -42,13 +42,15 @@ export function useAdminAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await fetch('/api/admins/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
+      await api.post('/admins/auth/logout');
     } catch {
       // ignore
     } finally {
+      try {
+        localStorage.removeItem('adminToken');
+      } catch {
+        // ignore
+      }
       setAdmin(null);
       setIsAuthenticated(false);
     }

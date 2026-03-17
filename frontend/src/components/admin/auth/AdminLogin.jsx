@@ -13,8 +13,20 @@ export default function AdminLogin({ onSuccess }) {
     setLoading(true);
     try {
       const api = require('../../../services/api').default;
-      const data = await api.post('/admins/auth/login', { email, password });
-      if (onSuccess) onSuccess(data);
+      const { admin, token } = await api.post('/admins/auth/login', {
+        email,
+        password,
+      });
+
+      if (token) {
+        try {
+          localStorage.setItem('adminToken', token);
+        } catch {
+          // ignore storage errors
+        }
+      }
+
+      if (onSuccess) onSuccess(admin);
     } catch (err) {
       setError(err.message);
     } finally {

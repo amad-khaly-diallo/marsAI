@@ -12,15 +12,6 @@ export const CookieBanner = () => {
     }
   }, []);
 
-  let cookieData = null;
-  fetch('http://localhost:1337/api/cookie?locale=en')
-    .then((response) => response.json())
-    .then((data) => {
-      cookieData = data;
-    })
-    .catch((error) => {
-      console.error('Error fetching cookie data:', error);
-    });
 
   const handleAccept = () => {
     localStorage.setItem('MarsIA_cookie_consent', 'accepted');

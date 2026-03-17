@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { heroAnimationStyles } from '../../sections/heroAnimations';
 import { resolveMediaUrl } from '../../../utils/media';
+import api from '../../../services/api';
 
 export const HomePhase2 = () => {
   const [movies, setMovies] = useState([]);
@@ -16,11 +17,7 @@ export const HomePhase2 = () => {
   const fetchMovies = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/movies');
-      if (!response.ok) {
-        throw new Error('Erreur réseau');
-      }
-      const data = await response.json();
+      const data = await api.get('/movies');
       setMovies(data);
     } catch (err) {
       setError('Erreur lors du chargement des films');

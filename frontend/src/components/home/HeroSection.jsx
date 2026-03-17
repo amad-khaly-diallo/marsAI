@@ -10,7 +10,7 @@ export function HeroSection({
   subtitle,
   ctas,
   statsCards,
-  videoSrc = '/video/video4.mp4',
+  videoSrc = `${process.env.PUBLIC_URL || ''}/video/video4.mp4`,
 }) {
   const { t } = useTranslation();
 
