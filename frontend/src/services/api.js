@@ -3,11 +3,32 @@
 // - includes `credentials: 'include'` by default
 // - parses JSON safely and throws a normalized Error on non-2xx
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+
 async function request(path, options = {}) {
-  const normalizedPath = path.startsWith('/api')
+  const relativePath = path.startsWith('/api')
     ? path
     : `/api${path.startsWith('/') ? '' : '/'}${path}`;
+
+  const base = API_BASE_URL.replace(/\/$/, '');
+  const baseHasApiSuffix = /\/api$/i.test(base);
+  const pathForBase =
+    baseHasApiSuffix && relativePath.startsWith('/api')
+      ? relativePath.replace(/^\/api/, '') || '/'
+      : relativePath;
+
+  const normalizedPath = base ? `${base}${pathForBase}` : relativePath;
+
   const { body, formData, headers = {}, method = 'GET', ...rest } = options;
+
+  let token = null;
+  try {
+    token = localStorage.getItem('adminToken');
+  } catch {
+    token = null;
+  }
+
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
   const init = {
     method,
@@ -17,12 +38,15 @@ async function request(path, options = {}) {
 
   if (formData) {
     init.body = formData;
-    // don't set content-type for FormData — browser sets the multipart boundary
   } else if (body !== undefined) {
-    init.headers = { 'Content-Type': 'application/json', ...headers };
+    init.headers = {
+      'Content-Type': 'application/json',
+      ...headers,
+      ...authHeaders,
+    };
     init.body = JSON.stringify(body);
-  } else if (Object.keys(headers).length) {
-    init.headers = { ...headers };
+  } else if (Object.keys(headers).length || token) {
+    init.headers = { ...headers, ...authHeaders };
   }
 
   const res = await fetch(normalizedPath, init);
@@ -66,9 +90,18 @@ const api = {
   // POST with upload progress callback (uses XMLHttpRequest because fetch has no upload progress)
   postFormWithProgress: (path, formData, onProgress, opts = {}) => {
     return new Promise((resolve, reject) => {
-      const normalizedPath = path.startsWith('/api')
+      const relativePath = path.startsWith('/api')
         ? path
         : `/api${path.startsWith('/') ? '' : '/'}${path}`;
+
+      const base = API_BASE_URL.replace(/\/$/, '');
+      const baseHasApiSuffix = /\/api$/i.test(base);
+      const pathForBase =
+        baseHasApiSuffix && relativePath.startsWith('/api')
+          ? relativePath.replace(/^\/api/, '') || '/'
+          : relativePath;
+
+      const normalizedPath = base ? `${base}${pathForBase}` : relativePath;
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', normalizedPath, true);

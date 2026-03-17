@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import AdminFilmGallery from './AdminFilmGallery';
+import api from '../../../services/api';
 
 export default function MoviesManagement({ currentAdmin }) {
   const [movies, setMovies] = useState([]);
@@ -14,12 +15,7 @@ export default function MoviesManagement({ currentAdmin }) {
     try {
       const params = new URLSearchParams();
       params.set('statuses', 'selected,winner');
-      const res = await fetch(`/api/admin/films?${params.toString()}`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const data = await res.json().catch(() => []);
-      if (!res.ok) throw new Error(data.error || 'Erreur de chargement.');
+      const data = await api.get(`/admin/films?${params.toString()}`);
       setMovies(data || []);
     } catch (err) {
       setError(err.message);

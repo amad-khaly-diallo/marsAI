@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { Clock, Play } from 'lucide-react';
 import { STATUS_LABELS } from '../../../constants/status';
 import AdminFilmModal from './AdminFilmModal';
+import api from '../../../services/api';
 
 function getYouTubeInfo(url) {
   if (!url) return { videoId: null, embedUrl: null, thumbUrl: null };
@@ -48,7 +49,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
     setLoadingReviewId(id);
     setReviewsError(null);
     try {
-      const res = await fetch(`/api/admin/films/${id}/reviews`, {
+      const res = await api.get(`/admin/films/${id}/reviews`, {
         method: 'GET',
         credentials: 'include',
       });
@@ -95,7 +96,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
     setTogglingWinnerId(movie.id);
     setWinnerError(null);
     try {
-      const res = await fetch(`/api/admin/films/${movie.id}/winner`, {
+      const res = await api.patch(`/admin/films/${movie.id}/winner`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

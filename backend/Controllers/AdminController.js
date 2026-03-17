@@ -38,15 +38,17 @@ exports.create = asyncHandler(async (req, res) => {
 exports.logAdmin = asyncHandler(async (req, res) => {
   const { admin, token } = await AdminService.logAdmin(req.body || {});
 
+  // On garde le cookie pour les usages mêmes-origine éventuels,
+  // mais on renvoie aussi explicitement le token au frontend
+  // pour l'utiliser en Authorization Bearer (option sans cookies).
   res.cookie('token', token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    // Durée max de session côté serveur (72h). L'inactivité (1h) est gérée côté frontend.
     maxAge: 72 * 60 * 60 * 1000,
     sameSite: 'lax',
   });
 
-  res.status(200).json(admin);
+  res.status(200).json({ admin, token });
 });
 
 exports.logout = asyncHandler(async (req, res) => {

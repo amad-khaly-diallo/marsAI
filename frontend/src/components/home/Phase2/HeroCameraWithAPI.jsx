@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { heroAnimationStyles } from '../../sections/heroAnimations';
 import { resolveMediaUrl } from '../../../utils/media';
+import api from '../../../services/api';
 
 export function HeroCameraWithAPI() {
   const [selectedGenreIdx, setSelectedGenreIdx] = useState(0);
@@ -21,8 +22,7 @@ export function HeroCameraWithAPI() {
 
   const fetchGenres = async () => {
     try {
-      const res = await fetch('/api/genres');
-      const data = await res.json();
+      const data = await api.get('/genres');
       setGenres(data);
       setLoading(false);
     } catch {
@@ -33,8 +33,7 @@ export function HeroCameraWithAPI() {
 
   const fetchMoviesByGenre = async (name) => {
     try {
-      const res = await fetch(`/api/movies?genre=${name}`);
-      const data = await res.json();
+      const data = await api.get(`/movies?genre=${name}`);
       setMovies(data.slice(0, 6));
     } catch {
       setMovies([]);

@@ -1,19 +1,27 @@
 const { verifyToken } = require('../Utils/jwt.utils');
 
 const authenticate = (req, res, next) => {
-    const token = req.cookies?.token;
+  // Priorité au header Authorization: Bearer <token>,
+  // sinon fallback sur le cookie "token" (compat local).
+  const auth = req.headers.authorization || '';
+  const [type, headerToken] = auth.split(' ');
+  const cookieToken = req.cookies?.token;
+  const token =
+    type === 'Bearer' && headerToken
+      ? headerToken
+      : cookieToken;
 
-    if (!token) {
-        return res.status(401).json({ message: 'No token provided' });
-    }
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
 
-    const decoded = verifyToken(token);
-    if (!decoded) {
-        return res.status(403).json({ message: 'Invalid or expired token' });
-    }
+  const decoded = verifyToken(token);
+  if (!decoded) {
+    return res.status(403).json({ message: 'Invalid or expired token' });
+  }
 
-    req.user = decoded;
-    next();
+  req.user = decoded;
+  next();
 };
 
 // Middleware pour vérifier rôle
