@@ -7,9 +7,18 @@ import {
   Trophy,
   ChevronLeft,
   ChevronRight,
+  Download,
+  Share2,
 } from 'lucide-react';
 import { STATUS_LABELS } from '../../../constants/status';
 import { resolveMediaUrl } from '../../../utils/media';
+import { useAdmin } from '../../../contexts';
+import {
+  buildSocialShareLinks,
+  safeFilename,
+  tryNativeShare,
+  tryNativeShareFile,
+} from '../../../utils/socialShare';
 
 function getYouTubeEmbed(url) {
   if (!url) return null;
@@ -36,9 +45,12 @@ export default function AdminFilmModal({
   winnersCount,
   winnerError,
 }) {
+  const { role } = useAdmin();
+  const canShareOrDownload = role === 'admin' || role === 'super_admin';
   const embedUrl = useMemo(() => getYouTubeEmbed(movie?.youtube_url), [movie]);
   const hasLocalVideo = !!movie?.video_url;
   const localSrc = hasLocalVideo ? resolveMediaUrl(movie.video_url) : null;
+  const [sharing, setSharing] = useState(false);
 
   const [winnerFormOpen, setWinnerFormOpen] = useState(false);
   const [winnerRanking, setWinnerRanking] = useState('');
@@ -57,6 +69,42 @@ export default function AdminFilmModal({
   }, [movie, winnersCount]);
 
   if (!isOpen || !movie) return null;
+
+  const shareUrl = hasLocalVideo && localSrc ? localSrc : movie.youtube_url || null;
+  const shareText = movie.original_title
+    ? `Regarder : ${movie.original_title}`
+    : 'Regarder cette vidéo';
+  const shareLinks = shareUrl
+    ? buildSocialShareLinks({ url: shareUrl, text: shareText })
+    : null;
+
+  const handleShare = async () => {
+    if (!shareUrl) return;
+    if (sharing) return;
+    setSharing(true);
+    try {
+      if (hasLocalVideo && localSrc) {
+        const didFileShare = await tryNativeShareFile({
+          fileUrl: localSrc,
+          filename: `${safeFilename(movie.original_title)}-${movie.id}.mp4`,
+          title: movie.original_title || 'Vidéo',
+          text: shareText,
+        });
+        if (didFileShare) return;
+      }
+
+      const didNative = await tryNativeShare({
+        title: movie.original_title || 'Vidéo',
+        text: shareText,
+        url: shareUrl,
+      });
+      if (didNative) return;
+      if (shareLinks?.whatsapp)
+        window.open(shareLinks.whatsapp, '_blank', 'noopener,noreferrer');
+    } finally {
+      setSharing(false);
+    }
+  };
 
   const isToggling = togglingWinnerId === movie.id;
   const canMarkWinner =
@@ -78,14 +126,41 @@ export default function AdminFilmModal({
                 : '—'}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-full bg-slate-900/80 p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
-            aria-label="Fermer"
-          >
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {canShareOrDownload && shareUrl && (
+              <div className="flex items-center gap-2">
+                {hasLocalVideo && localSrc && (
+                  <a
+                    href={localSrc}
+                    download={`${safeFilename(movie.original_title)}-${movie.id}.mp4`}
+                    className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900/70 px-2.5 py-1 text-[11px] font-medium text-slate-200 hover:bg-slate-800/80"
+                    title="Télécharger la vidéo"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    Télécharger
+                  </a>
+                )}
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  disabled={sharing}
+                  className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900/70 px-2.5 py-1 text-[11px] font-medium text-slate-200 hover:bg-slate-800/80"
+                  title="Partager la vidéo"
+                >
+                  <Share2 className="h-3.5 w-3.5" />
+                  {sharing ? 'Préparation...' : 'Partager'}
+                </button>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full bg-slate-900/80 p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-100"
+              aria-label="Fermer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4 md:flex-row">
@@ -111,6 +186,42 @@ export default function AdminFilmModal({
                 </div>
               )}
             </div>
+            {canShareOrDownload && shareLinks && (
+              <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+                <a
+                  href={shareLinks.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-slate-700 bg-slate-900/70 px-3 py-1 text-slate-200 hover:bg-slate-800/80"
+                >
+                  Facebook
+                </a>
+                <a
+                  href={shareLinks.x}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-slate-700 bg-slate-900/70 px-3 py-1 text-slate-200 hover:bg-slate-800/80"
+                >
+                  X
+                </a>
+                <a
+                  href={shareLinks.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-slate-700 bg-slate-900/70 px-3 py-1 text-slate-200 hover:bg-slate-800/80"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={shareLinks.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-slate-700 bg-slate-900/70 px-3 py-1 text-slate-200 hover:bg-slate-800/80"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-1 flex-col gap-3">
