@@ -11,7 +11,7 @@ export default function App() {
   return (
     <AuthProvider>
       <AdminProvider>
-        <Router basename="/marsai">
+        <Router >
           <GoogleAnalytics />
           <ScrollToTop />
 

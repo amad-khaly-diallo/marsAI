@@ -1,18 +1,28 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Download, Share2 } from 'lucide-react';
 import { getMovieFullById } from '../services/api';
 import { resolveMediaUrl } from '../utils/media';
+import { useAdmin } from '../contexts';
+import {
+  buildSocialShareLinks,
+  safeFilename,
+  tryNativeShare,
+  tryNativeShareFile,
+} from '../utils/socialShare';
 
 export default function VideoDetail() {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
+  const { role } = useAdmin();
   const [movie, setMovie] = useState(null);
   const [assets, setAssets] = useState([]);
   const [collaborators, setCollaborators] = useState([]);
   const [tags, setTags] = useState([]);
   const [aiDeclaration, setAiDeclaration] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -151,6 +161,43 @@ export default function VideoDetail() {
       </div>
     );
   }
+
+  const canShareOrDownload = role === 'admin' || role === 'super_admin';
+  const hasFileOnDisk = !!movie.video_url;
+  const fileSrc = hasFileOnDisk ? resolveMediaUrl(movie.video_url) : null;
+  const shareUrl = hasFileOnDisk && fileSrc ? fileSrc : movie.youtube_url || null;
+  const shareText = displayTitle ? `Regarder : ${displayTitle}` : 'Regarder cette vidéo';
+  const shareLinks = shareUrl
+    ? buildSocialShareLinks({ url: shareUrl, text: shareText })
+    : null;
+
+  const handleShare = async () => {
+    if (!shareUrl) return;
+    if (sharing) return;
+    setSharing(true);
+    try {
+      if (hasFileOnDisk && fileSrc) {
+        const didFileShare = await tryNativeShareFile({
+          fileUrl: fileSrc,
+          filename: `${safeFilename(displayTitle)}-${movie.id}.mp4`,
+          title: displayTitle || 'Vidéo',
+          text: shareText,
+        });
+        if (didFileShare) return;
+      }
+
+      const didNative = await tryNativeShare({
+        title: displayTitle || 'Vidéo',
+        text: shareText,
+        url: shareUrl,
+      });
+      if (didNative) return;
+      if (shareLinks?.whatsapp)
+        window.open(shareLinks.whatsapp, '_blank', 'noopener,noreferrer');
+    } finally {
+      setSharing(false);
+    }
+  };
 
   // --- PAGE CONTENU ---
   return (
@@ -327,6 +374,71 @@ export default function VideoDetail() {
             style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
           >
             {renderVideo()}
+
+            {canShareOrDownload && shareUrl && (
+              <div className="mt-3 flex flex-col gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  {hasFileOnDisk && fileSrc && (
+                    <a
+                      href={fileSrc}
+                      download={`${safeFilename(displayTitle)}-${movie.id}.mp4`}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10"
+                      title="Télécharger la vidéo"
+                    >
+                      <Download className="h-4 w-4" />
+                      Télécharger
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    disabled={sharing}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-white hover:bg-white/10"
+                    title="Partager la vidéo"
+                  >
+                    <Share2 className="h-4 w-4" />
+                    {sharing ? 'Préparation...' : 'Partager'}
+                  </button>
+                </div>
+
+                {shareLinks && (
+                  <div className="flex flex-wrap gap-2 text-[11px] text-gray-200">
+                    <a
+                      href={shareLinks.facebook}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 hover:bg-white/10"
+                    >
+                      Facebook
+                    </a>
+                    <a
+                      href={shareLinks.x}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 hover:bg-white/10"
+                    >
+                      X
+                    </a>
+                    <a
+                      href={shareLinks.whatsapp}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 hover:bg-white/10"
+                    >
+                      WhatsApp
+                    </a>
+                    <a
+                      href={shareLinks.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 hover:bg-white/10"
+                    >
+                      LinkedIn
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="flex justify-between items-center mt-6 text-xs font-mono text-gray-600 uppercase tracking-widest border-t border-gray-900 pt-4">
               <div>MARSAI FESTIVAL • 2026</div>
