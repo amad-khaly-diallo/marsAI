@@ -253,5 +253,16 @@
   "phase3.noSynopsis": "No synopsis available.",
   "phase3.exploreCategories": "Explore categories",
   "phase3.grandPrix": "Grand Prix",
-  "phase3.festivalTitle": "MarsAI"
+  "phase3.festivalTitle": "MarsAI",
+  "postFestival.badge": "2026 Edition Closed",
+  "postFestival.title": "MarsAI 2026: an edition that redefined AI short film storytelling.",
+  "postFestival.description": "Across several weeks, writers, directors, studios and partners turned innovation into memorable films. Discover the official awards, spotlight winners, and the identity of a festival built to showcase the next wave of AI cinema.",
+  "postFestival.stats.winners.value": "Official awards",
+  "postFestival.stats.winners.label": "Winners & distinctions",
+  "postFestival.stats.audience.value": "Engaged audience",
+  "postFestival.stats.audience.label": "Creative community momentum",
+  "postFestival.stats.countries.value": "Global footprint",
+  "postFestival.stats.countries.label": "Talent from everywhere",
+  "postFestival.cta.winners": "Explore the awards",
+  "postFestival.cta.partners": "Enter the MarsAI universe"
 }
