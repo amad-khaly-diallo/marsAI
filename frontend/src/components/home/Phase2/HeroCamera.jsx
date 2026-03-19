@@ -316,6 +316,7 @@ function normalizeApiMovie(m) {
 
 export default function HeroCamera({ moviesFromApi }) {
   const isMobile = useIsMobile();
+  const sectionRef = useRef(null);
   const [cameraOn, setCameraOn] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [selectedFilmIndex, setSelectedFilmIndex] = useState(0);
@@ -323,6 +324,7 @@ export default function HeroCamera({ moviesFromApi }) {
   const [powerOnAnim, setPowerOnAnim] = useState(false);
   const [isBooting, setIsBooting] = useState(false);
   const [showClap, setShowClap] = useState(false);
+  const [manuallyToggled, setManuallyToggled] = useState(false);
 
   const normalizedApiMovies = useMemo(() => {
     if (
@@ -372,6 +374,7 @@ export default function HeroCamera({ moviesFromApi }) {
   }, [isMobile, cameraOn, normalizedApiMovies]);
 
   const toggleCamera = () => {
+    setManuallyToggled(true);
     setCameraOn((p) => {
       const next = !p;
       if (next) {
@@ -461,8 +464,63 @@ export default function HeroCamera({ moviesFromApi }) {
       ? Math.ceil(totalMovies / MAX_VISIBLE_MOVIES)
       : 0;
 
+  useEffect(() => {
+    if (!sectionRef.current || isMobile) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (manuallyToggled) {
+            return;
+          }
+
+          if (entry.isIntersecting && !cameraOn) {
+            setCameraOn(true);
+            setSelectedGenre(
+              normalizedApiMovies.length > 0 ? { name: 'Tous' } : GENRES[0],
+            );
+            setSelectedFilmIndex(0);
+            setSelectedMovie(null);
+            setPowerOnAnim(true);
+            setIsBooting(true);
+            setShowClap(true);
+            window.setTimeout(() => {
+              setPowerOnAnim(false);
+              setIsBooting(false);
+              setShowClap(false);
+            }, 750);
+          } else if (!entry.isIntersecting && cameraOn) {
+            setCameraOn(false);
+            setIsBooting(false);
+            setSelectedGenre(null);
+            setSelectedFilmIndex(0);
+            setSelectedMovie(null);
+          }
+        });
+      },
+      {
+        threshold: 0.35,
+      },
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [
+    cameraOn,
+    manuallyToggled,
+    normalizedApiMovies.length,
+  ]);
+
   return (
-    <div className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-12">
+    <div
+      ref={sectionRef}
+      className="relative w-full bg-gradient-to-b from-[#050510] via-[#0a0a1a] to-[#050510] py-12"
+    >
       <style>{heroStyles + heroAnimationStyles}</style>
 
       <div className="relative flex flex-col items-center justify-center w-full px-3">
