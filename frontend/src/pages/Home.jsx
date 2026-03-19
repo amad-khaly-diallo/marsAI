@@ -16,7 +16,7 @@ import {
   ManifestoSection,
   ProgramSection,
 } from '../components/home/Phase2';
-import { Phase3Winners } from '../components/home/Phase3';
+import { Phase3Winners, PostFestivalPresentation } from '../components/home/Phase3';
 import { HOME_STYLES } from '../constants/homeStyles';
 import { CookieBanner } from '../components/ui/CookieBanner';
 import { heroAnimationStyles } from '../components/sections/heroAnimations';
@@ -25,6 +25,7 @@ import { useFestivalPhase } from '../hooks/useFestivalPhase';
 import { getHomePhase1, getHomePhase2, getHomePhase3 } from '../services/query';
 import { getLocalized } from '../utils/sanity';
 import { FestivalCountdown } from '../components/sections/FestivalCountdown';
+import { useFestivalCountdown } from '../hooks/useFestivalCountdown';
 
 /**
  * Page d'accueil – 3 phases :
@@ -64,6 +65,7 @@ export default function Home() {
   const fallback = [1, 2, 3].includes(phaseParam) ? phaseParam : 1;
 
   const { phase: apiPhase, loading: phaseLoading } = useFestivalPhase();
+  const { phase: countdownPhase, remaining } = useFestivalCountdown();
 
   // states must be declared unconditionally at top level
   const [phase2Movies, setPhase2Movies] = useState([]);
@@ -75,6 +77,11 @@ export default function Home() {
     !phaseLoading && apiPhase
       ? Number(apiPhase.replace('phase', ''))
       : fallback;
+  const isFestivalEnded =
+    countdownPhase === 'ended' ||
+    (countdownPhase === 'phase3' &&
+      typeof remaining?.totalSeconds === 'number' &&
+      remaining.totalSeconds <= 0);
 
   // effects must be declared before any early return so hooks order remains stable
   useEffect(() => {
@@ -206,6 +213,7 @@ export default function Home() {
       {/* ——— Phase 3 : Grand Prix / Palmarès ——— */}
       {phase === 3 && (
         <>
+          {isFestivalEnded && <PostFestivalPresentation />}
           <Phase3Winners
             winnersFromApi={phase3Winners}
             loading={phase3Loading}
