@@ -220,6 +220,11 @@ export default function useParticiperSubmit({
       await filmmakerOp.run(filmmakerLocal || filmmaker);
     } catch (err) {
       setError(err.message || String(err));
+      trackEvent('submit_step_error', {
+        funnel_name: 'film_submission',
+        step_number: 1,
+        error_message: err.message || String(err),
+      });
       setSubmitting(false);
     }
   };
@@ -265,6 +270,11 @@ export default function useParticiperSubmit({
       await movieOp.run(localMovie);
     } catch (err) {
       setError(err.message || String(err));
+      trackEvent('submit_step_error', {
+        funnel_name: 'film_submission',
+        step_number: 2,
+        error_message: err.message || String(err),
+      });
       setSubmitting(false);
     }
   };
@@ -283,6 +293,11 @@ export default function useParticiperSubmit({
       await aiOp.run(payload);
     } catch (err) {
       setError(err.message || String(err));
+      trackEvent('submit_step_error', {
+        funnel_name: 'film_submission',
+        step_number: 3,
+        error_message: err.message || String(err),
+      });
       setSubmitting(false);
     }
   };
@@ -300,6 +315,11 @@ export default function useParticiperSubmit({
       await collabOp.run();
     } catch (err) {
       setError(t('error.collaborators.saveFailed'));
+      trackEvent('submit_step_error', {
+        funnel_name: 'film_submission',
+        step_number: 5,
+        error_message: err.message || String(err),
+      });
       setSubmitting(false);
     }
   };
@@ -312,6 +332,11 @@ export default function useParticiperSubmit({
       await assetsOp.run();
     } catch (err) {
       setError(err.message || String(err));
+      trackEvent('submit_step_error', {
+        funnel_name: 'film_submission',
+        step_number: 4,
+        error_message: err.message || String(err),
+      });
       setSubmitting(false);
     }
   };

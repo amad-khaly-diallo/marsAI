@@ -10,6 +10,7 @@ import CollaboratorsStep from '../components/participer/CollaboratorsStep';
 import useParticiper from '../hooks/useParticiper';
 import { getParticiperPage } from '../services/query';
 import { getLocalized } from '../utils/sanity';
+import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';
 
 export default function Participer() {
   const { t, i18n } = useTranslation();
@@ -64,11 +65,45 @@ export default function Participer() {
   // Quand tout est terminé, afficher un popup de succès puis rediriger vers l'accueil.
   useEffect(() => {
     if (!finished) return;
+    trackEvent('submit_funnel_completed', {
+      funnel_name: 'film_submission',
+      final_step: currentStep,
+    });
     const timer = setTimeout(() => {
       navigate('/');
     }, 4000);
     return () => clearTimeout(timer);
-  }, [finished, navigate]);
+  }, [finished, navigate, currentStep]);
+
+  // Début de funnel (arrivée sur la page participer)
+  useEffect(() => {
+    trackEvent('submit_funnel_started', {
+      funnel_name: 'film_submission',
+    });
+  }, []);
+
+  // Vue d'étape de funnel
+  useEffect(() => {
+    trackEvent('submit_step_view', {
+      funnel_name: 'film_submission',
+      step_number: currentStep,
+      step_name: `step_${currentStep}`,
+    });
+  }, [currentStep]);
+
+  // Abandon de funnel (sortie de la page sans soumission finale)
+  useEffect(() => {
+    return () => {
+      if (!finished) {
+        trackEvent('submit_funnel_abandoned', {
+          funnel_name: 'film_submission',
+          last_step: currentStep,
+          has_filmmaker: Boolean(filmmakerId),
+          has_movie: Boolean(movieId),
+        });
+      }
+    };
+  }, [finished, currentStep, filmmakerId, movieId]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 pt-32 pb-20">

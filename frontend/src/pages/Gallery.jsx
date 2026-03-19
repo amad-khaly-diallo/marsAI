@@ -107,7 +107,14 @@ export default function Gallery() {
                   <Link
                     key={movie.id}
                     to={`/watch/${movie.id}`}
-                    onClick={() => trackEvent('view_movie', { movie_title: movie.original_title })}
+                    onClick={() =>
+                      trackEvent('movie_card_click', {
+                        movie_id: movie.id,
+                        movie_title: movie.original_title,
+                        source_page: 'catalogue',
+                        target_path: `/watch/${movie.id}`,
+                      })
+                    }
                     className="group flex flex-col rounded-2xl bg-white/5 border border-white/10 overflow-hidden hover:border-violet-400/60 hover:bg-white/10 transition-colors"
                   >
                     <div className="relative aspect-video bg-black">
