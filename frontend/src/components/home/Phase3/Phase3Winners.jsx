@@ -32,6 +32,7 @@ function mapWinnerToFilm(m, { defaultCategory, defaultTitle }) {
     juryQuote: '',
     rating: 5,
     movieId: m.id,
+    ranking: m.winner_ranking ?? null,
   };
 }
 
@@ -89,6 +90,13 @@ function WinnerSpotlight({ film }) {
               {film.duration && (
                 <span className="text-[13px] text-white/40 bg-white/[0.03] px-3.5 py-1.5 rounded-full border border-white/[0.05]">
                   {film.duration}
+                </span>
+              )}
+              {typeof film.ranking === 'number' && film.ranking > 0 && (
+                <span className="text-[12px] text-[#C6A55C] font-semibold bg-[#C6A55C]/10 px-3 py-1 rounded-full border border-[#C6A55C]/25">
+                  {film.ranking === 1
+                    ? '1er prix'
+                    : `${film.ranking}e prix`}
                 </span>
               )}
             </div>
@@ -166,6 +174,20 @@ export default function Phase3Winners({
   const [isPaused, setIsPaused] = useState(false);
   const dataLength = dataSource.length;
   const selectedFilm = dataSource[activeIndex];
+  const winnersByCategory = useMemo(() => {
+    const map = new Map();
+    dataSource.forEach((item, idx) => {
+      const key = item.category || t('phase3.grandPrix');
+      if (!map.has(key)) {
+        map.set(key, []);
+      }
+      map.get(key).push({ ...item, index: idx });
+    });
+    return Array.from(map.entries()).map(([category, winners]) => ({
+      category,
+      winners,
+    }));
+  }, [dataSource, t]);
 
   const goPrev = () => setActiveIndex((i) => (i - 1 + dataLength) % dataLength);
   const goNext = useCallback(
@@ -319,13 +341,13 @@ export default function Phase3Winners({
         </div>
       )}
 
-      {/* ── Category grid ── */}
+      {/* ── Winners grouped by category ── */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 max-w-3xl mx-auto px-4 md:px-8"
+        className="relative z-10 max-w-6xl mx-auto px-4 md:px-8"
       >
         <div className="flex items-center justify-center gap-3 mb-6">
           <span className="block h-px flex-1 max-w-[40px] bg-white/[0.08]" />
@@ -335,48 +357,71 @@ export default function Phase3Winners({
           <span className="block h-px flex-1 max-w-[40px] bg-white/[0.08]" />
         </div>
 
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-          {dataSource.map((item, idx) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveIndex(idx)}
-              className={`group relative overflow-hidden rounded-xl border transition-all duration-500 hover:-translate-y-1 ${
-                activeIndex === idx
-                  ? 'border-[#C6A55C]/40 shadow-[0_0_30px_rgba(198,165,92,0.12)]'
-                  : 'border-white/[0.05] hover:border-white/[0.1]'
-              }`}
+        <div className="space-y-5">
+          {winnersByCategory.map((group) => (
+            <div
+              key={group.category}
+              className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 md:p-5"
             >
-              <div className="relative h-16 md:h-20 overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className={`w-full h-full object-cover transition-all duration-700 ${
-                    activeIndex === idx
-                      ? 'scale-110 brightness-75'
-                      : 'brightness-[0.25] group-hover:brightness-[0.4] group-hover:scale-105'
-                  }`}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a16] via-[#0a0a16]/50 to-transparent" />
-              </div>
-
-              <div className="relative px-2 py-2 bg-[#0a0a16]/80 text-center">
-                <span
-                  className={`text-[9px] md:text-[10px] font-bold uppercase tracking-[0.12em] transition-colors duration-300 ${
-                    activeIndex === idx
-                      ? 'text-[#C6A55C]'
-                      : 'text-white/30 group-hover:text-white/60'
-                  }`}
-                >
-                  {item.category}
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <h3 className="text-sm md:text-base font-semibold text-[#C6A55C] uppercase tracking-[0.14em]">
+                  {group.category}
+                </h3>
+                <span className="text-[11px] text-white/45">
+                  {group.winners.length}{' '}
+                  {group.winners.length > 1 ? 'gagnants' : 'gagnant'}
                 </span>
               </div>
 
-              <div
-                className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C6A55C] to-[#DFC88A] transition-opacity duration-500 ${
-                  activeIndex === idx ? 'opacity-100' : 'opacity-0'
-                }`}
-              />
-            </button>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                {group.winners.map((item) => (
+                  <button
+                    key={`${group.category}-${item.id}`}
+                    onClick={() => setActiveIndex(item.index)}
+                    className={`group relative overflow-hidden rounded-xl border transition-all duration-300 hover:-translate-y-0.5 ${
+                      activeIndex === item.index
+                        ? 'border-[#C6A55C]/40 shadow-[0_0_30px_rgba(198,165,92,0.12)]'
+                        : 'border-white/[0.05] hover:border-white/[0.1]'
+                    }`}
+                  >
+                    <div className="relative h-16 md:h-20 overflow-hidden">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className={`w-full h-full object-cover transition-all duration-500 ${
+                          activeIndex === item.index
+                            ? 'scale-105 brightness-75'
+                            : 'brightness-[0.3] group-hover:brightness-[0.45]'
+                        }`}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a16] via-[#0a0a16]/50 to-transparent" />
+                      {typeof item.ranking === 'number' && item.ranking > 0 && (
+                        <div className="absolute left-1.5 top-1.5 rounded-full bg-[#C6A55C]/95 px-2 py-0.5 text-[9px] font-semibold text-[#0a0a16] shadow">
+                          {item.ranking === 1
+                            ? '1er'
+                            : `${item.ranking}e`}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="relative px-2 py-2 bg-[#0a0a16]/80 text-left">
+                      <p
+                        className={`text-[10px] md:text-[11px] font-semibold truncate ${
+                          activeIndex === item.index
+                            ? 'text-[#C6A55C]'
+                            : 'text-white/70'
+                        }`}
+                      >
+                        {item.title}
+                      </p>
+                      <p className="text-[9px] text-white/35 truncate">
+                        {item.director}
+                      </p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </motion.div>

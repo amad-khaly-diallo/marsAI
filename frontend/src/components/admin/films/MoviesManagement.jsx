@@ -59,7 +59,7 @@ export default function MoviesManagement({ currentAdmin }) {
                 <span>
                   Gagnants actuels :{' '}
                   <span className="font-semibold text-slate-100">
-                    {winnersCount} / 6
+                    {winnersCount}
                   </span>
                 </span>
                 <div className="flex items-center gap-1">

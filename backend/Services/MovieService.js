@@ -59,8 +59,7 @@ async function listWinners() {
      FROM winner w
      INNER JOIN movie m ON m.id = w.movie_id
      LEFT JOIN filmmaker f ON f.id = m.filmmaker_id
-     ORDER BY w.ranking ASC, w.id ASC
-     LIMIT 6`,
+     ORDER BY w.category ASC, w.ranking ASC, w.id ASC`,
   );
   return rows.map(mapMovie);
 }

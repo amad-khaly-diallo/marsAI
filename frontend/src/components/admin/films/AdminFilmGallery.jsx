@@ -171,8 +171,18 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
                     </div>
                   )}
                   {movie.is_winner && (
-                    <div className="absolute left-2 top-2 rounded-full bg-amber-500/90 px-2 py-0.5 text-[10px] font-semibold text-slate-900 shadow">
-                      Gagnant
+                    <div className="absolute left-2 top-2 flex flex-col gap-1">
+                      <div className="rounded-full bg-amber-500/90 px-2 py-0.5 text-[10px] font-semibold text-slate-900 shadow">
+                        Gagnant
+                      </div>
+                      {typeof movie.winner_ranking === 'number' &&
+                        movie.winner_ranking > 0 && (
+                          <div className="rounded-full bg-slate-950/90 px-2 py-0.5 text-[10px] font-semibold text-amber-300 border border-amber-400/60 shadow">
+                            {movie.winner_ranking === 1
+                              ? '1er'
+                              : `${movie.winner_ranking}e`}
+                          </div>
+                        )}
                     </div>
                   )}
                 </div>

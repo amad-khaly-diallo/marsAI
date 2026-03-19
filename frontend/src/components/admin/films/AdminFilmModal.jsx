@@ -60,9 +60,7 @@ export default function AdminFilmModal({
     if (!movie) return;
     // Pré-remplir avec les valeurs existantes ou un rang suggéré.
     setWinnerRanking(
-      movie.winner_ranking !== null
-        ? String(movie.winner_ranking)
-        : winnersCount + 1,
+      movie.winner_ranking !== null ? String(movie.winner_ranking) : '',
     );
     setWinnerCategory(movie.winner_category || 'Grand Prix');
     setWinnerFormOpen(false);
@@ -108,9 +106,7 @@ export default function AdminFilmModal({
 
   const isToggling = togglingWinnerId === movie.id;
   const canMarkWinner =
-    movie.status === 'selected' &&
-    (movie.is_winner || winnersCount < 6) &&
-    !isToggling;
+    movie.status === 'selected' && !isToggling;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/75 px-3 md:px-6">
@@ -294,14 +290,9 @@ export default function AdminFilmModal({
                 <Trophy className="h-3.5 w-3.5 shrink-0" />
                 {isToggling
                   ? 'Mise à jour...'
-                  : movie.is_winner
+                    : movie.is_winner
                     ? 'Retirer des gagnants'
                     : 'Marquer comme gagnant'}
-                {!movie.is_winner && winnersCount >= 6 && (
-                  <span className="text-[10px] font-normal text-red-300">
-                    Limite de 6 gagnants atteinte
-                  </span>
-                )}
               </button>
               {winnerError && (
                 <p className="mt-1 text-xs text-red-300">{winnerError}</p>
@@ -328,12 +319,11 @@ export default function AdminFilmModal({
                     </div>
                     <div className="w-28">
                       <label className="mb-1 block text-[11px] font-medium text-brand-muted">
-                        Rang (1–6)
+                        Rang (optionnel)
                       </label>
                       <input
                         type="number"
                         min={1}
-                        max={6}
                         value={winnerRanking}
                         onChange={(e) => setWinnerRanking(e.target.value)}
                         className="w-full rounded-md border border-slate-800/80 bg-slate-950/60 px-2 py-1.5 text-xs text-slate-100 outline-none"
