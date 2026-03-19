@@ -20,6 +20,11 @@ async function getPhaseOrThrow() {
 function allowPhases(allowedPhases) {
   return async (req, res, next) => {
     try {
+      // Super admin connecté : on bypass les restrictions de phase
+      if (req.user && req.user.role === 'super_admin') {
+        return next();
+      }
+
       const phase = await getPhaseOrThrow();
       if (!allowedPhases.includes(phase)) {
         return res.status(403).json({
@@ -38,6 +43,11 @@ function allowPhases(allowedPhases) {
 function requirePhaseAtLeast(minPhase) {
   return async (req, res, next) => {
     try {
+      // Super admin connecté : on bypass les restrictions de phase
+      if (req.user && req.user.role === 'super_admin') {
+        return next();
+      }
+
       const phase = await getPhaseOrThrow();
       if (PHASE_ORDER[phase] < PHASE_ORDER[minPhase]) {
         return res.status(403).json({

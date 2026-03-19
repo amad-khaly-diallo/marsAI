@@ -22,7 +22,7 @@ export function useFestivalPhase() {
   const [error, setError] = useState(null);
 
   const fetchPhase = useCallback(async () => {
-// A supprimer si on veut pas que le hook réagisse aux changements de l'URL.
+    // 1) Priorité à une phase forcée dans l'URL (debug / liens spécifiques)
     const forcedPhase = normalizePhaseParam(
       new URLSearchParams(search).get('phase'),
     );
@@ -33,7 +33,25 @@ export function useFestivalPhase() {
       setLoading(false);
       return;
     }
-// ==========================
+
+    // 2) Sinon, regarder s'il existe une phase simulée côté front
+    try {
+      const simulatedRaw =
+        typeof window !== 'undefined'
+          ? window.localStorage.getItem('simulatedPhase')
+          : null;
+      const simulatedPhase = normalizePhaseParam(simulatedRaw);
+      if (simulatedPhase) {
+        setPhase(simulatedPhase);
+        setError(null);
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // en cas de problème d'accès à localStorage, on ignore simplement
+    }
+
+    // 3) Fallback sur la phase réelle renvoyée par l'API
     setLoading(true);
     setError(null);
     try {

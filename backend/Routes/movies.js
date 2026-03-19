@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const MovieController = require('../Controllers/MovieController');
 const FilmSubmissionController = require('../Controllers/FilmSubmissionController');
+const { authenticate } = require('../Middlewares/authMiddleware');
 const {
   allowPhases,
 } = require('../Middlewares/festivalPhaseAccess');
@@ -36,7 +37,9 @@ router.post(
 
 // GET /api/movies - Liste tous les films sélectionnés (catalogue)
 // Accès uniquement en phase2 (visionnage & sélection)
-router.get('/', allowPhases(['phase2']), MovieController.list);
+// Pour permettre au super_admin de bypass la phase, on attache d'abord authenticate
+// afin de peupler req.user avant le middleware de phase.
+router.get('/', authenticate, allowPhases(['phase2']), MovieController.list);
 // GET /api/movies/winners - Liste des films gagnants
 // Accessible à partir de la phase2 (phase2 + phase3)
 router.get('/winners', MovieController.listWinners);
