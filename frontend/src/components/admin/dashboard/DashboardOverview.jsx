@@ -3,6 +3,7 @@ import { useDashboardStats } from '../hooks';
 import { useAdmin } from '../../../contexts';
 import { useFestivalPhase } from '../../../hooks/useFestivalPhase';
 import { useFestivalPhaseConfig } from '../../../hooks/useFestivalPhaseConfig';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function DashboardOverview() {
   const { stats, loading, error } = useDashboardStats();
@@ -19,6 +20,8 @@ export default function DashboardOverview() {
     error: configError,
     saveConfig,
   } = useFestivalPhaseConfig();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSet = async (p) => {
     try {
@@ -26,6 +29,29 @@ export default function DashboardOverview() {
     } catch (err) {
       alert('Échec mise à jour phase: ' + (err.message || err));
     }
+  };
+
+  const handleSimulatePhase = (p) => {
+    // On stocke une phase simulée dans localStorage pour ce navigateur seulement.
+    try {
+      if (p) {
+        window.localStorage.setItem('simulatedPhase', p);
+      } else {
+        window.localStorage.removeItem('simulatedPhase');
+      }
+    } catch {
+      // si localStorage n'est pas dispo, on ignore
+    }
+
+    // Optionnel : on force un rafraîchissement doux de la route courante
+    // pour que les composants qui lisent la phase se re-rendent rapidement.
+    navigate(
+      {
+        pathname: location.pathname,
+        search: location.search,
+      },
+      { replace: true },
+    );
   };
 
   return (
@@ -71,6 +97,44 @@ export default function DashboardOverview() {
               >
                 Phase 3
               </button>
+            </div>
+
+            <div className="mt-2 space-y-2">
+              <p className="text-sm text-white/80">
+                Mode simulation (front uniquement)&nbsp;: permet de naviguer
+                dans le site comme si la phase sélectionnée était active, sans
+                modifier la phase réelle pour les autres utilisateurs.
+              </p>
+              <div className="space-x-2">
+                <button
+                  type="button"
+                  className="px-3 py-1 bg-emerald-600 text-white rounded"
+                  onClick={() => handleSimulatePhase('phase1')}
+                >
+                  Simuler phase 1
+                </button>
+                <button
+                  type="button"
+                  className="px-3 py-1 bg-emerald-600 text-white rounded"
+                  onClick={() => handleSimulatePhase('phase2')}
+                >
+                  Simuler phase 2
+                </button>
+                <button
+                  type="button"
+                  className="px-3 py-1 bg-emerald-600 text-white rounded"
+                  onClick={() => handleSimulatePhase('phase3')}
+                >
+                  Simuler phase 3
+                </button>
+                <button
+                  type="button"
+                  className="px-3 py-1 bg-slate-600 text-white rounded"
+                  onClick={() => handleSimulatePhase(null)}
+                >
+                  Désactiver la simulation
+                </button>
+              </div>
             </div>
 
             {/* configuration des dates de phases pour le timer */}

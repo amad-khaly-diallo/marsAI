@@ -17,3 +17,9 @@ exports.subscribe = asyncHandler(async (req, res) => {
   const result = await NewsletterService.subscribe(email);
   res.status(201).json(result);
 });
+
+exports.unsubscribe = asyncHandler(async (req, res) => {
+  const { email } = req.body || {};
+  const result = await NewsletterService.unsubscribe(email);
+  res.status(200).json(result);
+});

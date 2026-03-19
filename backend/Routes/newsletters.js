@@ -28,5 +28,11 @@ router.post(
   NewsletterController.subscribe
 );
 
+// Désinscription publique newsletter
+router.post(
+  '/unsubscribe',
+  NewsletterController.unsubscribe
+);
+
 module.exports = router;
 

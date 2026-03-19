@@ -1,6 +1,13 @@
 const { query } = require('../Utils/db');
 const { HttpError } = require('../Utils/http');
 const { sendMail } = require('./../Services/mail.service');
+const brevoService = require('./brevo.service');
+
+function normalizeEmail(email) {
+  return String(email || '')
+    .trim()
+    .toLowerCase();
+}
 
 async function listSubscribers() {
   const rows = await query(`SELECT * FROM newsletters ORDER BY id DESC`);
@@ -11,14 +18,15 @@ async function listSubscribers() {
 }
 
 async function subscribe(email) {
-  if (!email) {
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail) {
     throw new HttpError(400, 'Missing email');
   }
 
   try {
     await query(
       'INSERT INTO newsletters (email) VALUES (:email)',
-      { email }
+      { email: normalizedEmail }
     );
   } catch (err) {
     // 1062 = duplicate key (email unique) → on ignore simplement
@@ -27,7 +35,39 @@ async function subscribe(email) {
     }
   }
 
-  return { email };
+  // Sync Brevo en best effort (on ne casse pas l'inscription locale si Brevo est KO)
+  try {
+    await brevoService.upsertContact(normalizedEmail);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('[NewsletterService] Brevo upsert failed:', err.message);
+  }
+
+  return { email: normalizedEmail };
+}
+
+async function unsubscribe(email) {
+  const normalizedEmail = normalizeEmail(email);
+  if (!normalizedEmail) {
+    throw new HttpError(400, 'Missing email');
+  }
+
+  await query('DELETE FROM newsletters WHERE email = :email', {
+    email: normalizedEmail,
+  });
+
+  // Best effort également
+  try {
+    await brevoService.removeContact(normalizedEmail);
+  } catch (err) {
+    // Si le contact n'existe pas déjà chez Brevo, on ignore
+    if (!(err && err.status === 404)) {
+      // eslint-disable-next-line no-console
+      console.error('[NewsletterService] Brevo delete failed:', err.message);
+    }
+  }
+
+  return { email: normalizedEmail, unsubscribed: true };
 }
 
 async function sendNewsletter({ subject, text }) {
@@ -41,14 +81,22 @@ async function sendNewsletter({ subject, text }) {
     return { sent: 0 };
   }
 
-  // Envoi simple, un email par abonné
+  // Envoi via Brevo API si configuré, sinon fallback SMTP actuel.
   let sent = 0;
   for (const sub of subscribers) {
-    await sendMail({
-      to: sub.email,
-      subject,
-      text,
-    });
+    if (brevoService.hasBrevoConfig()) {
+      await brevoService.sendEmail({
+        to: sub.email,
+        subject,
+        text,
+      });
+    } else {
+      await sendMail({
+        to: sub.email,
+        subject,
+        text,
+      });
+    }
     sent += 1;
   }
 
@@ -58,6 +106,7 @@ async function sendNewsletter({ subject, text }) {
 module.exports = {
   listSubscribers,
   subscribe,
+  unsubscribe,
   sendNewsletter,
 };
 

@@ -1,48 +1,15 @@
-import { useState } from 'react';
 import { SectionHeader, ErrorAlert, SectionCard } from '../common';
 import { useNewsletterSubscribers } from '../hooks';
 import SubscribersList from './SubscribersList';
-import SendNewsletterForm from './SendNewsletterForm';
 
 export default function NewslettersManagement() {
   const { subscribers, loading, error } = useNewsletterSubscribers();
-  const [subject, setSubject] = useState('');
-  const [body, setBody] = useState('');
-  const [sending, setSending] = useState(false);
-  const [sendError, setSendError] = useState(null);
-  const [sendResult, setSendResult] = useState(null);
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    setSendError(null);
-    setSendResult(null);
-    if (!subject.trim() || !body.trim()) {
-      setSendError('Sujet et contenu sont obligatoires.');
-      return;
-    }
-    setSending(true);
-    try {
-      const admin = require('../../../services/admin').default;
-      const data = await admin.sendNewsletter({ subject, text: body });
-      setSendResult(
-        typeof data.sent === 'number'
-          ? `Newsletter envoyée à ${data.sent} abonné(s).`
-          : 'Newsletter envoyée.',
-      );
-      setSubject('');
-      setBody('');
-    } catch (err) {
-      setSendError(err.message);
-    } finally {
-      setSending(false);
-    }
-  };
 
   return (
     <div className="space-y-4">
       <SectionHeader
         title="Gestion des newsletters"
-        subtitle="Consultez les inscrits et envoyez des campagnes d'emailing."
+        subtitle="Consultez les inscrits et gérez vos campagnes directement dans Brevo."
       />
       <div className="grid gap-4 md:grid-cols-[2fr,1.2fr]">
         <SectionCard
@@ -56,20 +23,22 @@ export default function NewslettersManagement() {
           <ErrorAlert message={error} className="mb-3" />
           <SubscribersList subscribers={subscribers} loading={loading} />
         </SectionCard>
-        <SectionCard title="Envoyer une newsletter" action={null}>
+        <SectionCard title="Édition & envoi" action={null}>
           <p className="mt-1 text-[11px] text-brand-muted">
-            Un email sera envoyé à tous les abonnés.
+            Le contenu de la newsletter est rédigé et envoyé depuis Brevo.
           </p>
-          <SendNewsletterForm
-            subject={subject}
-            setSubject={setSubject}
-            body={body}
-            setBody={setBody}
-            onSubmit={handleSend}
-            sending={sending}
-            sendError={sendError}
-            sendResult={sendResult}
-          />
+          <a
+            href="https://app.brevo.com"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 inline-flex items-center rounded-full bg-brand-primary px-4 py-1.5 text-xs font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent"
+          >
+            Ouvrir Brevo
+          </a>
+          <p className="mt-3 text-[11px] text-brand-muted">
+            Conseil : créez votre campagne dans Brevo puis ciblez la liste
+            newsletter du projet.
+          </p>
         </SectionCard>
       </div>
     </div>
