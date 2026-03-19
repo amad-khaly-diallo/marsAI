@@ -17,10 +17,18 @@ export default function NewsletterForm() {
     const trimmed = email.trim();
     if (!trimmed) {
       setError(t('newsletter.error.required'));
+      trackEvent('newsletter_signup', {
+        status: 'failure',
+        reason: 'empty_email',
+      });
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
       setError(t('newsletter.error.invalid'));
+      trackEvent('newsletter_signup', {
+        status: 'failure',
+        reason: 'invalid_email',
+      });
       return;
     }
 
@@ -34,7 +42,10 @@ export default function NewsletterForm() {
       trackEvent('newsletter_signup', { status: 'success' });
     } catch (err) {
       setError(err.message);
-      trackEvent('newsletter_signup', { status: 'failure' });
+      trackEvent('newsletter_signup', {
+        status: 'failure',
+        reason: 'api_error',
+      });
     } finally {
       setLoading(false);
     }

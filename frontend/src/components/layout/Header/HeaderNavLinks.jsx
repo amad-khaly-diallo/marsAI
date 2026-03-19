@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAdmin } from '../../../contexts';
 import { useFestivalPhase } from '../../../hooks/useFestivalPhase';
+import { trackEvent } from '../../G-Analytics/GoogleAnalytics';
 
 const links = [
   { to: '/catalogue', labelKey: 'nav.catalogue', defaultLabel: 'Catalogue' },
@@ -97,12 +98,33 @@ export default function HeaderNavLinks({
   return (
     <div className="flex items-center gap-6">
       {filteredLinks.map((link) => (
-        <NavLink key={link.to} to={link.to} className={active}>
+        <NavLink
+          key={link.to}
+          to={link.to}
+          className={active}
+          onClick={() =>
+            trackEvent('nav_click', {
+              location: 'header',
+              target_path: link.to,
+              label: link.defaultLabel,
+            })
+          }
+        >
           {t(link.labelKey, link.defaultLabel)}
         </NavLink>
       ))}
       {showAdminLink && (
-        <NavLink to="/admin" className={active}>
+        <NavLink
+          to="/admin"
+          className={active}
+          onClick={() =>
+            trackEvent('nav_click', {
+              location: 'header',
+              target_path: '/admin',
+              label: 'Admin',
+            })
+          }
+        >
           {t('nav.admin', 'Admin')}
         </NavLink>
       )}
