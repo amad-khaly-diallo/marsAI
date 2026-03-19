@@ -189,43 +189,16 @@ async function updateWinner(id, { is_winner, ranking, category }) {
     throw new HttpError(400, 'Seuls les films sélectionnés peuvent être gagnants.');
   }
 
-  // Compte actuel de gagnants (tous films confondus)
-  const countRows = await query('SELECT COUNT(*) AS cnt FROM winner', {});
-  const currentCount =
-    countRows[0] && typeof countRows[0].cnt === 'number' ? countRows[0].cnt : 0;
-
   if (flag) {
-    if (!movie.is_winner && currentCount >= 6) {
-      throw new HttpError(400, 'Vous avez déjà 6 films gagnants.');
-    }
-
     if (!movie.is_winner) {
-      // Nouveau gagnant : on calcule le ranking final
       let finalRank = null;
 
       if (ranking !== undefined && ranking !== null && ranking !== '') {
         const parsed = Number(ranking);
-        if (!Number.isFinite(parsed) || parsed < 1 || parsed > 6) {
-          throw new HttpError(400, 'Le rang doit être un nombre entre 1 et 6.');
+        if (!Number.isFinite(parsed) || parsed < 1) {
+          throw new HttpError(400, 'Le rang doit être un nombre positif.');
         }
-
-        // Vérifie qu'aucun autre gagnant n'utilise déjà ce ranking
-        const existingRankRows = await query(
-          'SELECT id FROM winner WHERE ranking = :ranking LIMIT 1',
-          { ranking: parsed }
-        );
-        if (existingRankRows.length > 0) {
-          throw new HttpError(400, 'Ce rang est déjà utilisé par un autre gagnant.');
-        }
-
         finalRank = parsed;
-      } else {
-        // Fallback : rang automatique suivant
-        const rankRows = await query('SELECT COALESCE(MAX(ranking), 0) AS max_rank FROM winner', {});
-        finalRank =
-          rankRows[0] && typeof rankRows[0].max_rank === 'number'
-            ? rankRows[0].max_rank + 1
-            : currentCount + 1;
       }
 
       const finalCategory =
