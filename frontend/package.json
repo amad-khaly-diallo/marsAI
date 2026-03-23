@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://amad.alwaysdata.net/",
   "homepage": "/marsai",
   "dependencies": {
     "@sanity/client": "^7.16.0",
