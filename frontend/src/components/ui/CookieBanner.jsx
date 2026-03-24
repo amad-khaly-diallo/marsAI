@@ -12,7 +12,6 @@ export const CookieBanner = () => {
     }
   }, []);
 
-
   const handleAccept = () => {
     localStorage.setItem('MarsIA_cookie_consent', 'accepted');
     setIsVisible(false);
@@ -20,15 +19,6 @@ export const CookieBanner = () => {
 
   const handleDecline = () => {
     localStorage.setItem('MarsIA_cookie_consent', 'declined');
-    setIsVisible(false);
-  };
-
-  // Backward-compatible aliases (avoid no-undef if older handlers are still referenced)
-  const accept = handleAccept;
-  const decline = handleDecline;
-
-  const refuse = () => {
-    localStorage.setItem('MarsIA_cookie_consent', 'false');
     setIsVisible(false);
   };
 

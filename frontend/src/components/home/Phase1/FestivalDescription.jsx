@@ -27,10 +27,8 @@ export default function FestivalDescription({ phase1 }) {
     getLocalized(phase1?.selectionTitle, i18n) || 'Format de la sélection';
   const selectionItems = phase1?.selectionItems || [];
 
-  const venueTitle =
-    getLocalized(phase1?.venueTitle, i18n) || 'Le lieu';
-  const venueName =
-    getLocalized(phase1?.venueName, i18n) || 'La Plateforme';
+  const venueTitle = getLocalized(phase1?.venueTitle, i18n) || 'Le lieu';
+  const venueName = getLocalized(phase1?.venueName, i18n) || 'La Plateforme';
   const venueExName =
     getLocalized(phase1?.venueExName, i18n) || 'ex Dock des Suds';
   const venuePoints = phase1?.venuePoints || [];
@@ -42,27 +40,22 @@ export default function FestivalDescription({ phase1 }) {
     getLocalized(phase1?.conferencesSubtitle, i18n) ||
     "De débats engagés, de confrontations d'idées, d'interrogations stimulantes.";
   const conferencesAudienceLabel =
-    getLocalized(phase1?.conferencesAudienceLabel, i18n) ||
-    'Publics ciblés';
+    getLocalized(phase1?.conferencesAudienceLabel, i18n) || 'Publics ciblés';
   const conferencesAudiences = phase1?.conferencesAudiences || [];
 
-  const alsoTitle =
-    getLocalized(phase1?.alsoTitle, i18n) || '… Mais aussi';
+  const alsoTitle = getLocalized(phase1?.alsoTitle, i18n) || '… Mais aussi';
   const alsoItems = phase1?.alsoItems || [];
 
   const nightIntroLabel =
     getLocalized(phase1?.nightIntroLabel, i18n) || '… Et enfin !';
-  const nightTitle =
-    getLocalized(phase1?.nightTitle, i18n) || 'marsAI Night';
+  const nightTitle = getLocalized(phase1?.nightTitle, i18n) || 'marsAI Night';
   const nightTagline =
     getLocalized(phase1?.nightTagline, i18n) ||
     'Fête Électro mêlant IA et futurs souhaitables';
   const nightType =
     getLocalized(phase1?.nightType, i18n) || 'Grande cérémonie de clôture';
-  const nightDate =
-    getLocalized(phase1?.nightDate, i18n) || 'Samedi 13 Juin';
-  const nightTime =
-    getLocalized(phase1?.nightTime, i18n) || 'à partir de 19h';
+  const nightDate = getLocalized(phase1?.nightDate, i18n) || 'Samedi 13 Juin';
+  const nightTime = getLocalized(phase1?.nightTime, i18n) || 'à partir de 19h';
 
   return (
     <section className="relative py-16 md:py-24 px-4" id="le-festival">
@@ -111,9 +104,7 @@ export default function FestivalDescription({ phase1 }) {
           </h3>
           <p className="text-brand-primary font-semibold text-lg md:text-xl">
             {venueName}{' '}
-            <span className="text-slate-400 font-normal">
-              ({venueExName})
-            </span>
+            <span className="text-slate-400 font-normal">({venueExName})</span>
           </p>
           <ul className="mt-4 space-y-2 text-slate-300 text-sm md:text-base">
             {venuePoints.map((point, i) => (

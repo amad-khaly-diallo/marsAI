@@ -124,12 +124,7 @@ export default function VideosGallery() {
         subtitle="Liste complète des films du festival, avec pagination et possibilité de les noter."
       />
       <div className="rounded-lg border border-slate-800/80 bg-brand-surface/80 p-4 shadow-soft-sm">
-        {error && (
-          <ErrorAlert
-            message={error}
-            className="mb-4"
-          />
-        )}
+        {error && <ErrorAlert message={error} className="mb-4" />}
         {loading && (
           <div className="text-center py-8 text-sm text-brand-muted">
             Chargement...
@@ -194,4 +189,3 @@ export default function VideosGallery() {
     </div>
   );
 }
-

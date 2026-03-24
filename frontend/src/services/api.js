@@ -3,7 +3,7 @@
 // - includes `credentials: 'include'` by default
 // - parses JSON safely and throws a normalized Error on non-2xx
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+const API_BASE_URL = process.env.REACT_APP_API_URL || '';
 
 async function request(path, options = {}) {
   const relativePath = path.startsWith('/api')
@@ -80,8 +80,6 @@ const api = {
   get: (path, opts) => request(path, { method: 'GET', ...opts }),
   post: (path, body, opts) => request(path, { method: 'POST', body, ...opts }),
   put: (path, body, opts) => request(path, { method: 'PUT', body, ...opts }),
-  patch: (path, body, opts) =>
-    request(path, { method: 'PATCH', body, ...opts }),
   patch: (path, body, opts) =>
     request(path, { method: 'PATCH', body, ...opts }),
   del: (path, opts) => request(path, { method: 'DELETE', ...opts }),

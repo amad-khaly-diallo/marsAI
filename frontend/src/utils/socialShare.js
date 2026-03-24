@@ -80,4 +80,3 @@ export function safeFilename(input) {
 
   return base || 'video';
 }
-

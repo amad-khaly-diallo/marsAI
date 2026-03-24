@@ -1,5 +1,12 @@
 import { useMemo, useState, useEffect } from 'react';
-import { X, Clock, ChevronLeft, ChevronRight, Download, Share2 } from 'lucide-react';
+import {
+  X,
+  Clock,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  Share2,
+} from 'lucide-react';
 import { resolveMediaUrl } from '../../../utils/media';
 import { useAdmin } from '../../../contexts';
 import {
@@ -49,7 +56,8 @@ export default function MyMovieModal({
 
   if (!isOpen || !movie) return null;
 
-  const shareUrl = hasLocalVideo && localSrc ? localSrc : movie.youtube_url || null;
+  const shareUrl =
+    hasLocalVideo && localSrc ? localSrc : movie.youtube_url || null;
   const shareText = movie.original_title
     ? `Regarder : ${movie.original_title}`
     : 'Regarder cette vidéo';

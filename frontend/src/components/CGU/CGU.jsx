@@ -4,13 +4,21 @@ import BannerBg from '../../assets/images/bn03.png';
 import { getLegalData } from './legalData';
 import LegalCard from './LegalCard';
 import LegalHeader from './LegalHeader';
+import SEOHead from '../seo/SEOHead';
 
 export default function CGU() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const legalData = getLegalData(t);
 
   return (
     <div className="relative w-full min-h-screen bg-[#020617] text-slate-200 py-20 px-6 font-sans overflow-hidden">
+      <SEOHead
+        title="Conditions Générales d'Utilisation"
+        description="Consultez les conditions générales d'utilisation de la plateforme marsAI : droits des créateurs, propriété intellectuelle, protection des données (RGPD)."
+        canonical="/cgu"
+        noindex
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+      />
       {/* Background Image */}
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-30 pointer-events-none"

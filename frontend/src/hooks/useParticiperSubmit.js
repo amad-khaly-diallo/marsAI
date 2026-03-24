@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useSubmission from './useSubmission';
 import useAsync from './useAsync';
-import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';   
+import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';
 
 export default function useParticiperSubmit({
   // state pieces & setters from useParticiperState
@@ -44,7 +44,7 @@ export default function useParticiperSubmit({
 
     // Déclenchez l'événement de l'étape 1 ainsi que le nom du pays (pour la carte du monde de 120 pays)
     trackEvent('step_1_filmmaker', {
-      country_origin: filmmakerLocal.country 
+      country_origin: filmmakerLocal.country,
     });
 
     setCurrentStep(2);
@@ -81,12 +81,14 @@ export default function useParticiperSubmit({
     await submission.saveAiDeclaration(movieId, payload);
     setAiSaved(true);
 
-    const aiToolsUsed = payload.tools ? payload.tools.join(', ') : 'Non spécifié';
+    const aiToolsUsed = payload.tools
+      ? payload.tools.join(', ')
+      : 'Non spécifié';
 
     // Déclenchement de l'événement de l'étape 3 avec les noms des outils d'IA
     trackEvent('step_3_ai', {
-      ai_tool: aiToolsUsed
-    })
+      ai_tool: aiToolsUsed,
+    });
 
     setCurrentStep(4);
   });
@@ -108,7 +110,8 @@ export default function useParticiperSubmit({
     const rawStills = Array.isArray(assets.stills) ? assets.stills : [];
     // On ne garde que les vrais File (avec propriété type) pour l'upload backend.
     const stillFiles = rawStills.filter(
-      (item) => item && typeof item === 'object' && typeof item.type === 'string',
+      (item) =>
+        item && typeof item === 'object' && typeof item.type === 'string',
     );
 
     if (stillFiles.length > 0 || assets.subtitle) {

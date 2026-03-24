@@ -75,7 +75,7 @@ export async function sendNewsletter(payload) {
 }
 
 // expose a default object for easy imports
-export default {
+const adminService = {
   checkAuth,
   getAdmins,
   createAdmin,
@@ -100,3 +100,5 @@ export default {
   changeCurrentAdminPassword: (payload) =>
     api.patch('/admins/me/password', payload),
 };
+
+export default adminService;

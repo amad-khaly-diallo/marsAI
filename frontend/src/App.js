@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import AppRouter from './router/AppRouter';
 import Header from './components/layout/Header/Header';
 import Footer from './components/layout/Footer/Footer';
@@ -9,23 +10,25 @@ import GoogleAnalytics from './components/G-Analytics/GoogleAnalytics';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AdminProvider>
-        <Router >
-          <GoogleAnalytics />
-          <ScrollToTop />
+    <HelmetProvider>
+      <AuthProvider>
+        <AdminProvider>
+          <Router basename={process.env.PUBLIC_URL}>
+            <GoogleAnalytics />
+            <ScrollToTop />
 
-          <div className="flex min-h-screen flex-col">
-            <Header />
+            <div className="flex min-h-screen flex-col">
+              <Header />
 
-            <main className="flex-grow">
-              <AppRouter />
-            </main>
+              <main className="flex-grow">
+                <AppRouter />
+              </main>
 
-            <Footer />
-          </div>
-        </Router>
-      </AdminProvider>
-    </AuthProvider>
+              <Footer />
+            </div>
+          </Router>
+        </AdminProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }

@@ -142,17 +142,21 @@ export default function DashboardOverview() {
               <h3 className="text-md font-semibold mb-2">
                 Dates des phases (compte à rebours)
               </h3>
-              {configLoading && !configs && <p>Chargement de la configuration…</p>}
+              {configLoading && !configs && (
+                <p>Chargement de la configuration…</p>
+              )}
               {!configLoading && configs && (
                 <div className="space-y-3">
                   {['phase1', 'phase2', 'phase3'].map((p) => {
                     const cfg = configs[p] || {};
 
-                    const label = cfg.label || {
-                      phase1: 'Soumissions des films',
-                      phase2: 'Visionnage & sélection',
-                      phase3: 'Jour du festival',
-                    }[p];
+                    const label =
+                      cfg.label ||
+                      {
+                        phase1: 'Soumissions des films',
+                        phase2: 'Visionnage & sélection',
+                        phase3: 'Jour du festival',
+                      }[p];
 
                     const endsAtValue = (() => {
                       if (!cfg.endsAt) return '';

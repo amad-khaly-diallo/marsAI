@@ -52,8 +52,6 @@ export default function HeaderNavLinks({
     return true;
   });
 
-  const canShowParticiperButton = phase === 'phase1' || !phase;
-
   if (orientation === 'vertical') {
     return (
       <div className="flex flex-col gap-4 text-center">

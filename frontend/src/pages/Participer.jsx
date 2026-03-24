@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SEOHead from '../components/seo/SEOHead';
+import { participerPageSchema } from '../components/seo/schemas';
 import { useNavigate } from 'react-router-dom';
 import SubmissionStepper from '../components/participer/SubmissionStepper';
 import FilmmakerStep from '../components/participer/FilmmakerStep';
@@ -24,8 +26,6 @@ export default function Participer() {
     fetchPageData();
   }, []);
 
-
-
   const navigate = useNavigate();
 
   const {
@@ -33,7 +33,6 @@ export default function Participer() {
     setFilmmaker,
     movie,
     setMovie,
-    movieVideo,
     setMovieVideo,
     aiDeclaration,
     setAiDeclaration,
@@ -107,6 +106,13 @@ export default function Participer() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 pt-32 pb-20">
+      <SEOHead
+        title="Soumettre un film"
+        description="Soumettez votre court-métrage d'une minute généré par IA au festival marsAI. Appel à films ouvert aux créateurs du monde entier (+120 pays)."
+        canonical="/participer"
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+        schema={participerPageSchema}
+      />
       <header className="mb-4 space-y-2">
         <p className="inline-flex items-center rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-brand-primary-soft">
           {getLocalized(pageData?.tag, i18n)}

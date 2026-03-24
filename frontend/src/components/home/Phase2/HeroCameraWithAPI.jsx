@@ -125,7 +125,11 @@ export function HeroCameraWithAPI() {
               className="w-64 bg-black border border-cyan-500 rounded-xl overflow-hidden cursor-pointer hologram-card"
               onClick={() => setSelectedMovie(m)}
             >
-              <img src={m.thumbnail_url} className="w-full h-40 object-cover" />
+              <img
+                src={m.thumbnail_url}
+                alt={m.title || ''}
+                className="w-full h-40 object-cover"
+              />
               <div className="p-3 text-white">{m.title}</div>
             </div>
           ))}

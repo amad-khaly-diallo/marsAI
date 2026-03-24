@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import banner01 from '../assets/images/banner.jpg';
 import { getPartnerPage } from '../services/query';
 import api from '../services/api';
+import SEOHead from '../components/seo/SEOHead';
+import { partenairesPageSchema } from '../components/seo/schemas';
 
 const Partners = () => {
   const { t, i18n } = useTranslation();
@@ -62,11 +64,21 @@ const Partners = () => {
 
   return (
     <div className="bg-[#070819] text-white min-h-screen bg-gradient-to-b from-sky-dark to-sky-light pb-20 font-sans">
+      <SEOHead
+        title="Partenaires"
+        description="Découvrez les partenaires officiels du festival marsAI. Soutenez l'innovation et la créativité dans le cinéma IA — associez votre image à un événement culturel contemporain."
+        canonical="/partenaires"
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+        schema={partenairesPageSchema}
+      />
       {/* Section Bannière - Inchangée */}
       <div className="relative w-full h-[400px] md:h-[550px] overflow-hidden pt-[120px]">
-        <div 
+        <div
           className="absolute inset-0 z-0 bg-center bg-no-repeat transition-all duration-1000 blur-[1px]"
-          style={{ backgroundImage: `url(${banner01})`, backgroundSize: 'contain' }}
+          style={{
+            backgroundImage: `url(${banner01})`,
+            backgroundSize: 'contain',
+          }}
         ></div>
         <div className="absolute inset-0 bg-black/20 z-1"></div>
         <div
@@ -79,11 +91,16 @@ const Partners = () => {
                 '0 0 20px rgba(30, 58, 138, 0.8), 0 0 40px rgba(59, 130, 246, 0.5)',
             }}
           >
-            {getLocalized(pageData?.pageTitle) || t('partners.title', 'Devenez Partenaire de MarsAI')}
+            {getLocalized(pageData?.pageTitle) ||
+              t('partners.title', 'Devenez Partenaire de MarsAI')}
           </h1>
           <div className="h-1 w-20 bg-gradient-to-r from-[#FF0080] to-[#2933D3] rounded-full mb-5 shadow-[0_0_15px_rgba(249,115,22,0.5)]"></div>
           <p className="text-white text-base md:text-xl font-medium max-w-xl leading-relaxed drop-shadow-lg">
-            {getLocalized(pageData?.intro) || t('partners.intro', 'Rejoignez l’aventure MarsAI en devenant partenaire de notre festival de films générés par IA.')}
+            {getLocalized(pageData?.intro) ||
+              t(
+                'partners.intro',
+                'Rejoignez l’aventure MarsAI en devenant partenaire de notre festival de films générés par IA.',
+              )}
           </p>
         </div>
       </div>
@@ -93,12 +110,15 @@ const Partners = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
           <div className="bg-gradient-to-r from-[#021649] to-[#4b0227] hover:from-[#4a0126] hover:to-[#01053a]  border  p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
             <div className="text-white mb-4 text-2xl font-bold">Branding</div>
-            <p className="text-white text-sm leading-relaxed">{t("partners.benefit1", "Exposition maximale de votre logo sur nos supports digitaux.")}</p>
+            <p className="text-white text-sm leading-relaxed">
+              {t(
+                'partners.benefit1',
+                'Exposition maximale de votre logo sur nos supports digitaux.',
+              )}
+            </p>
           </div>
           <div className="border bg-gradient-to-r from-[#021649] to-[#4b0227] hover:from-[#4a0126] hover:to-[#01053a] p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
-            <div className="text-white mb-4 text-2xl font-bold">
-              Networking
-            </div>
+            <div className="text-white mb-4 text-2xl font-bold">Networking</div>
             <p className="text-white text-sm leading-relaxed">
               {t(
                 'partners.benefit2',
@@ -107,9 +127,7 @@ const Partners = () => {
             </p>
           </div>
           <div className="border bg-gradient-to-r from-[#021649] to-[#4b0227] hover:from-[#4a0126] hover:to-[#01053a] p-8 rounded-2xl shadow-xl transform hover:-translate-y-1 transition-all">
-            <div className="text-white mb-4 text-2xl font-bold">
-              Innovation
-            </div>
+            <div className="text-white mb-4 text-2xl font-bold">Innovation</div>
             <p className="text-white text-sm leading-relaxed">
               {t(
                 'partners.benefit3',

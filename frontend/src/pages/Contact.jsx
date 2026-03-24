@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getContactPage } from '../services/query';
 import api from '../services/api';
+import SEOHead from '../components/seo/SEOHead';
+import { contactPageSchema } from '../components/seo/schemas';
 
 export default function Contact() {
   const { t, i18n } = useTranslation();
@@ -93,6 +95,13 @@ export default function Contact() {
 
   return (
     <div className="relative min-h-screen text-white">
+      <SEOHead
+        title="Contact"
+        description="Contactez l'équipe marsAI pour vos questions pratiques, partenariats, presse ou programmation du festival."
+        canonical="/contact"
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+        schema={contactPageSchema}
+      />
       <Background />
 
       <section className="px-6 pt-32 pb-12">
@@ -251,7 +260,11 @@ const StatusMessage = ({ error, success }) => {
 
   if (error) return <p className="text-[11px] text-red-300">{error}</p>;
   if (success) {
-    return <p className="text-[11px] text-emerald-300">{t('contact.form.success')}</p>;
+    return (
+      <p className="text-[11px] text-emerald-300">
+        {t('contact.form.success')}
+      </p>
+    );
   }
   return null;
 };

@@ -6,11 +6,9 @@ const JuryHeader = ({ pageData }) => {
   const { t, i18n } = useTranslation();
 
   const tag =
-    getLocalized(pageData?.tag, i18n) ||
-    t('jury.tag', 'Rencontrez le jury');
+    getLocalized(pageData?.tag, i18n) || t('jury.tag', 'Rencontrez le jury');
   const title =
-    getLocalized(pageData?.title, i18n) ||
-    t('jury.title', 'Jury du Festival');
+    getLocalized(pageData?.title, i18n) || t('jury.title', 'Jury du Festival');
   const festivalName = pageData?.festivalName || 'marsAI';
   const description =
     getLocalized(pageData?.description, i18n) ||

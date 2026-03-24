@@ -45,13 +45,14 @@ export function useCountUp(
       { threshold: 0.5 },
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const el = ref.current;
+    if (el) {
+      observer.observe(el);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (el) {
+        observer.unobserve(el);
       }
     };
   }, [target, duration, hasStarted, triggerOnce, enabled]);

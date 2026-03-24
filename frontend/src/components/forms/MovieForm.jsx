@@ -49,26 +49,6 @@ export default function MovieForm({
   const handle = (field) => (e) =>
     onChange({ ...value, [field]: e.target.value });
 
-  const handleDuration = (e) => {
-    let val = e.target.value.replace(',', '.');
-    // Autoriser uniquement chiffres et point
-    val = val.replace(/[^0-9.]/g, '');
-    if (val === '') {
-      onChange({ ...value, duration: '' });
-      return;
-    }
-
-    const num = parseFloat(val);
-    if (!Number.isFinite(num)) {
-      onChange({ ...value, duration: '' });
-      return;
-    }
-
-    // Durée en minutes : autoriser décimales entre 0 (non nul) et 1 minute max
-    let clamped = Math.max(0, Math.min(1, num));
-    onChange({ ...value, duration: clamped.toString() });
-  };
-
   return (
     <section
       className={[

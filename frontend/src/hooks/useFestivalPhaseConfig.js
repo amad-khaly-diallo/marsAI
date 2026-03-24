@@ -27,7 +27,7 @@ export function useFestivalPhaseConfig() {
     } catch (err) {
       console.error('Erreur récupération config phases', err);
       setError(
-        "Impossible de récupérer la configuration des dates de phases du festival.",
+        'Impossible de récupérer la configuration des dates de phases du festival.',
       );
     } finally {
       setLoading(false);
@@ -66,4 +66,3 @@ export function useFestivalPhaseConfig() {
     saveConfig,
   };
 }
-
