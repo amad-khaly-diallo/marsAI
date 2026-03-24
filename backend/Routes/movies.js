@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const MovieController = require('../Controllers/MovieController');
 const FilmSubmissionController = require('../Controllers/FilmSubmissionController');
-const { authenticate } = require('../Middlewares/authMiddleware');
+const { authenticate, authorize } = require('../Middlewares/authMiddleware');
 const {
   allowPhases,
 } = require('../Middlewares/festivalPhaseAccess');
@@ -73,6 +73,12 @@ router.post('/:movieId/tags', MovieController.addTag);
 
 // PUT /api/movies/:movieId/ai-declaration - Mettre à jour la déclaration IA
 router.put('/:movieId/ai-declaration', MovieController.upsertAiDeclaration);
+
+// DELETE /api/movies/:id - Suppression réservée aux admins
+router.delete('/:id', authenticate, authorize(['admin', 'super_admin']), MovieController.remove);
+
+// DELETE /api/movies/:movieId/tags/:tagId - Suppression d'un tag réservée aux admins
+router.delete('/:movieId/tags/:tagId', authenticate, authorize(['admin', 'super_admin']), MovieController.removeTag);
 
 module.exports = router;
 

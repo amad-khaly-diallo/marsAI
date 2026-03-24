@@ -268,6 +268,17 @@ async function upsertReview(movieId, { rating, comment }, currentUser) {
 
   const adminId = currentUser.id;
 
+  // Super admins can review any film; regular admins only assigned films
+  if (currentUser.role !== 'super_admin') {
+    const rows = await query(
+      'SELECT 1 FROM admin_movie_assignment WHERE admin_id = :admin_id AND movie_id = :movie_id LIMIT 1',
+      { admin_id: adminId, movie_id: movieId }
+    );
+    if (!rows || rows.length === 0) {
+      throw new HttpError(403, 'Ce film ne vous a pas été assigné.');
+    }
+  }
+
   let normalizedRating = null;
   if (rating !== undefined && rating !== null && rating !== '') {
     const num = Number(rating);

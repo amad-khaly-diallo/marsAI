@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 // Durée maximale du token (absolute max). L'inactivité est gérée côté frontend.
-const { JWT_SECRET, JWT_EXPIRES_IN = '72h' } = process.env;
+const { JWT_SECRET, JWT_EXPIRES_IN = '24h' } = process.env;
 
 if (!JWT_SECRET) {
   // On échoue au démarrage si le secret n'est pas défini

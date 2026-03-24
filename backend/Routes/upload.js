@@ -1,6 +1,7 @@
 const express = require("express");
 const { uploadSingle } = require("../Middlewares/upload");
 const s3Service = require("../Services/s3Service");
+const { authenticate, authorize } = require("../Middlewares/authMiddleware");
 
 const router = express.Router();
 
@@ -66,7 +67,7 @@ router.post("/upload/thumbnail", uploadSingle, async (req, res) => {
  * Supprime un fichier du bucket S3 via sa clé.
  * La clé doit être encodée URL (encodeURIComponent côté client).
  */
-router.delete("/upload/:key(*)", async (req, res) => {
+router.delete("/upload/:key(*)", authenticate, authorize(["admin", "super_admin"]), async (req, res) => {
   try {
     const key = req.params.key;
     if (!key) {
