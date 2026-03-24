@@ -94,9 +94,7 @@ function WinnerSpotlight({ film }) {
               )}
               {typeof film.ranking === 'number' && film.ranking > 0 && (
                 <span className="text-[12px] text-[#C6A55C] font-semibold bg-[#C6A55C]/10 px-3 py-1 rounded-full border border-[#C6A55C]/25">
-                  {film.ranking === 1
-                    ? '1er prix'
-                    : `${film.ranking}e prix`}
+                  {film.ranking === 1 ? '1er prix' : `${film.ranking}e prix`}
                 </span>
               )}
             </div>
@@ -397,9 +395,7 @@ export default function Phase3Winners({
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a16] via-[#0a0a16]/50 to-transparent" />
                       {typeof item.ranking === 'number' && item.ranking > 0 && (
                         <div className="absolute left-1.5 top-1.5 rounded-full bg-[#C6A55C]/95 px-2 py-0.5 text-[9px] font-semibold text-[#0a0a16] shadow">
-                          {item.ranking === 1
-                            ? '1er'
-                            : `${item.ranking}e`}
+                          {item.ranking === 1 ? '1er' : `${item.ranking}e`}
                         </div>
                       )}
                     </div>

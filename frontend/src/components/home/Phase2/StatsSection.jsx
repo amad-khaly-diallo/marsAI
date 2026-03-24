@@ -248,8 +248,8 @@ export function StatsSection({ phase2 }) {
   const { t, i18n } = useTranslation();
   const [statsRevealed, setStatsRevealed] = React.useState(false);
   const [statsFlash, setStatsFlash] = React.useState(false);
-  const [selectedGenreIndex, setSelectedGenreIndex] = React.useState(0);
-  const [isRotating, setIsRotating] = React.useState(false);
+  const [selectedGenreIndex] = React.useState(0);
+  const [isRotating] = React.useState(false);
   const [manuallyTurnedOff, setManuallyTurnedOff] = React.useState(false);
   const sectionRef = React.useRef(null);
   const playCameraSound = useAudioContext();
@@ -280,13 +280,14 @@ export function StatsSection({ phase2 }) {
       },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const el = sectionRef.current;
+    if (el) {
+      observer.observe(el);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (el) {
+        observer.unobserve(el);
       }
     };
   }, [statsRevealed, manuallyTurnedOff, playCameraSound]);

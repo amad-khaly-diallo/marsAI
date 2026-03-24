@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import SEOHead from '../components/seo/SEOHead';
+import { videoObjectSchema } from '../components/seo/schemas';
 import { Download, Share2 } from 'lucide-react';
 import { getMovieFullById } from '../services/api';
 import { resolveMediaUrl } from '../utils/media';
@@ -76,7 +78,9 @@ export default function VideoDetail() {
 
     // Sous-titres SRT éventuels parmi les assets
     const subtitleAsset = assets.find((a) => a.asset_type === 'subtitle');
-    const subtitleSrc = subtitleAsset ? resolveMediaUrl(subtitleAsset.file_path) : null;
+    const subtitleSrc = subtitleAsset
+      ? resolveMediaUrl(subtitleAsset.file_path)
+      : null;
 
     // Cas 1 : lien YouTube
     const isYoutube =
@@ -165,8 +169,11 @@ export default function VideoDetail() {
   const canShareOrDownload = role === 'admin' || role === 'super_admin';
   const hasFileOnDisk = !!movie.video_url;
   const fileSrc = hasFileOnDisk ? resolveMediaUrl(movie.video_url) : null;
-  const shareUrl = hasFileOnDisk && fileSrc ? fileSrc : movie.youtube_url || null;
-  const shareText = displayTitle ? `Regarder : ${displayTitle}` : 'Regarder cette vidéo';
+  const shareUrl =
+    hasFileOnDisk && fileSrc ? fileSrc : movie.youtube_url || null;
+  const shareText = displayTitle
+    ? `Regarder : ${displayTitle}`
+    : 'Regarder cette vidéo';
   const shareLinks = shareUrl
     ? buildSocialShareLinks({ url: shareUrl, text: shareText })
     : null;
@@ -202,6 +209,17 @@ export default function VideoDetail() {
   // --- PAGE CONTENU ---
   return (
     <div className="min-h-screen bg-black text-white selection:bg-blue-500/30 font-sans overflow-x-hidden">
+      <SEOHead
+        title={displayTitle || 'Court-métrage'}
+        description={
+          displaySynopsis ||
+          `Regardez "${displayTitle}" — court-métrage IA sélectionné au festival marsAI.`
+        }
+        canonical={`/watch/${id}`}
+        image={movie?.thumbnail_url}
+        lang={isEnglish ? 'en' : 'fr'}
+        schema={videoObjectSchema(movie)}
+      />
       <div className="max-w-[1600px] mx-auto px-6 py-24 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
           {/* COLONNE GAUCHE : infos film + relations */}
@@ -239,8 +257,13 @@ export default function VideoDetail() {
 
             {/* Tags */}
             {tags.length > 0 && (
-              <div className="mb-6 opacity-0 animate-fadeInUp"
-                   style={{ animationDelay: '0.45s', animationFillMode: 'forwards' }}>
+              <div
+                className="mb-6 opacity-0 animate-fadeInUp"
+                style={{
+                  animationDelay: '0.45s',
+                  animationFillMode: 'forwards',
+                }}
+              >
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
                   {t('videoDetail.tags')}
                 </h2>
@@ -259,8 +282,13 @@ export default function VideoDetail() {
 
             {/* Collaborateurs */}
             {collaborators.length > 0 && (
-              <div className="mb-6 opacity-0 animate-fadeInUp"
-                   style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
+              <div
+                className="mb-6 opacity-0 animate-fadeInUp"
+                style={{
+                  animationDelay: '0.5s',
+                  animationFillMode: 'forwards',
+                }}
+              >
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
                   {t('videoDetail.collaborators')}
                 </h2>
@@ -282,8 +310,13 @@ export default function VideoDetail() {
 
             {/* Déclaration IA */}
             {aiDeclaration && (
-              <div className="mb-6 opacity-0 animate-fadeInUp"
-                   style={{ animationDelay: '0.55s', animationFillMode: 'forwards' }}>
+              <div
+                className="mb-6 opacity-0 animate-fadeInUp"
+                style={{
+                  animationDelay: '0.55s',
+                  animationFillMode: 'forwards',
+                }}
+              >
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
                   {t('videoDetail.aiDeclaration')}
                 </h2>
@@ -316,8 +349,13 @@ export default function VideoDetail() {
 
             {/* Assets */}
             {assets.length > 0 && (
-              <div className="mb-6 opacity-0 animate-fadeInUp"
-                   style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
+              <div
+                className="mb-6 opacity-0 animate-fadeInUp"
+                style={{
+                  animationDelay: '0.6s',
+                  animationFillMode: 'forwards',
+                }}
+              >
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-2">
                   {t('videoDetail.assets')}
                 </h2>
@@ -361,7 +399,7 @@ export default function VideoDetail() {
                           </a>
                         )}
                       </div>
-                  );
+                    );
                   })}
                 </div>
               </div>

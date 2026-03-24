@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /marsai/admin
+Disallow: /marsai/admin/
+Disallow: /marsai/timer-test
+
+Sitemap: https://amad-khaly-diallo.students-laplateforme.io/marsai/sitemap.xml

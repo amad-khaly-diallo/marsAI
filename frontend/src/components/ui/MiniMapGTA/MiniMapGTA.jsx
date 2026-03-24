@@ -132,12 +132,28 @@ function Marker({ poi, active, isMissionTarget, onClick, onKeyDown }) {
 
       {poi.type === 'mairie' && (
         <>
-          <rect x="-8" y="-6" width="16" height="12" rx="1.5" className="marker-mairie" />
+          <rect
+            x="-8"
+            y="-6"
+            width="16"
+            height="12"
+            rx="1.5"
+            className="marker-mairie"
+          />
           <polygon points="-9,-6 0,-12 9,-6" className="marker-mairie-roof" />
         </>
       )}
 
-      {poi.type === 'port' && <rect x="-9" y="-5" width="18" height="10" rx="2" className="marker-port" />}
+      {poi.type === 'port' && (
+        <rect
+          x="-9"
+          y="-5"
+          width="18"
+          height="10"
+          rx="2"
+          className="marker-port"
+        />
+      )}
 
       {poi.type === 'nd' && (
         <>
@@ -148,7 +164,14 @@ function Marker({ poi, active, isMissionTarget, onClick, onKeyDown }) {
 
       {poi.type === 'gare' && (
         <>
-          <rect x="-8" y="-8" width="16" height="16" rx="2" className="marker-gare" />
+          <rect
+            x="-8"
+            y="-8"
+            width="16"
+            height="16"
+            rx="2"
+            className="marker-gare"
+          />
           <line x1="-6" y1="0" x2="6" y2="0" className="marker-gare-line" />
         </>
       )}
@@ -161,7 +184,9 @@ function Marker({ poi, active, isMissionTarget, onClick, onKeyDown }) {
         </>
       )}
 
-      {poi.type === 'musee' && <polygon points="0,-8 -7,7 7,7" className="marker-musee" />}
+      {poi.type === 'musee' && (
+        <polygon points="0,-8 -7,7 7,7" className="marker-musee" />
+      )}
     </g>
   );
 }
@@ -184,8 +209,18 @@ function SVGDefs() {
         <stop offset="100%" stopColor="#256f42" stopOpacity="0.25" />
       </radialGradient>
 
-      <pattern id="mini-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-        <path d="M20 0 L0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="0.8" />
+      <pattern
+        id="mini-grid"
+        width="20"
+        height="20"
+        patternUnits="userSpaceOnUse"
+      >
+        <path
+          d="M20 0 L0 0 0 20"
+          fill="none"
+          stroke="rgba(255,255,255,0.05)"
+          strokeWidth="0.8"
+        />
       </pattern>
 
       <linearGradient id="radar-sweep" x1="0" y1="0" x2="1" y2="0">
@@ -215,7 +250,7 @@ export default function MiniMapMarseille() {
 
   const poiList = useMemo(() => Object.values(POIS), []);
   const activeData = activePoi ? POIS[activePoi] : null;
-  
+
   // Mission distance calculation
   const missionDistance = useMemo(() => {
     if (!missionTarget) return null;
@@ -309,7 +344,12 @@ export default function MiniMapMarseille() {
         <SVGDefs />
 
         <rect width={MAP_W} height={MAP_H} fill="url(#mini-bg)" />
-        <rect width={MAP_W} height={MAP_H} fill="url(#mini-grid)" opacity="0.23" />
+        <rect
+          width={MAP_W}
+          height={MAP_H}
+          fill="url(#mini-grid)"
+          opacity="0.23"
+        />
 
         <path
           d="M0,70 C130,25 260,55 380,48 C540,39 660,62 820,55 C900,52 950,60 1000,50 L1000,0 L0,0 Z"
@@ -335,25 +375,65 @@ export default function MiniMapMarseille() {
 
         {MAIN_ROADS.map(([x1, y1, x2, y2, width], idx) => (
           <g key={`main-road-${idx}`}>
-            <line x1={x1} y1={y1} x2={x2} y2={y2} className="mini-road-main" strokeWidth={width} />
-            <line x1={x1} y1={y1} x2={x2} y2={y2} className="mini-road-main-glow" strokeWidth={Math.max(width / 3, 2)} />
+            <line
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              className="mini-road-main"
+              strokeWidth={width}
+            />
+            <line
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              className="mini-road-main-glow"
+              strokeWidth={Math.max(width / 3, 2)}
+            />
           </g>
         ))}
 
         {SECONDARY_ROADS.map(([x1, y1, x2, y2], idx) => (
-          <line key={`sec-road-${idx}`} x1={x1} y1={y1} x2={x2} y2={y2} className="mini-road-secondary" />
+          <line
+            key={`sec-road-${idx}`}
+            x1={x1}
+            y1={y1}
+            x2={x2}
+            y2={y2}
+            className="mini-road-secondary"
+          />
         ))}
 
         {ALLEYS.map(([x1, y1, x2, y2], idx) => (
-          <line key={`alley-${idx}`} x1={x1} y1={y1} x2={x2} y2={y2} className="mini-road-alley" />
+          <line
+            key={`alley-${idx}`}
+            x1={x1}
+            y1={y1}
+            x2={x2}
+            y2={y2}
+            className="mini-road-alley"
+          />
         ))}
 
         <g transform="translate(640,105)">
           <polygon points="0,-12 -7,8 7,8" className="landmark-nd" />
         </g>
 
-        <rect x="286" y="132" width="68" height="32" rx="4" className="landmark-port" />
-        <text x="320" y="152" textAnchor="middle" className="landmark-port-label">
+        <rect
+          x="286"
+          y="132"
+          width="68"
+          height="32"
+          rx="4"
+          className="landmark-port"
+        />
+        <text
+          x="320"
+          y="152"
+          textAnchor="middle"
+          className="landmark-port-label"
+        >
           PORT
         </text>
 
@@ -370,7 +450,13 @@ export default function MiniMapMarseille() {
 
         <g transform="translate(380,255)">
           <circle r="11" className="mini-player-ring" />
-          <rect x="-5" y="-5" width="10" height="10" className="mini-player-core" />
+          <rect
+            x="-5"
+            y="-5"
+            width="10"
+            height="10"
+            className="mini-player-core"
+          />
           <polygon points="0,-13 -3,-7 3,-7" fill="#fff" />
         </g>
 
@@ -382,13 +468,22 @@ export default function MiniMapMarseille() {
           <line x1="0" y1="-36" x2="0" y2="36" className="mini-radar-grid" />
 
           <g className="mini-radar-sweep">
-            <path d="M0,0 L0,-36 A36,36 0 0 1 25.4,-25.4 Z" fill="url(#radar-sweep)" />
+            <path
+              d="M0,0 L0,-36 A36,36 0 0 1 25.4,-25.4 Z"
+              fill="url(#radar-sweep)"
+            />
           </g>
 
           <circle cx="12" cy="-8" r="1.8" className="mini-radar-blip" />
           <circle cx="-14" cy="11" r="1.8" className="mini-radar-blip" />
           <circle cx="8" cy="16" r="1.8" className="mini-radar-blip warm" />
-          <rect x="-3" y="-3" width="6" height="6" className="mini-radar-center" />
+          <rect
+            x="-3"
+            y="-3"
+            width="6"
+            height="6"
+            className="mini-radar-center"
+          />
         </g>
       </svg>
 
@@ -397,37 +492,45 @@ export default function MiniMapMarseille() {
           className="mini-poi-tooltip pointer-events-auto absolute z-20 w-[min(82vw,14rem)] rounded-md border border-white/10 bg-black/80 px-3 py-2 text-[11px] text-white/90 shadow-lg backdrop-blur"
           style={tooltipPosition || undefined}
         >
-          <div className="text-[12px] font-semibold text-white">{activeData.name}</div>
-          <div className="mt-0.5 leading-snug text-white/70">{activeData.description}</div>
+          <div className="text-[12px] font-semibold text-white">
+            {activeData.name}
+          </div>
+          <div className="mt-0.5 leading-snug text-white/70">
+            {activeData.description}
+          </div>
         </div>
       )}
 
       <div className="mini-overlay-scanlines pointer-events-none absolute inset-0 z-[11]" />
       <div className="mini-overlay-vignette pointer-events-none absolute inset-0 z-[11]" />
 
-      <div className={`mini-mission-card pointer-events-auto absolute left-3 top-10 z-20 rounded-md border px-2.5 py-2 text-[10px] backdrop-blur-sm cursor-pointer transition-all ${
-        missionState === 'idle' 
-          ? 'border-cyan-300/25 bg-black/55 text-cyan-100' 
-          : missionState === 'active' 
-            ? 'border-yellow-400/50 bg-yellow-900/30 text-yellow-100' 
-            : 'border-green-400/50 bg-green-900/40 text-green-100'
-      }`}
-      onClick={() => {
-        if (missionState === 'reached' || missionState === 'active') {
-          setMissionState('idle');
-          setMissionTarget(null);
-        }
-      }}>
+      <div
+        className={`mini-mission-card pointer-events-auto absolute left-3 top-10 z-20 rounded-md border px-2.5 py-2 text-[10px] backdrop-blur-sm cursor-pointer transition-all ${
+          missionState === 'idle'
+            ? 'border-cyan-300/25 bg-black/55 text-cyan-100'
+            : missionState === 'active'
+              ? 'border-yellow-400/50 bg-yellow-900/30 text-yellow-100'
+              : 'border-green-400/50 bg-green-900/40 text-green-100'
+        }`}
+        onClick={() => {
+          if (missionState === 'reached' || missionState === 'active') {
+            setMissionState('idle');
+            setMissionTarget(null);
+          }
+        }}
+      >
         <div className="mini-mission-title">OBJECTIF ACTUEL</div>
         <div className="mini-mission-value">{objectiveText}</div>
         {missionState === 'active' && missionDistance !== null && (
           <div className="mt-1.5 space-y-1">
-            <div className="text-[9px] text-white/60">Distance: {Math.round(missionDistance)}m</div>
+            <div className="text-[9px] text-white/60">
+              Distance: {Math.round(missionDistance)}m
+            </div>
             <div className="h-1.5 w-32 rounded-full bg-black/50 border border-white/20 overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 transition-all duration-200"
-                style={{ 
-                  width: `${Math.max(0, Math.min(100, (1 - missionDistance / 550) * 100))}%`
+                style={{
+                  width: `${Math.max(0, Math.min(100, (1 - missionDistance / 550) * 100))}%`,
                 }}
               />
             </div>
@@ -453,7 +556,9 @@ export default function MiniMapMarseille() {
 
       <div className="mini-hud pointer-events-none absolute inset-0 z-10 flex flex-col justify-between p-3">
         <div className="mini-hud-top flex items-start justify-between">
-          <span className="text-[10px] font-bold tracking-wider text-white/70">MARS.AI // MAP</span>
+          <span className="text-[10px] font-bold tracking-wider text-white/70">
+            MARS.AI // MAP
+          </span>
           <span className="text-sm font-black text-white/85">N</span>
         </div>
         <div className="flex items-end justify-between">
@@ -468,7 +573,9 @@ export default function MiniMapMarseille() {
             <div className="mini-hud-brand-title text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-300">
               marsAI
             </div>
-            <div className="mini-hud-brand-sub text-[10px] font-bold tracking-wider text-white/80">MARSEILLE</div>
+            <div className="mini-hud-brand-sub text-[10px] font-bold tracking-wider text-white/80">
+              MARSEILLE
+            </div>
           </div>
         </div>
       </div>

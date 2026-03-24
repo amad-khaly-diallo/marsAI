@@ -58,7 +58,10 @@ export default function JuryManagement() {
     setPhotoUploading(true);
     try {
       const res = await uploadImage(file);
-      setForm((prev) => ({ ...prev, photo_url: res.url || res.Location || '' }));
+      setForm((prev) => ({
+        ...prev,
+        photo_url: res.url || res.Location || '',
+      }));
     } catch (err) {
       setPhotoUploadError(err.message || 'Erreur upload image');
     } finally {

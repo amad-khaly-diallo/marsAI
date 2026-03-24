@@ -68,7 +68,8 @@ export default function AdminFilmModal({
 
   if (!isOpen || !movie) return null;
 
-  const shareUrl = hasLocalVideo && localSrc ? localSrc : movie.youtube_url || null;
+  const shareUrl =
+    hasLocalVideo && localSrc ? localSrc : movie.youtube_url || null;
   const shareText = movie.original_title
     ? `Regarder : ${movie.original_title}`
     : 'Regarder cette vidéo';
@@ -105,8 +106,7 @@ export default function AdminFilmModal({
   };
 
   const isToggling = togglingWinnerId === movie.id;
-  const canMarkWinner =
-    movie.status === 'selected' && !isToggling;
+  const canMarkWinner = movie.status === 'selected' && !isToggling;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/75 px-3 md:px-6">
@@ -290,7 +290,7 @@ export default function AdminFilmModal({
                 <Trophy className="h-3.5 w-3.5 shrink-0" />
                 {isToggling
                   ? 'Mise à jour...'
-                    : movie.is_winner
+                  : movie.is_winner
                     ? 'Retirer des gagnants'
                     : 'Marquer comme gagnant'}
               </button>
@@ -341,17 +341,17 @@ export default function AdminFilmModal({
                     <button
                       type="button"
                       disabled={isToggling || !winnerCategory || !winnerRanking}
-                      onClick={() =>{
+                      onClick={() => {
                         // -----------------------------------
-                        trackEvent('admin_winner_marked', { 
-                        movie_title: movie.original_title, 
-                         category: winnerCategory 
-                         });
+                        trackEvent('admin_winner_marked', {
+                          movie_title: movie.original_title,
+                          category: winnerCategory,
+                        });
                         // -----------------------------------
                         onToggleWinner(movie, {
                           ranking: winnerRanking,
                           category: winnerCategory,
-                        })
+                        });
                       }}
                       className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-3 py-1.5 text-[11px] font-semibold text-slate-900 shadow-soft-sm hover:bg-brand-accent disabled:opacity-60 disabled:cursor-not-allowed"
                     >

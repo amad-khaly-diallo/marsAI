@@ -114,8 +114,6 @@ export function StatsPanel({
   selectedGenreIndex,
   total = 1,
 }) {
-  const [showParticles] = React.useState(false);
-
   const generateParticles = () => {
     const particles = [];
     for (let i = 0; i < 8; i++) {

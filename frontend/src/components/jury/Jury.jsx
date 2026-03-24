@@ -6,8 +6,9 @@ import JuryHeader from './JuryHeader';
 import styles from './Jury.module.css';
 import backgroundImage from '../../assets/images/bn05.png';
 import { getJuryPage } from '../../services/query';
-import { getLocalized } from '../../utils/sanity';
 import api from '../../services/api';
+import SEOHead from '../seo/SEOHead';
+import { juryListSchema } from '../seo/schemas';
 
 const Jury = () => {
   const [juryMembers, setJuryMembers] = useState([]);
@@ -72,6 +73,19 @@ const Jury = () => {
 
   return (
     <div className="w-full min-h-screen bg-[#070819] text-white py-4 px-2 flex flex-col items-center justify-start overflow-hidden relative font-sans">
+      <SEOHead
+        title="Jury du festival"
+        description="Découvrez les membres du jury du festival marsAI — experts du cinéma, de l'IA et de la création audiovisuelle qui évaluent les œuvres soumises."
+        canonical="/jury"
+        schema={juryListSchema(
+          juryMembers.map((m) => ({
+            name: m.name,
+            bio: m.bio,
+            image: m.photo_url,
+            role: m.role,
+          })),
+        )}
+      />
       {/*Arrière-plan*/}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img

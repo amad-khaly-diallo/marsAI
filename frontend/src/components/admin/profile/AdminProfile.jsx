@@ -68,11 +68,15 @@ export default function AdminProfile() {
       return;
     }
     if (passwords.new_password.length < 8) {
-      setPasswordError('Le nouveau mot de passe doit contenir au moins 8 caractères.');
+      setPasswordError(
+        'Le nouveau mot de passe doit contenir au moins 8 caractères.',
+      );
       return;
     }
     if (passwords.new_password !== passwords.confirm_password) {
-      setPasswordError('La confirmation ne correspond pas au nouveau mot de passe.');
+      setPasswordError(
+        'La confirmation ne correspond pas au nouveau mot de passe.',
+      );
       return;
     }
 
@@ -89,7 +93,9 @@ export default function AdminProfile() {
         confirm_password: '',
       });
     } catch (err) {
-      setPasswordError(err.message || 'Impossible de mettre à jour le mot de passe.');
+      setPasswordError(
+        err.message || 'Impossible de mettre à jour le mot de passe.',
+      );
     } finally {
       setPasswordLoading(false);
     }
@@ -237,4 +243,3 @@ export default function AdminProfile() {
     </div>
   );
 }
-

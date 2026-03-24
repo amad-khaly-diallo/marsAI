@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import SEOHead from '../components/seo/SEOHead';
+import { websiteSchema, festivalEventSchema } from '../components/seo/schemas';
 import { PageBackground } from '../components/home';
 import {
   Phase1Hero,
@@ -13,10 +15,11 @@ import {
   CTASection,
   HeroCamera,
   StatsSection as ProjectorStatsSection,
-  ManifestoSection,
-  ProgramSection,
 } from '../components/home/Phase2';
-import { Phase3Winners, PostFestivalPresentation } from '../components/home/Phase3';
+import {
+  Phase3Winners,
+  PostFestivalPresentation,
+} from '../components/home/Phase3';
 import { HOME_STYLES } from '../constants/homeStyles';
 import { CookieBanner } from '../components/ui/CookieBanner';
 import { heroAnimationStyles } from '../components/sections/heroAnimations';
@@ -105,7 +108,7 @@ export default function Home() {
     'Un festival pour raconter fort, en une minute.';
   const phase1Subtitle =
     getLocalized(phase1?.heroSubtitle, i18n) ||
-    "1 minute pour créer. 1 minute pour choquer. 1 minute pour marquer.";
+    '1 minute pour créer. 1 minute pour choquer. 1 minute pour marquer.';
   const phase1CtaLabel =
     getLocalized(phase1?.heroCtaLabel, i18n) || 'Participer au projet';
   const phase1CtaLink = phase1?.heroCtaLink || '/participer';
@@ -119,10 +122,8 @@ export default function Home() {
     getLocalized(phase2?.heroCtaLabel, i18n) || 'Découvrir les films';
   const phase2CtaLink = phase2?.heroCtaLink || '/catalogue';
 
-  const phase3Prix =
-    getLocalized(phase3?.prix, i18n) || 'Grand Prix';
-  const phase3Title =
-    getLocalized(phase3?.title, i18n) || 'MarsAI';
+  const phase3Prix = getLocalized(phase3?.prix, i18n) || 'Grand Prix';
+  const phase3Title = getLocalized(phase3?.title, i18n) || 'MarsAI';
 
   useEffect(() => {
     if (phase !== 3) return;
@@ -153,6 +154,13 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen text-white">
+      <SEOHead
+        title="Accueil"
+        description="marsAI — Premier festival mondial de courts-métrages d'une minute générés par intelligence artificielle. Projections, jury international, talks et ateliers à Marseille."
+        canonical="/"
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+        schema={[websiteSchema, festivalEventSchema()]}
+      />
       <PageBackground />
 
       {/* ——— Phase 1 : Hero + Description + Newsletter ——— */}
@@ -188,7 +196,7 @@ export default function Home() {
             }
             subtitle={
               getLocalized(phase1?.newsletterSubtitle, i18n) ||
-              "Inscrivez-vous pour recevoir les infos du festival : programmation, appels à films et événements."
+              'Inscrivez-vous pour recevoir les infos du festival : programmation, appels à films et événements.'
             }
           />
         </>

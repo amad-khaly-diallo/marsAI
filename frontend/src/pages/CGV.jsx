@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import SEOHead from '../components/seo/SEOHead';
 
 export default function CGV() {
   const { i18n } = useTranslation();
@@ -7,6 +8,13 @@ export default function CGV() {
 
   return (
     <div className="relative min-h-screen text-white">
+      <SEOHead
+        title="Conditions Générales de Vente"
+        description="Consultez les conditions générales de vente du festival marsAI : billetterie, remboursements, modalités de participation."
+        canonical="/cgv"
+        noindex
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+      />
       <CinematicBackground />
 
       <section className="px-6 pt-32 pb-20">

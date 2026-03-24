@@ -279,12 +279,14 @@ const heroStyles = `
   }
 `;
 
-// Helper: Calculate coverflow position
+// Helper: Calculate coverflow position (kept for future use)
+// eslint-disable-next-line no-unused-vars
 function calculateCoverflowPosition(index, totalCards, radius = 250) {
   const angle = (360 / totalCards) * index;
   const angleRad = (angle * Math.PI) / 180;
 
   const x = Math.sin(angleRad) * radius;
+  // eslint-disable-next-line no-unused-vars
   const z = Math.cos(angleRad) * radius;
   const rotationY = -angle;
 
@@ -365,7 +367,9 @@ export default function HeroCamera({ moviesFromApi }) {
     if (!isMobile || cameraOn) return;
 
     setCameraOn(true);
-    setSelectedGenre(normalizedApiMovies.length > 0 ? { name: 'Tous' } : GENRES[0]);
+    setSelectedGenre(
+      normalizedApiMovies.length > 0 ? { name: 'Tous' } : GENRES[0],
+    );
     setSelectedFilmIndex(0);
     setSelectedMovie(null);
     setPowerOnAnim(false);
@@ -456,13 +460,9 @@ export default function HeroCamera({ moviesFromApi }) {
       ? movies[selectedFilmIndex]
       : null;
   const currentPage =
-    totalMovies > 0
-      ? Math.floor(selectedFilmIndex / MAX_VISIBLE_MOVIES)
-      : 0;
+    totalMovies > 0 ? Math.floor(selectedFilmIndex / MAX_VISIBLE_MOVIES) : 0;
   const totalPages =
-    totalMovies > 0
-      ? Math.ceil(totalMovies / MAX_VISIBLE_MOVIES)
-      : 0;
+    totalMovies > 0 ? Math.ceil(totalMovies / MAX_VISIBLE_MOVIES) : 0;
 
   useEffect(() => {
     if (!sectionRef.current || isMobile) return;
@@ -503,18 +503,16 @@ export default function HeroCamera({ moviesFromApi }) {
       },
     );
 
-    observer.observe(sectionRef.current);
+    const el = sectionRef.current;
+    observer.observe(el);
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (el) {
+        observer.unobserve(el);
       }
     };
-  }, [
-    cameraOn,
-    manuallyToggled,
-    normalizedApiMovies.length,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cameraOn, manuallyToggled, normalizedApiMovies.length]);
 
   return (
     <div
@@ -524,9 +522,13 @@ export default function HeroCamera({ moviesFromApi }) {
       <style>{heroStyles + heroAnimationStyles}</style>
 
       <div className="relative flex flex-col items-center justify-center w-full px-3">
-        <div className={`relative flex gap-0 flex-wrap justify-center w-full ${isMobile ? 'flex-col items-center' : 'items-center'}`}>
+        <div
+          className={`relative flex gap-0 flex-wrap justify-center w-full ${isMobile ? 'flex-col items-center' : 'items-center'}`}
+        >
           {/* TV Desktop / iPhone Mobile */}
-          <div className={`relative ${isMobile ? 'w-full flex justify-center' : ''}`}>
+          <div
+            className={`relative ${isMobile ? 'w-full flex justify-center' : ''}`}
+          >
             {isMobile ? (
               /* iPhone pour mobile */
               <div
@@ -561,7 +563,9 @@ export default function HeroCamera({ moviesFromApi }) {
                       <div className="absolute inset-0 pointer-events-none z-20">
                         <div
                           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 bg-white/90"
-                          style={{ animation: 'expand 0.55s ease-out forwards' }}
+                          style={{
+                            animation: 'expand 0.55s ease-out forwards',
+                          }}
                         />
                         <div className="absolute inset-0 bg-white/5 animate-pulse" />
                       </div>
@@ -573,7 +577,7 @@ export default function HeroCamera({ moviesFromApi }) {
                         </div>
                       </div>
                     )}
-                    
+
                     {cameraOn && isBooting && (
                       <div className="w-full h-full flex flex-col items-center justify-center bg-black px-4">
                         {showClap ? (
@@ -581,14 +585,18 @@ export default function HeroCamera({ moviesFromApi }) {
                             <div className="absolute -inset-2 rounded-2xl bg-cyan-500/10 blur-xl" />
                             <div
                               className="absolute left-1/2 top-0 h-7 w-32 -translate-x-1/2 rounded-t-xl bg-gradient-to-r from-slate-200 to-slate-400 origin-bottom animate-clap"
-                              style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.45)' }}
+                              style={{
+                                boxShadow: '0 6px 20px rgba(0,0,0,0.45)',
+                              }}
                             >
                               <div className="absolute inset-0 rounded-t-xl clap-stripes" />
                             </div>
                             <div className="absolute left-1/2 top-5 h-2 w-10 -translate-x-1/2 rounded-full bg-black/70" />
                             <div
                               className="absolute inset-0 rounded-xl border border-white/15 bg-gradient-to-br from-slate-800 via-slate-900 to-black"
-                              style={{ boxShadow: 'inset 0 0 20px rgba(0,0,0,0.7)' }}
+                              style={{
+                                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.7)',
+                              }}
                             >
                               <div className="absolute inset-0 rounded-xl clap-grid" />
                               <div className="absolute top-2 left-3 text-[9px] font-bold text-white/80 tracking-widest">
@@ -612,7 +620,7 @@ export default function HeroCamera({ moviesFromApi }) {
                         )}
                       </div>
                     )}
-                    
+
                     {cameraOn && !isBooting && selectedMovie && (
                       <div className="w-full h-full flex flex-col p-4 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
                         <div className="flex items-center justify-between mb-3">
@@ -621,7 +629,8 @@ export default function HeroCamera({ moviesFromApi }) {
                               {selectedMovie.title}
                             </h3>
                             <p className="text-xs text-cyan-400/70 truncate">
-                              {selectedMovie.filmmaker} • {selectedMovie.duration}s
+                              {selectedMovie.filmmaker} •{' '}
+                              {selectedMovie.duration}s
                             </p>
                           </div>
                           <button
@@ -641,7 +650,10 @@ export default function HeroCamera({ moviesFromApi }) {
                             />
                           ) : selectedMovie.youtube_url ? (
                             <iframe
-                              src={getYouTubeEmbed(selectedMovie.youtube_url) + '?autoplay=1'}
+                              src={
+                                getYouTubeEmbed(selectedMovie.youtube_url) +
+                                '?autoplay=1'
+                              }
                               className="w-full h-full bg-black"
                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                               allowFullScreen
@@ -658,90 +670,109 @@ export default function HeroCamera({ moviesFromApi }) {
                         </div>
                       </div>
                     )}
-                    
-                    {cameraOn && !isBooting && selectedGenre && !selectedMovie && (
-                      <div className="w-full h-full flex flex-col p-4 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628] overflow-y-auto">
-                        <div className="flex items-center justify-between mb-3 flex-shrink-0">
-                          <div>
-                            <h2 className="text-xl font-bold text-white">MarsAI</h2>
-                            <p className="text-[10px] text-cyan-400/60">Festival IA</p>
+
+                    {cameraOn &&
+                      !isBooting &&
+                      selectedGenre &&
+                      !selectedMovie && (
+                        <div className="w-full h-full flex flex-col p-4 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628] overflow-y-auto">
+                          <div className="flex items-center justify-between mb-3 flex-shrink-0">
+                            <div>
+                              <h2 className="text-xl font-bold text-white">
+                                MarsAI
+                              </h2>
+                              <p className="text-[10px] text-cyan-400/60">
+                                Festival IA
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-gray-400">Sélection</p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="text-xs text-gray-400">Sélection</p>
-                          </div>
-                        </div>
-                        
-                        {(() => {
-                          const visibleCount = Math.min(totalMovies, MAX_VISIBLE_MOVIES);
-                          if (!visibleCount) return null;
-                          
-                          const pageStart = currentPage * MAX_VISIBLE_MOVIES;
-                          const pageEnd = Math.min(pageStart + MAX_VISIBLE_MOVIES, totalMovies);
-                          const pageMovies = movies.slice(pageStart, pageEnd);
-                          
-                          return (
-                            <>
-                              <div className="grid grid-cols-2 gap-3 mb-3">
-                                {pageMovies.map((movie, idx) => {
-                                  const globalIndex = pageStart + idx;
-                                  const isSelected = globalIndex === selectedFilmIndex;
-                                  return (
-                                    <div
-                                      key={movie.id}
-                                      className={`relative rounded-lg overflow-hidden border-2 transition-all cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 ${
-                                        isSelected
-                                          ? 'border-cyan-400 shadow-lg shadow-cyan-400/40'
-                                          : 'border-cyan-400/20 opacity-80'
-                                      }`}
-                                      style={{ aspectRatio: '2/3' }}
-                                      role="button"
-                                      tabIndex={0}
-                                      aria-label={`Sélectionner ${movie.title}`}
-                                      onClick={() => setSelectedFilmIndex(globalIndex)}
-                                      onDoubleClick={() => {
-                                        setSelectedFilmIndex(globalIndex);
-                                        setSelectedMovie(movie);
-                                      }}
-                                      onKeyDown={(event) => {
-                                        if (event.key === 'Enter' || event.key === ' ') {
-                                          event.preventDefault();
-                                          setSelectedFilmIndex(globalIndex);
+
+                          {(() => {
+                            const visibleCount = Math.min(
+                              totalMovies,
+                              MAX_VISIBLE_MOVIES,
+                            );
+                            if (!visibleCount) return null;
+
+                            const pageStart = currentPage * MAX_VISIBLE_MOVIES;
+                            const pageEnd = Math.min(
+                              pageStart + MAX_VISIBLE_MOVIES,
+                              totalMovies,
+                            );
+                            const pageMovies = movies.slice(pageStart, pageEnd);
+
+                            return (
+                              <>
+                                <div className="grid grid-cols-2 gap-3 mb-3">
+                                  {pageMovies.map((movie, idx) => {
+                                    const globalIndex = pageStart + idx;
+                                    const isSelected =
+                                      globalIndex === selectedFilmIndex;
+                                    return (
+                                      <div
+                                        key={movie.id}
+                                        className={`relative rounded-lg overflow-hidden border-2 transition-all cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/80 ${
+                                          isSelected
+                                            ? 'border-cyan-400 shadow-lg shadow-cyan-400/40'
+                                            : 'border-cyan-400/20 opacity-80'
+                                        }`}
+                                        style={{ aspectRatio: '2/3' }}
+                                        role="button"
+                                        tabIndex={0}
+                                        aria-label={`Sélectionner ${movie.title}`}
+                                        onClick={() =>
+                                          setSelectedFilmIndex(globalIndex)
                                         }
-                                      }}
-                                    >
-                                      <img
-                                        src={movie.thumbnail}
-                                        alt={movie.title}
-                                        className="w-full h-full object-cover"
-                                      />
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                                      <div className="absolute bottom-1 left-1 right-1 text-[10px] font-bold text-white truncate">
-                                        {movie.title}
+                                        onDoubleClick={() => {
+                                          setSelectedFilmIndex(globalIndex);
+                                          setSelectedMovie(movie);
+                                        }}
+                                        onKeyDown={(event) => {
+                                          if (
+                                            event.key === 'Enter' ||
+                                            event.key === ' '
+                                          ) {
+                                            event.preventDefault();
+                                            setSelectedFilmIndex(globalIndex);
+                                          }
+                                        }}
+                                      >
+                                        <img
+                                          src={movie.thumbnail}
+                                          alt={movie.title}
+                                          className="w-full h-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                                        <div className="absolute bottom-1 left-1 right-1 text-[10px] font-bold text-white truncate">
+                                          {movie.title}
+                                        </div>
                                       </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                              {totalPages > 1 && (
-                                <div className="text-[10px] text-cyan-200 text-center flex-shrink-0">
-                                  Page {currentPage + 1} / {totalPages}
+                                    );
+                                  })}
                                 </div>
-                              )}
-                              <div className="mt-3 text-center flex-shrink-0">
-                                <button
-                                  onClick={playFilm}
-                                  className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm active:scale-95"
-                                >
-                                  ▶ Lancer
-                                </button>
-                              </div>
-                            </>
-                          );
-                        })()}
-                      </div>
-                    )}
+                                {totalPages > 1 && (
+                                  <div className="text-[10px] text-cyan-200 text-center flex-shrink-0">
+                                    Page {currentPage + 1} / {totalPages}
+                                  </div>
+                                )}
+                                <div className="mt-3 text-center flex-shrink-0">
+                                  <button
+                                    onClick={playFilm}
+                                    className="px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold text-sm active:scale-95"
+                                  >
+                                    ▶ Lancer
+                                  </button>
+                                </div>
+                              </>
+                            );
+                          })()}
+                        </div>
+                      )}
                   </div>
-                  
+
                   {/* Bouton Home iPhone classique */}
                   <button
                     type="button"
@@ -762,253 +793,259 @@ export default function HeroCamera({ moviesFromApi }) {
                   height: 'clamp(520px, 55vw, 720px)',
                 }}
               >
-              <div
-                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-900 via-black to-slate-950"
-                style={{
-                  padding: '10px',
-                  boxShadow:
-                    '0 30px 80px rgba(0,0,0,0.85), inset 0 0 20px rgba(255,255,255,0.05)',
-                }}
-              >
                 <div
-                  className="absolute -inset-1 rounded-[20px]"
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-900 via-black to-slate-950"
                   style={{
-                    background:
-                      'linear-gradient(120deg, rgba(34,211,238,0.25), rgba(168,85,247,0.25), rgba(59,130,246,0.25))',
-                    filter: 'blur(18px)',
-                    opacity: 0.6,
+                    padding: '10px',
+                    boxShadow:
+                      '0 30px 80px rgba(0,0,0,0.85), inset 0 0 20px rgba(255,255,255,0.05)',
                   }}
-                />
-                <div
-                  className="relative w-full h-full rounded-xl overflow-hidden bg-black"
-                  style={{ boxShadow: 'inset 0 0 50px rgba(0,0,0,0.9)' }}
                 >
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/6 via-transparent to-transparent" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
-                  </div>
-                  {cameraOn && powerOnAnim && (
-                    <div className="absolute inset-0 pointer-events-none z-20">
-                      <div
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 bg-white/90"
-                        style={{ animation: 'expand 0.55s ease-out forwards' }}
-                      />
-                      <div className="absolute inset-0 bg-white/5 animate-pulse" />
+                  <div
+                    className="absolute -inset-1 rounded-[20px]"
+                    style={{
+                      background:
+                        'linear-gradient(120deg, rgba(34,211,238,0.25), rgba(168,85,247,0.25), rgba(59,130,246,0.25))',
+                      filter: 'blur(18px)',
+                      opacity: 0.6,
+                    }}
+                  />
+                  <div
+                    className="relative w-full h-full rounded-xl overflow-hidden bg-black"
+                    style={{ boxShadow: 'inset 0 0 50px rgba(0,0,0,0.9)' }}
+                  >
+                    <div className="absolute inset-0 pointer-events-none">
+                      <div className="absolute inset-0 bg-gradient-to-tr from-white/6 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_45%)]" />
                     </div>
-                  )}
-                  {!cameraOn && (
-                    <div className="relative w-full h-full bg-gradient-to-br from-gray-900/60 to-black flex items-center justify-center">
-                      <div className="text-gray-700/30 text-6xl font-bold">
-                        MARS.AI
+                    {cameraOn && powerOnAnim && (
+                      <div className="absolute inset-0 pointer-events-none z-20">
+                        <div
+                          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 bg-white/90"
+                          style={{
+                            animation: 'expand 0.55s ease-out forwards',
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-white/5 animate-pulse" />
                       </div>
-                    </div>
-                  )}
-
-                  {cameraOn && isBooting && (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-black">
-                      {showClap ? (
-                        <div className="relative w-44 h-32">
-                          {/* Ombre */}
-                          <div className="absolute -inset-2 rounded-2xl bg-cyan-500/10 blur-xl" />
-                          {/* Clap top */}
-                          <div
-                            className="absolute left-1/2 top-0 h-9 w-44 -translate-x-1/2 rounded-t-xl bg-gradient-to-r from-slate-200 to-slate-400 origin-bottom animate-clap"
-                            style={{ boxShadow: '0 6px 20px rgba(0,0,0,0.45)' }}
-                          >
-                            <div className="absolute inset-0 rounded-t-xl clap-stripes" />
-                          </div>
-                          {/* Hinge */}
-                          <div className="absolute left-1/2 top-7 h-2 w-12 -translate-x-1/2 rounded-full bg-black/70" />
-                          {/* Clap body */}
-                          <div
-                            className="absolute inset-0 rounded-xl border border-white/15 bg-gradient-to-br from-slate-800 via-slate-900 to-black"
-                            style={{
-                              boxShadow: 'inset 0 0 20px rgba(0,0,0,0.7)',
-                            }}
-                          >
-                            <div className="absolute inset-0 rounded-xl clap-grid" />
-                            <div className="absolute top-3 left-4 text-[11px] font-bold text-white/80 tracking-widest">
-                              MARS.AI
-                            </div>
-                            <div className="absolute bottom-3 left-4 text-[10px] text-white/55">
-                              TAKE 01
-                            </div>
-                            <div className="absolute bottom-3 right-4 text-[10px] text-white/55">
-                              SCENE 01
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="text-6xl font-black text-white/10 tracking-[0.3em] select-none">
-                            MARS.AI
-                          </div>
-                          <div className="mt-4 h-1 w-56 rounded-full bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 opacity-70" />
-                          <div className="mt-6 text-sm text-white/40">
-                            Démarrage…
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  {cameraOn && !isBooting && selectedMovie && (
-                    <div className="w-full h-full flex flex-col p-6 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <h3 className="text-2xl font-bold text-white">
-                            {selectedMovie.title}
-                          </h3>
-                          <p className="text-sm text-cyan-400/70">
-                            {selectedMovie.filmmaker} • {selectedMovie.duration}
-                            s
-                          </p>
-                        </div>
-                        <button
-                          onClick={closeMovie}
-                          className="px-3 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20"
-                        >
-                          Fermer
-                        </button>
-                      </div>
-                      <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30 min-h-0">
-                        {selectedMovie.video_url ? (
-                          <video
-                            className="w-full h-full bg-black"
-                            src={resolveMediaUrl(selectedMovie.video_url)}
-                            controls
-                            autoPlay
-                          />
-                        ) : selectedMovie.youtube_url ? (
-                          <iframe
-                            src={
-                              getYouTubeEmbed(selectedMovie.youtube_url) +
-                              '?autoplay=1'
-                            }
-                            className="w-full h-full bg-black"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            title={selectedMovie.title}
-                          />
-                        ) : (
-                          <video
-                            className="w-full h-full bg-black"
-                            src={selectedMovie.video}
-                            controls
-                            autoPlay
-                          />
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {cameraOn &&
-                    !isBooting &&
-                    selectedGenre &&
-                    !selectedMovie && (
-                      <div className="w-full h-full flex flex-col p-8 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <h2 className="text-2xl font-bold text-white">
-                              MarsAI
-                            </h2>
-                            <p className="text-xs text-cyan-400/60">
-                              Festival de courts-métrages IA
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-sm text-gray-400">
-                              Films sélectionnés
-                            </p>
-                          </div>
-                        </div>
-
-                        {(() => {
-                          const visibleCount = Math.min(
-                            totalMovies,
-                            MAX_VISIBLE_MOVIES,
-                          );
-                          if (!visibleCount) return null;
-
-                          const cols = Math.min(GRID_COLUMNS, visibleCount);
-                          const cardSize = { width: '190px', height: '260px' };
-
-                          const pageStart =
-                            currentPage * MAX_VISIBLE_MOVIES;
-                          const pageEnd = Math.min(
-                            pageStart + MAX_VISIBLE_MOVIES,
-                            totalMovies,
-                          );
-                          const pageMovies = movies.slice(pageStart, pageEnd);
-
-                          return (
-                            <>
-                              <div
-                                className="grid gap-5 place-items-start w-full"
-                                style={{
-                                  gridTemplateColumns: `repeat(${cols}, ${cardSize.width})`,
-                                  justifyContent: 'start',
-                                }}
-                              >
-                                {pageMovies.map((movie, idx) => {
-                                  const globalIndex = pageStart + idx;
-                                  const isSelected =
-                                    globalIndex === selectedFilmIndex;
-                                  return (
-                                    <div
-                                      key={movie.id}
-                                      className={`relative rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:scale-105 ${
-                                        isSelected
-                                          ? 'border-cyan-400 shadow-cyan-400/60'
-                                          : 'border-cyan-400/20 opacity-80'
-                                      }`}
-                                      style={{
-                                        width: cardSize.width,
-                                        height: cardSize.height,
-                                      }}
-                                      onClick={() =>
-                                        setSelectedFilmIndex(globalIndex)
-                                      }
-                                      onDoubleClick={() => {
-                                        setSelectedFilmIndex(globalIndex);
-                                        setSelectedMovie(movie);
-                                      }}
-                                    >
-                                      <img
-                                        src={movie.thumbnail}
-                                        alt={movie.title}
-                                        className="w-full h-full object-cover"
-                                      />
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                                      <div className="absolute bottom-2 left-2 right-2 text-sm font-bold text-white truncate">
-                                        {movie.title}
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                              {totalPages > 1 && (
-                                <div className="mt-3 text-xs text-cyan-200 text-right">
-                                  Page {currentPage + 1} / {totalPages}
-                                </div>
-                              )}
-                            </>
-                          );
-                        })()}
-
-                        <div className="mt-6 text-center">
-                          <button
-                            onClick={playFilm}
-                            className="px-6 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold"
-                          >
-                            Lancer: {currentMovie ? currentMovie.title : ''}
-                          </button>
+                    )}
+                    {!cameraOn && (
+                      <div className="relative w-full h-full bg-gradient-to-br from-gray-900/60 to-black flex items-center justify-center">
+                        <div className="text-gray-700/30 text-6xl font-bold">
+                          MARS.AI
                         </div>
                       </div>
                     )}
+
+                    {cameraOn && isBooting && (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-black">
+                        {showClap ? (
+                          <div className="relative w-44 h-32">
+                            {/* Ombre */}
+                            <div className="absolute -inset-2 rounded-2xl bg-cyan-500/10 blur-xl" />
+                            {/* Clap top */}
+                            <div
+                              className="absolute left-1/2 top-0 h-9 w-44 -translate-x-1/2 rounded-t-xl bg-gradient-to-r from-slate-200 to-slate-400 origin-bottom animate-clap"
+                              style={{
+                                boxShadow: '0 6px 20px rgba(0,0,0,0.45)',
+                              }}
+                            >
+                              <div className="absolute inset-0 rounded-t-xl clap-stripes" />
+                            </div>
+                            {/* Hinge */}
+                            <div className="absolute left-1/2 top-7 h-2 w-12 -translate-x-1/2 rounded-full bg-black/70" />
+                            {/* Clap body */}
+                            <div
+                              className="absolute inset-0 rounded-xl border border-white/15 bg-gradient-to-br from-slate-800 via-slate-900 to-black"
+                              style={{
+                                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.7)',
+                              }}
+                            >
+                              <div className="absolute inset-0 rounded-xl clap-grid" />
+                              <div className="absolute top-3 left-4 text-[11px] font-bold text-white/80 tracking-widest">
+                                MARS.AI
+                              </div>
+                              <div className="absolute bottom-3 left-4 text-[10px] text-white/55">
+                                TAKE 01
+                              </div>
+                              <div className="absolute bottom-3 right-4 text-[10px] text-white/55">
+                                SCENE 01
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="text-6xl font-black text-white/10 tracking-[0.3em] select-none">
+                              MARS.AI
+                            </div>
+                            <div className="mt-4 h-1 w-56 rounded-full bg-gradient-to-r from-cyan-400 via-violet-400 to-fuchsia-400 opacity-70" />
+                            <div className="mt-6 text-sm text-white/40">
+                              Démarrage…
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {cameraOn && !isBooting && selectedMovie && (
+                      <div className="w-full h-full flex flex-col p-6 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <h3 className="text-2xl font-bold text-white">
+                              {selectedMovie.title}
+                            </h3>
+                            <p className="text-sm text-cyan-400/70">
+                              {selectedMovie.filmmaker} •{' '}
+                              {selectedMovie.duration}s
+                            </p>
+                          </div>
+                          <button
+                            onClick={closeMovie}
+                            className="px-3 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20"
+                          >
+                            Fermer
+                          </button>
+                        </div>
+                        <div className="flex-1 rounded-lg overflow-hidden border border-cyan-400/30 min-h-0">
+                          {selectedMovie.video_url ? (
+                            <video
+                              className="w-full h-full bg-black"
+                              src={resolveMediaUrl(selectedMovie.video_url)}
+                              controls
+                              autoPlay
+                            />
+                          ) : selectedMovie.youtube_url ? (
+                            <iframe
+                              src={
+                                getYouTubeEmbed(selectedMovie.youtube_url) +
+                                '?autoplay=1'
+                              }
+                              className="w-full h-full bg-black"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              title={selectedMovie.title}
+                            />
+                          ) : (
+                            <video
+                              className="w-full h-full bg-black"
+                              src={selectedMovie.video}
+                              controls
+                              autoPlay
+                            />
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {cameraOn &&
+                      !isBooting &&
+                      selectedGenre &&
+                      !selectedMovie && (
+                        <div className="w-full h-full flex flex-col p-8 bg-gradient-to-br from-[#0a1628] via-[#0d1b2a] to-[#0a1628]">
+                          <div className="flex items-center justify-between mb-4">
+                            <div>
+                              <h2 className="text-2xl font-bold text-white">
+                                MarsAI
+                              </h2>
+                              <p className="text-xs text-cyan-400/60">
+                                Festival de courts-métrages IA
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm text-gray-400">
+                                Films sélectionnés
+                              </p>
+                            </div>
+                          </div>
+
+                          {(() => {
+                            const visibleCount = Math.min(
+                              totalMovies,
+                              MAX_VISIBLE_MOVIES,
+                            );
+                            if (!visibleCount) return null;
+
+                            const cols = Math.min(GRID_COLUMNS, visibleCount);
+                            const cardSize = {
+                              width: '190px',
+                              height: '260px',
+                            };
+
+                            const pageStart = currentPage * MAX_VISIBLE_MOVIES;
+                            const pageEnd = Math.min(
+                              pageStart + MAX_VISIBLE_MOVIES,
+                              totalMovies,
+                            );
+                            const pageMovies = movies.slice(pageStart, pageEnd);
+
+                            return (
+                              <>
+                                <div
+                                  className="grid gap-5 place-items-start w-full"
+                                  style={{
+                                    gridTemplateColumns: `repeat(${cols}, ${cardSize.width})`,
+                                    justifyContent: 'start',
+                                  }}
+                                >
+                                  {pageMovies.map((movie, idx) => {
+                                    const globalIndex = pageStart + idx;
+                                    const isSelected =
+                                      globalIndex === selectedFilmIndex;
+                                    return (
+                                      <div
+                                        key={movie.id}
+                                        className={`relative rounded-xl overflow-hidden border-2 transition-all cursor-pointer hover:scale-105 ${
+                                          isSelected
+                                            ? 'border-cyan-400 shadow-cyan-400/60'
+                                            : 'border-cyan-400/20 opacity-80'
+                                        }`}
+                                        style={{
+                                          width: cardSize.width,
+                                          height: cardSize.height,
+                                        }}
+                                        onClick={() =>
+                                          setSelectedFilmIndex(globalIndex)
+                                        }
+                                        onDoubleClick={() => {
+                                          setSelectedFilmIndex(globalIndex);
+                                          setSelectedMovie(movie);
+                                        }}
+                                      >
+                                        <img
+                                          src={movie.thumbnail}
+                                          alt={movie.title}
+                                          className="w-full h-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                                        <div className="absolute bottom-2 left-2 right-2 text-sm font-bold text-white truncate">
+                                          {movie.title}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                                {totalPages > 1 && (
+                                  <div className="mt-3 text-xs text-cyan-200 text-right">
+                                    Page {currentPage + 1} / {totalPages}
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
+
+                          <div className="mt-6 text-center">
+                            <button
+                              onClick={playFilm}
+                              className="px-6 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold"
+                            >
+                              Lancer: {currentMovie ? currentMovie.title : ''}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                  </div>
                 </div>
               </div>
-            </div>
             )}
           </div>
 
@@ -1141,16 +1178,20 @@ export default function HeroCamera({ moviesFromApi }) {
             </div>
           </div>
         </div>
-        
+
         {/* Contrôles mobiles pour iPhone */}
         {isMobile && (
           <div className="mt-6 flex flex-col gap-4 items-center w-full max-w-sm mx-auto px-4">
             <p className="text-[11px] text-white/70 text-center rounded-lg border border-white/10 bg-white/5 px-3 py-2">
               Interface tactile iPhone active · Touchez une affiche puis LIRE
             </p>
-            
+
             {cameraOn && normalizedApiMovies.length === 0 && (
-              <div className="w-full" role="group" aria-label="Choix du genre de films">
+              <div
+                className="w-full"
+                role="group"
+                aria-label="Choix du genre de films"
+              >
                 <p className="text-xs text-gray-300 uppercase mb-2 text-center tracking-wider">
                   Genres de films
                 </p>
@@ -1187,7 +1228,7 @@ export default function HeroCamera({ moviesFromApi }) {
                 </div>
               </div>
             )}
-            
+
             {cameraOn && selectedGenre && !selectedMovie && (
               <div className="w-full flex items-center justify-center gap-3">
                 <button

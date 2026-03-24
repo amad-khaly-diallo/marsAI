@@ -1,9 +1,4 @@
 import React from 'react';
-// Images spécifiques au projecteur
-import imgFilm from '../../../assets/images/film.png';
-import imgIa from '../../../assets/images/ia.png';
-import imgVisiteur from '../../../assets/images/visiteur.png';
-import imgPays from '../../../assets/images/pays.png';
 
 export function ProjectorButton({
   statsRevealed,

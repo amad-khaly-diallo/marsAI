@@ -1,5 +1,7 @@
 .mini-map-shell {
-  box-shadow: 0 0 24px rgba(65, 120, 220, 0.18), inset 0 0 18px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 24px rgba(65, 120, 220, 0.18),
+    inset 0 0 18px rgba(0, 0, 0, 0.35);
   min-height: clamp(220px, 42vw, 420px);
 }
 
@@ -16,7 +18,11 @@
 }
 
 .mini-overlay-vignette {
-  background: radial-gradient(circle at center, transparent 52%, rgba(0, 0, 0, 0.35) 100%);
+  background: radial-gradient(
+    circle at center,
+    transparent 52%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
 }
 
 .mini-mission-card {
@@ -98,7 +104,9 @@
 
 .mini-marker {
   cursor: pointer;
-  transition: filter 180ms ease, opacity 180ms ease;
+  transition:
+    filter 180ms ease,
+    opacity 180ms ease;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -344,10 +352,12 @@
 @keyframes missionTargetGlow {
   0%,
   100% {
-    filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.7)) drop-shadow(0 0 4px rgba(255, 152, 0, 0.5));
+    filter: drop-shadow(0 0 8px rgba(255, 193, 7, 0.7))
+      drop-shadow(0 0 4px rgba(255, 152, 0, 0.5));
   }
   50% {
-    filter: drop-shadow(0 0 12px rgba(255, 193, 7, 0.95)) drop-shadow(0 0 6px rgba(255, 152, 0, 0.7));
+    filter: drop-shadow(0 0 12px rgba(255, 193, 7, 0.95))
+      drop-shadow(0 0 6px rgba(255, 152, 0, 0.7));
   }
 }
 

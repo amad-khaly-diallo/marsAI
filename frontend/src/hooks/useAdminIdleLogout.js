@@ -46,4 +46,3 @@ export function useAdminIdleLogout({ timeoutMs = 60 * 60 * 1000, onIdle }) {
     };
   }, [timeoutMs, onIdle]);
 }
-

@@ -5,6 +5,8 @@ import api from '../services/api';
 import { getCataloguePage } from '../services/query';
 import { getLocalized } from '../utils/sanity';
 import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';
+import SEOHead from '../components/seo/SEOHead';
+import { movieListSchema } from '../components/seo/schemas';
 
 function getYouTubeThumbnail(url) {
   if (!url) return null;
@@ -60,6 +62,13 @@ export default function Gallery() {
 
   return (
     <div className="min-h-screen bg-[#070819] text-white">
+      <SEOHead
+        title="Catalogue — Films sélectionnés"
+        description="Découvrez les courts-métrages d'une minute générés par IA sélectionnés pour le festival marsAI. Votez pour vos films préférés."
+        canonical="/catalogue"
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+        schema={movieListSchema(movies)}
+      />
       <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
         <header className="mb-8 md:mb-10 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50 mb-2">

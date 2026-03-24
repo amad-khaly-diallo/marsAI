@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import SEOHead from '../components/seo/SEOHead';
+import { aboutPageSchema } from '../components/seo/schemas';
 import { SmallLabel, InfoRow, Divider } from '../components/ui';
 import { getAboutPage } from '../services/query';
 
@@ -29,6 +31,13 @@ export default function AProposPage() {
 
   return (
     <div className="relative min-h-screen text-white">
+      <SEOHead
+        title="À propos"
+        description="marsAI est un festival de courts-métrages au format 1 minute généré par IA. Découvrez notre manifeste, notre lieu à Marseille et notre équipe."
+        canonical="/a-propos"
+        lang={i18n.language?.startsWith('en') ? 'en' : 'fr'}
+        schema={aboutPageSchema}
+      />
       <CinematicBackground />
 
       {/* HERO ABOUT */}
@@ -57,36 +66,28 @@ export default function AProposPage() {
 
             <div className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <InfoRow
-                label={
-                  getLocalized(pageData?.heroInfoFormatLabel) || 'Format'
-                }
+                label={getLocalized(pageData?.heroInfoFormatLabel) || 'Format'}
                 value={
                   getLocalized(pageData?.heroInfoFormatValue) || '≈ 60 sec'
                 }
               />
               <InfoRow
-                label={
-                  getLocalized(pageData?.heroInfoAccessLabel) || 'Accès'
-                }
-                value={
-                  getLocalized(pageData?.heroInfoAccessValue) || 'Ouvert'
-                }
+                label={getLocalized(pageData?.heroInfoAccessLabel) || 'Accès'}
+                value={getLocalized(pageData?.heroInfoAccessValue) || 'Ouvert'}
               />
               <InfoRow
                 label={getLocalized(pageData?.heroInfoCityLabel) || 'Ville'}
-                value={
-                  getLocalized(pageData?.heroInfoCityValue) || 'Marseille'
-                }
+                value={getLocalized(pageData?.heroInfoCityValue) || 'Marseille'}
               />
             </div>
 
             <div className="mt-7 flex flex-wrap gap-3">
               <ActionButton
-                  to={pageData?.heroCtaContactLink || '/contact'}
-                  label={
-                    getLocalized(pageData?.heroCtaContactLabel) ||
-                    t('about.hero.cta.contact')
-                  }
+                to={pageData?.heroCtaContactLink || '/contact'}
+                label={
+                  getLocalized(pageData?.heroCtaContactLabel) ||
+                  t('about.hero.cta.contact')
+                }
                 variant="secondary"
               />
             </div>
@@ -197,7 +198,6 @@ export default function AProposPage() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }

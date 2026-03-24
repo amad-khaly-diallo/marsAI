@@ -25,7 +25,10 @@ export default function PostFestivalPresentation() {
   ];
 
   return (
-    <section className="relative z-10 px-4 pt-16 pb-10 md:pt-24" id="post-festival">
+    <section
+      className="relative z-10 px-4 pt-16 pb-10 md:pt-24"
+      id="post-festival"
+    >
       <div className="mx-auto max-w-6xl rounded-3xl border border-white/10 bg-[#0a0a16]/85 p-6 md:p-10 backdrop-blur-xl">
         <div className="flex items-center gap-2 text-[#C6A55C] mb-4">
           <Sparkles className="h-4 w-4" />
@@ -52,7 +55,9 @@ export default function PostFestivalPresentation() {
                 <div className="inline-flex items-center justify-center rounded-full border border-[#C6A55C]/30 bg-[#C6A55C]/10 p-2">
                   <Icon className="h-4 w-4 text-[#C6A55C]" />
                 </div>
-                <p className="mt-3 text-xl font-bold text-white">{item.value}</p>
+                <p className="mt-3 text-xl font-bold text-white">
+                  {item.value}
+                </p>
                 <p className="text-xs text-white/55">{item.label}</p>
               </div>
             );

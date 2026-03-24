@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import HeaderLogo from './HeaderLogo';
@@ -10,15 +10,7 @@ import { useFestivalPhase } from '../../../hooks/useFestivalPhase';
 export default function Header() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
-  const [scrolled, setScrolled] = useState(false);
   const { phase } = useFestivalPhase();
-
-  // Détection du scroll
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Style "Bulle de verre" mis à jour
   // On remplace 'bg-brand-surface/60' par 'bg-white/[0.05]' pour imiter le style des sections

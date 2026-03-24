@@ -50,7 +50,9 @@ export default function GreenFlagGallery() {
     setSelectingId(movieId);
     try {
       await admin.updateFilmStatus(movieId, 'selected');
-      trackEvent('jury_selection_added', { movie_title: activeFavorite.movie.original_title });
+      trackEvent('jury_selection_added', {
+        movie_title: activeFavorite.movie.original_title,
+      });
       setGroups((prev) =>
         prev.map((g) => ({
           ...g,

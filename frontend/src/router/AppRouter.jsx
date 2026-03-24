@@ -11,7 +11,6 @@ import Jury from '../components/jury/Jury';
 import Contact from '../pages/Contact';
 import TimerTest from '../pages/TimerTest';
 import Gallery from '../pages/Gallery';
-import { HomePhase2 } from '../components/home/Phase2';
 import { CookieBanner } from '../components/ui/CookieBanner'; // Importation du composant cookie banner
 import VideoDetail from '../pages/VideoDetail';
 import About from '../pages/Partenaires';

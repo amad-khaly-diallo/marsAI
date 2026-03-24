@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/a-propos</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/a-propos"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/a-propos?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/catalogue</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/catalogue"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/catalogue?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/participer</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/participer"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/participer?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/jury</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/jury"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/jury?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/partenaires</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/partenaires"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/partenaires?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/winners</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/winners"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/winners?lng=en"/>
+  </url>
+
+  <url>
+    <loc>https://amad-khaly-diallo.students-laplateforme.io/marsai/contact</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/contact"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://amad-khaly-diallo.students-laplateforme.io/marsai/contact?lng=en"/>
+  </url>
+
+</urlset>

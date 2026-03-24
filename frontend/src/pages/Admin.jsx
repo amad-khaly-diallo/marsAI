@@ -17,7 +17,8 @@ import { useAdmin } from '../contexts';
 import { useAdminIdleLogout } from '../hooks/useAdminIdleLogout';
 
 function AdminContent() {
-  const { admin, checking, isAuthenticated, error, reload, logout } = useAdmin();
+  const { admin, checking, isAuthenticated, error, reload, logout } =
+    useAdmin();
 
   // Déconnexion automatique après 1h sans activité dans l'espace admin
   useAdminIdleLogout({

@@ -1,0 +1,19 @@
+{
+  "short_name": "marsAI",
+  "name": "marsAI — Festival de courts-métrages IA",
+  "description": "Premier festival mondial de courts-métrages d'une minute générés par intelligence artificielle. Marseille.",
+  "start_url": "/marsai/",
+  "scope": "/marsai/",
+  "display": "standalone",
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a",
+  "orientation": "portrait",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/marsai/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

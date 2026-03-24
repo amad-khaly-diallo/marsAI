@@ -6,4 +6,3 @@ export function resolveMediaUrl(url) {
   const normalized = url.replace(/^\/+/, '');
   return `${window.location.origin}/${normalized}`;
 }
-
