@@ -114,12 +114,15 @@ export default function useParticiperSubmit({
         item && typeof item === 'object' && typeof item.type === 'string',
     );
 
-    if (stillFiles.length > 0 || assets.subtitle) {
+    if (stillFiles.length > 0 || assets.subtitle || assets.thumbnail) {
       stillFiles.forEach((file) => {
         if (!file.type || !file.type.startsWith('image/')) {
           throw new Error(t('error.assets.still.invalidType'));
         }
       });
+      if (assets.thumbnail && !assets.thumbnail.type.startsWith('image/')) {
+        throw new Error(t('error.assets.still.invalidType'));
+      }
       if (assets.subtitle) {
         const name = assets.subtitle.name || '';
         if (!name.toLowerCase().endsWith('.srt')) {
@@ -133,7 +136,7 @@ export default function useParticiperSubmit({
       setAssetsUploadProgress(0);
 
     const requests = [];
-    if (stillFiles.length > 0 || assets.subtitle)
+    if (stillFiles.length > 0 || assets.subtitle || assets.thumbnail)
       requests.push(
         submission.uploadAssetsWithProgress(
           movieId,
@@ -143,6 +146,7 @@ export default function useParticiperSubmit({
             if (typeof setAssetsUploadProgress === 'function')
               setAssetsUploadProgress(pct);
           },
+          assets.thumbnail || null,
         ),
       );
     const cleanTags = (tags || [])

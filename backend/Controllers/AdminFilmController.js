@@ -39,8 +39,8 @@ exports.updateWinner = asyncHandler(async (req, res) => {
 
 // POST /api/admin/films/distribute
 exports.distribute = asyncHandler(async (req, res) => {
-  const { minReviewers } = req.body || {};
-  const data = await AdminFilmService.distributeToAdmins(minReviewers);
+  const { adminIds } = req.body || {};
+  const data = await AdminFilmService.distributeToAdmins(Array.isArray(adminIds) ? adminIds : null);
   res.json(data);
 });
 

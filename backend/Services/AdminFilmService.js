@@ -37,7 +37,11 @@ async function list({ status, statuses, search, currentUser }) {
   if (isBasicAdmin) {
     // L'admin simple ne voit que les films qui lui sont assignés
     joins.push(
-      'INNER JOIN admin_movie_assignment ama ON ama.movie_id = m.id AND ama.admin_id = :current_admin_id',
+      `INNER JOIN (
+        SELECT DISTINCT movie_id
+        FROM admin_movie_assignment
+        WHERE admin_id = :current_admin_id
+      ) ama ON ama.movie_id = m.id`,
     );
     params.current_admin_id = currentUser.id;
   }
@@ -47,7 +51,12 @@ async function list({ status, statuses, search, currentUser }) {
       params.current_admin_id = currentUser.id;
     }
     joins.push(
-      'LEFT JOIN admin_movie_assignment self_ama ON self_ama.movie_id = m.id AND self_ama.admin_id = :current_admin_id',
+      `LEFT JOIN (
+        SELECT movie_id, rating, comment, flag
+        FROM admin_movie_assignment
+        WHERE admin_id = :current_admin_id
+        GROUP BY movie_id
+      ) self_ama ON self_ama.movie_id = m.id`,
     );
   }
 
@@ -121,8 +130,12 @@ async function getById(id, currentUser) {
 
   let joinCurrentAdmin = '';
   if (hasUser) {
-    joinCurrentAdmin =
-      'LEFT JOIN admin_movie_assignment self_ama ON self_ama.movie_id = m.id AND self_ama.admin_id = :current_admin_id';
+    joinCurrentAdmin = `LEFT JOIN (
+      SELECT movie_id, rating, comment, flag
+      FROM admin_movie_assignment
+      WHERE admin_id = :current_admin_id
+      GROUP BY movie_id
+    ) self_ama ON self_ama.movie_id = m.id`;
     params.current_admin_id = currentUser.id;
   }
 
@@ -451,11 +464,15 @@ async function listReviews(movieId) {
   }));
 }
 
-async function distributeToAdmins(minReviewers = 2) {
-  const reviewersRequired = Number.isInteger(minReviewers) && minReviewers > 0 ? minReviewers : 2;
+async function distributeToAdmins(adminIds = null) {
+  const reviewersRequired = 2;
 
   return withTransaction(async (db) => {
-    const admins = await db.query('SELECT id FROM admins WHERE role = "admin"');
+    const allAdmins = await db.query('SELECT id FROM admins WHERE role = "admin"');
+    const admins = adminIds && adminIds.length > 0
+      ? allAdmins.filter((a) => adminIds.includes(Number(a.id)))
+      : allAdmins;
+
     if (!admins.length) {
       throw new HttpError(400, 'Aucun compte admin disponible pour la répartition');
     }

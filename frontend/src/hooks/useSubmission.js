@@ -44,8 +44,10 @@ export default function useSubmission() {
     stillFiles = [],
     subtitle = null,
     onProgress,
+    thumbnail = null,
   ) => {
     const formData = new FormData();
+    if (thumbnail) formData.append('thumbnail', thumbnail);
     stillFiles.forEach((f) => formData.append('stills', f));
     if (subtitle) formData.append('subtitle', subtitle);
     return await api.postFormWithProgress(

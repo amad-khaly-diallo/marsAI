@@ -1,31 +1,19 @@
-import { uploadImage } from '../../services/uploadService';
-
 export default function MovieAssetsForm({ value, onChange, hasError }) {
   const data = value || {};
 
-  const handleStillsChange = async (e) => {
+  const handleStillsChange = (e) => {
     const files = Array.from(e.target.files || []).slice(0, 3);
-    try {
-      const uploadPromises = files.map((f) => uploadImage(f));
-      const results = await Promise.all(uploadPromises);
-      onChange({
-        ...data,
-        stills: results.map((r) => r.url),
-        stillsKeys: results.map((r) => r.key),
-      });
-    } catch (err) {
-      console.error('[MovieAssetsForm] uploadImage error:', err.message);
-      // Fallback : stocker les fichiers bruts
-      onChange({ ...data, stills: files });
-    }
+    onChange({ ...data, stills: files });
   };
 
   const handleSubtitleChange = (e) => {
     const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-    onChange({
-      ...data,
-      subtitle: file,
-    });
+    onChange({ ...data, subtitle: file });
+  };
+
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+    onChange({ ...data, thumbnail: file });
   };
 
   const stillsCount = Array.isArray(data.stills) ? data.stills.length : 0;
@@ -38,16 +26,33 @@ export default function MovieAssetsForm({ value, onChange, hasError }) {
       ].join(' ')}
     >
       <h2 className="mb-3 text-sm font-semibold text-slate-100">
-        4. Assets (captures &amp; sous-titres)
+        4. Assets (miniature, captures &amp; sous-titres)
       </h2>
 
       <p className="mb-3 text-xs text-brand-muted">
-        Uploadez jusqu&apos;à 3 captures d&apos;écran (fichiers image) et un
-        fichier de sous-titres optionnel au format <code>.srt</code>. Ces
-        fichiers seront stockés côté serveur avec votre film.
+        Uploadez une miniature (image affichée sur la page du film),
+        jusqu&apos;à 3 captures d&apos;écran et un fichier de sous-titres
+        optionnel au format <code>.srt</code>.
       </p>
 
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-xs text-brand-muted">
+            Miniature (optionnel, fichier image)
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleThumbnailChange}
+            className="block w-full text-xs text-slate-300 file:mr-3 file:rounded-md file:border-0 file:bg-brand-primary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-brand-accent"
+          />
+          {data.thumbnail && (
+            <p className="text-[11px] text-brand-muted">
+              Fichier sélectionné : {data.thumbnail.name}
+            </p>
+          )}
+        </div>
+
         <div className="flex flex-col gap-1">
           <label className="text-xs text-brand-muted">
             Captures d&apos;écran (max 3 fichiers image)
