@@ -12,10 +12,10 @@ export default function AdminLayout({ children, currentAdmin }) {
     { id: 'jury', label: 'Jury' },
     { id: 'partners', label: 'Partenaires' },
     { id: 'newsletters', label: 'Newsletters' },
-    { id: 'videos', label: 'Vidéos' },
-    { id: 'all-videos', label: 'Galerie des vidéos' },
-    { id: 'videos-distribution', label: 'Répartition vidéos' },
-    { id: 'movies', label: 'Films (sélection & gagnants)' },
+    { id: 'videos', label: ' Toutes les Vidéos' },
+    { id: 'all-videos', label: 'Les green flags' },
+    { id: 'videos-distribution', label: 'Répartir les vidéos' },
+    { id: 'movies', label: 'Marquer des Gagnants' },
     { id: 'my-movies', label: 'Mes vidéos' }, // vue personnelle pour un admin simple
     { id: 'profile', label: 'Profil' },
   ];

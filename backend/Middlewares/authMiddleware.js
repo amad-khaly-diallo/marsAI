@@ -37,4 +37,18 @@ const authorize = (allowedRoles = []) => {
     };
 };
 
-module.exports = { authenticate, authorize };
+// Middleware optionnel : set req.user si token valide, sans bloquer si absent
+const optionalAuthenticate = (req, res, next) => {
+  const auth = req.headers.authorization || '';
+  const [type, headerToken] = auth.split(' ');
+  const cookieToken = req.cookies?.token;
+  const token = type === 'Bearer' && headerToken ? headerToken : cookieToken;
+
+  if (token) {
+    const decoded = verifyToken(token);
+    if (decoded) req.user = decoded;
+  }
+  next();
+};
+
+module.exports = { authenticate, authorize, optionalAuthenticate };

@@ -62,8 +62,9 @@ exports.addAssets = asyncHandler(async (req, res) => {
 
   const stillFiles = files.stills || [];
   const subtitleFiles = files.subtitle || [];
+  const thumbnailFiles = files.thumbnail || [];
 
-  if (!stillFiles.length && !subtitleFiles.length) {
+  if (!stillFiles.length && !subtitleFiles.length && !thumbnailFiles.length) {
     throw new HttpError(400, 'No asset files provided');
   }
 
@@ -78,6 +79,21 @@ exports.addAssets = asyncHandler(async (req, res) => {
 
     payloads.push({
       asset_type: 'still',
+      file_path: url,
+      file_format: ext,
+    });
+  }
+
+  if (thumbnailFiles[0]) {
+    const file = thumbnailFiles[0];
+    const ext =
+      (path.extname(file.originalname) || '').replace('.', '').toLowerCase() ||
+      null;
+
+    const { url } = await s3Service.uploadFile(file, 'assets/thumbnails');
+
+    payloads.push({
+      asset_type: 'thumbnail',
       file_path: url,
       file_format: ext,
     });

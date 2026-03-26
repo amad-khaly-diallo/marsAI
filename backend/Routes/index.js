@@ -12,6 +12,7 @@ const newsletterRoutes = require("./newsletters");
 const contactRoutes = require("./contact");
 const festivalPhaseRoutes = require("./festivalPhase");
 const uploadRoutes = require("./upload"); // Upload S3 Scaleway
+const proxyRoutes = require("./proxy"); // Proxy S3 pour éviter CORS
 const cookieParser = require("cookie-parser");
 
 const router = express.Router();
@@ -37,5 +38,6 @@ router.use("/newsletters", newsletterRoutes); // Gestion des newsletters par les
 router.use("/contact", contactRoutes); // Formulaire de contact public
 router.use("/festival-phase", festivalPhaseRoutes); // Phase du festival + timer
 router.use("/", uploadRoutes); // Upload S3 : /api/upload/video, /api/upload/image, etc.
+router.use("/proxy", proxyRoutes); // Proxy fichiers S3 (sous-titres)
 
 module.exports = router;

@@ -49,15 +49,7 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
     setLoadingReviewId(id);
     setReviewsError(null);
     try {
-      const res = await api.get(`/admin/films/${id}/reviews`, {
-        method: 'GET',
-        credentials: 'include',
-      });
-      const data = await res.json().catch(() => []);
-      if (!res.ok)
-        throw new Error(
-          data.error || data.message || 'Erreur de chargement des avis.',
-        );
+      const data = await api.get(`/admin/films/${id}/reviews`);
       setReviewsCache((prev) => ({ ...prev, [id]: data || [] }));
     } catch (err) {
       setReviewsError(err.message || 'Erreur de chargement des avis.');
@@ -96,23 +88,11 @@ export default function AdminFilmGallery({ movies, loading, error, onReload }) {
     setTogglingWinnerId(movie.id);
     setWinnerError(null);
     try {
-      const res = await api.patch(`/admin/films/${movie.id}/winner`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          is_winner: !movie.is_winner,
-          ranking: options.ranking,
-          category: options.category,
-        }),
+      await api.patch(`/admin/films/${movie.id}/winner`, {
+        is_winner: !movie.is_winner,
+        ranking: options.ranking,
+        category: options.category,
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok)
-        throw new Error(
-          data.error ||
-            data.message ||
-            'Impossible de mettre à jour le statut gagnant.',
-        );
       if (onReload) onReload();
     } catch (err) {
       setWinnerError(

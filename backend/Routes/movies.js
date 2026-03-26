@@ -61,6 +61,7 @@ router.post(
   uploadAssets.fields([
     { name: 'stills', maxCount: 3 },
     { name: 'subtitle', maxCount: 1 },
+    { name: 'thumbnail', maxCount: 1 },
   ]),
   MovieController.addAssets
 );

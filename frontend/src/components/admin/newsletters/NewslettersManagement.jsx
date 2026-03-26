@@ -12,17 +12,6 @@ export default function NewslettersManagement() {
         subtitle="Consultez les inscrits et gérez vos campagnes directement dans Brevo."
       />
       <div className="grid gap-4 md:grid-cols-[2fr,1.2fr]">
-        <SectionCard
-          title="Inscrits à la newsletter"
-          action={
-            <span className="text-[11px] text-brand-muted">
-              Basé sur les abonnements newsletter des réalisateurs.
-            </span>
-          }
-        >
-          <ErrorAlert message={error} className="mb-3" />
-          <SubscribersList subscribers={subscribers} loading={loading} />
-        </SectionCard>
         <SectionCard title="Édition & envoi" action={null}>
           <p className="mt-1 text-[11px] text-brand-muted">
             Le contenu de la newsletter est rédigé et envoyé depuis Brevo.

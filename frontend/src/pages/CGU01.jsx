@@ -95,7 +95,8 @@ export default function CGU() {
           </h1>
 
           <p className="relative z-10 mt-4 md:mt-6 text-white uppercase tracking-[0.15em] md:tracking-[0.3em] text-[10px] sm:text-xs md:text-sm leading-relaxed">
-            {t('cgu.title')} <span className="mx-1 md:mx-2 text-white">//</span>
+            {t('cgu.title')}{' '}
+            <span className="mx-1 md:mx-2 text-white">{'//'}</span>
             <span className="text-white font-mono">2026</span>
           </p>
         </header>

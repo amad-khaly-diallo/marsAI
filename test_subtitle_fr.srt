@@ -1,0 +1,31 @@
+1
+00:00:01,000 --> 00:00:04,000
+Bienvenue au festival MarsAI.
+
+2
+00:00:05,000 --> 00:00:09,000
+Ce court-métrage a été créé entièrement par intelligence artificielle.
+
+3
+00:00:10,500 --> 00:00:14,000
+Une nouvelle ère de la création cinématographique commence.
+
+4
+00:00:15,000 --> 00:00:19,500
+Les frontières entre l'humain et la machine s'effacent.
+
+5
+00:00:21,000 --> 00:00:25,000
+Chaque image, chaque son, généré par des algorithmes.
+
+6
+00:00:26,500 --> 00:00:30,000
+L'art artificiel est-il encore de l'art ?
+
+7
+00:00:31,000 --> 00:00:36,000
+Vous en êtes les juges.
+
+8
+00:00:38,000 --> 00:00:42,000
+Merci de regarder ce film.
