@@ -2,13 +2,17 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 
+// ID de suivi GA4 utilisé par défaut, ou variable d'environnement si définie.
 const TRACKING_ID = process.env.REACT_APP_GA4_MEASUREMENT_ID || 'G-Q2S789KV4W';
+// Active le tracking seulement si un TRACKING_ID est disponible.
 const ENABLED = Boolean(TRACKING_ID);
 
 if (ENABLED) {
+  // Initialisation de Google Analytics 4 via react-ga4.
   ReactGA.initialize(TRACKING_ID);
 }
 
+// Retourne un nom de page lisible pour les événements personnalisés.
 function getPageName(pathname) {
   if (pathname === '/') return 'home';
   if (pathname.startsWith('/participer')) return 'participer';
