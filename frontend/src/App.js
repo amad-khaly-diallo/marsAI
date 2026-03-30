@@ -13,7 +13,7 @@ export default function App() {
     <HelmetProvider>
       <AuthProvider>
         <AdminProvider>
-          <Router basename={process.env.PUBLIC_URL}>
+          <Router >
             <GoogleAnalytics />
             <ScrollToTop />
 
