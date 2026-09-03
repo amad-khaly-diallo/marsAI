@@ -10,11 +10,12 @@ import GoogleAnalytics from './components/G-Analytics/GoogleAnalytics';
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AdminProvider>
-        <Router>
-          <GoogleAnalytics />
-          <ScrollToTop />
+    <HelmetProvider>
+      <AuthProvider>
+        <AdminProvider>
+          <Router>
+            <GoogleAnalytics />
+            <ScrollToTop />
 
             <div className="flex min-h-screen flex-col">
               <Header />
