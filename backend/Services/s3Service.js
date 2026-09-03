@@ -21,6 +21,13 @@ function buildFilename(originalname) {
  * @returns {string}
  */
 function getFileUrl(fileKey) {
+  // Certains fournisseurs S3-compatibles (ex: Supabase Storage) exposent les
+  // objets publics via une URL différente de leur endpoint S3 signé. On la
+  // laisse configurable, avec l'ancienne URL Scaleway en repli par défaut.
+  const publicBase = process.env.SCALEWAY_PUBLIC_URL_BASE;
+  if (publicBase) {
+    return `${publicBase.replace(/\/$/, "")}/${fileKey}`;
+  }
   const region = process.env.SCALEWAY_REGION || "fr-par";
   const bucket = process.env.SCALEWAY_BUCKET_NAME || "paris";
   return `https://${bucket}.s3.${region}.scw.cloud/${fileKey}`;
