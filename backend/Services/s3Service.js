@@ -1,4 +1,5 @@
 const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const { s3Client, BUCKET_NAME, FOLDER } = require("../Config/s3");
 
 /**
@@ -68,4 +69,31 @@ async function deleteFile(fileKey) {
   }
 }
 
-module.exports = { uploadFile, deleteFile, getFileUrl };
+/**
+ * Génère une presigned URL pour upload direct depuis le navigateur vers S3.
+ * @param {string} filename  nom original du fichier
+ * @param {string} mimetype  type MIME
+ * @param {string} subfolder ex: 'videos'
+ * @returns {Promise<{ presignedUrl: string, key: string, publicUrl: string }>}
+ */
+async function generatePresignedUploadUrl(filename, mimetype, subfolder = "videos") {
+  const clean = filename
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9.\-_]/g, "");
+  const key = `${FOLDER}/${subfolder}/${Date.now()}-${clean}`;
+
+  const command = new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+    ContentType: mimetype,
+    ACL: "public-read",
+  });
+
+  const presignedUrl = await getSignedUrl(s3Client, command, { expiresIn: 300 });
+  const publicUrl = getFileUrl(key);
+
+  return { presignedUrl, key, publicUrl };
+}
+
+module.exports = { uploadFile, deleteFile, getFileUrl, generatePresignedUploadUrl };

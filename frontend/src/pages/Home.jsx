@@ -25,7 +25,11 @@ import { CookieBanner } from '../components/ui/CookieBanner';
 import { heroAnimationStyles } from '../components/sections/heroAnimations';
 import api from '../services/api';
 import { useFestivalPhase } from '../hooks/useFestivalPhase';
-import { getHomePhase1, getHomePhase2, getHomePhase3 } from '../services/query';
+import {
+  phase1 as phase1Content,
+  phase2 as phase2Content,
+  phase3 as phase3Content,
+} from '../content/homePhases';
 import { getLocalized } from '../utils/sanity';
 import { FestivalCountdown } from '../components/sections/FestivalCountdown';
 import { useFestivalCountdown } from '../hooks/useFestivalCountdown';
@@ -38,30 +42,9 @@ import { useFestivalCountdown } from '../hooks/useFestivalCountdown';
  */
 export default function Home() {
   const { i18n } = useTranslation();
-  const [phase1, setPhase1] = useState(null);
-  const [phase2, setPhase2] = useState(null);
-  const [phase3, setPhase3] = useState(null);
-
-  useEffect(() => {
-    const fetchPhases = async () => {
-      try {
-        const [data1, data2, data3] = await Promise.all([
-          getHomePhase1(),
-          getHomePhase2(),
-          getHomePhase3(),
-        ]);
-        setPhase1(data1);
-        setPhase2(data2);
-        setPhase3(data3);
-        // console.log('Données phase 1 :', data1);
-        // console.log('Données phase 2 :', data2);
-        // console.log('Données phase 3 :', data3);
-      } catch (error) {
-        console.error('Erreur lors du chargement des phases home:', error);
-      }
-    };
-    fetchPhases();
-  }, []);
+  const phase1 = phase1Content;
+  const phase2 = phase2Content;
+  const phase3 = phase3Content;
 
   const [searchParams] = useSearchParams();
   const phaseParam = parseInt(searchParams.get('phase'), 10);

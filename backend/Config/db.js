@@ -15,6 +15,8 @@ const pool = mysql.createPool({
   namedPlaceholders: true,
   timezone: 'Z',
   charset: 'utf8mb4',
+
+  ...(env.DB_SSL ? { ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: true } } : {}),
 });
 
 async function checkDatabaseConnection() {

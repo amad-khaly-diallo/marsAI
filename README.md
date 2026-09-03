@@ -68,8 +68,6 @@ Cree un fichier `frontend/.env` :
 
 ```env
 REACT_APP_API_URL=http://localhost:5000
-REACT_APP_SANITY_PROJECT_ID=tvm6js2e
-REACT_APP_SANITY_DATASET=production
 ```
 
 ### 3. Backend
@@ -94,6 +92,8 @@ L'application demarre sur `http://localhost:3000`.
 
 ### 5. Sanity CMS (optionnel)
 
+Le dossier `cms-sanity/` contient toujours le Studio Sanity utilise pendant le developpement, mais l'application deployee ne depend plus du CMS a l'execution : le contenu qui etait recupere depuis Sanity a ete fige en donnees statiques dans `frontend/src/content/`. Le Studio reste disponible localement si besoin :
+
 ```bash
 cd cms-sanity
 npm install
@@ -113,7 +113,6 @@ docker exec -i mariadb mariadb -ufestivalAi -pfestivalAi marsAi < database/marsA
 - **Frontend** : React 19, Tailwind CSS
 - **Backend** : Node.js, Express.js
 - **Base de donnees** : MariaDB 11 (via Docker)
-- **CMS** : Sanity
 - **Stockage** : Scaleway S3
 - **Email** : Brevo (SMTP)
 - **Video** : YouTube API

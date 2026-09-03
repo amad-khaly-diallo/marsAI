@@ -24,6 +24,7 @@ const env = {
   DB_NAME: required('DB_NAME'),
   DB_USER: required('DB_USER'),
   DB_PASSWORD: required('DB_PASSWORD'),
+  DB_SSL: optional('DB_SSL', 'false') === 'true',
 };
 
 module.exports = Object.freeze(env);

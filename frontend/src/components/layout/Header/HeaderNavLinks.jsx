@@ -12,22 +12,14 @@ const links = [
   { to: '/a-propos', labelKey: 'nav.about', defaultLabel: 'À Propos' },
 ];
 
-const CMS_URL =
-  process.env.REACT_APP_CMS_URL || 'https://cms-codex.sanity.studio/';
-
 export default function HeaderNavLinks({
   orientation = 'horizontal',
   onNavigate,
 }) {
   const { t } = useTranslation();
-  const { isAuthenticated: isAdmin, checking, admin, role } = useAdmin();
+  const { isAuthenticated: isAdmin, checking } = useAdmin();
   const { phase } = useFestivalPhase();
   const showAdminLink = !checking && isAdmin;
-  const isSuperAdmin =
-    !checking &&
-    isAdmin &&
-    ((role && role === 'super_admin') ||
-      (admin && admin.role === 'super_admin'));
 
   const base =
     'text-sm font-medium tracking-wide transition-colors duration-200';
@@ -78,17 +70,6 @@ export default function HeaderNavLinks({
             {t('nav.admin', 'Admin')}
           </NavLink>
         )}
-        {isSuperAdmin && CMS_URL && (
-          <a
-            href={CMS_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="text-lg font-medium transition-colors text-slate-200 hover:text-brand-primary"
-            onClick={onNavigate}
-          >
-            {t('nav.cms', 'CMS')}
-          </a>
-        )}
       </div>
     );
   }
@@ -125,16 +106,6 @@ export default function HeaderNavLinks({
         >
           {t('nav.admin', 'Admin')}
         </NavLink>
-      )}
-      {isSuperAdmin && CMS_URL && (
-        <a
-          href={CMS_URL}
-          target="_blank"
-          rel="noreferrer"
-          className={`${base} text-slate-200 hover:text-white`}
-        >
-          {t('nav.cms', 'CMS')}
-        </a>
       )}
     </div>
   );

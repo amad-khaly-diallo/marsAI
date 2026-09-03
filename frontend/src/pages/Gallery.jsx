@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../services/api';
-import { getCataloguePage } from '../services/query';
+import { cataloguePage as pageData } from '../content/cataloguePage';
 import { getLocalized } from '../utils/sanity';
 import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';
 import SEOHead from '../components/seo/SEOHead';
@@ -23,7 +23,6 @@ export default function Gallery() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [pageData, setPageData] = useState(null);
   const { i18n } = useTranslation();
 
   useEffect(() => {
@@ -44,20 +43,6 @@ export default function Gallery() {
     };
 
     fetchMovies();
-  }, []);
-
-  useEffect(() => {
-    const fetchPageData = async () => {
-      try {
-        const data = await getCataloguePage();
-        setPageData(data);
-        // console.log('Catalogue page data:', data);
-      } catch (err) {
-        console.error('Erreur chargement page catalogue:', err);
-      }
-    };
-
-    fetchPageData();
   }, []);
 
   return (

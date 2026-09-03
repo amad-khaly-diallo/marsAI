@@ -5,7 +5,7 @@ import JuryAvatar from './JuryAvatar';
 import JuryHeader from './JuryHeader';
 import styles from './Jury.module.css';
 import backgroundImage from '../../assets/images/bn05.png';
-import { getJuryPage } from '../../services/query';
+import { juryPage as pageData } from '../../content/juryPage';
 import api from '../../services/api';
 import SEOHead from '../seo/SEOHead';
 import { juryListSchema } from '../seo/schemas';
@@ -16,15 +16,6 @@ const Jury = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState(null);
   const scrollRef = useRef(null);
-  const [pageData, setPageData] = useState(null);
-
-  useEffect(() => {
-    const fetchPageData = async () => {
-      const data = await getJuryPage();
-      setPageData(data);
-    };
-    fetchPageData();
-  }, []);
 
   const radius = 250;
   const imagesContext = useMemo(

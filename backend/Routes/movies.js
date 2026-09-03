@@ -28,10 +28,10 @@ const uploadAssets = multer({
 
 // POST /api/movies/submit - Soumission publique (crée uniquement movie)
 // Autorisée uniquement en phase1 (soumissions ouvertes)
+// La vidéo est uploadée directement vers S3 via presigned URL côté frontend.
 router.post(
   '/submit',
   allowPhases(['phase1']),
-  upload.single('video'),
   FilmSubmissionController.submit,
 );
 

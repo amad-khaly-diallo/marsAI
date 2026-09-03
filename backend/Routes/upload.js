@@ -63,6 +63,28 @@ router.post("/upload/thumbnail", uploadSingle, async (req, res) => {
 });
 
 /**
+ * POST /api/upload/presigned-video
+ * Génère une presigned URL pour upload direct vers S3 depuis le navigateur.
+ */
+router.post("/upload/presigned-video", async (req, res) => {
+  try {
+    const { filename, mimetype } = req.body;
+    if (!filename || !mimetype) {
+      return res.status(400).json({ error: "filename et mimetype requis." });
+    }
+    const ACCEPTED = ["video/mp4", "video/webm", "video/quicktime"];
+    if (!ACCEPTED.includes(mimetype)) {
+      return res.status(400).json({ error: "Type de fichier non supporté." });
+    }
+    const result = await s3Service.generatePresignedUploadUrl(filename, mimetype, "videos");
+    return res.json(result);
+  } catch (err) {
+    console.error("[upload/presigned-video]", err.message);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/**
  * DELETE /api/upload/:key
  * Supprime un fichier du bucket S3 via sa clé.
  * La clé doit être encodée URL (encodeURIComponent côté client).

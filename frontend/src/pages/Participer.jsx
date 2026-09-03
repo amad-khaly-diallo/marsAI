@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import SEOHead from '../components/seo/SEOHead';
 import { participerPageSchema } from '../components/seo/schemas';
@@ -10,21 +10,12 @@ import AIDeclarationStep from '../components/participer/AIDeclarationStep';
 import AssetsTagsStep from '../components/participer/AssetsTagsStep';
 import CollaboratorsStep from '../components/participer/CollaboratorsStep';
 import useParticiper from '../hooks/useParticiper';
-import { getParticiperPage } from '../services/query';
+import { participerPage as pageData } from '../content/participerPage';
 import { getLocalized } from '../utils/sanity';
 import { trackEvent } from '../components/G-Analytics/GoogleAnalytics';
 
 export default function Participer() {
   const { t, i18n } = useTranslation();
-  const [pageData, setPageData] = useState([]);
-
-  useEffect(() => {
-    const fetchPageData = async () => {
-      const data = await getParticiperPage();
-      setPageData(data);
-    };
-    fetchPageData();
-  }, []);
 
   const navigate = useNavigate();
 

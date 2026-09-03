@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import banner01 from '../assets/images/banner.jpg';
-import { getPartnerPage } from '../services/query';
+import { partnerPage as pageData } from '../content/partnerPage';
 import api from '../services/api';
 import SEOHead from '../components/seo/SEOHead';
 import { partenairesPageSchema } from '../components/seo/schemas';
@@ -13,26 +13,12 @@ const Partners = () => {
   const [loaded, setLoaded] = useState(false);
   const [partners, setPartners] = useState([]);
   const [error, setError] = useState(null);
-  const [pageData, setPageData] = useState([]);
 
   const getLocalized = (field) => {
     if (!field) return null;
     const lang = (i18n.language || 'fr').startsWith('en') ? 'en' : 'fr';
     return field[lang] || field.fr || field.en || null;
   };
-
-  useEffect(() => {
-    const fetchPageData = async () => {
-      try {
-        const data = await getPartnerPage();
-        setPageData(data);
-        console.log('Page data:', data);
-      } catch (err) {
-        console.error('Erreur chargement données page partenaires:', err);
-      }
-    };
-    fetchPageData();
-  }, []);
 
   // Récupération des données
   useEffect(() => {

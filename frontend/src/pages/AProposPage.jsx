@@ -1,33 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SEOHead from '../components/seo/SEOHead';
 import { aboutPageSchema } from '../components/seo/schemas';
 import { SmallLabel, InfoRow, Divider } from '../components/ui';
-import { getAboutPage } from '../services/query';
+import { aboutPage as pageData } from '../content/aboutPage';
 
 export default function AProposPage() {
   const { t, i18n } = useTranslation();
-  const [pageData, setPageData] = useState(null);
 
   const getLocalized = (field) => {
     if (!field) return null;
     const lang = (i18n.language || 'fr').startsWith('en') ? 'en' : 'fr';
     return field[lang] || field.fr || field.en || null;
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAboutPage();
-        setPageData(data);
-        // console.log('About page data:', data);
-      } catch (error) {
-        console.error('Erreur chargement page À propos:', error);
-      }
-    };
-    fetchData();
-  }, []);
 
   return (
     <div className="relative min-h-screen text-white">

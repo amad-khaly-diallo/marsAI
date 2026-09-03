@@ -93,12 +93,48 @@ async function submit({ movie, videoFile }) {
 
   const hasUpload = videoFile && videoFile.buffer;
   const youtubeUrlFromPayload = movie.youtube_url || null;
+  const videoUrlFromPayload = movie.video_url || null;
 
-  if (!hasUpload && !youtubeUrlFromPayload) {
-    throw new HttpError(400, 'Either a video file or a youtube_url is required');
+  if (!hasUpload && !youtubeUrlFromPayload && !videoUrlFromPayload) {
+    throw new HttpError(400, 'Either a video file, a video_url, or a youtube_url is required');
   }
 
   try {
+    if (videoUrlFromPayload && !hasUpload) {
+      // ——— Flux presigned upload : la vidéo est déjà sur S3, on insère directement ———
+      const result = await withTransaction(async (trx) => {
+        const movieInsert = await trx.query(
+          `INSERT INTO movie
+            (original_title, english_title, duration, language, synopsis_original, synopsis_english, youtube_url, video_url, status, filmmaker_id)
+           VALUES
+            (:original_title, :english_title, :duration, :language, :synopsis_original, :synopsis_english, NULL, :video_url, 'in_process', :filmmaker_id)`,
+          {
+            original_title: movie.original_title,
+            english_title: movie.english_title,
+            duration: movie.duration,
+            language: movie.language ?? null,
+            synopsis_original: movie.synopsis_original ?? null,
+            synopsis_english: movie.synopsis_english ?? null,
+            video_url: videoUrlFromPayload,
+            filmmaker_id: movie.filmmaker_id,
+          }
+        );
+        return {
+          movie_id: movieInsert.insertId,
+          video_url: videoUrlFromPayload,
+          status: 'in_process',
+        };
+      });
+
+      await sendSubmissionConfirmation({
+        to: filmmaker.email,
+        filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
+        movieTitle: movie.original_title,
+      });
+
+      return result;
+    }
+
     if (hasUpload) {
       // ——— Flux upload : envoyer la vidéo vers S3, insérer avec l'URL publique, mail confirmation, puis YouTube en arrière-plan ———
       const { url: videoUrl } = await s3Service.uploadFile(videoFile, 'videos');

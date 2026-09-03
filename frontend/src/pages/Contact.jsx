@@ -1,21 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getContactPage } from '../services/query';
+import { contactPage as pageData } from '../content/contactPage';
 import api from '../services/api';
 import SEOHead from '../components/seo/SEOHead';
 import { contactPageSchema } from '../components/seo/schemas';
 
 export default function Contact() {
   const { t, i18n } = useTranslation();
-  const [pageData, setPageData] = useState([]);
-
-  useEffect(() => {
-    const fetchPageData = async () => {
-      const data = await getContactPage();
-      setPageData(data);
-    };
-    fetchPageData();
-  }, []);
 
   const getLocalized = (field) => {
     if (!field) return null;

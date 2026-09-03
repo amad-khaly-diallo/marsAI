@@ -10,7 +10,7 @@ import { getLocalized } from '../../../utils/sanity';
 
 /**
  * Phase 1 – Description du festival.
- * Texte piloté par le document homePhase1 (Sanity).
+ * Texte piloté par le contenu statique homePhase1 (src/content/homePhases.js).
  */
 export default function FestivalDescription({ phase1 }) {
   const { i18n } = useTranslation();
