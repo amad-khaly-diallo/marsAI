@@ -25,6 +25,12 @@ function getTransporter() {
         user: SMTP_USER,
         pass: SMTP_PASSWORD,
       },
+      // Certains hébergeurs (ex: Render free tier) bloquent ou ralentissent
+      // fortement les connexions SMTP sortantes : on échoue vite plutôt que
+      // de bloquer la requête pendant plusieurs minutes.
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     });
   }
 

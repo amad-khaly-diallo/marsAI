@@ -126,10 +126,15 @@ async function submit({ movie, videoFile }) {
         };
       });
 
-      await sendSubmissionConfirmation({
+      // Envoi non-bloquant : un SMTP lent/indisponible ne doit pas faire
+      // échouer ou traîner la soumission (déjà enregistrée en base à ce stade).
+      sendSubmissionConfirmation({
         to: filmmaker.email,
         filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
         movieTitle: movie.original_title,
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Envoi email confirmation soumission échoué', err.message || err);
       });
 
       return result;
@@ -165,10 +170,15 @@ async function submit({ movie, videoFile }) {
         };
       });
 
-      await sendSubmissionConfirmation({
+      // Envoi non-bloquant : un SMTP lent/indisponible ne doit pas faire
+      // échouer ou traîner la soumission (déjà enregistrée en base à ce stade).
+      sendSubmissionConfirmation({
         to: filmmaker.email,
         filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
         movieTitle: movie.original_title,
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Envoi email confirmation soumission échoué', err.message || err);
       });
 
       setImmediate(() => {
@@ -207,10 +217,15 @@ async function submit({ movie, videoFile }) {
       );
       const movieId = movieInsert.insertId;
 
-      await sendSubmissionConfirmation({
+      // Envoi non-bloquant : un SMTP lent/indisponible ne doit pas faire
+      // échouer ou traîner la soumission (déjà enregistrée en base à ce stade).
+      sendSubmissionConfirmation({
         to: filmmaker.email,
         filmmakerName: `${filmmaker.first_name} ${filmmaker.last_name}`,
         movieTitle: movie.original_title,
+      }).catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error('Envoi email confirmation soumission échoué', err.message || err);
       });
 
       return {
