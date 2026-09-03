@@ -1,0 +1,97 @@
+import { useCallback, useEffect, useState } from 'react';
+
+// Hook personnalisé pour gérer la phase actuelle du festival
+import { useLocation } from 'react-router-dom';
+import api from '../services/api';
+
+function normalizePhaseParam(raw) {
+  if (!raw) return null;
+  const value = String(raw).toLowerCase().trim();
+
+  if (value === '1' || value === 'phase1') return 'phase1';
+  if (value === '2' || value === 'phase2') return 'phase2';
+  if (value === '3' || value === 'phase3') return 'phase3';
+
+  return null;
+}
+// fin helper normalizePhaseParam
+
+export function useFestivalPhase() {
+  const { search } = useLocation(); // A supprimer si on veut pas que le hook réagisse aux changements de l'URL.
+  const [phase, setPhase] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchPhase = useCallback(async () => {
+    // 1) Priorité à une phase forcée dans l'URL (debug / liens spécifiques)
+    const forcedPhase = normalizePhaseParam(
+      new URLSearchParams(search).get('phase'),
+    );
+
+    if (forcedPhase) {
+      setPhase(forcedPhase);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    // 2) Sinon, regarder s'il existe une phase simulée côté front
+    try {
+      const simulatedRaw =
+        typeof window !== 'undefined'
+          ? window.localStorage.getItem('simulatedPhase')
+          : null;
+      const simulatedPhase = normalizePhaseParam(simulatedRaw);
+      if (simulatedPhase) {
+        setPhase(simulatedPhase);
+        setError(null);
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // en cas de problème d'accès à localStorage, on ignore simplement
+    }
+
+    // 3) Fallback sur la phase réelle renvoyée par l'API
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.get('/festival-phase');
+      setPhase(data.phase);
+    } catch (err) {
+      console.error('Erreur récupération phase festival', err);
+      setError('Impossible de récupérer la phase du festival');
+    } finally {
+      setLoading(false);
+    }
+  }, [search]); // a remplacer par [] si on veut pas que le hook réagisse aux changements de l'URL (ex: navigation interne), mais c'est utile pour forcer une phase via l'URL sans recharger la page
+
+  const updatePhase = useCallback(async (newPhase) => {
+    setError(null);
+    try {
+      const data = await api.put('/festival-phase', { phase: newPhase });
+      setPhase(data.phase);
+      return data.phase;
+    } catch (err) {
+      console.error('Erreur mise à jour phase', err);
+      const userMessage =
+        err?.body?.message ||
+        err?.message ||
+        'Impossible de modifier la phase du festival (il faut entre 40 et 50 films sélectionnés pour la phase 2).';
+      setError(userMessage);
+      throw new Error(userMessage);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPhase();
+  }, [fetchPhase]);
+
+  return {
+    phase,
+    loading,
+    error,
+    fetchPhase,
+    updatePhase,
+  };
+}

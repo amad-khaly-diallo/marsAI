@@ -62,19 +62,30 @@ async function create(payload) {
       }
     );
 
+    // Si le réalisateur souhaite la newsletter, on enregistre son email dans la table newsletters
+    if (payload.newsletter) {
+      try {
+        await query(
+          'INSERT INTO newsletters (email) VALUES (:email)',
+          { email: payload.email }
+        );
+      } catch (err) {
+        // 1062 = duplicate (email déjà inscrit) → on ignore
+        if (!(err && err.code === 'ER_DUP_ENTRY')) {
+          throw err;
+        }
+      }
+    }
+
     return getById(result.insertId);
   } catch (err) {
-    // 1062 = duplicate key (email unique)
-    if (err && err.code === 'ER_DUP_ENTRY') {
-      throw new HttpError(409, 'Email already exists');
-    }
     throw err;
   }
 }
 
 async function update(id, payload) {
   // Ensure exists
-  await getById(id);
+  const existing = await getById(id);
 
   await query(
     `UPDATE filmmaker SET
@@ -111,6 +122,21 @@ async function update(id, payload) {
       newsletter: payload.newsletter ? 1 : 0,
     }
   );
+
+  // Si le champ newsletter vient d'être activé, on inscrit l'email dans newsletters
+  if (payload.newsletter && !existing.newsletter && (payload.email || existing.email)) {
+    const email = payload.email || existing.email;
+    try {
+      await query(
+        'INSERT INTO newsletters (email) VALUES (:email)',
+        { email }
+      );
+    } catch (err) {
+      if (!(err && err.code === 'ER_DUP_ENTRY')) {
+        throw err;
+      }
+    }
+  }
 
   return getById(id);
 }

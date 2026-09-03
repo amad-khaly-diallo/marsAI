@@ -1,28 +1,34 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Submission from "./pages/Submission";
-import Admin from "./pages/Admin";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import AppRouter from './router/AppRouter';
+import Header from './components/layout/Header/Header';
+import Footer from './components/layout/Footer/Footer';
+import { AuthProvider, AdminProvider } from './contexts';
+import ScrollToTop from './components/ui/ScrollToTop';
+import GoogleAnalytics from './components/G-Analytics/GoogleAnalytics';
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Header />
+    <HelmetProvider>
+      <AuthProvider>
+        <AdminProvider>
+          <Router>
+            <GoogleAnalytics />
+            <ScrollToTop />
 
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/submission" element={<Submission />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </main>
+            <div className="flex min-h-screen flex-col">
+              <Header />
 
-        <Footer />
-      </div>
-    </Router>
+              <main className="flex-grow">
+                <AppRouter />
+              </main>
+
+              <Footer />
+            </div>
+          </Router>
+        </AdminProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
-
-export default App;

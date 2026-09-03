@@ -1,9 +1,97 @@
+import AdminLayout from '../components/layout/AdminLayout';
+import {
+  DashboardOverview,
+  AdminsManagement,
+  JuryManagement,
+  MoviesManagement,
+  PartnersManagement,
+  NewslettersManagement,
+  AdminLogin,
+  GreenFlagGallery,
+  VideosDistribution,
+  MyMoviesGallery,
+  VideosGallery,
+  AdminProfile,
+} from '../components/admin';
+import { useAdmin } from '../contexts';
+import { useAdminIdleLogout } from '../hooks/useAdminIdleLogout';
+
+function AdminContent() {
+  const { admin, checking, isAuthenticated, error, reload, logout } =
+    useAdmin();
+
+  // Déconnexion automatique après 1h sans activité dans l'espace admin
+  useAdminIdleLogout({
+    timeoutMs: 60 * 60 * 1000,
+    onIdle: () => {
+      // On appelle le logout global et on peut afficher un message si besoin
+      // (alert simple côté client pour le moment)
+      alert(
+        "Vous avez été déconnecté de l'espace admin après 1h sans activité.",
+      );
+      logout();
+    },
+  });
+
+  const renderSection = (section) => {
+    switch (section) {
+      case 'admins':
+        return <AdminsManagement />;
+      case 'jury':
+        return <JuryManagement />;
+      case 'my-movies':
+        return <MyMoviesGallery />;
+      case 'movies':
+        return <MoviesManagement currentAdmin={admin} />;
+      case 'partners':
+        return <PartnersManagement />;
+      case 'newsletters':
+        return <NewslettersManagement />;
+      case 'videos':
+        return <VideosGallery />;
+      case 'all-videos':
+        return <GreenFlagGallery />;
+      case 'videos-distribution':
+        return <VideosDistribution currentAdmin={admin} />;
+      case 'profile':
+        return <AdminProfile />;
+      case 'dashboard':
+      default:
+        return <DashboardOverview />;
+    }
+  };
+
+  if (checking) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center px-4 pt-32">
+        <p className="text-sm text-brand-muted">
+          Vérification de l&apos;accès administrateur...
+        </p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen pt-20 pb-20">
+        {error && (
+          <div className="px-4 mb-4">
+            <p className="mx-auto max-w-sm rounded-md border border-amber-500/60 bg-amber-950/40 px-3 py-2 text-xs text-amber-100">
+              {error}
+            </p>
+          </div>
+        )}
+        <AdminLogin onSuccess={reload} />
+      </div>
+    );
+  }
+
+  return <AdminLayout currentAdmin={admin}>{renderSection}</AdminLayout>;
+}
+
+// The app already wraps everything with a single AdminProvider in App.js.
+// Avoid creating a second provider here, otherwise the header and other
+// components will read a different slice of state and won't see updates.
 export default function Admin() {
-  return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Dashboard Admin</h2>
-      <p>Liste des films soumis + actions sur le statut des films.</p>
-      {/* Plus tard : table + boutons de changement de statut */}
-    </div>
-  );
+  return <AdminContent />;
 }

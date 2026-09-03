@@ -1,30 +1,43 @@
-const express = require('express');
-const HomeController = require('../Controllers/HomeController');
-const { asyncHandler } = require('../Utils/http');
-const { ping } = require('../Utils/db');
-
-const filmmakerRoutes = require('./filmmakers');
-const movieRoutes = require('./movies');
+const express = require("express");
+const { asyncHandler } = require("../Utils/http");
+const { ping } = require("../Utils/db");
+const adminRoutes = require("./admins");
+const filmmakerRoutes = require("./filmmakers");
+const movieRoutes = require("./movies");
+const adminFilmsRoutes = require("./adminFilms");
+const juryRoutes = require("./jury");
+const authRoutes = require("./auth");
+const partnerRoutes = require("./partners");
+const newsletterRoutes = require("./newsletters");
+const contactRoutes = require("./contact");
+const festivalPhaseRoutes = require("./festivalPhase");
+const uploadRoutes = require("./upload"); // Upload S3 Scaleway
+const proxyRoutes = require("./proxy"); // Proxy S3 pour éviter CORS
+const cookieParser = require("cookie-parser");
 
 const router = express.Router();
 
-router.get('/', HomeController.index);
+router.use(cookieParser());
 
-router.get(
-  '/health',
+router.use(
+  "/health",
   asyncHandler(async (req, res) => {
     await ping();
-    res.json({
-      status: 'ok',
-      service: 'marsAI-backend',
-      timestamp: new Date().toISOString(),
-      db: 'up',
-    });
-  })
+    res.json({ status: "ok" });
+  }),
 );
 
-router.use('/filmmakers', filmmakerRoutes);
-router.use('/movies', movieRoutes);
+router.use("/admins", adminRoutes); // Admin CRUD
+router.use("/admin/films", adminFilmsRoutes); // Admin gestion des films
+router.use("/filmmakers", filmmakerRoutes); // Filmmaker CRUD
+router.use("/movies", movieRoutes); // CRUD movies + POST /api/movies/submit (soumission publique)
+router.use("/auth", authRoutes);
+router.use("/jury", juryRoutes); // Jury public + admin CRUD
+router.use("/partners", partnerRoutes); // Partenaires public + admin CRUD
+router.use("/newsletters", newsletterRoutes); // Gestion des newsletters par les admins
+router.use("/contact", contactRoutes); // Formulaire de contact public
+router.use("/festival-phase", festivalPhaseRoutes); // Phase du festival + timer
+router.use("/", uploadRoutes); // Upload S3 : /api/upload/video, /api/upload/image, etc.
+router.use("/proxy", proxyRoutes); // Proxy fichiers S3 (sous-titres)
 
 module.exports = router;
-
