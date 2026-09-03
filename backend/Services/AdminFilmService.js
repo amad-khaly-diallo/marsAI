@@ -52,7 +52,7 @@ async function list({ status, statuses, search, currentUser }) {
     }
     joins.push(
       `LEFT JOIN (
-        SELECT movie_id, rating, comment, flag
+        SELECT movie_id, MAX(rating) AS rating, MAX(comment) AS comment, MAX(flag) AS flag
         FROM admin_movie_assignment
         WHERE admin_id = :current_admin_id
         GROUP BY movie_id
@@ -131,7 +131,7 @@ async function getById(id, currentUser) {
   let joinCurrentAdmin = '';
   if (hasUser) {
     joinCurrentAdmin = `LEFT JOIN (
-      SELECT movie_id, rating, comment, flag
+      SELECT movie_id, MAX(rating) AS rating, MAX(comment) AS comment, MAX(flag) AS flag
       FROM admin_movie_assignment
       WHERE admin_id = :current_admin_id
       GROUP BY movie_id
